@@ -41,6 +41,9 @@ python3 scripts/build.py --preset gd32-liangshan-freertos-release
 
 ## 重构与交付
 
+首批已通过 3 项 Native 运行检查、8 组 ARM 构建及 20 个 ELF 静态校验；
+实板运行尚未验证。平台完整重构分为 38 项任务、19 个提交批次，按 3–6 个月安排。
+
 - [完整平台重构计划](docs/platform-refactor-plan.md)：任务依赖、责任、提交与验收。
 - [示例迭代计划](docs/examples-roadmap.md)：基础外设到参数／工业通信／升级实例。
 - [验证记录](docs/validation.md)：仅记录实际执行范围。
