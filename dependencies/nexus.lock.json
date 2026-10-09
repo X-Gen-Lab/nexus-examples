@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "038b16d3348a0399f4b4cea574fdaf761a4c0ee4",
-  "tree": "3dc33408b05a6f66113de7dfcde9e4ebff0e4d88",
+  "commit": "0804411d8a35d7b110e4a9fc975775c365374c02",
+  "tree": "927fccd75fd57645f32a734d7247ec38f5cff1ab",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
   "baseline_status": "next-generation common platform; software qualification in candidate evidence; physical HIL not executed",
