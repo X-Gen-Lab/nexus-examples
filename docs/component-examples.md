@@ -16,8 +16,9 @@
 nexus_add_application(TARGET shell_console VERSION "0.1.0"
     SOURCES apps/shell_console/main.c EXTRA_DEPS Nexus::Shell)
 nexus_add_application(TARGET config_roundtrip VERSION "0.1.0"
-    SOURCES apps/config_roundtrip/main.c
+    SOURCES apps/config_roundtrip/main.c apps/config_roundtrip/heap_bounds.c
     EXTRA_DEPS Nexus::ConfigCore Nexus::ConfigRAM)
+# Native adds heap_bounds_test.c; MCU adds its app-owned newlib_sbrk.c.
 nexus_add_application(TARGET log_uart VERSION "0.1.0"
     SOURCES apps/log_uart/main.c EXTRA_DEPS Nexus::LogRuntime Nexus::LogUART)
 ```
@@ -71,7 +72,7 @@ Config 和 Log 的组件初始化及调用发生在 main（裸机）或已调度
 | 资源 | `shell_console` | `config_roundtrip` | `log_uart` |
 | --- | --- | --- | --- |
 | 应用缓冲区 | 输入 128 B；Shell 128 B command buffer，history 8、commands 16 | JSON 2048 B、binary 2048 B | 固定 4 × 256 B TX 数据，另加 `log_uart_backend_t` 元数据 |
-| MCU 配置容量 | 不支持 MCU 标准流版本 | `MANAGER_KEY_LIMIT=32`、`MANAGER_VALUE_SIZE=256`；snapshot scratch 16384 B；包含 Core/RAM 的独立容量 | `LOG_UART_QUEUE_DEPTH=4`、`LOG_UART_MESSAGE_SIZE=256`，编译断言 |
+| MCU／Native 配置容量 | 不支持 MCU 标准流版本 | key/default 32、key length 32 B、value/default 64 B、snapshot scratch 2048 B；Core/RAM 使用同一配置 | `LOG_UART_QUEUE_DEPTH=4`、`LOG_UART_MESSAGE_SIZE=256`，编译断言 |
 | 应用 FreeRTOS worker | 无 | 一个 2048 B 栈任务 | 一个 2048 B 栈任务、同步 logger 所用 OSAL mutex；无 logger async worker |
 | 操作预算 | delay 1–1000 ms | 单 owner 有界容量；snapshot 不涉及 Flash | 每次 UART TX 100 ms、每次 flush 1000 ms |
 
@@ -79,7 +80,24 @@ Config 和 Log 的组件初始化及调用发生在 main（裸机）或已调度
 `config_manager_config_t` 不会缩小 SDK 静态容量。应用首先包含 `nexus_config.h`。
 以上是声明的容量，不是总 RAM 或栈峰值测量；总量应读取实际 ELF/MAP，栈峰值需要 HIL。
 
-开发中的 SDK 联合验证已实际完成 Native 两项 CTest（0 失败、0 跳过；禁用 OpenSSL 查找），
+Config 的原子 import 会临时分配 replacement 表、原值表及值副本；仅保留 linker heap
+容量并不构成有界 C 分配器。旧 ELF 中工具链的 libnosys `_sbrk` 只增长 break，
+没有检查声明的 heap／stack 边界。MCU 本例显式加入应用拥有的 `newlib_sbrk.c`，从两个
+维护中的 GNU linker 实际符号 `_end`（heap 起点）和 `_Min_Heap_Size`（绝对大小）
+建立 8192 B 有界 arena。它不会进入栈预留或剩余空闲 RAM；扩展超界返回 `ENOMEM`，
+收缩越过起点返回 `EINVAL`，正负溢出失败均保持 break。默认例程不依赖 libc stdout。
+
+裸机所有 allocator 调用由 main 串行执行；FreeRTOS 只由已经调度的 Configuration
+worker 绑定和使用。`_sbrk` 拒绝 ISR、被屏蔽的上下文及其他 worker 扩堆，但这只约束
+arena 增长；malloc 已有 free-bin 和 free 的元数据操作可能不调用 `_sbrk`。
+整个示例禁止其他任务／ISR 调用 malloc-family，不提供通用 newlib 多任务锁或 ISR 安全保证。
+Native 使用宿主分配器完成相同受限 Config 用例，并在已有有限 CTest 内运行同一边界算法的
+实际 grow/shrink/full/OOM、PTRDIFF 边界和前后 canary 模拟检查；它不执行 MCU newlib。
+Debugger 的 `config_example_heap_{begin,end,break,high_water}` 记录 arena break，
+不等于 malloc live bytes，也不能替代实板堆／栈峰值验证。
+
+下面是调整示例容量与 libc adapter 之前的历史开发数据，不能用作当前 MCU 执行证据。
+开发中的 SDK 联合验证曾实际完成 Native 两项 CTest（0 失败、0 跳过；禁用 OpenSSL 查找），
 以及启明欣欣裸机、梁山派 FreeRTOS 的两应用共四个 ARM ELF 静态检查。
 以下是这两份实际有效配置的 Flash 加载／主 RAM 预留量，包含链接器栈／heap 预留，
 不代表其他配置或运行峰值。ARM MAP 中 `uart_sink` 为 1152 B（1024 B 数据加元数据）。

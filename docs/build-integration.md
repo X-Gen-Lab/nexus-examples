@@ -63,6 +63,10 @@ ELF／MAP／BIN／HEX 放在后者 `bin` 中，有效配置在 `generated` 中�
 一份 build root 只选择一个 Board／backend／mode，不能混用不同 SDK。
 `FIRMWARE_MAIN_STACK_SIZE` 是 MSP／exception linker 预留，`FIRMWARE_LIBC_HEAP_SIZE`
 是 C runtime heap；它们与 OSAL task stack pool、kernel objects／heap 分开。
+链接器预留不是通用 allocator 契约。Config 示例在 MCU 显式加入应用侧有界
+`newlib_sbrk.c`，只由一个管理 worker／裸机 main 使用 8 KiB arena；其他任务／ISR
+不得调用 malloc-family。Native 的同一例程使用 32 keys、64 B values、2 KiB snapshot
+的受限配置并执行边界算法测试，详细限制见 [组件示例](component-examples.md)。
 
 ## 外部 Board 与 Flash layout
 

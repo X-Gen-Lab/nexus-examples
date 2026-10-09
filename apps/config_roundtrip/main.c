@@ -8,6 +8,11 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#if defined(NX_CONFIG_PLATFORM_NATIVE)
+#include "heap_bounds.h"
+#else
+#include "newlib_sbrk.h"
+#endif
 
 
 /* Management context only, one owner. These bounded example buffers are not
@@ -238,6 +243,15 @@ static bool namespaced_roundtrips(void) {
 }
 
 static int run_configuration_example(void) {
+#if defined(NX_CONFIG_PLATFORM_NATIVE)
+    if (!verify(example_heap_bounds_self_test() == 0,
+                "bounded heap growth/shrink/OOM/overflow/canary self-test")) {
+#else
+    if (!verify(example_newlib_heap_bind(), "bind single-owner newlib heap")) {
+#endif
+        config_example_result = 1;
+        return 1;
+    }
     bool initialized = expect(config_init(NULL), CONFIG_OK, "config_init");
     bool passed = initialized &&
                   expect(config_set_backend(config_backend_ram_get()), CONFIG_OK,

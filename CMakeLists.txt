@@ -26,8 +26,14 @@ endif()
 
 if(CONFIG_FRAMEWORK_CONFIG)
     nexus_add_application(TARGET config_roundtrip VERSION "0.1.0"
-        SOURCES apps/config_roundtrip/main.c
+        SOURCES apps/config_roundtrip/main.c apps/config_roundtrip/heap_bounds.c
         EXTRA_DEPS Nexus::ConfigCore Nexus::ConfigRAM)
+    if(CONFIG_PLATFORM_NATIVE)
+        target_sources(config_roundtrip PRIVATE apps/config_roundtrip/heap_bounds_test.c)
+    else()
+        target_sources(config_roundtrip PRIVATE apps/config_roundtrip/newlib_sbrk.c)
+        target_link_libraries(config_roundtrip PRIVATE Nexus::Arch)
+    endif()
 endif()
 
 # SPI reference wiring is qualified in software only for Native/Discovery.
