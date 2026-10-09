@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/X-Gen-Lab/nexus.git",
+  "commit": "069dcf14f9cb1cd6fc4a869d87bf9827b91ce306",
+  "tree": "b135a2cf0294319a8f02b15c578b35433864a3aa",
+  "consumption": "source-add_subdirectory",
+  "recursive_submodules": true,
+  "baseline_status": "experimental; physical HIL not executed",
+  "transitional_api": "Nexus::Product / nx_product_boot; migrate with platform runtime refactor"
+}
