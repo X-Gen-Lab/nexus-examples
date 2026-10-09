@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "kind": "readonly-ctest-enumeration-bound-to-final-examples",
+  "source_pair": {
+    "nexus": {
+      "commit": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "tree": "1a5d811afe5b6978d6902c56272763110437905f"
+    },
+    "examples": {
+      "commit": "85c1e2678e238d30a383a98d975bcf68d1055c3a",
+      "tree": "0e55a577751cdd01bfbd0a66dc7a91131c64294c"
+    }
+  },
+  "source_pair_after": {
+    "nexus": {
+      "commit": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "tree": "1a5d811afe5b6978d6902c56272763110437905f"
+    },
+    "examples": {
+      "commit": "85c1e2678e238d30a383a98d975bcf68d1055c3a",
+      "tree": "0e55a577751cdd01bfbd0a66dc7a91131c64294c"
+    }
+  },
+  "started_at_utc": "2026-10-09T11:59:33.973878+00:00",
+  "finished_at_utc": "2026-10-09T11:59:34.033099+00:00",
+  "source_unchanged": true,
+  "commands": [
+    {
+      "argv": [
+        "/workspace/nexus-tools/cmake/data/bin/ctest",
+        "--test-dir",
+        "/workspace/nexus-examples/build/native-debug",
+        "--show-only=json-v1"
+      ],
+      "cwd": "/workspace/nexus-examples",
+      "exit_code": 0,
+      "stdout": {
+        "path": "/workspace/nexus-examples/build/unification-final-matrix-a4d5ac6/native-enumeration-verified/ctest-enumeration.json",
+        "size": 5341,
+        "sha256": "cb44dac860272018a084ef79978ec4e23ca45d35b9f89f7a6c000e5ce7620a1c"
+      },
+      "stderr": {
+        "path": "/workspace/nexus-examples/build/unification-final-matrix-a4d5ac6/native-enumeration-verified/ctest-enumeration.stderr.log",
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "matrix_report": {
+    "path": "/workspace/nexus-examples/build/unification-final-matrix-a4d5ac6/results.json",
+    "size": 766327,
+    "sha256": "bbfbf6d23de6b0b7c3ae2a380e8ab798edcf339bca3cd10ec99d5c7e74608f68"
+  },
+  "junit": {
+    "path": "/workspace/nexus-examples/build/unification-final-matrix-a4d5ac6/frozen-files/nexus-examples/build/native-debug/ctest-results.xml",
+    "size_bytes": 3742,
+    "sha256": "62e6ed5ded6831e114cf2491cf3723cefefe21f6ea622a45613ff17f90358e2d",
+    "original_path": "/workspace/nexus-examples/build/native-debug/ctest-results.xml"
+  },
+  "enumeration": {
+    "path": "/workspace/nexus-examples/build/unification-final-matrix-a4d5ac6/native-enumeration-verified/ctest-enumeration.json",
+    "size": 5341,
+    "sha256": "cb44dac860272018a084ef79978ec4e23ca45d35b9f89f7a6c000e5ce7620a1c"
+  },
+  "scheduled_tests": 7,
+  "exact_ctest_junit_name_match": true,
+  "all_passed": true,
+  "scope": "Readonly enumeration; tests were executed by the separately referenced completed matrix.",
+  "hardware_verified": false,
+  "operations": []
+}

@@ -1,0 +1,558 @@
+{
+  "artifacts": {
+    "artifacts/native/compile_commands.json": "d543d0443dca6a775d11500dddcdee9f28b642e5a9380b13ddab4ccc146e6a37",
+    "artifacts/native/effective.config": "142bfde3d858cc64013d66536a46ef0797dbdcee7c22ac79aa29c2f7424d8eb1",
+    "artifacts/native/installed_c": "38e50e9df16fbd89948ee3022adf0b1a922c4753752a24931d115111a47c8c34",
+    "artifacts/native/installed_cpp": "9e313e866ac9b3d6db0716b9ac05281b1ec35e96fca899c7fc92e6aa1289227d",
+    "artifacts/stm32/compile_commands.json": "2af6b90cf300cfc348d0aa480b96d8b6146eb07cc2c4b2e5d6135ee3b1ab34bd",
+    "artifacts/stm32/effective.config": "0773f7cb8a6d01cf7651ebac2a6fcd37c7d41b281c3958bf28c26fbbe547981f",
+    "artifacts/stm32/installed_c.elf": "38dedbc5b0ca9ca45d93f5e690765f6968e679c1ca3ca0f9fa1641f57a56876a",
+    "artifacts/stm32/installed_c.map": "8c1c1c61cc6f0c9f6a54279c80c02cdc67498f0cffb7d0ebea02e3b1fd5355a5",
+    "artifacts/stm32/installed_cpp.elf": "1f4fd5b6cd885e924d2cbadf2b6dfcb2501363f7e32a1c12076cf744b1146745",
+    "artifacts/stm32/installed_cpp.map": "16c186bd90bd7c3b0442f1e7e0493f8d7032f198ee73a9dddbd584bf0d6535ea",
+    "firmware-static-contract.json": "4343e56e32535b7579ac7ade2831f8f12482f7b75c444c69a3735d8936d96205",
+    "source-sdk-manifest.json": "d982bded3a949a1693728df87bb9e7eae061de0273fc7c6154e0549db3f43009"
+  },
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "-C",
+        "/workspace/nexus",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.002,
+      "exit_code": 0,
+      "label": "source-head",
+      "log": "01-source-head.log",
+      "log_sha256": "8301c9a219e166d861db187c934a72d783f139fd6fed7090006739f9db50112c"
+    },
+    {
+      "argv": [
+        "git",
+        "-C",
+        "/workspace/nexus",
+        "status",
+        "--porcelain",
+        "--untracked-files=normal"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.038,
+      "exit_code": 0,
+      "label": "source-clean-before",
+      "log": "02-source-clean-before.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "-C",
+        "/workspace/nexus",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.003,
+      "exit_code": 0,
+      "label": "source-tree",
+      "log": "03-source-tree.log",
+      "log_sha256": "5aca1d8ff2bb86a8c7bf7b9eed808a36bc534705e12e048726c325baf1322739"
+    },
+    {
+      "argv": [
+        "cmake",
+        "--version"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.103,
+      "exit_code": 0,
+      "label": "cmake-version",
+      "log": "04-cmake-version.log",
+      "log_sha256": "4d92ce18ddf9889d463ac875608423312823ad89e7fd5178b02a21ea26a2bd3d"
+    },
+    {
+      "argv": [
+        "cc",
+        "--version"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.001,
+      "exit_code": 0,
+      "label": "native-c-version",
+      "log": "05-native-c-version.log",
+      "log_sha256": "78fc11ae2c3ff7c235eb18ed90989d18f6cc864fb27027f839368cd0888deebc"
+    },
+    {
+      "argv": [
+        "c++",
+        "--version"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.001,
+      "exit_code": 0,
+      "label": "native-cpp-version",
+      "log": "06-native-cpp-version.log",
+      "log_sha256": "00f7e3c3e6a0308d7b60cc02429720ef6000d84c0add523f7dc030058d19961b"
+    },
+    {
+      "argv": [
+        "arm-none-eabi-gcc",
+        "--version"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.003,
+      "exit_code": 0,
+      "label": "arm-version",
+      "log": "07-arm-version.log",
+      "log_sha256": "e5d5fdd1e3a8634d1981bc07130f5176636ecd4a28fef63c6271e44f57db621b"
+    },
+    {
+      "argv": [
+        "git",
+        "init",
+        "--quiet",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.004,
+      "exit_code": 0,
+      "label": "consumer-owner-init",
+      "log": "08-consumer-owner-init.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "-C",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner",
+        "add",
+        "owner.txt"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.003,
+      "exit_code": 0,
+      "label": "consumer-owner-add",
+      "log": "09-consumer-owner-add.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "-C",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner",
+        "-c",
+        "user.name=SDK validation",
+        "-c",
+        "user.email=sdk-validation@local.invalid",
+        "commit",
+        "--quiet",
+        "-m",
+        "Independent SDK consumer identity"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.004,
+      "exit_code": 0,
+      "label": "consumer-owner-commit",
+      "log": "10-consumer-owner-commit.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "-C",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.001,
+      "exit_code": 0,
+      "label": "consumer-owner-head",
+      "log": "11-consumer-owner-head.log",
+      "log_sha256": "5bf906f0861c8f14c9cf629102af1e9d1ec87a8f1ecd3b34f19d97add38923be"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/nexus/cmake/package/package_source_sdk.py",
+        "--source",
+        "/workspace/nexus",
+        "--output",
+        "/workspace/nexus source SDK validation a4d5ac6/initial strict SDK prefix"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 2.579,
+      "exit_code": 0,
+      "label": "strict-package-prepare",
+      "log": "12-strict-package-prepare.log",
+      "log_sha256": "d184e618e37c4d16975e2dce610720e86451761e0b46a281541682b65916e99b"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/cmake/package/package_source_sdk.py",
+        "--verify",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.901,
+      "exit_code": 0,
+      "label": "relocated-package-verify",
+      "log": "13-relocated-package-verify.log",
+      "log_sha256": "d184e618e37c4d16975e2dce610720e86451761e0b46a281541682b65916e99b"
+    },
+    {
+      "argv": [
+        "cmake",
+        "-S",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/native application source",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/native application build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNexus_DIR=/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/lib/cmake/Nexus",
+        "-DNEXUS_BUILD_TESTS=OFF",
+        "-DNEXUS_BUILD_CONTRACTS=OFF",
+        "-DNEXUS_EXPECTED_SOURCE_REVISION=a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "-DNEXUS_CONFIG_FILE=/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/configs/native_minimal_defconfig"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 2.779,
+      "exit_code": 0,
+      "label": "native-consumer-configure",
+      "log": "14-native-consumer-configure.log",
+      "log_sha256": "7188ddfb3e2123fc3507fa670756286f3155a0149a4cc0989ee85095f8608ec9"
+    },
+    {
+      "argv": [
+        "cmake",
+        "--build",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/native application build",
+        "--parallel",
+        "4"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 1.553,
+      "exit_code": 0,
+      "label": "native-consumer-build",
+      "log": "15-native-consumer-build.log",
+      "log_sha256": "0d7703615ad817ed682c9703bec35ed94214d632b7546e0cd779f60c6f8ea028"
+    },
+    {
+      "argv": [
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/native application build/nexus-sdk/bin/installed_c"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.001,
+      "exit_code": 0,
+      "label": "native-run-installed_c",
+      "log": "16-native-run-installed_c.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/native application build/nexus-sdk/bin/installed_cpp"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.001,
+      "exit_code": 0,
+      "label": "native-run-installed_cpp",
+      "log": "17-native-run-installed_cpp.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/native application build/parent_plain"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.001,
+      "exit_code": 0,
+      "label": "native-run-parent-plain",
+      "log": "18-native-run-parent-plain.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "cmake",
+        "-S",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/stm32 application source",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/stm32 application build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNexus_DIR=/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/lib/cmake/Nexus",
+        "-DNEXUS_BUILD_TESTS=OFF",
+        "-DNEXUS_BUILD_CONTRACTS=OFF",
+        "-DNEXUS_EXPECTED_SOURCE_REVISION=a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "-DNEXUS_PLATFORM=stm32",
+        "-DCMAKE_TOOLCHAIN_FILE=/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/cmake/toolchains/arm-gcc.cmake",
+        "-DNEXUS_CONFIG_FILE=/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/configs/stm32f407_baremetal_defconfig"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 2.425,
+      "exit_code": 0,
+      "label": "arm-consumer-configure",
+      "log": "19-arm-consumer-configure.log",
+      "log_sha256": "d1a1d40a113d8ea5831db170552e986fea07b4454ed0638d6b5855d3d70fddda"
+    },
+    {
+      "argv": [
+        "cmake",
+        "--build",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/stm32 application build",
+        "--parallel",
+        "4",
+        "--target",
+        "installed_c",
+        "installed_cpp"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 2.483,
+      "exit_code": 0,
+      "label": "arm-consumer-build",
+      "log": "20-arm-consumer-build.log",
+      "log_sha256": "6c28b1fc9467550f475083ce37a887e096de0fedf560f6419e1877cc875ffe59"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/scripts/ci/validate_firmware_elf.py",
+        "--build-dir",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/stm32 application build/nexus-sdk",
+        "--report",
+        "/workspace/nexus/build/unification-source-sdk-a4d5ac6/firmware-static-contract.json"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.059,
+      "exit_code": 0,
+      "label": "arm-firmware-validator",
+      "log": "21-arm-firmware-validator.log",
+      "log_sha256": "ae4431aa63cbb76fdf82b71aab678e5dc2c1c1d99023eacd9185458c8c075968"
+    },
+    {
+      "argv": [
+        "cmake",
+        "-S",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/source pin mismatch application source",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/source pin mismatch application build",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNexus_DIR=/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/lib/cmake/Nexus",
+        "-DNEXUS_BUILD_TESTS=OFF",
+        "-DNEXUS_BUILD_CONTRACTS=OFF",
+        "-DNEXUS_EXPECTED_SOURCE_REVISION=0000000000000000000000000000000000000000",
+        "-DNEXUS_CONFIG_FILE=/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/configs/native_minimal_defconfig"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 2.23,
+      "exit_code": 1,
+      "label": "reject-wrong-source-pin",
+      "log": "22-reject-wrong-source-pin.log",
+      "log_sha256": "c6f3806f2f06fd60ad858ed09fa85fd508fca3d516492603cca1fa8a6767f97d"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/cmake/package/package_source_sdk.py",
+        "--verify",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.226,
+      "exit_code": 1,
+      "label": "reject-modified-runtime",
+      "log": "23-reject-modified-runtime.log",
+      "log_sha256": "59d4c05528a3825a7f0188ef56c0b1ad12a53cc5da96a28ded04949a7e509b78"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/cmake/package/package_source_sdk.py",
+        "--verify",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 1.682,
+      "exit_code": 1,
+      "label": "reject-modified-export-config",
+      "log": "24-reject-modified-export-config.log",
+      "log_sha256": "5f7af7b9ba3564306a963e0b1dc0d0a7e30aa9292153ed9e558331150d5044a5"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/cmake/package/package_source_sdk.py",
+        "--verify",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.231,
+      "exit_code": 1,
+      "label": "reject-missing-license",
+      "log": "25-reject-missing-license.log",
+      "log_sha256": "de28c75f833e318bbd58f8b65164cf321051137ab0637c37010874e4370c323e"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/cmake/package/package_source_sdk.py",
+        "--verify",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 3.956,
+      "exit_code": 1,
+      "label": "reject-additional-file",
+      "log": "26-reject-additional-file.log",
+      "log_sha256": "d5738d5a74551fecb4afb8c71ba614bb335ef429e8c63b82261fccfd73d04b96"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/cmake/package/package_source_sdk.py",
+        "--verify",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 6.075,
+      "exit_code": 1,
+      "label": "reject-source-symlink",
+      "log": "27-reject-source-symlink.log",
+      "log_sha256": "d5738d5a74551fecb4afb8c71ba614bb335ef429e8c63b82261fccfd73d04b96"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src/cmake/package/package_source_sdk.py",
+        "--verify",
+        "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 5.118,
+      "exit_code": 0,
+      "label": "final-restored-package-verify",
+      "log": "28-final-restored-package-verify.log",
+      "log_sha256": "d184e618e37c4d16975e2dce610720e86451761e0b46a281541682b65916e99b"
+    },
+    {
+      "argv": [
+        "git",
+        "-C",
+        "/workspace/nexus",
+        "status",
+        "--porcelain",
+        "--untracked-files=normal"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.175,
+      "exit_code": 0,
+      "label": "source-clean-after",
+      "log": "29-source-clean-after.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "-C",
+        "/workspace/nexus",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": null,
+      "elapsed_seconds": 0.012,
+      "exit_code": 0,
+      "label": "source-head-after",
+      "log": "30-source-head-after.log",
+      "log_sha256": "8301c9a219e166d861db187c934a72d783f139fd6fed7090006739f9db50112c"
+    }
+  ],
+  "completed": true,
+  "consumer_parent_revision": "1e11bb05c6a81a15f9009ccf07eb8342d9a13a3a",
+  "consumers": {
+    "native": {
+      "build_dir": "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/native application build",
+      "compile_commands": 95,
+      "executed": true,
+      "fixture_opt_in": false,
+      "resolved_sdk": "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src",
+      "source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2"
+    },
+    "stm32": {
+      "build_dir": "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/stm32 application build",
+      "compile_commands": 106,
+      "executed": false,
+      "fixture_opt_in": false,
+      "resolved_sdk": "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces/share/nexus/src",
+      "source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2"
+    }
+  },
+  "expected_source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+  "finished_utc": "2026-10-09T11:54:46.973088+00:00",
+  "kind": "strict-relocated-source-sdk-validation",
+  "package": {
+    "dependency_records": 6,
+    "files": 5293,
+    "publishable": true,
+    "snapshot_sha256": "6db3f1727b30ee4774df4ca18cbed2a7101782c9787c80d2b9b13d659fb32b3c",
+    "source_dirty": false
+  },
+  "physical_execution": false,
+  "rejections": [
+    {
+      "case": "reject-wrong-source-pin",
+      "command_index": 22,
+      "reason": "expected revision"
+    },
+    {
+      "case": "reject-modified-runtime",
+      "command_index": 23,
+      "reason": "file identity changed"
+    },
+    {
+      "case": "reject-modified-export-config",
+      "command_index": 24,
+      "reason": "Exported CMake package identity changed"
+    },
+    {
+      "case": "reject-missing-license",
+      "command_index": 25,
+      "reason": "Missing source SDK file"
+    },
+    {
+      "case": "reject-additional-file",
+      "command_index": 26,
+      "reason": "missing or additional files"
+    },
+    {
+      "case": "reject-source-symlink",
+      "command_index": 27,
+      "reason": "missing or additional files"
+    }
+  ],
+  "relocation": {
+    "consumer_parent": "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner",
+    "prepared_prefix": "/workspace/nexus source SDK validation a4d5ac6/initial strict SDK prefix",
+    "relocated_prefix": "/workspace/nexus source SDK validation a4d5ac6/unrelated consumer owner/relocated Nexus SDK prefix with spaces",
+    "source_checkout": "/workspace/nexus"
+  },
+  "schema": 1,
+  "source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+  "source_sdk_not_binary_sdk": true,
+  "source_tree": "1a5d811afe5b6978d6902c56272763110437905f",
+  "started_utc": "2026-10-09T11:54:14.297261+00:00"
+}

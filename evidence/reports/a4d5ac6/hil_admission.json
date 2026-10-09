@@ -1,0 +1,390 @@
+{
+  "cases": [
+    {
+      "artifact_admission": {
+        "artifacts": [
+          {
+            "path": "/workspace/nexus-examples/build/stm32-qiming-baremetal-release/nexus/bin/uart_echo.elf",
+            "sha256": "2fbd8e79bfa2590188eff43fac9745b59d19be99954ed31d51bf54ffae7632c5",
+            "size": 66444
+          },
+          {
+            "path": "/workspace/nexus-examples/build/stm32-qiming-baremetal-release/nexus/bin/uart_echo.bin",
+            "sha256": "6e5f6426eb162e04a2b890fc1a1cfb0d1e71756eaab93c00ab48c3cfb688e0aa",
+            "size": 32320
+          },
+          {
+            "path": "/workspace/nexus-examples/build/stm32-qiming-baremetal-release/nexus/generated/effective.config",
+            "sha256": "17ed1caa3d3ac0e2f977c705da50272e71e3d34b0d567e0abc4d210d39562d1e",
+            "size": 13644
+          },
+          {
+            "path": "/workspace/nexus-examples/build/stm32-qiming-baremetal-release/nexus/generated/board-identity.json",
+            "sha256": "a66b9e3262fcca3bd4d432424ad8fb15d2dc7d193d89d605ebf0e847b54fcf66",
+            "size": 1594
+          },
+          {
+            "path": "/workspace/nexus-examples/build/stm32-qiming-baremetal-release/nexus/generated/layout.json",
+            "sha256": "ba55dfefef7e65a67aa0acec7593ef8c0c4f6e7e9482b2646d88d8c7d89e145b",
+            "size": 270
+          },
+          {
+            "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/stm32f407zg-qiming-v31/static.json",
+            "sha256": "8794b26628c750fc37876d3c6406291a0bb7a06dc8f2ad2a0b6db5c687b92f24",
+            "size": 3647
+          },
+          {
+            "path": "/workspace/nexus/boards/stm32f407_qiming_v31/board.json",
+            "sha256": "f99b0c9b47f02d9ae44b37764fb97fa3fae2c4493839555dc2369a8531b2a549",
+            "size": 1279
+          },
+          {
+            "path": "/workspace/nexus/boards/stm32f407_qiming_v31/CMakeLists.txt",
+            "sha256": "40ea6b4274d235b38eb9397dce836163bca8f842b85eb319691f4774f628f761",
+            "size": 916
+          },
+          {
+            "path": "/workspace/nexus/boards/stm32f407_qiming_v31/nexus_board.h",
+            "sha256": "807dbacd7df77b6f4a86f9301fb2e8fde9d1a77c5473395a5a4a2def013087cf",
+            "size": 658
+          },
+          {
+            "path": "/workspace/nexus/boards/stm32f407_qiming_v31/board.c",
+            "sha256": "450497b631cb31b469e3a1be34858a3799034812c644b736ce21da52df416fbf",
+            "size": 943
+          },
+          {
+            "path": "/workspace/nexus/boards/stm32f407_qiming_v31/uart.c",
+            "sha256": "551a06de9b0f85a5ee673797c73b983196b7fbdc8b44dabb1f1bc87c44cd6aef",
+            "size": 1188
+          }
+        ],
+        "board_sha256": "86bd0215939804e60ee472e2439f607f296e465162188714742cc4217254ee35",
+        "config_sha256": "17ed1caa3d3ac0e2f977c705da50272e71e3d34b0d567e0abc4d210d39562d1e",
+        "elf_sha256": "2fbd8e79bfa2590188eff43fac9745b59d19be99954ed31d51bf54ffae7632c5",
+        "firmware": {
+          "path": "/workspace/nexus-examples/build/stm32-qiming-baremetal-release/nexus/bin/uart_echo.bin",
+          "sha256": "6e5f6426eb162e04a2b890fc1a1cfb0d1e71756eaab93c00ab48c3cfb688e0aa"
+        },
+        "image_size": 32320,
+        "layout_sha256": "c0cec8e445b58eff01df78a30ed8db3164e98dbe0a979d0390571f152dd09c7a",
+        "load_address": 134217728
+      },
+      "board_id": "stm32f407zg-qiming-v31",
+      "build_dir": "/workspace/nexus-examples/build/stm32-qiming-baremetal-release/nexus",
+      "checker": {
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/nexus/scripts/ci/validate_firmware_elf.py",
+          "--build-dir",
+          "/workspace/nexus-examples/build/stm32-qiming-baremetal-release/nexus",
+          "--report",
+          "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/stm32f407zg-qiming-v31/static.json"
+        ],
+        "log": {
+          "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/stm32f407zg-qiming-v31/checker.log",
+          "sha256": "5f6b327c5096606c048585d8c336cec5e95242c0b5beb5166327d7345d86ec22",
+          "size": 62
+        },
+        "report": {
+          "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/stm32f407zg-qiming-v31/static.json",
+          "sha256": "8794b26628c750fc37876d3c6406291a0bb7a06dc8f2ad2a0b6db5c687b92f24",
+          "size": 3647
+        },
+        "returncode": 0
+      },
+      "eligible_physical_hil": false,
+      "fixture": {
+        "path": "/workspace/nexus/scripts/hil/fixtures/stm32f407_qiming_v31.json",
+        "sha256": "272904ddd36e496aa8de70b29040b1636c766f98c5ed93942c990e4343666fe4",
+        "size": 1937
+      },
+      "hardware_verified": false,
+      "image": "uart_echo",
+      "software_status": "pass",
+      "station_refusal": {
+        "operations": [],
+        "reason": "invalid registered lab id",
+        "report": {
+          "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/stm32f407zg-qiming-v31/station-refusal.json",
+          "sha256": "817e1b476d2e37cfacf9c9af0b3e697052c3b451b954b6cc3ef864ebcf91e435",
+          "size": 316
+        }
+      },
+      "station_template": {
+        "path": "/workspace/nexus/scripts/hil/fixtures/station.template.json",
+        "sha256": "8515924aa11ddd66c999ec6508d4fb8e7538d04a8d8f18afb3945233a1238380",
+        "size": 1050
+      }
+    },
+    {
+      "artifact_admission": {
+        "artifacts": [
+          {
+            "path": "/workspace/nexus-examples/build/stm32-sky-baremetal-release/nexus/bin/uart_echo.elf",
+            "sha256": "387374c35afa299680ce0e5530685fede271804ebad763bc743b7902f892d551",
+            "size": 66460
+          },
+          {
+            "path": "/workspace/nexus-examples/build/stm32-sky-baremetal-release/nexus/bin/uart_echo.bin",
+            "sha256": "ea4d9f70373f2d163d2fab447ee111314765f8b4e1ee80356791a3b2771b2261",
+            "size": 32336
+          },
+          {
+            "path": "/workspace/nexus-examples/build/stm32-sky-baremetal-release/nexus/generated/effective.config",
+            "sha256": "aff5378419e6aaba63c85aae7675b450e8725c4d39bc7acfc5eaf2d1b5f40c65",
+            "size": 13648
+          },
+          {
+            "path": "/workspace/nexus-examples/build/stm32-sky-baremetal-release/nexus/generated/board-identity.json",
+            "sha256": "78e859a48bef1102748e3fc398d2a2e1b4c852f660cb9c5a876e57a164780619",
+            "size": 1327
+          },
+          {
+            "path": "/workspace/nexus-examples/build/stm32-sky-baremetal-release/nexus/generated/layout.json",
+            "sha256": "f37c66a745ebc6de5a1c7d1f530ecb57c7e6472d60d6a3d115f0fad624c2a649",
+            "size": 268
+          },
+          {
+            "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/stm32f407ve-sky-qingchun/static.json",
+            "sha256": "5f45bdecbe7ae635b3492abd035c6fa253378ec4c4120f7643f5a31ce5fd485c",
+            "size": 3645
+          },
+          {
+            "path": "/workspace/nexus/boards/stm32f407ve_sky_qingchun/board.json",
+            "sha256": "b848fbb27e289d72dba8b95fc9f314d6978cf68f8f7fd89a549cd6098ca79ce5",
+            "size": 1020
+          },
+          {
+            "path": "/workspace/nexus/boards/stm32f407ve_sky_qingchun/CMakeLists.txt",
+            "sha256": "c1c5009ca7aad9d851fc7f52e7f203dee41a3d54cdcf4926e67af54145f48a8b",
+            "size": 963
+          },
+          {
+            "path": "/workspace/nexus/boards/stm32f407ve_sky_qingchun/nexus_board.h",
+            "sha256": "c94256fc48e9068030b9bc30c29b1813ef6b5611fae6a84d6ff8989385a10b90",
+            "size": 659
+          },
+          {
+            "path": "/workspace/nexus/boards/stm32f407ve_sky_qingchun/board.c",
+            "sha256": "fc3f493921a51249477848fd87bb428379953d2b58e0c521f0b864176e8e668d",
+            "size": 537
+          },
+          {
+            "path": "/workspace/nexus/boards/stm32f407ve_sky_qingchun/uart.c",
+            "sha256": "9613961224904f80d4488c015b4565ac136a8308acff709604746aa95bd5649c",
+            "size": 1128
+          }
+        ],
+        "board_sha256": "4dc4307aa6782a8af1f397a35fbdbf784f0e824e5d9322c686b19e82c6484ba2",
+        "config_sha256": "aff5378419e6aaba63c85aae7675b450e8725c4d39bc7acfc5eaf2d1b5f40c65",
+        "elf_sha256": "387374c35afa299680ce0e5530685fede271804ebad763bc743b7902f892d551",
+        "firmware": {
+          "path": "/workspace/nexus-examples/build/stm32-sky-baremetal-release/nexus/bin/uart_echo.bin",
+          "sha256": "ea4d9f70373f2d163d2fab447ee111314765f8b4e1ee80356791a3b2771b2261"
+        },
+        "image_size": 32336,
+        "layout_sha256": "55562ce67ca24d77ff9f209a3ea343e6187606f59fa3acf7b653f8cce02388ae",
+        "load_address": 134217728
+      },
+      "board_id": "stm32f407ve-sky-qingchun",
+      "build_dir": "/workspace/nexus-examples/build/stm32-sky-baremetal-release/nexus",
+      "checker": {
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/nexus/scripts/ci/validate_firmware_elf.py",
+          "--build-dir",
+          "/workspace/nexus-examples/build/stm32-sky-baremetal-release/nexus",
+          "--report",
+          "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/stm32f407ve-sky-qingchun/static.json"
+        ],
+        "log": {
+          "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/stm32f407ve-sky-qingchun/checker.log",
+          "sha256": "5f6b327c5096606c048585d8c336cec5e95242c0b5beb5166327d7345d86ec22",
+          "size": 62
+        },
+        "report": {
+          "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/stm32f407ve-sky-qingchun/static.json",
+          "sha256": "5f45bdecbe7ae635b3492abd035c6fa253378ec4c4120f7643f5a31ce5fd485c",
+          "size": 3645
+        },
+        "returncode": 0
+      },
+      "eligible_physical_hil": false,
+      "fixture": {
+        "path": "/workspace/nexus/scripts/hil/fixtures/stm32f407ve_sky_qingchun.json",
+        "sha256": "364377c52196fcc7b07599d43afb1e021be225f9e12f00ee6f4308eb7ea52873",
+        "size": 1943
+      },
+      "hardware_verified": false,
+      "image": "uart_echo",
+      "software_status": "pass",
+      "station_refusal": {
+        "operations": [],
+        "reason": "invalid registered lab id",
+        "report": {
+          "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/stm32f407ve-sky-qingchun/station-refusal.json",
+          "sha256": "fcae67a6a6812f3b9e8528e47f3be9c12e340ca330d51282c3389b27f60955e7",
+          "size": 316
+        }
+      },
+      "station_template": {
+        "path": "/workspace/nexus/scripts/hil/fixtures/station.template.json",
+        "sha256": "8515924aa11ddd66c999ec6508d4fb8e7538d04a8d8f18afb3945233a1238380",
+        "size": 1050
+      }
+    },
+    {
+      "artifact_admission": {
+        "artifacts": [
+          {
+            "path": "/workspace/nexus-examples/build/gd32-liangshan-baremetal-release/nexus/bin/uart_echo.elf",
+            "sha256": "b308c38651fd03a721ff2297de4667bf34da931848e3a355d07cee83f7e5158e",
+            "size": 51100
+          },
+          {
+            "path": "/workspace/nexus-examples/build/gd32-liangshan-baremetal-release/nexus/bin/uart_echo.bin",
+            "sha256": "675936f0eabab46f697214db9baf20afa25c17731695ef440f33597aa7655c83",
+            "size": 23300
+          },
+          {
+            "path": "/workspace/nexus-examples/build/gd32-liangshan-baremetal-release/nexus/generated/effective.config",
+            "sha256": "d2c274aa80a161e8ee82fb3548ecbd306e25f8f8ab3e0950368f7477126f00e6",
+            "size": 4039
+          },
+          {
+            "path": "/workspace/nexus-examples/build/gd32-liangshan-baremetal-release/nexus/generated/board-identity.json",
+            "sha256": "d315d85af79306fd6d22f29535beac0882f7e751651fa532d58759e963628df0",
+            "size": 1987
+          },
+          {
+            "path": "/workspace/nexus-examples/build/gd32-liangshan-baremetal-release/nexus/generated/layout.json",
+            "sha256": "ab3c40a1d395b25406a3777e495f0839658b72dae698ca71ee677c0c5e31bc10",
+            "size": 269
+          },
+          {
+            "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/gd32f470zg-liangshan/static.json",
+            "sha256": "1e40c323363c8749c5a2d6656775c744a77a004da5b25301dda4aa7084cbb6ae",
+            "size": 3648
+          },
+          {
+            "path": "/workspace/nexus/boards/gd32f470_liangshan/board.json",
+            "sha256": "a617e730cb92b63ba4a71615a8269f22f555933fb3c1c66a349f2f1dc6cf8d41",
+            "size": 1915
+          },
+          {
+            "path": "/workspace/nexus/boards/gd32f470_liangshan/CMakeLists.txt",
+            "sha256": "f99839b7ed45b10044b34380c45df767a36a1c598af31a956f185e9bc13b1e4d",
+            "size": 354
+          },
+          {
+            "path": "/workspace/nexus/boards/gd32f470_liangshan/nexus_board.h",
+            "sha256": "d402cf9b22eef020656236f28be7bf42bb3d0fa33ad28e914650caf8fad3e182",
+            "size": 374
+          },
+          {
+            "path": "/workspace/nexus/boards/gd32f470_liangshan/board.h",
+            "sha256": "859c230c1724835ea86acb01e0d07289c58a70cd431ed5208ad9c17e2411358a",
+            "size": 902
+          },
+          {
+            "path": "/workspace/nexus/boards/gd32f470_liangshan/board.c",
+            "sha256": "a1582fd38251f5a9865a2c99aa0066aace490f2f902b9fb404228434bc14f0e5",
+            "size": 2220
+          }
+        ],
+        "board_sha256": "5dc0052d8a926df798f5d080376af08c3044e683b742b3598387623cea4fbfe9",
+        "config_sha256": "d2c274aa80a161e8ee82fb3548ecbd306e25f8f8ab3e0950368f7477126f00e6",
+        "elf_sha256": "b308c38651fd03a721ff2297de4667bf34da931848e3a355d07cee83f7e5158e",
+        "firmware": {
+          "path": "/workspace/nexus-examples/build/gd32-liangshan-baremetal-release/nexus/bin/uart_echo.bin",
+          "sha256": "675936f0eabab46f697214db9baf20afa25c17731695ef440f33597aa7655c83"
+        },
+        "image_size": 23300,
+        "layout_sha256": "e0a5ac251d0355c1d635c310ea2574c5c541413265930f9adddf4baf6c6c5a42",
+        "load_address": 134217728
+      },
+      "board_id": "gd32f470zg-liangshan",
+      "build_dir": "/workspace/nexus-examples/build/gd32-liangshan-baremetal-release/nexus",
+      "checker": {
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/nexus/scripts/ci/validate_firmware_elf.py",
+          "--build-dir",
+          "/workspace/nexus-examples/build/gd32-liangshan-baremetal-release/nexus",
+          "--report",
+          "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/gd32f470zg-liangshan/static.json"
+        ],
+        "log": {
+          "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/gd32f470zg-liangshan/checker.log",
+          "sha256": "5f6b327c5096606c048585d8c336cec5e95242c0b5beb5166327d7345d86ec22",
+          "size": 62
+        },
+        "report": {
+          "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/gd32f470zg-liangshan/static.json",
+          "sha256": "1e40c323363c8749c5a2d6656775c744a77a004da5b25301dda4aa7084cbb6ae",
+          "size": 3648
+        },
+        "returncode": 0
+      },
+      "eligible_physical_hil": false,
+      "fixture": {
+        "path": "/workspace/nexus/scripts/hil/fixtures/gd32f470_liangshan.json",
+        "sha256": "7c2f3a78aed4c8528b276ba06d7787a5c75e52a3a01bb2fa7f9b2696379ddff6",
+        "size": 1891
+      },
+      "hardware_verified": false,
+      "image": "uart_echo",
+      "software_status": "pass",
+      "station_refusal": {
+        "operations": [],
+        "reason": "invalid registered lab id",
+        "report": {
+          "path": "/workspace/nexus/build/unification-hil-readonly-a4d5ac6/gd32f470zg-liangshan/station-refusal.json",
+          "sha256": "5e174b3e4ea641acf0bda05a11240c46a8724312b032f12bcda439d6e2b2a9ca",
+          "size": 316
+        }
+      },
+      "station_template": {
+        "path": "/workspace/nexus/scripts/hil/fixtures/station.template.json",
+        "sha256": "8515924aa11ddd66c999ec6508d4fb8e7538d04a8d8f18afb3945233a1238380",
+        "size": 1050
+      }
+    }
+  ],
+  "eligible_physical_hil": false,
+  "hardware_verified": false,
+  "kind": "hil-readonly-software-admission",
+  "operations": [],
+  "runner": {
+    "path": "/tmp/nexus-hil-readonly.py",
+    "sha256": "efb96bad97103585036fbd4cfab4eff1cde948c10a39fa2a3923313c8b16bf06",
+    "size": 3724
+  },
+  "schema_version": 1,
+  "source_pair": {
+    "examples": {
+      "dirty": false,
+      "revision": "85c1e2678e238d30a383a98d975bcf68d1055c3a",
+      "tree": "0e55a577751cdd01bfbd0a66dc7a91131c64294c"
+    },
+    "nexus": {
+      "dirty": false,
+      "revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "tree": "1a5d811afe5b6978d6902c56272763110437905f"
+    }
+  },
+  "source_pair_after": {
+    "examples": {
+      "dirty": false,
+      "revision": "85c1e2678e238d30a383a98d975bcf68d1055c3a",
+      "tree": "0e55a577751cdd01bfbd0a66dc7a91131c64294c"
+    },
+    "nexus": {
+      "dirty": false,
+      "revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "tree": "1a5d811afe5b6978d6902c56272763110437905f"
+    }
+  },
+  "status": "pass"
+}

@@ -1,0 +1,2844 @@
+{
+  "candidate": false,
+  "environment": {
+    "PATH": "/workspace/nexus-tools/bin:/workspace/nexus-tools-arm/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin:/run/codex-environment/codex-home/tmp/arg0/codex-arg0ZKmiS4:/opt/codex/codex-path:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+    "PYTHONPATH": "/workspace/nexus-tools"
+  },
+  "execution_argv": [
+    "/tmp/nexus-arm-matrix-final.py",
+    "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+    "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6"
+  ],
+  "expected_source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+  "failed": 0,
+  "finished_utc": "2026-10-09T11:55:55.178021+00:00",
+  "hardware_verified": false,
+  "kind": "arm-clean-source-integration-matrix",
+  "passed": 8,
+  "postprocessing": {
+    "executed_results": {
+      "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/results.executed.json",
+      "sha256": "f0ccc0d53f5bc456da551eb541f141acf618bd837054eb4d0244473b918fb4cb",
+      "size": 97219
+    },
+    "kind": "immutable-evidence-path-retention",
+    "manifest": {
+      "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-file-manifest.json",
+      "sha256": "d823275b7957db343ca1e5aa8d4e3bd135b89205a99871ccc2af270187390eb7",
+      "size": 84236
+    },
+    "report": {
+      "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-report.json",
+      "sha256": "fc9c1e35f761bf9adcb21357c94c6935bc2b4160b6bb4126725b9326c0f98f20",
+      "size": 3570
+    },
+    "script": {
+      "original_path": "/workspace/nexus/build/unification-arm-retention.py",
+      "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/unification-arm-retention.py",
+      "sha256": "369f3ef53670698bb13558334c7798bd5510c78a7bc5d644c75f3ee98b263f96",
+      "size": 16073
+    }
+  },
+  "results": [
+    {
+      "artifacts": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/bin/nexus_contract_firmware.bin",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/bin/nexus_contract_firmware.bin",
+          "sha256": "eda386b492b25ed613ca705458d49212c8312338fd55ea9b68f3d4702cb3c332",
+          "size": 47020
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/bin/nexus_contract_firmware.elf",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/bin/nexus_contract_firmware.elf",
+          "sha256": "12b21fa389353867bf47ca959d2c8775d13d1cba33b9eb5319724c4cf8cffad6",
+          "size": 87688
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/bin/nexus_contract_firmware.hex",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/bin/nexus_contract_firmware.hex",
+          "sha256": "2085df2df1344a5b57955c117978f75ca779327ef53af5e13054d5f6d919bfee",
+          "size": 132350
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/bin/nexus_contract_firmware.map",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/bin/nexus_contract_firmware.map",
+          "sha256": "79be4c42d2b36d2c1a12b6f28ac8dd909044ca4f800de287e6b07651ff51b09d",
+          "size": 289537
+        }
+      ],
+      "board": {
+        "active_resources": [
+          {
+            "id": "status-led",
+            "kind": "gpio",
+            "pins": [
+              {
+                "af": 0,
+                "initial": 0,
+                "pin": 12,
+                "port": "D",
+                "signal": "led"
+              }
+            ],
+            "when": "CONFIG_STM32_GPIO_ENABLE"
+          },
+          {
+            "clock": "USART2",
+            "id": "console",
+            "instance": 1,
+            "irq": 38,
+            "kind": "uart",
+            "pins": [
+              {
+                "af": 7,
+                "pin": 2,
+                "port": "A",
+                "signal": "tx"
+              },
+              {
+                "af": 7,
+                "pin": 3,
+                "port": "A",
+                "signal": "rx"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_STM32_UART_ENABLE"
+          },
+          {
+            "clock": "SPI1",
+            "dma": [
+              {
+                "channel": 3,
+                "controller": "DMA2",
+                "direction": "tx",
+                "irq": 59,
+                "stream": 3
+              },
+              {
+                "channel": 3,
+                "controller": "DMA2",
+                "direction": "rx",
+                "irq": 56,
+                "stream": 0
+              }
+            ],
+            "id": "spi-fixture",
+            "instance": 1,
+            "irq": 35,
+            "kind": "spi",
+            "pins": [
+              {
+                "af": 5,
+                "pin": 5,
+                "port": "A",
+                "signal": "sck"
+              },
+              {
+                "af": 5,
+                "pin": 6,
+                "port": "A",
+                "signal": "miso"
+              },
+              {
+                "af": 5,
+                "pin": 7,
+                "port": "A",
+                "signal": "mosi"
+              },
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 0,
+                "port": "B",
+                "signal": "cs0"
+              },
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 1,
+                "port": "B",
+                "signal": "cs1"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_STM32_SPI_ENABLE"
+          }
+        ],
+        "id": "stm32f4discovery-mb997",
+        "inputs_sha256": {
+          "CMakeLists.txt": "a953fe4068e220d7606a6cd821a62ec9471b71694d054a569f04171a431de3ec",
+          "nexus_board.h": "ed9da5df0b48398e445dabe9362e899c4dbc8d39433ca104827b629b0f953629",
+          "spi.c": "bf42d226024b40e42d87bbc0af4e81c1d6a98424d4c5d3aa7ab18497a3ef1b6e",
+          "uart.c": "c0c27a76736cd34a11048332e4343acc7f0bd5f6e0bac3c1de2fa6da7dabbcc8"
+        },
+        "manifest_sha256": "62d23c570bea86e5b301d92447b76536e2607ba102999563714fb09cea103556",
+        "schema": 1,
+        "sha256": "c79f75598b14e20de7ff70a8d19fe623a4b0fd0f80002b74606ba4e973995e9f",
+        "soc": "stm32f407vg"
+      },
+      "build_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/CMakeCache.txt",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/CMakeCache.txt",
+          "sha256": "ea650e2d7ec845a702a2ee9a21531cb51f2ec5065cd74764f693cfa1b05ada5a",
+          "size": 18918
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/compile_commands.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/compile_commands.json",
+          "sha256": "444e39b14e89df8b748d1b43852d83f2e2c3b200e5e3c3eaa8887bfedf769d90",
+          "size": 163910
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/build.ninja",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/build.ninja",
+          "sha256": "481975f8c483fd9e152222fa1333141f8bb60a8550c7771c708dbc50a87e07d0",
+          "size": 309453
+        }
+      ],
+      "candidate": false,
+      "checker": {
+        "hardware_verified": false,
+        "images": [
+          "nexus_contract_firmware.elf"
+        ],
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-release/elf-contract.json",
+          "sha256": "bca64709384fcfafa74a60c20c50caebd6ccefb5ddfd17a9e4eb6328d9ef84fe",
+          "size": 1318
+        },
+        "returncode": 0
+      },
+      "commands": [
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/ci_build.py",
+            "--preset",
+            "stm32-armgcc-release",
+            "--stage",
+            "build",
+            "--jobs",
+            "4"
+          ],
+          "finished_utc": "2026-10-09T11:54:45.907235+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-release/build.log",
+            "sha256": "355f737afe1df64d18ff01f93c4d637687a0b00637953388691049c5bf600527",
+            "size": 19089
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:54:28.175875+00:00"
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/validate_firmware_elf.py",
+            "--build-dir",
+            "/workspace/nexus/build/stm32-armgcc-release",
+            "--report",
+            "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-release/elf-contract.json"
+          ],
+          "finished_utc": "2026-10-09T11:54:46.289178+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-release/checker.log",
+            "sha256": "139c6186a766dfd3a1f7f0485d97b50b368ca2d760deed7e605a08caf19f540c",
+            "size": 62
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:54:45.907452+00:00"
+        }
+      ],
+      "expected_source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "finished_utc": "2026-10-09T11:54:47.368596+00:00",
+      "generated_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/board-identity.json",
+          "sha256": "2f7066da929d83c5ef7b58252d52539eb6dabfba457e235bc711391e5c2263c1",
+          "size": 2446
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/board.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/board.cmake",
+          "sha256": "c4887ffa92308a74d8a12a867735270c32f84d1e25d7636efe82d700eef0f1d5",
+          "size": 444
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/config.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/config.cmake",
+          "sha256": "4fc56b3953d31efe83ab46c788820d0b91e4fb072711ab9e4092992731b6f0b0",
+          "size": 167655
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/effective.config",
+          "sha256": "97a5a6b94dc45f8d702cbcdf3a283cf36e8b7a6634f35854a99833ce020ffd30",
+          "size": 13766
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/firmware.ld",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/firmware.ld",
+          "sha256": "64a243519c97446ed8831dff341c51f6577fe39663532868a7f603d3076a3874",
+          "size": 1021
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/layout.json",
+          "sha256": "970acf67238509425ea9d2a34203d3606e817cde2e36f4e3058fe8b2e87872b3",
+          "size": 270
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/nexus_config.h",
+          "sha256": "1cfafefdf10cf30014573c56e505dd70a38b1a4dfb0e2f51a29ed5f466084de5",
+          "size": 139223
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/nx_flash_layout.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/nx_flash_layout.h",
+          "sha256": "383d0853ff10a98436da373e23887ffbca9429ef9300afcb3e4934a8cb088ad2",
+          "size": 335
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      ],
+      "hardware_verified": false,
+      "identities": {
+        "board-identity.json": {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/board-identity.json",
+          "sha256": "2f7066da929d83c5ef7b58252d52539eb6dabfba457e235bc711391e5c2263c1",
+          "size": 2446
+        },
+        "effective.config": {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/effective.config",
+          "sha256": "97a5a6b94dc45f8d702cbcdf3a283cf36e8b7a6634f35854a99833ce020ffd30",
+          "size": 13766
+        },
+        "layout.json": {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/layout.json",
+          "sha256": "970acf67238509425ea9d2a34203d3606e817cde2e36f4e3058fe8b2e87872b3",
+          "size": 270
+        },
+        "nexus_config.h": {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/nexus_config.h",
+          "sha256": "1cfafefdf10cf30014573c56e505dd70a38b1a4dfb0e2f51a29ed5f466084de5",
+          "size": 139223
+        },
+        "toolchains.lock.json": {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      },
+      "kind": "arm-clean-source-integration",
+      "layout": {
+        "flash_base": 134217728,
+        "flash_size": 1048576,
+        "image": {
+          "offset": 0,
+          "size": 1048576
+        },
+        "input_sha256": null,
+        "regions": [],
+        "schema": 1,
+        "sha256": "71e5ddb118b67f4b4d1fdc23187806608ebf88d88efbacf9328463c9e8f8c5c8",
+        "soc": "stm32f407vg"
+      },
+      "postprocessing": {
+        "executed_result": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-release/result.executed.json",
+          "sha256": "c4ed4ad7e87bb76d0c42da424172a8197a12ca00c1c022136ddc52937a1c3f36",
+          "size": 10664
+        },
+        "executed_results": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/results.executed.json",
+          "sha256": "f0ccc0d53f5bc456da551eb541f141acf618bd837054eb4d0244473b918fb4cb",
+          "size": 97219
+        },
+        "kind": "immutable-evidence-path-retention",
+        "manifest": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-file-manifest.json",
+          "sha256": "d823275b7957db343ca1e5aa8d4e3bd135b89205a99871ccc2af270187390eb7",
+          "size": 84236
+        },
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-report.json",
+          "sha256": "fc9c1e35f761bf9adcb21357c94c6935bc2b4160b6bb4126725b9326c0f98f20",
+          "size": 3570
+        },
+        "script": {
+          "original_path": "/workspace/nexus/build/unification-arm-retention.py",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/unification-arm-retention.py",
+          "sha256": "369f3ef53670698bb13558334c7798bd5510c78a7bc5d644c75f3ee98b263f96",
+          "size": 16073
+        }
+      },
+      "preserved_previous_outputs": [],
+      "preset": "stm32-armgcc-release",
+      "source_after": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-release/source-after.json",
+        "sha256": "4232c3f3ac5b6f422f5bb7448dfd97e7987f3fbf5859b1fd88aed52caa1e37d1"
+      },
+      "source_before": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-release/source-before.json",
+        "sha256": "75aec5515fcc6e8429288608795a6abe281ec7587397a38545acd9f98aa02a7a"
+      },
+      "source_changed_during_build": false,
+      "source_changed_paths": [],
+      "source_clean": true,
+      "started_utc": "2026-10-09T11:54:27.673027+00:00",
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/bin/nexus_contract_firmware.bin",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/bin/nexus_contract_firmware.bin",
+          "sha256": "a9d0e1cb1eaf9f662d2f3775a9521770e6c135b8d5f8868c9235b0b1e4eb8a74",
+          "size": 63036
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/bin/nexus_contract_firmware.elf",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/bin/nexus_contract_firmware.elf",
+          "sha256": "9f0917deea86b4732a870a2f937d496212fffe22b1c217ec2d0f4bbe48017841",
+          "size": 112136
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/bin/nexus_contract_firmware.hex",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/bin/nexus_contract_firmware.hex",
+          "sha256": "41d5d02dc01a357bee7e1f7929f6d6326a95d522c926d97e1d603c86cef4933a",
+          "size": 177379
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/bin/nexus_contract_firmware.map",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/bin/nexus_contract_firmware.map",
+          "sha256": "091e96d41cbd6c6faa9e1f9137a824816719bf4c18a5971a511d1ff1725beab2",
+          "size": 322764
+        }
+      ],
+      "board": {
+        "active_resources": [
+          {
+            "id": "status-led",
+            "kind": "gpio",
+            "pins": [
+              {
+                "af": 0,
+                "initial": 0,
+                "pin": 12,
+                "port": "D",
+                "signal": "led"
+              }
+            ],
+            "when": "CONFIG_STM32_GPIO_ENABLE"
+          },
+          {
+            "clock": "USART2",
+            "id": "console",
+            "instance": 1,
+            "irq": 38,
+            "kind": "uart",
+            "pins": [
+              {
+                "af": 7,
+                "pin": 2,
+                "port": "A",
+                "signal": "tx"
+              },
+              {
+                "af": 7,
+                "pin": 3,
+                "port": "A",
+                "signal": "rx"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_STM32_UART_ENABLE"
+          },
+          {
+            "clock": "SPI1",
+            "dma": [
+              {
+                "channel": 3,
+                "controller": "DMA2",
+                "direction": "tx",
+                "irq": 59,
+                "stream": 3
+              },
+              {
+                "channel": 3,
+                "controller": "DMA2",
+                "direction": "rx",
+                "irq": 56,
+                "stream": 0
+              }
+            ],
+            "id": "spi-fixture",
+            "instance": 1,
+            "irq": 35,
+            "kind": "spi",
+            "pins": [
+              {
+                "af": 5,
+                "pin": 5,
+                "port": "A",
+                "signal": "sck"
+              },
+              {
+                "af": 5,
+                "pin": 6,
+                "port": "A",
+                "signal": "miso"
+              },
+              {
+                "af": 5,
+                "pin": 7,
+                "port": "A",
+                "signal": "mosi"
+              },
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 0,
+                "port": "B",
+                "signal": "cs0"
+              },
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 1,
+                "port": "B",
+                "signal": "cs1"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_STM32_SPI_ENABLE"
+          }
+        ],
+        "id": "stm32f4discovery-mb997",
+        "inputs_sha256": {
+          "CMakeLists.txt": "a953fe4068e220d7606a6cd821a62ec9471b71694d054a569f04171a431de3ec",
+          "nexus_board.h": "ed9da5df0b48398e445dabe9362e899c4dbc8d39433ca104827b629b0f953629",
+          "spi.c": "bf42d226024b40e42d87bbc0af4e81c1d6a98424d4c5d3aa7ab18497a3ef1b6e",
+          "uart.c": "c0c27a76736cd34a11048332e4343acc7f0bd5f6e0bac3c1de2fa6da7dabbcc8"
+        },
+        "manifest_sha256": "62d23c570bea86e5b301d92447b76536e2607ba102999563714fb09cea103556",
+        "schema": 1,
+        "sha256": "c79f75598b14e20de7ff70a8d19fe623a4b0fd0f80002b74606ba4e973995e9f",
+        "soc": "stm32f407vg"
+      },
+      "build_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/CMakeCache.txt",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/CMakeCache.txt",
+          "sha256": "fd202d2f815e90b94899641bdbf92bd601ba4975de4bf5214bd5188d613e05cc",
+          "size": 19067
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/compile_commands.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/compile_commands.json",
+          "sha256": "020c265737046afad014080579febd4a568355ccd5a47cf92594623cf4c82a65",
+          "size": 181741
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/build.ninja",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/build.ninja",
+          "sha256": "6fbbe3ab6589c9557f1d1002d6f44a297aa2583ff9f1f83f47d5d4881c4bc387",
+          "size": 338129
+        }
+      ],
+      "candidate": false,
+      "checker": {
+        "hardware_verified": false,
+        "images": [
+          "nexus_contract_firmware.elf"
+        ],
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-freertos-release/elf-contract.json",
+          "sha256": "5b7f1b19c1515766d0fcba13ec9a46e942ba7c72f789923d06e284ac1004616d",
+          "size": 1367
+        },
+        "returncode": 0
+      },
+      "commands": [
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/ci_build.py",
+            "--preset",
+            "stm32-armgcc-freertos-release",
+            "--stage",
+            "build",
+            "--jobs",
+            "4"
+          ],
+          "finished_utc": "2026-10-09T11:54:50.723165+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-freertos-release/build.log",
+            "sha256": "70dd3dbb93fc7acb8aa3dc320604a79d227e7dde1912d19652031493d3d63c07",
+            "size": 20009
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:54:28.070168+00:00"
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/validate_firmware_elf.py",
+            "--build-dir",
+            "/workspace/nexus/build/stm32-armgcc-freertos-release",
+            "--report",
+            "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-freertos-release/elf-contract.json"
+          ],
+          "finished_utc": "2026-10-09T11:54:50.935159+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-freertos-release/checker.log",
+            "sha256": "139c6186a766dfd3a1f7f0485d97b50b368ca2d760deed7e605a08caf19f540c",
+            "size": 62
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:54:50.723375+00:00"
+        }
+      ],
+      "expected_source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "finished_utc": "2026-10-09T11:54:51.764085+00:00",
+      "generated_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/board-identity.json",
+          "sha256": "2f7066da929d83c5ef7b58252d52539eb6dabfba457e235bc711391e5c2263c1",
+          "size": 2446
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/board.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/board.cmake",
+          "sha256": "16663b94af0aeb783bef1a88c86769890e00af3958e1d391b6afc9493f796248",
+          "size": 453
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/config.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/config.cmake",
+          "sha256": "3a4b4c25a621bcf0424dda7272c4b2bc46c64b93ca0844fad97352a09a25a99e",
+          "size": 167672
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/effective.config",
+          "sha256": "c21b5995c04896d8524c0abeacc83d431893b0dc213a0f8769855628f6090e22",
+          "size": 14198
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/firmware.ld",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/firmware.ld",
+          "sha256": "64a243519c97446ed8831dff341c51f6577fe39663532868a7f603d3076a3874",
+          "size": 1021
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/layout.json",
+          "sha256": "970acf67238509425ea9d2a34203d3606e817cde2e36f4e3058fe8b2e87872b3",
+          "size": 270
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/nexus_config.h",
+          "sha256": "f6f4b92ead738fd328db21f5ba946e02406fad27a36f753306b6cbdeebd11f6d",
+          "size": 139543
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/nx_flash_layout.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/nx_flash_layout.h",
+          "sha256": "383d0853ff10a98436da373e23887ffbca9429ef9300afcb3e4934a8cb088ad2",
+          "size": 335
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      ],
+      "hardware_verified": false,
+      "identities": {
+        "board-identity.json": {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/board-identity.json",
+          "sha256": "2f7066da929d83c5ef7b58252d52539eb6dabfba457e235bc711391e5c2263c1",
+          "size": 2446
+        },
+        "effective.config": {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/effective.config",
+          "sha256": "c21b5995c04896d8524c0abeacc83d431893b0dc213a0f8769855628f6090e22",
+          "size": 14198
+        },
+        "layout.json": {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/layout.json",
+          "sha256": "970acf67238509425ea9d2a34203d3606e817cde2e36f4e3058fe8b2e87872b3",
+          "size": 270
+        },
+        "nexus_config.h": {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/nexus_config.h",
+          "sha256": "f6f4b92ead738fd328db21f5ba946e02406fad27a36f753306b6cbdeebd11f6d",
+          "size": 139543
+        },
+        "toolchains.lock.json": {
+          "original_path": "/workspace/nexus/build/stm32-armgcc-freertos-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-armgcc-freertos-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      },
+      "kind": "arm-clean-source-integration",
+      "layout": {
+        "flash_base": 134217728,
+        "flash_size": 1048576,
+        "image": {
+          "offset": 0,
+          "size": 1048576
+        },
+        "input_sha256": null,
+        "regions": [],
+        "schema": 1,
+        "sha256": "71e5ddb118b67f4b4d1fdc23187806608ebf88d88efbacf9328463c9e8f8c5c8",
+        "soc": "stm32f407vg"
+      },
+      "postprocessing": {
+        "executed_result": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-freertos-release/result.executed.json",
+          "sha256": "32ba3edec75dd305028f1da1f1044a9908cec0e0720352444745fa7b6337059c",
+          "size": 10935
+        },
+        "executed_results": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/results.executed.json",
+          "sha256": "f0ccc0d53f5bc456da551eb541f141acf618bd837054eb4d0244473b918fb4cb",
+          "size": 97219
+        },
+        "kind": "immutable-evidence-path-retention",
+        "manifest": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-file-manifest.json",
+          "sha256": "d823275b7957db343ca1e5aa8d4e3bd135b89205a99871ccc2af270187390eb7",
+          "size": 84236
+        },
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-report.json",
+          "sha256": "fc9c1e35f761bf9adcb21357c94c6935bc2b4160b6bb4126725b9326c0f98f20",
+          "size": 3570
+        },
+        "script": {
+          "original_path": "/workspace/nexus/build/unification-arm-retention.py",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/unification-arm-retention.py",
+          "sha256": "369f3ef53670698bb13558334c7798bd5510c78a7bc5d644c75f3ee98b263f96",
+          "size": 16073
+        }
+      },
+      "preserved_previous_outputs": [],
+      "preset": "stm32-armgcc-freertos-release",
+      "source_after": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-freertos-release/source-after.json",
+        "sha256": "0cde899768642d20de3bda4c07307c8194495c1e870f7bbb32b9b8ce5c3261f0"
+      },
+      "source_before": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-armgcc-freertos-release/source-before.json",
+        "sha256": "70f713232a4d534ce058e4500dbcf85d14c6b78e7ffb82d03d3ff8e4eb706bf5"
+      },
+      "source_changed_during_build": false,
+      "source_changed_paths": [],
+      "source_clean": true,
+      "started_utc": "2026-10-09T11:54:27.672814+00:00",
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/bin/nexus_contract_firmware.bin",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/bin/nexus_contract_firmware.bin",
+          "sha256": "9ee3d419744adddea3465e5af3d1c3e1c1dd03dbbe29aea19dbeb0302e5afd85",
+          "size": 29164
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/bin/nexus_contract_firmware.elf",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/bin/nexus_contract_firmware.elf",
+          "sha256": "f310ae5301dc6b522c613e280fc4eb18f14f8d6a4e60b745babbd4ad729b3c76",
+          "size": 61128
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/bin/nexus_contract_firmware.hex",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/bin/nexus_contract_firmware.hex",
+          "sha256": "c8f17b0931415649dbafb2b410c500bb8899a1e168ec5c5aadc369c23e24a327",
+          "size": 82130
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/bin/nexus_contract_firmware.map",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/bin/nexus_contract_firmware.map",
+          "sha256": "b9c0c1edfc634e3f07585b46b8c0d2fbcfef6eaf960eedbf30b25fb16684c2e9",
+          "size": 263257
+        }
+      ],
+      "board": {
+        "active_resources": [
+          {
+            "id": "status-led",
+            "kind": "gpio",
+            "pins": [
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 3,
+                "port": "E",
+                "signal": "led0"
+              },
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 4,
+                "port": "E",
+                "signal": "led1"
+              },
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 9,
+                "port": "G",
+                "signal": "led2"
+              }
+            ],
+            "when": "CONFIG_STM32_GPIO_ENABLE"
+          },
+          {
+            "clock": "USART1",
+            "id": "console",
+            "instance": 0,
+            "irq": 37,
+            "kind": "uart",
+            "pins": [
+              {
+                "af": 7,
+                "pin": 9,
+                "port": "A",
+                "signal": "tx"
+              },
+              {
+                "af": 7,
+                "pin": 10,
+                "port": "A",
+                "signal": "rx"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_STM32_UART_ENABLE"
+          }
+        ],
+        "id": "stm32f407zg-qiming-v31",
+        "inputs_sha256": {
+          "CMakeLists.txt": "40ea6b4274d235b38eb9397dce836163bca8f842b85eb319691f4774f628f761",
+          "board.c": "450497b631cb31b469e3a1be34858a3799034812c644b736ce21da52df416fbf",
+          "nexus_board.h": "807dbacd7df77b6f4a86f9301fb2e8fde9d1a77c5473395a5a4a2def013087cf",
+          "uart.c": "551a06de9b0f85a5ee673797c73b983196b7fbdc8b44dabb1f1bc87c44cd6aef"
+        },
+        "manifest_sha256": "f99b0c9b47f02d9ae44b37764fb97fa3fae2c4493839555dc2369a8531b2a549",
+        "schema": 1,
+        "sha256": "86bd0215939804e60ee472e2439f607f296e465162188714742cc4217254ee35",
+        "soc": "stm32f407zg"
+      },
+      "build_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/CMakeCache.txt",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/CMakeCache.txt",
+          "sha256": "0539389ff6a2a66ae0d719dc0344767e7596df67015eb44b075eb64e69103d74",
+          "size": 19016
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/compile_commands.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/compile_commands.json",
+          "sha256": "640cf11a23acff4171b7a2ff6ac45dfb80ceb4fb8c25863a3f7faf9bab1eb9d7",
+          "size": 114613
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/build.ninja",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/build.ninja",
+          "sha256": "1eccd9431c06f900a590d32a1a042d7614cefc1aec8c3954fbc525addab92b45",
+          "size": 224009
+        }
+      ],
+      "candidate": false,
+      "checker": {
+        "hardware_verified": false,
+        "images": [
+          "nexus_contract_firmware.elf"
+        ],
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-baremetal-release/elf-contract.json",
+          "sha256": "17002c895dd763df96fce19bf7bb20393ef3a3425f1da1127617d4832e44abd1",
+          "size": 1250
+        },
+        "returncode": 0
+      },
+      "commands": [
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/ci_build.py",
+            "--preset",
+            "stm32-qiming-armgcc-baremetal-release",
+            "--stage",
+            "build",
+            "--jobs",
+            "4"
+          ],
+          "finished_utc": "2026-10-09T11:55:02.800597+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-baremetal-release/build.log",
+            "sha256": "b79d2d6ca0f732fecec873718b837d190742f38e8f00fe6448750a6eae013c18",
+            "size": 14797
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:54:48.325004+00:00"
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/validate_firmware_elf.py",
+            "--build-dir",
+            "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release",
+            "--report",
+            "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-baremetal-release/elf-contract.json"
+          ],
+          "finished_utc": "2026-10-09T11:55:03.021396+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-baremetal-release/checker.log",
+            "sha256": "139c6186a766dfd3a1f7f0485d97b50b368ca2d760deed7e605a08caf19f540c",
+            "size": 62
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:55:02.800766+00:00"
+        }
+      ],
+      "expected_source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "finished_utc": "2026-10-09T11:55:04.208863+00:00",
+      "generated_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/board-identity.json",
+          "sha256": "a66b9e3262fcca3bd4d432424ad8fb15d2dc7d193d89d605ebf0e847b54fcf66",
+          "size": 1594
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/board.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/board.cmake",
+          "sha256": "85d01a580895672d6b1acac97e49376f3b557a8130c5afa381292ae990233673",
+          "size": 469
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/config.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/config.cmake",
+          "sha256": "0c216850986c446a1a04086b9b36f5ec87b181a3f3d0fe0659604cc6de882436",
+          "size": 167645
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/effective.config",
+          "sha256": "24ce6093193261605901455f2767e844579af262aa75b84bdefede8d198f63b4",
+          "size": 13367
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/firmware.ld",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/firmware.ld",
+          "sha256": "43d1f08605aab6af25864dbff491298111db52e44b03da25c274cffbc5c07f1d",
+          "size": 1021
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/layout.json",
+          "sha256": "ba55dfefef7e65a67aa0acec7593ef8c0c4f6e7e9482b2646d88d8c7d89e145b",
+          "size": 270
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/nexus_config.h",
+          "sha256": "65316c7c2cac76d3dd9dfb1075bfa2f7d888ba8da9a9fae913084b5794141e08",
+          "size": 138982
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/nx_flash_layout.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/nx_flash_layout.h",
+          "sha256": "1cdd873057a9acb497c3170b04f2c80399fffa1834abbe60180afd2d23b60623",
+          "size": 335
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      ],
+      "hardware_verified": false,
+      "identities": {
+        "board-identity.json": {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/board-identity.json",
+          "sha256": "a66b9e3262fcca3bd4d432424ad8fb15d2dc7d193d89d605ebf0e847b54fcf66",
+          "size": 1594
+        },
+        "effective.config": {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/effective.config",
+          "sha256": "24ce6093193261605901455f2767e844579af262aa75b84bdefede8d198f63b4",
+          "size": 13367
+        },
+        "layout.json": {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/layout.json",
+          "sha256": "ba55dfefef7e65a67aa0acec7593ef8c0c4f6e7e9482b2646d88d8c7d89e145b",
+          "size": 270
+        },
+        "nexus_config.h": {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/nexus_config.h",
+          "sha256": "65316c7c2cac76d3dd9dfb1075bfa2f7d888ba8da9a9fae913084b5794141e08",
+          "size": 138982
+        },
+        "toolchains.lock.json": {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      },
+      "kind": "arm-clean-source-integration",
+      "layout": {
+        "flash_base": 134217728,
+        "flash_size": 1048576,
+        "image": {
+          "offset": 0,
+          "size": 1048576
+        },
+        "input_sha256": null,
+        "regions": [],
+        "schema": 1,
+        "sha256": "c0cec8e445b58eff01df78a30ed8db3164e98dbe0a979d0390571f152dd09c7a",
+        "soc": "stm32f407zg"
+      },
+      "postprocessing": {
+        "executed_result": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-baremetal-release/result.executed.json",
+          "sha256": "b4b6f7ab0a8607de89086552b488a4a460fa9e11191097d88b2041181e6719e8",
+          "size": 10231
+        },
+        "executed_results": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/results.executed.json",
+          "sha256": "f0ccc0d53f5bc456da551eb541f141acf618bd837054eb4d0244473b918fb4cb",
+          "size": 97219
+        },
+        "kind": "immutable-evidence-path-retention",
+        "manifest": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-file-manifest.json",
+          "sha256": "d823275b7957db343ca1e5aa8d4e3bd135b89205a99871ccc2af270187390eb7",
+          "size": 84236
+        },
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-report.json",
+          "sha256": "fc9c1e35f761bf9adcb21357c94c6935bc2b4160b6bb4126725b9326c0f98f20",
+          "size": 3570
+        },
+        "script": {
+          "original_path": "/workspace/nexus/build/unification-arm-retention.py",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/unification-arm-retention.py",
+          "sha256": "369f3ef53670698bb13558334c7798bd5510c78a7bc5d644c75f3ee98b263f96",
+          "size": 16073
+        }
+      },
+      "preserved_previous_outputs": [],
+      "preset": "stm32-qiming-armgcc-baremetal-release",
+      "source_after": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-baremetal-release/source-after.json",
+        "sha256": "a7d45a45da149755af52725f2f0262c8d1a3ef5386929585ff5e0b40a0705e6e"
+      },
+      "source_before": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-baremetal-release/source-before.json",
+        "sha256": "4148a4f54914e225939c1d11cd68699759248f701af957c5b4183ea348ea7481"
+      },
+      "source_changed_during_build": false,
+      "source_changed_paths": [],
+      "source_clean": true,
+      "started_utc": "2026-10-09T11:54:47.375550+00:00",
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/bin/nexus_contract_firmware.bin",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/bin/nexus_contract_firmware.bin",
+          "sha256": "031c7f409ac4d8270ef6e834537f150b0950da118624e871f3101b358191dbfc",
+          "size": 39120
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/bin/nexus_contract_firmware.elf",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/bin/nexus_contract_firmware.elf",
+          "sha256": "c8f67044c83a40b47f983a331d542879e2c5af766b5ec311ac51cdb574c9101b",
+          "size": 79764
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/bin/nexus_contract_firmware.hex",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/bin/nexus_contract_firmware.hex",
+          "sha256": "24460a3bdc8dde78e42873d6de3ea75cb27ecc41a16c2454eb7f513a8ce03a44",
+          "size": 110112
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/bin/nexus_contract_firmware.map",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/bin/nexus_contract_firmware.map",
+          "sha256": "c2291b83d2ebd5cd512154de93fa13d01e557289f74d3b993d2b41cf926347a9",
+          "size": 294841
+        }
+      ],
+      "board": {
+        "active_resources": [
+          {
+            "id": "status-led",
+            "kind": "gpio",
+            "pins": [
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 3,
+                "port": "E",
+                "signal": "led0"
+              },
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 4,
+                "port": "E",
+                "signal": "led1"
+              },
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 9,
+                "port": "G",
+                "signal": "led2"
+              }
+            ],
+            "when": "CONFIG_STM32_GPIO_ENABLE"
+          },
+          {
+            "clock": "USART1",
+            "id": "console",
+            "instance": 0,
+            "irq": 37,
+            "kind": "uart",
+            "pins": [
+              {
+                "af": 7,
+                "pin": 9,
+                "port": "A",
+                "signal": "tx"
+              },
+              {
+                "af": 7,
+                "pin": 10,
+                "port": "A",
+                "signal": "rx"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_STM32_UART_ENABLE"
+          }
+        ],
+        "id": "stm32f407zg-qiming-v31",
+        "inputs_sha256": {
+          "CMakeLists.txt": "40ea6b4274d235b38eb9397dce836163bca8f842b85eb319691f4774f628f761",
+          "board.c": "450497b631cb31b469e3a1be34858a3799034812c644b736ce21da52df416fbf",
+          "nexus_board.h": "807dbacd7df77b6f4a86f9301fb2e8fde9d1a77c5473395a5a4a2def013087cf",
+          "uart.c": "551a06de9b0f85a5ee673797c73b983196b7fbdc8b44dabb1f1bc87c44cd6aef"
+        },
+        "manifest_sha256": "f99b0c9b47f02d9ae44b37764fb97fa3fae2c4493839555dc2369a8531b2a549",
+        "schema": 1,
+        "sha256": "86bd0215939804e60ee472e2439f607f296e465162188714742cc4217254ee35",
+        "soc": "stm32f407zg"
+      },
+      "build_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/CMakeCache.txt",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/CMakeCache.txt",
+          "sha256": "91d99794cf37d1b48ffa78fa97694bebabb38765b1bde4096394e678361f46a1",
+          "size": 19115
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/compile_commands.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/compile_commands.json",
+          "sha256": "e3c6b4a0024afae63dfc0506fbd72aa77e4d74b203b3b4469d2a6b52b12b3062",
+          "size": 129612
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/build.ninja",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/build.ninja",
+          "sha256": "4f13f63ee7f1fc64343f176f84ba7602182f6c065accb03497c22e9c79955382",
+          "size": 249648
+        }
+      ],
+      "candidate": false,
+      "checker": {
+        "hardware_verified": false,
+        "images": [
+          "nexus_contract_firmware.elf"
+        ],
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-freertos-release/elf-contract.json",
+          "sha256": "abdbc1077556f856933500dc62fdee9f880213e9c0862ab0f6491b316a078985",
+          "size": 1299
+        },
+        "returncode": 0
+      },
+      "commands": [
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/ci_build.py",
+            "--preset",
+            "stm32-qiming-armgcc-freertos-release",
+            "--stage",
+            "build",
+            "--jobs",
+            "4"
+          ],
+          "finished_utc": "2026-10-09T11:55:09.135168+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-freertos-release/build.log",
+            "sha256": "830843bcd2c41f43a1cad842cc39fb206004519de767df22268d28255c5b9bb9",
+            "size": 15647
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:54:52.500765+00:00"
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/validate_firmware_elf.py",
+            "--build-dir",
+            "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release",
+            "--report",
+            "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-freertos-release/elf-contract.json"
+          ],
+          "finished_utc": "2026-10-09T11:55:09.283026+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-freertos-release/checker.log",
+            "sha256": "139c6186a766dfd3a1f7f0485d97b50b368ca2d760deed7e605a08caf19f540c",
+            "size": 62
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:55:09.135406+00:00"
+        }
+      ],
+      "expected_source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "finished_utc": "2026-10-09T11:55:10.213911+00:00",
+      "generated_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/board-identity.json",
+          "sha256": "a66b9e3262fcca3bd4d432424ad8fb15d2dc7d193d89d605ebf0e847b54fcf66",
+          "size": 1594
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/board.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/board.cmake",
+          "sha256": "c5d02c55c45b5f6b71ffa173cb0d27a8e1a4fc0d010bb3990de763dc1c82c43e",
+          "size": 468
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/config.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/config.cmake",
+          "sha256": "09d55205627d1868dfe4e3555c56ed716ada8593de98182c6e63b060d06b6ec7",
+          "size": 167663
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/effective.config",
+          "sha256": "a01bb0a4b3aefd7e94853830b3a5c3de291a72cb1334b538738c001024c1456b",
+          "size": 13771
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/firmware.ld",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/firmware.ld",
+          "sha256": "43d1f08605aab6af25864dbff491298111db52e44b03da25c274cffbc5c07f1d",
+          "size": 1021
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/layout.json",
+          "sha256": "ba55dfefef7e65a67aa0acec7593ef8c0c4f6e7e9482b2646d88d8c7d89e145b",
+          "size": 270
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/nexus_config.h",
+          "sha256": "fd57775a039b4bd3f9efc26f79cd2efe7616a5b783f35018e6973a142b76422f",
+          "size": 139305
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/nx_flash_layout.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/nx_flash_layout.h",
+          "sha256": "1cdd873057a9acb497c3170b04f2c80399fffa1834abbe60180afd2d23b60623",
+          "size": 335
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      ],
+      "hardware_verified": false,
+      "identities": {
+        "board-identity.json": {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/board-identity.json",
+          "sha256": "a66b9e3262fcca3bd4d432424ad8fb15d2dc7d193d89d605ebf0e847b54fcf66",
+          "size": 1594
+        },
+        "effective.config": {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/effective.config",
+          "sha256": "a01bb0a4b3aefd7e94853830b3a5c3de291a72cb1334b538738c001024c1456b",
+          "size": 13771
+        },
+        "layout.json": {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/layout.json",
+          "sha256": "ba55dfefef7e65a67aa0acec7593ef8c0c4f6e7e9482b2646d88d8c7d89e145b",
+          "size": 270
+        },
+        "nexus_config.h": {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/nexus_config.h",
+          "sha256": "fd57775a039b4bd3f9efc26f79cd2efe7616a5b783f35018e6973a142b76422f",
+          "size": 139305
+        },
+        "toolchains.lock.json": {
+          "original_path": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-qiming-armgcc-freertos-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      },
+      "kind": "arm-clean-source-integration",
+      "layout": {
+        "flash_base": 134217728,
+        "flash_size": 1048576,
+        "image": {
+          "offset": 0,
+          "size": 1048576
+        },
+        "input_sha256": null,
+        "regions": [],
+        "schema": 1,
+        "sha256": "c0cec8e445b58eff01df78a30ed8db3164e98dbe0a979d0390571f152dd09c7a",
+        "soc": "stm32f407zg"
+      },
+      "postprocessing": {
+        "executed_result": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-freertos-release/result.executed.json",
+          "sha256": "5d92ac1f7ebd4c7f4f55ba1f429b2e9928f6a0d1b53a82e4cfa50d61d9f8c08c",
+          "size": 10202
+        },
+        "executed_results": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/results.executed.json",
+          "sha256": "f0ccc0d53f5bc456da551eb541f141acf618bd837054eb4d0244473b918fb4cb",
+          "size": 97219
+        },
+        "kind": "immutable-evidence-path-retention",
+        "manifest": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-file-manifest.json",
+          "sha256": "d823275b7957db343ca1e5aa8d4e3bd135b89205a99871ccc2af270187390eb7",
+          "size": 84236
+        },
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-report.json",
+          "sha256": "fc9c1e35f761bf9adcb21357c94c6935bc2b4160b6bb4126725b9326c0f98f20",
+          "size": 3570
+        },
+        "script": {
+          "original_path": "/workspace/nexus/build/unification-arm-retention.py",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/unification-arm-retention.py",
+          "sha256": "369f3ef53670698bb13558334c7798bd5510c78a7bc5d644c75f3ee98b263f96",
+          "size": 16073
+        }
+      },
+      "preserved_previous_outputs": [],
+      "preset": "stm32-qiming-armgcc-freertos-release",
+      "source_after": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-freertos-release/source-after.json",
+        "sha256": "4b1dcd40438c35537a4814253f559eed6b6cdaad9b9ccc8444a53fdf19047bba"
+      },
+      "source_before": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-qiming-armgcc-freertos-release/source-before.json",
+        "sha256": "d365d09344e33845a6326820f6d453e17533e830eb71c747c7ca285f8c90a804"
+      },
+      "source_changed_during_build": false,
+      "source_changed_paths": [],
+      "source_clean": true,
+      "started_utc": "2026-10-09T11:54:51.765935+00:00",
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/bin/nexus_contract_firmware.bin",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/bin/nexus_contract_firmware.bin",
+          "sha256": "c7311cd935df3da0e80ac3dc9679249de9f4ac65f9874540933d8ab229f5d6a7",
+          "size": 29192
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/bin/nexus_contract_firmware.elf",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/bin/nexus_contract_firmware.elf",
+          "sha256": "6090b57306aed2ef0e627105f83b07677e8c141b0c636a3e11ee26fe32643bcd",
+          "size": 61144
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/bin/nexus_contract_firmware.hex",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/bin/nexus_contract_firmware.hex",
+          "sha256": "67c37d07691ad229381c48411461b2d73827fd8daea44332483fa67fcf18fe58",
+          "size": 82212
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/bin/nexus_contract_firmware.map",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/bin/nexus_contract_firmware.map",
+          "sha256": "9715810a55d0d579d35b3b520c02a0a18e870aba5aa0256b2d606f8a92ae19f6",
+          "size": 263368
+        }
+      ],
+      "board": {
+        "active_resources": [
+          {
+            "id": "status-led",
+            "kind": "gpio",
+            "pins": [
+              {
+                "af": 0,
+                "initial": 0,
+                "pin": 2,
+                "port": "B",
+                "signal": "led"
+              }
+            ],
+            "when": "CONFIG_STM32_GPIO_ENABLE"
+          },
+          {
+            "clock": "USART1",
+            "id": "console",
+            "instance": 0,
+            "irq": 37,
+            "kind": "uart",
+            "pins": [
+              {
+                "af": 7,
+                "pin": 9,
+                "port": "A",
+                "signal": "tx"
+              },
+              {
+                "af": 7,
+                "pin": 10,
+                "port": "A",
+                "signal": "rx"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_STM32_UART_ENABLE"
+          }
+        ],
+        "id": "stm32f407ve-sky-qingchun",
+        "inputs_sha256": {
+          "CMakeLists.txt": "c1c5009ca7aad9d851fc7f52e7f203dee41a3d54cdcf4926e67af54145f48a8b",
+          "board.c": "fc3f493921a51249477848fd87bb428379953d2b58e0c521f0b864176e8e668d",
+          "nexus_board.h": "c94256fc48e9068030b9bc30c29b1813ef6b5611fae6a84d6ff8989385a10b90",
+          "uart.c": "9613961224904f80d4488c015b4565ac136a8308acff709604746aa95bd5649c"
+        },
+        "manifest_sha256": "b848fbb27e289d72dba8b95fc9f314d6978cf68f8f7fd89a549cd6098ca79ce5",
+        "schema": 1,
+        "sha256": "4dc4307aa6782a8af1f397a35fbdbf784f0e824e5d9322c686b19e82c6484ba2",
+        "soc": "stm32f407ve"
+      },
+      "build_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/CMakeCache.txt",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/CMakeCache.txt",
+          "sha256": "32531ca90d3d19c3c1027aff12f40afacee53e25d2ad09f80364214b74e93d45",
+          "size": 19003
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/compile_commands.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/compile_commands.json",
+          "sha256": "3b25a9333aef0f65975f001d2c3c79e433c9d7121704834c75318d1ef134730b",
+          "size": 114045
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/build.ninja",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/build.ninja",
+          "sha256": "bd6ab6aae726ea97c3c7a5e6a7e82a3a82c8ec29e511df37f94b96ab8d6e07d1",
+          "size": 223699
+        }
+      ],
+      "candidate": false,
+      "checker": {
+        "hardware_verified": false,
+        "images": [
+          "nexus_contract_firmware.elf"
+        ],
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-baremetal-release/elf-contract.json",
+          "sha256": "dae2ba1b7686c0e3df5e727a0ddd9c09d6f69492aa5933de772f52654a75593a",
+          "size": 1251
+        },
+        "returncode": 0
+      },
+      "commands": [
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/ci_build.py",
+            "--preset",
+            "stm32-sky-armgcc-baremetal-release",
+            "--stage",
+            "build",
+            "--jobs",
+            "4"
+          ],
+          "finished_utc": "2026-10-09T11:55:21.110597+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-baremetal-release/build.log",
+            "sha256": "ed9a4e4488a79539ba9857eecc51840c5da1e3edac79ad5517f7051de9aae9a1",
+            "size": 14790
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:55:05.334768+00:00"
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/validate_firmware_elf.py",
+            "--build-dir",
+            "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release",
+            "--report",
+            "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-baremetal-release/elf-contract.json"
+          ],
+          "finished_utc": "2026-10-09T11:55:21.329356+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-baremetal-release/checker.log",
+            "sha256": "139c6186a766dfd3a1f7f0485d97b50b368ca2d760deed7e605a08caf19f540c",
+            "size": 62
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:55:21.110775+00:00"
+        }
+      ],
+      "expected_source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "finished_utc": "2026-10-09T11:55:22.589159+00:00",
+      "generated_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/board-identity.json",
+          "sha256": "78e859a48bef1102748e3fc398d2a2e1b4c852f660cb9c5a876e57a164780619",
+          "size": 1327
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/board.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/board.cmake",
+          "sha256": "6041b3652b773d38dfc6081483a5a1516c304c8fb3463cae9f6a3d1b9408077d",
+          "size": 476
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/config.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/config.cmake",
+          "sha256": "16507e0f0389f77ae5ed9f17711efa028b154043e3443efa47012a93c945b27c",
+          "size": 167645
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/effective.config",
+          "sha256": "c2553d3f11eaba7cbc4347971067eec8a952af9c8c344dc24903fdc2f1efa6ff",
+          "size": 13371
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/firmware.ld",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/firmware.ld",
+          "sha256": "e73b2a2ed0a74629bffd79b8052bdd1007b57e742e7cfcfeefa0e978b9614c07",
+          "size": 1020
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/layout.json",
+          "sha256": "f37c66a745ebc6de5a1c7d1f530ecb57c7e6472d60d6a3d115f0fad624c2a649",
+          "size": 268
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/nexus_config.h",
+          "sha256": "597c98b66b35445e866c215cbc7409534d8459e6dcf41d63a725ba7c6361aed2",
+          "size": 138982
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/nx_flash_layout.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/nx_flash_layout.h",
+          "sha256": "cf31561e1cd25e19303706ad9a291373804b7d56dfd0d7778fde821e5c439d87",
+          "size": 334
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      ],
+      "hardware_verified": false,
+      "identities": {
+        "board-identity.json": {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/board-identity.json",
+          "sha256": "78e859a48bef1102748e3fc398d2a2e1b4c852f660cb9c5a876e57a164780619",
+          "size": 1327
+        },
+        "effective.config": {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/effective.config",
+          "sha256": "c2553d3f11eaba7cbc4347971067eec8a952af9c8c344dc24903fdc2f1efa6ff",
+          "size": 13371
+        },
+        "layout.json": {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/layout.json",
+          "sha256": "f37c66a745ebc6de5a1c7d1f530ecb57c7e6472d60d6a3d115f0fad624c2a649",
+          "size": 268
+        },
+        "nexus_config.h": {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/nexus_config.h",
+          "sha256": "597c98b66b35445e866c215cbc7409534d8459e6dcf41d63a725ba7c6361aed2",
+          "size": 138982
+        },
+        "toolchains.lock.json": {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      },
+      "kind": "arm-clean-source-integration",
+      "layout": {
+        "flash_base": 134217728,
+        "flash_size": 524288,
+        "image": {
+          "offset": 0,
+          "size": 524288
+        },
+        "input_sha256": null,
+        "regions": [],
+        "schema": 1,
+        "sha256": "55562ce67ca24d77ff9f209a3ea343e6187606f59fa3acf7b653f8cce02388ae",
+        "soc": "stm32f407ve"
+      },
+      "postprocessing": {
+        "executed_result": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-baremetal-release/result.executed.json",
+          "sha256": "a9e40003dd7736d98c5d2f4434cb7ca000ebbbacb061d4781d15c0eb86987e4a",
+          "size": 9844
+        },
+        "executed_results": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/results.executed.json",
+          "sha256": "f0ccc0d53f5bc456da551eb541f141acf618bd837054eb4d0244473b918fb4cb",
+          "size": 97219
+        },
+        "kind": "immutable-evidence-path-retention",
+        "manifest": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-file-manifest.json",
+          "sha256": "d823275b7957db343ca1e5aa8d4e3bd135b89205a99871ccc2af270187390eb7",
+          "size": 84236
+        },
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-report.json",
+          "sha256": "fc9c1e35f761bf9adcb21357c94c6935bc2b4160b6bb4126725b9326c0f98f20",
+          "size": 3570
+        },
+        "script": {
+          "original_path": "/workspace/nexus/build/unification-arm-retention.py",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/unification-arm-retention.py",
+          "sha256": "369f3ef53670698bb13558334c7798bd5510c78a7bc5d644c75f3ee98b263f96",
+          "size": 16073
+        }
+      },
+      "preserved_previous_outputs": [],
+      "preset": "stm32-sky-armgcc-baremetal-release",
+      "source_after": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-baremetal-release/source-after.json",
+        "sha256": "b542c9f66889f30fdaf936b261a4bf233981647a3cf4ea139093bfce2b47e2b2"
+      },
+      "source_before": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-baremetal-release/source-before.json",
+        "sha256": "c1044bdd2b89317f454be1585308d7fbdaea8f7afa1b240afc8a31764de77490"
+      },
+      "source_changed_during_build": false,
+      "source_changed_paths": [],
+      "source_clean": true,
+      "started_utc": "2026-10-09T11:55:04.223885+00:00",
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/bin/nexus_contract_firmware.bin",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/bin/nexus_contract_firmware.bin",
+          "sha256": "04760df8dd0a6632bf52b4a953f1f3afea44bf20c25985c5fe55d84973bfc762",
+          "size": 39156
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/bin/nexus_contract_firmware.elf",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/bin/nexus_contract_firmware.elf",
+          "sha256": "2970d714444fa8abd44ce4b4bef084c22f6e0d90b5cd0efecb926dfce64613d3",
+          "size": 79780
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/bin/nexus_contract_firmware.hex",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/bin/nexus_contract_firmware.hex",
+          "sha256": "aa0e610b1fb46c1f47a805fe7f4726a56a01749318da38e6b276f8c6aa526a48",
+          "size": 110210
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/bin/nexus_contract_firmware.map",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/bin/nexus_contract_firmware.map",
+          "sha256": "89a262a25d1a87c9675a6517333278ac71115cf7c5d0e46e6451f9feeace02ab",
+          "size": 294952
+        }
+      ],
+      "board": {
+        "active_resources": [
+          {
+            "id": "status-led",
+            "kind": "gpio",
+            "pins": [
+              {
+                "af": 0,
+                "initial": 0,
+                "pin": 2,
+                "port": "B",
+                "signal": "led"
+              }
+            ],
+            "when": "CONFIG_STM32_GPIO_ENABLE"
+          },
+          {
+            "clock": "USART1",
+            "id": "console",
+            "instance": 0,
+            "irq": 37,
+            "kind": "uart",
+            "pins": [
+              {
+                "af": 7,
+                "pin": 9,
+                "port": "A",
+                "signal": "tx"
+              },
+              {
+                "af": 7,
+                "pin": 10,
+                "port": "A",
+                "signal": "rx"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_STM32_UART_ENABLE"
+          }
+        ],
+        "id": "stm32f407ve-sky-qingchun",
+        "inputs_sha256": {
+          "CMakeLists.txt": "c1c5009ca7aad9d851fc7f52e7f203dee41a3d54cdcf4926e67af54145f48a8b",
+          "board.c": "fc3f493921a51249477848fd87bb428379953d2b58e0c521f0b864176e8e668d",
+          "nexus_board.h": "c94256fc48e9068030b9bc30c29b1813ef6b5611fae6a84d6ff8989385a10b90",
+          "uart.c": "9613961224904f80d4488c015b4565ac136a8308acff709604746aa95bd5649c"
+        },
+        "manifest_sha256": "b848fbb27e289d72dba8b95fc9f314d6978cf68f8f7fd89a549cd6098ca79ce5",
+        "schema": 1,
+        "sha256": "4dc4307aa6782a8af1f397a35fbdbf784f0e824e5d9322c686b19e82c6484ba2",
+        "soc": "stm32f407ve"
+      },
+      "build_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/CMakeCache.txt",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/CMakeCache.txt",
+          "sha256": "63a5641d07dcc92bd82ad88055ceaef6ac37d8b18a97b147336fd76907bde527",
+          "size": 19102
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/compile_commands.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/compile_commands.json",
+          "sha256": "0e429d84da8fe5bdbdeca3239dd9af75b51112a626dd7ddfb836d1b76b6ed817",
+          "size": 128963
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/build.ninja",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/build.ninja",
+          "sha256": "caa52bc105d16862a7a73bc1c485e56c384979e81c8c2515f368331f34775a75",
+          "size": 249266
+        }
+      ],
+      "candidate": false,
+      "checker": {
+        "hardware_verified": false,
+        "images": [
+          "nexus_contract_firmware.elf"
+        ],
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-freertos-release/elf-contract.json",
+          "sha256": "6c54e084ffda66f2d2e0c5ba312d1a2b6cec687a53d62c6361f5c8546eb0da03",
+          "size": 1300
+        },
+        "returncode": 0
+      },
+      "commands": [
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/ci_build.py",
+            "--preset",
+            "stm32-sky-armgcc-freertos-release",
+            "--stage",
+            "build",
+            "--jobs",
+            "4"
+          ],
+          "finished_utc": "2026-10-09T11:55:33.532241+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-freertos-release/build.log",
+            "sha256": "8b5589a36be05613a5072c09fce653578559f26994af8713831ed0ddca6f693f",
+            "size": 15640
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:55:11.177994+00:00"
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/validate_firmware_elf.py",
+            "--build-dir",
+            "/workspace/nexus/build/stm32-sky-armgcc-freertos-release",
+            "--report",
+            "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-freertos-release/elf-contract.json"
+          ],
+          "finished_utc": "2026-10-09T11:55:33.835188+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-freertos-release/checker.log",
+            "sha256": "139c6186a766dfd3a1f7f0485d97b50b368ca2d760deed7e605a08caf19f540c",
+            "size": 62
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:55:33.532423+00:00"
+        }
+      ],
+      "expected_source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "finished_utc": "2026-10-09T11:55:35.207670+00:00",
+      "generated_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/board-identity.json",
+          "sha256": "78e859a48bef1102748e3fc398d2a2e1b4c852f660cb9c5a876e57a164780619",
+          "size": 1327
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/board.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/board.cmake",
+          "sha256": "88ec06e6df93c38aaa1893050cf99c590613b966f713eb2ee88d02ef494f9af8",
+          "size": 475
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/config.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/config.cmake",
+          "sha256": "c9aabc3c7d7cd6dd9ff21314c1cd322fd31c1ac8984574b6d0881f0fc9fcbf3e",
+          "size": 167663
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/effective.config",
+          "sha256": "c6c4e6ce8650b43d627ea3b7e205d8b62d077988adea809916de60dd7925dba6",
+          "size": 13775
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/firmware.ld",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/firmware.ld",
+          "sha256": "e73b2a2ed0a74629bffd79b8052bdd1007b57e742e7cfcfeefa0e978b9614c07",
+          "size": 1020
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/layout.json",
+          "sha256": "f37c66a745ebc6de5a1c7d1f530ecb57c7e6472d60d6a3d115f0fad624c2a649",
+          "size": 268
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/nexus_config.h",
+          "sha256": "41372ab48e13876ee02563b2c0a5799948125cbc9b6947f2337d9379f309d313",
+          "size": 139305
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/nx_flash_layout.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/nx_flash_layout.h",
+          "sha256": "cf31561e1cd25e19303706ad9a291373804b7d56dfd0d7778fde821e5c439d87",
+          "size": 334
+        },
+        {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      ],
+      "hardware_verified": false,
+      "identities": {
+        "board-identity.json": {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/board-identity.json",
+          "sha256": "78e859a48bef1102748e3fc398d2a2e1b4c852f660cb9c5a876e57a164780619",
+          "size": 1327
+        },
+        "effective.config": {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/effective.config",
+          "sha256": "c6c4e6ce8650b43d627ea3b7e205d8b62d077988adea809916de60dd7925dba6",
+          "size": 13775
+        },
+        "layout.json": {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/layout.json",
+          "sha256": "f37c66a745ebc6de5a1c7d1f530ecb57c7e6472d60d6a3d115f0fad624c2a649",
+          "size": 268
+        },
+        "nexus_config.h": {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/nexus_config.h",
+          "sha256": "41372ab48e13876ee02563b2c0a5799948125cbc9b6947f2337d9379f309d313",
+          "size": 139305
+        },
+        "toolchains.lock.json": {
+          "original_path": "/workspace/nexus/build/stm32-sky-armgcc-freertos-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/stm32-sky-armgcc-freertos-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      },
+      "kind": "arm-clean-source-integration",
+      "layout": {
+        "flash_base": 134217728,
+        "flash_size": 524288,
+        "image": {
+          "offset": 0,
+          "size": 524288
+        },
+        "input_sha256": null,
+        "regions": [],
+        "schema": 1,
+        "sha256": "55562ce67ca24d77ff9f209a3ea343e6187606f59fa3acf7b653f8cce02388ae",
+        "soc": "stm32f407ve"
+      },
+      "postprocessing": {
+        "executed_result": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-freertos-release/result.executed.json",
+          "sha256": "86f7760ae64c914be1b0b66155efe9a0fba812f169dd8d0df823973808a87604",
+          "size": 9815
+        },
+        "executed_results": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/results.executed.json",
+          "sha256": "f0ccc0d53f5bc456da551eb541f141acf618bd837054eb4d0244473b918fb4cb",
+          "size": 97219
+        },
+        "kind": "immutable-evidence-path-retention",
+        "manifest": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-file-manifest.json",
+          "sha256": "d823275b7957db343ca1e5aa8d4e3bd135b89205a99871ccc2af270187390eb7",
+          "size": 84236
+        },
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-report.json",
+          "sha256": "fc9c1e35f761bf9adcb21357c94c6935bc2b4160b6bb4126725b9326c0f98f20",
+          "size": 3570
+        },
+        "script": {
+          "original_path": "/workspace/nexus/build/unification-arm-retention.py",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/unification-arm-retention.py",
+          "sha256": "369f3ef53670698bb13558334c7798bd5510c78a7bc5d644c75f3ee98b263f96",
+          "size": 16073
+        }
+      },
+      "preserved_previous_outputs": [],
+      "preset": "stm32-sky-armgcc-freertos-release",
+      "source_after": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-freertos-release/source-after.json",
+        "sha256": "128dd622649b8367a625e33f99cfafc828978b41cebfaccc584145f81afd2e28"
+      },
+      "source_before": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/stm32-sky-armgcc-freertos-release/source-before.json",
+        "sha256": "8d49698a07e6cb58038549194208bbf89946d28477633fbd48456ebb89a5831a"
+      },
+      "source_changed_during_build": false,
+      "source_changed_paths": [],
+      "source_clean": true,
+      "started_utc": "2026-10-09T11:55:10.232899+00:00",
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/bin/nexus_contract_firmware.bin",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/bin/nexus_contract_firmware.bin",
+          "sha256": "f242402080b3fe9bd49dcb2bd48481f424c09f6ceca98b73c9b51591e197891b",
+          "size": 20144
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/bin/nexus_contract_firmware.elf",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/bin/nexus_contract_firmware.elf",
+          "sha256": "6c81347f47edc7fe3550fc6464c30fa8cd7aaf4232408f38351b6606f0feefd2",
+          "size": 45820
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/bin/nexus_contract_firmware.hex",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/bin/nexus_contract_firmware.hex",
+          "sha256": "6ff772f025db31bc578b11ad8cc69a4a8fbe0762db7854dad0189d10c70b5ecb",
+          "size": 56771
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/bin/nexus_contract_firmware.map",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/bin/nexus_contract_firmware.map",
+          "sha256": "3e0623f9f431a002a484a91d4bfcbefb357f35edfbfdde4a4cdc240f06e4dabd",
+          "size": 174943
+        }
+      ],
+      "board": {
+        "active_resources": [
+          {
+            "id": "status-led",
+            "kind": "gpio",
+            "pins": [
+              {
+                "af": 0,
+                "initial": 0,
+                "pin": 7,
+                "port": "D",
+                "signal": "led"
+              }
+            ],
+            "when": "CONFIG_GD32_GPIO_ENABLE"
+          },
+          {
+            "clock": "USART0",
+            "id": "console",
+            "instance": 0,
+            "irq": 37,
+            "kind": "uart",
+            "pins": [
+              {
+                "af": 7,
+                "pin": 9,
+                "port": "A",
+                "signal": "tx"
+              },
+              {
+                "af": 7,
+                "pin": 10,
+                "port": "A",
+                "signal": "rx"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_GD32_UART_ENABLE"
+          },
+          {
+            "clock": "SPI4",
+            "id": "spi-flash",
+            "instance": 4,
+            "irq": 85,
+            "kind": "spi",
+            "pins": [
+              {
+                "af": 5,
+                "pin": 7,
+                "port": "F",
+                "signal": "sck"
+              },
+              {
+                "af": 5,
+                "pin": 8,
+                "port": "F",
+                "signal": "miso"
+              },
+              {
+                "af": 5,
+                "pin": 9,
+                "port": "F",
+                "signal": "mosi"
+              },
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 6,
+                "port": "F",
+                "signal": "cs0"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_GD32_SPI_ENABLE"
+          }
+        ],
+        "id": "gd32f470zg-liangshan",
+        "inputs_sha256": {
+          "CMakeLists.txt": "f99839b7ed45b10044b34380c45df767a36a1c598af31a956f185e9bc13b1e4d",
+          "board.c": "a1582fd38251f5a9865a2c99aa0066aace490f2f902b9fb404228434bc14f0e5",
+          "board.h": "859c230c1724835ea86acb01e0d07289c58a70cd431ed5208ad9c17e2411358a",
+          "nexus_board.h": "d402cf9b22eef020656236f28be7bf42bb3d0fa33ad28e914650caf8fad3e182"
+        },
+        "manifest_sha256": "a617e730cb92b63ba4a71615a8269f22f555933fb3c1c66a349f2f1dc6cf8d41",
+        "schema": 1,
+        "sha256": "5dc0052d8a926df798f5d080376af08c3044e683b742b3598387623cea4fbfe9",
+        "soc": "gd32f470zg"
+      },
+      "build_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/CMakeCache.txt",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/CMakeCache.txt",
+          "sha256": "0e798277a75dc220b14291de31e2aafcd8947120052ea91e4cce8056cfa89e2b",
+          "size": 18985
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/compile_commands.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/compile_commands.json",
+          "sha256": "5c61ceb1da5ceb6fa3db50a574f93c692329082304c982f5fef92096102e95e6",
+          "size": 63391
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/build.ninja",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/build.ninja",
+          "sha256": "5046f088fb646101ad09c7d651eb3ae3ecd7f3ce1e0255cd774880562a166d2f",
+          "size": 164027
+        }
+      ],
+      "candidate": false,
+      "checker": {
+        "hardware_verified": false,
+        "images": [
+          "nexus_contract_firmware.elf"
+        ],
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-baremetal-release/elf-contract.json",
+          "sha256": "08f152cd43c07f79c883788c9d36e1f42e3fb377109b83c5fa2d39913fae88b1",
+          "size": 1250
+        },
+        "returncode": 0
+      },
+      "commands": [
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/ci_build.py",
+            "--preset",
+            "gd32f470-armgcc-baremetal-release",
+            "--stage",
+            "build",
+            "--jobs",
+            "4"
+          ],
+          "finished_utc": "2026-10-09T11:55:41.082635+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-baremetal-release/build.log",
+            "sha256": "2cea9dd0ed0fac9d49c0af666eb5838c5c8e80e6187b175a9ccd151a3f6a38e1",
+            "size": 10165
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:55:24.163674+00:00"
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/validate_firmware_elf.py",
+            "--build-dir",
+            "/workspace/nexus/build/gd32f470-armgcc-baremetal-release",
+            "--report",
+            "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-baremetal-release/elf-contract.json"
+          ],
+          "finished_utc": "2026-10-09T11:55:41.217671+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-baremetal-release/checker.log",
+            "sha256": "139c6186a766dfd3a1f7f0485d97b50b368ca2d760deed7e605a08caf19f540c",
+            "size": 62
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:55:41.082823+00:00"
+        }
+      ],
+      "expected_source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "finished_utc": "2026-10-09T11:55:42.332201+00:00",
+      "generated_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/board-identity.json",
+          "sha256": "d315d85af79306fd6d22f29535beac0882f7e751651fa532d58759e963628df0",
+          "size": 1987
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/board.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/board.cmake",
+          "sha256": "cd4a8662ada1a4843718961aa66a8dfd0c0170b13e2fcff42f6fe2c6a1d6cabf",
+          "size": 449
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/config.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/config.cmake",
+          "sha256": "53fb34657d13063ae1fc7967781e33bf6cc0153ecbf4b3e0f8c267cc0c7ba92e",
+          "size": 167549
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/effective.config",
+          "sha256": "149dd320cc946751f17c9349f6704d78f4c3453203bc912fdc5b4894e0d2c75e",
+          "size": 3762
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/firmware.ld",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/firmware.ld",
+          "sha256": "685fe05d15e6bfd7087268515474ec79c6076e477f902e1ab15665c0593acb66",
+          "size": 1115
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/layout.json",
+          "sha256": "ab3c40a1d395b25406a3777e495f0839658b72dae698ca71ee677c0c5e31bc10",
+          "size": 269
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/nexus_config.h",
+          "sha256": "1a4d2db6c25964802aac24b6794a5dfa541811613a5c8f238bd425aec0a6a93b",
+          "size": 136822
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/nx_flash_layout.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/nx_flash_layout.h",
+          "sha256": "72de10c746f6e57d7c2e23ca5335329b3711484fc859e464f39fe7bea1e3e1c6",
+          "size": 335
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      ],
+      "hardware_verified": false,
+      "identities": {
+        "board-identity.json": {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/board-identity.json",
+          "sha256": "d315d85af79306fd6d22f29535beac0882f7e751651fa532d58759e963628df0",
+          "size": 1987
+        },
+        "effective.config": {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/effective.config",
+          "sha256": "149dd320cc946751f17c9349f6704d78f4c3453203bc912fdc5b4894e0d2c75e",
+          "size": 3762
+        },
+        "layout.json": {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/layout.json",
+          "sha256": "ab3c40a1d395b25406a3777e495f0839658b72dae698ca71ee677c0c5e31bc10",
+          "size": 269
+        },
+        "nexus_config.h": {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/nexus_config.h",
+          "sha256": "1a4d2db6c25964802aac24b6794a5dfa541811613a5c8f238bd425aec0a6a93b",
+          "size": 136822
+        },
+        "toolchains.lock.json": {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-baremetal-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      },
+      "kind": "arm-clean-source-integration",
+      "layout": {
+        "flash_base": 134217728,
+        "flash_size": 1048576,
+        "image": {
+          "offset": 0,
+          "size": 1048576
+        },
+        "input_sha256": null,
+        "regions": [],
+        "schema": 1,
+        "sha256": "e0a5ac251d0355c1d635c310ea2574c5c541413265930f9adddf4baf6c6c5a42",
+        "soc": "gd32f470zg"
+      },
+      "postprocessing": {
+        "executed_result": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-baremetal-release/result.executed.json",
+          "sha256": "29f5bf544e0068d2f2c95a2ca963613f0a8c6b890de395b83a6164c2d7339b90",
+          "size": 10544
+        },
+        "executed_results": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/results.executed.json",
+          "sha256": "f0ccc0d53f5bc456da551eb541f141acf618bd837054eb4d0244473b918fb4cb",
+          "size": 97219
+        },
+        "kind": "immutable-evidence-path-retention",
+        "manifest": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-file-manifest.json",
+          "sha256": "d823275b7957db343ca1e5aa8d4e3bd135b89205a99871ccc2af270187390eb7",
+          "size": 84236
+        },
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-report.json",
+          "sha256": "fc9c1e35f761bf9adcb21357c94c6935bc2b4160b6bb4126725b9326c0f98f20",
+          "size": 3570
+        },
+        "script": {
+          "original_path": "/workspace/nexus/build/unification-arm-retention.py",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/unification-arm-retention.py",
+          "sha256": "369f3ef53670698bb13558334c7798bd5510c78a7bc5d644c75f3ee98b263f96",
+          "size": 16073
+        }
+      },
+      "preserved_previous_outputs": [],
+      "preset": "gd32f470-armgcc-baremetal-release",
+      "source_after": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-baremetal-release/source-after.json",
+        "sha256": "a58000bbdb7ee1cdf05d00dcf1f19121c9f7b071e35880ab5879a5f49f2009fa"
+      },
+      "source_before": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-baremetal-release/source-before.json",
+        "sha256": "4de9a9221df2d62ca66c5d4161fe183303caa4f284b99966f9f11672ec91ecd9"
+      },
+      "source_changed_during_build": false,
+      "source_changed_paths": [],
+      "source_clean": true,
+      "started_utc": "2026-10-09T11:55:22.604307+00:00",
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/bin/nexus_contract_firmware.bin",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/bin/nexus_contract_firmware.bin",
+          "sha256": "02d0a20857d968d2488c8874df182ab88bc99bd8b2e7d6b50bd7f93373b15857",
+          "size": 30092
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/bin/nexus_contract_firmware.elf",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/bin/nexus_contract_firmware.elf",
+          "sha256": "19bd2ef44c0bf27c77624e0c531cc332ac7c0b09d1d342046897a788d9516a0d",
+          "size": 64456
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/bin/nexus_contract_firmware.hex",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/bin/nexus_contract_firmware.hex",
+          "sha256": "efef18146107698e347ad360d3bdf2c2f9ac7720d05640f6b79526d9c42faa4d",
+          "size": 84719
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/bin/nexus_contract_firmware.map",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/bin/nexus_contract_firmware.map",
+          "sha256": "c4322b29f0e8893c556f5a44d65b5ed8aeb3aae7ed47694cd3501c28b50ffda5",
+          "size": 206563
+        }
+      ],
+      "board": {
+        "active_resources": [
+          {
+            "id": "status-led",
+            "kind": "gpio",
+            "pins": [
+              {
+                "af": 0,
+                "initial": 0,
+                "pin": 7,
+                "port": "D",
+                "signal": "led"
+              }
+            ],
+            "when": "CONFIG_GD32_GPIO_ENABLE"
+          },
+          {
+            "clock": "USART0",
+            "id": "console",
+            "instance": 0,
+            "irq": 37,
+            "kind": "uart",
+            "pins": [
+              {
+                "af": 7,
+                "pin": 9,
+                "port": "A",
+                "signal": "tx"
+              },
+              {
+                "af": 7,
+                "pin": 10,
+                "port": "A",
+                "signal": "rx"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_GD32_UART_ENABLE"
+          },
+          {
+            "clock": "SPI4",
+            "id": "spi-flash",
+            "instance": 4,
+            "irq": 85,
+            "kind": "spi",
+            "pins": [
+              {
+                "af": 5,
+                "pin": 7,
+                "port": "F",
+                "signal": "sck"
+              },
+              {
+                "af": 5,
+                "pin": 8,
+                "port": "F",
+                "signal": "miso"
+              },
+              {
+                "af": 5,
+                "pin": 9,
+                "port": "F",
+                "signal": "mosi"
+              },
+              {
+                "af": 0,
+                "initial": 1,
+                "pin": 6,
+                "port": "F",
+                "signal": "cs0"
+              }
+            ],
+            "priority": 5,
+            "when": "CONFIG_GD32_SPI_ENABLE"
+          }
+        ],
+        "id": "gd32f470zg-liangshan",
+        "inputs_sha256": {
+          "CMakeLists.txt": "f99839b7ed45b10044b34380c45df767a36a1c598af31a956f185e9bc13b1e4d",
+          "board.c": "a1582fd38251f5a9865a2c99aa0066aace490f2f902b9fb404228434bc14f0e5",
+          "board.h": "859c230c1724835ea86acb01e0d07289c58a70cd431ed5208ad9c17e2411358a",
+          "nexus_board.h": "d402cf9b22eef020656236f28be7bf42bb3d0fa33ad28e914650caf8fad3e182"
+        },
+        "manifest_sha256": "a617e730cb92b63ba4a71615a8269f22f555933fb3c1c66a349f2f1dc6cf8d41",
+        "schema": 1,
+        "sha256": "5dc0052d8a926df798f5d080376af08c3044e683b742b3598387623cea4fbfe9",
+        "soc": "gd32f470zg"
+      },
+      "build_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/CMakeCache.txt",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/CMakeCache.txt",
+          "sha256": "2be0924ba82966c7b942a77318cdb851bda781aaf8cbbc5f2df71226eee28f8a",
+          "size": 19084
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/compile_commands.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/compile_commands.json",
+          "sha256": "0bd7a4135fd1917630990ab40f757656b03618dbda86d834dd02e1d6172a1d8b",
+          "size": 76734
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/build.ninja",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/build.ninja",
+          "sha256": "6c0f9a7c841502406375556e845ad9cff9a5142f98223237c7de109f35e6fd20",
+          "size": 188073
+        }
+      ],
+      "candidate": false,
+      "checker": {
+        "hardware_verified": false,
+        "images": [
+          "nexus_contract_firmware.elf"
+        ],
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-freertos-release/elf-contract.json",
+          "sha256": "6f41c108f0240328e4620651a3b9b80242ce91676dc5de84624aae2163e937cc",
+          "size": 1300
+        },
+        "returncode": 0
+      },
+      "commands": [
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/ci_build.py",
+            "--preset",
+            "gd32f470-armgcc-freertos-release",
+            "--stage",
+            "build",
+            "--jobs",
+            "4"
+          ],
+          "finished_utc": "2026-10-09T11:55:53.499643+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-freertos-release/build.log",
+            "sha256": "5166d9ce39c3886446baea252893fe715d278b4d45ccfcea78db342ec9b1cd76",
+            "size": 11015
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:55:36.696903+00:00"
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "scripts/ci/validate_firmware_elf.py",
+            "--build-dir",
+            "/workspace/nexus/build/gd32f470-armgcc-freertos-release",
+            "--report",
+            "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-freertos-release/elf-contract.json"
+          ],
+          "finished_utc": "2026-10-09T11:55:53.705146+00:00",
+          "log": {
+            "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-freertos-release/checker.log",
+            "sha256": "139c6186a766dfd3a1f7f0485d97b50b368ca2d760deed7e605a08caf19f540c",
+            "size": 62
+          },
+          "returncode": 0,
+          "started_utc": "2026-10-09T11:55:53.499827+00:00"
+        }
+      ],
+      "expected_source_revision": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+      "finished_utc": "2026-10-09T11:55:55.136280+00:00",
+      "generated_inputs": [
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/board-identity.json",
+          "sha256": "d315d85af79306fd6d22f29535beac0882f7e751651fa532d58759e963628df0",
+          "size": 1987
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/board.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/board.cmake",
+          "sha256": "8c6452a6e9328f6c99541d9965249f91ead3873a4ea66ba86560f89e37d687af",
+          "size": 448
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/config.cmake",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/config.cmake",
+          "sha256": "2a34ea63a85d6634bebab9ece5a47bbbfa9b01b8aab168323f349bf8048cd7a4",
+          "size": 167566
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/effective.config",
+          "sha256": "b2243707ed0e83c312afe5c123deb7d021a5157a1e20431eb00444ade7b14ee3",
+          "size": 4165
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/firmware.ld",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/firmware.ld",
+          "sha256": "685fe05d15e6bfd7087268515474ec79c6076e477f902e1ab15665c0593acb66",
+          "size": 1115
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/layout.json",
+          "sha256": "ab3c40a1d395b25406a3777e495f0839658b72dae698ca71ee677c0c5e31bc10",
+          "size": 269
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/nexus_config.h",
+          "sha256": "a811390c22604ff3ca746449aa192cd4aa21c2d849956f700642749b2887cafd",
+          "size": 137144
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/nx_flash_layout.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/nx_flash_layout.h",
+          "sha256": "72de10c746f6e57d7c2e23ca5335329b3711484fc859e464f39fe7bea1e3e1c6",
+          "size": 335
+        },
+        {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      ],
+      "hardware_verified": false,
+      "identities": {
+        "board-identity.json": {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/board-identity.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/board-identity.json",
+          "sha256": "d315d85af79306fd6d22f29535beac0882f7e751651fa532d58759e963628df0",
+          "size": 1987
+        },
+        "effective.config": {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/effective.config",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/effective.config",
+          "sha256": "b2243707ed0e83c312afe5c123deb7d021a5157a1e20431eb00444ade7b14ee3",
+          "size": 4165
+        },
+        "layout.json": {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/layout.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/layout.json",
+          "sha256": "ab3c40a1d395b25406a3777e495f0839658b72dae698ca71ee677c0c5e31bc10",
+          "size": 269
+        },
+        "nexus_config.h": {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/nexus_config.h",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/nexus_config.h",
+          "sha256": "a811390c22604ff3ca746449aa192cd4aa21c2d849956f700642749b2887cafd",
+          "size": 137144
+        },
+        "toolchains.lock.json": {
+          "original_path": "/workspace/nexus/build/gd32f470-armgcc-freertos-release/generated/toolchains.lock.json",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/builds/gd32f470-armgcc-freertos-release/generated/toolchains.lock.json",
+          "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+          "size": 469
+        }
+      },
+      "kind": "arm-clean-source-integration",
+      "layout": {
+        "flash_base": 134217728,
+        "flash_size": 1048576,
+        "image": {
+          "offset": 0,
+          "size": 1048576
+        },
+        "input_sha256": null,
+        "regions": [],
+        "schema": 1,
+        "sha256": "e0a5ac251d0355c1d635c310ea2574c5c541413265930f9adddf4baf6c6c5a42",
+        "soc": "gd32f470zg"
+      },
+      "postprocessing": {
+        "executed_result": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-freertos-release/result.executed.json",
+          "sha256": "b1570aeeb2685cce2c23c74f9a6a5749d81da1dd8b25c3499ef8b7dd504cdd8c",
+          "size": 10514
+        },
+        "executed_results": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/results.executed.json",
+          "sha256": "f0ccc0d53f5bc456da551eb541f141acf618bd837054eb4d0244473b918fb4cb",
+          "size": 97219
+        },
+        "kind": "immutable-evidence-path-retention",
+        "manifest": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-file-manifest.json",
+          "sha256": "d823275b7957db343ca1e5aa8d4e3bd135b89205a99871ccc2af270187390eb7",
+          "size": 84236
+        },
+        "report": {
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/retention-report.json",
+          "sha256": "fc9c1e35f761bf9adcb21357c94c6935bc2b4160b6bb4126725b9326c0f98f20",
+          "size": 3570
+        },
+        "script": {
+          "original_path": "/workspace/nexus/build/unification-arm-retention.py",
+          "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/unification-arm-retention.py",
+          "sha256": "369f3ef53670698bb13558334c7798bd5510c78a7bc5d644c75f3ee98b263f96",
+          "size": 16073
+        }
+      },
+      "preserved_previous_outputs": [],
+      "preset": "gd32f470-armgcc-freertos-release",
+      "source_after": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-freertos-release/source-after.json",
+        "sha256": "fae50e94c1526d2e890d57f99a69a170983bff3f60d44650c7b647986d29f344"
+      },
+      "source_before": {
+        "complete": true,
+        "dirty": false,
+        "files_sha256": "94744f4cd39bec5d7b1a4102ff0dae479c7c8674c3bb2bccc828c373f49b4ee6",
+        "head_after": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "head_before": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
+        "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/gd32f470-armgcc-freertos-release/source-before.json",
+        "sha256": "eb4305d346c3a5bb404c78932c189b5af93b64bfdff7ece9e7e0556fd6c3ad81"
+      },
+      "source_changed_during_build": false,
+      "source_changed_paths": [],
+      "source_clean": true,
+      "started_utc": "2026-10-09T11:55:35.210060+00:00",
+      "status": "pass"
+    }
+  ],
+  "runners": [
+    {
+      "original_path": "/tmp/nexus-arm-matrix.py",
+      "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/nexus-arm-matrix.py",
+      "sha256": "e26db8301e45dd299ed1fa84ab8c2a7aa4c369d5020a6ddc7df34b57b35f1227",
+      "size": 7862
+    },
+    {
+      "original_path": "/tmp/nexus-arm-matrix-final.py",
+      "path": "/workspace/nexus/build/refactor-arm-matrix/unified-a4d5ac6/frozen-artifacts/runners/nexus-arm-matrix-final.py",
+      "sha256": "c95923fe07fb316dd6c1cca9b994c374bc0aa2922026ddea223f4cf0f0a2b1f2",
+      "size": 3658
+    }
+  ],
+  "schema_version": 1,
+  "source_clean": true,
+  "started_utc": "2026-10-09T11:54:27.661626+00:00",
+  "status": "pass",
+  "tools": {
+    "arm-none-eabi-ar": {
+      "path": "/workspace/nexus-tools-arm/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-ar",
+      "sha256": "dc338bd934fa994934e0738ae5ec69527dbbbc6abb1a3dee581899ceee323f52",
+      "size": 1107032,
+      "version": "GNU ar (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 2.44.0.20250616"
+    },
+    "arm-none-eabi-as": {
+      "path": "/workspace/nexus-tools-arm/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-as",
+      "sha256": "500c3d460643e1961d1de6b5be98c50ceae574d85edce8e3c8c57cf8c35d2fd8",
+      "size": 1883976,
+      "version": "GNU assembler (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 2.44.0.20250616"
+    },
+    "arm-none-eabi-g++": {
+      "path": "/workspace/nexus-tools-arm/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-g++",
+      "sha256": "275742816c097f75218517c48599e6efb8e98c0acdf0c5e7c0c4ea147fbf3527",
+      "size": 2430000,
+      "version": "arm-none-eabi-g++ (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 14.3.1 20250623"
+    },
+    "arm-none-eabi-gcc": {
+      "path": "/workspace/nexus-tools-arm/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
+      "sha256": "510c55cfeed7328ade1eb8cb23808fcce1ba6c52dac8d4ebfe033ae4b2534385",
+      "size": 2421736,
+      "version": "arm-none-eabi-gcc (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 14.3.1 20250623"
+    },
+    "arm-none-eabi-ld": {
+      "path": "/workspace/nexus-tools-arm/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-ld",
+      "sha256": "73b48c4930f7b9d9888fb400a46432486596b943d1415101245b735117d97732",
+      "size": 1939688,
+      "version": "GNU ld (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 2.44.0.20250616"
+    },
+    "arm-none-eabi-objcopy": {
+      "path": "/workspace/nexus-tools-arm/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-objcopy",
+      "sha256": "0424b422a6c075238c2d4878630e9f111fd0f9320ac34e6f2cd617954042adda",
+      "size": 1229864,
+      "version": "GNU objcopy (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 2.44.0.20250616"
+    },
+    "arm-none-eabi-objdump": {
+      "path": "/workspace/nexus-tools-arm/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-objdump",
+      "sha256": "29829538419301ed3da5f3148a89e19ea9f9111105fa2ec3e05550f8998a5389",
+      "size": 1909744,
+      "version": "GNU objdump (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 2.44.0.20250616"
+    },
+    "arm-none-eabi-size": {
+      "path": "/workspace/nexus-tools-arm/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-size",
+      "sha256": "9aa1623c3874cab906b5cca55212b2f6abaec25fc2b1512e55cf9f1d8217f7cb",
+      "size": 1073352,
+      "version": "GNU size (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 2.44.0.20250616"
+    },
+    "cmake": {
+      "path": "/workspace/nexus-tools/bin/cmake",
+      "sha256": "335e68330939166b59973b7f9130afee827964c933a3745be6e1d957bc468686",
+      "size": 210,
+      "version": "cmake version 4.4.4"
+    },
+    "ninja": {
+      "path": "/workspace/nexus-tools/bin/ninja",
+      "sha256": "08639e194fffa7f08b259fc4abfa4803aff66b64de52549cee42ec527d55cea6",
+      "size": 370448,
+      "version": "1.13.2.git.kitware.jobserver-pipe-1"
+    },
+    "python": {
+      "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+      "size": 30894944,
+      "version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]"
+    }
+  }
+}
