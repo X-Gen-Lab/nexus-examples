@@ -34,6 +34,8 @@ jobs:
           python3 -m pip install kconfiglib==14.1.0
       - name: Verify source dependency identity
         run: python3 scripts/test_repository.py --report build/native-debug/dependency-identity.json
+      - name: Verify runner rejects empty and skipped execution
+        run: python3 -m unittest discover -s scripts -p test_build.py -v
       - name: Build and run Native examples
         run: python3 scripts/build.py --preset native-debug --test --parallel 4
       - name: Retain Native artifacts and execution evidence

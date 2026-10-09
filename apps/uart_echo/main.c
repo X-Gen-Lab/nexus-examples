@@ -1,7 +1,7 @@
 /** Typed UART event/ticket example. Electrical validation is pending.
  * Copyright (c) 2026 Nexus Embedded Platform Team. MIT license. */
 #include "hal/base/nx_device.h"
-#include "product/product.h"
+#include "runtime/nx_runtime.h"
 #include "nexus_config.h"
 #include "osal/osal.h"
 #include <stdbool.h>
@@ -73,7 +73,7 @@ static void echo(void* argument) {
 }
 
 int main(void) {
-    if (nx_product_boot(NULL) != NX_OK) return 1;
+    if (nx_runtime_bootstrap(NULL) != NX_OK) return 1;
     if (nx_device_open(NEXUS_EXAMPLE_CONSOLE_DEVICE, NX_DEVICE_CLASS_UART,
                        (uintptr_t)&console, &console) != NX_OK) return 1;
     nx_device_caps_t capabilities;

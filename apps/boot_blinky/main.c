@@ -1,6 +1,6 @@
-/** Typed GPIO heartbeat using resolved board wiring and product startup. */
+/** Typed GPIO heartbeat using resolved board wiring and platform bootstrap. */
 #include "hal/base/nx_device.h"
-#include "product/product.h"
+#include "runtime/nx_runtime.h"
 #include "nexus_board.h"
 #include "nexus_config.h"
 #include "osal/osal.h"
@@ -81,18 +81,18 @@ int main(int argc, char** argv) {
 #else
 int main(void) {
 #endif
-    if (nx_product_boot(NULL) != NX_OK) return startup_error("product boot");
+    if (nx_runtime_bootstrap(NULL) != NX_OK) return startup_error("platform bootstrap");
     char name[16];
     int written = snprintf(name, sizeof(name), "GPIO%c%u", NX_BOARD_LED_GPIO_PORT,
                             (unsigned)NX_BOARD_LED_GPIO_PIN);
     if (written < 0 || (size_t)written >= sizeof(name) ||
         nx_device_open(name, NX_DEVICE_CLASS_GPIO, (uintptr_t)&led, &led) != NX_OK) {
-        (void)nx_product_shutdown(NULL);
+        (void)nx_runtime_shutdown(NULL);
         return startup_error("configured GPIO open");
     }
     if (nx_device_gpio_write(led, NX_BOARD_LED_INACTIVE_LEVEL) != NX_OK) {
         (void)nx_device_close(led);
-        (void)nx_product_shutdown(NULL);
+        (void)nx_runtime_shutdown(NULL);
         return startup_error("GPIO safe level");
     }
 
@@ -111,7 +111,7 @@ int main(void) {
     if (osal_task_create(&config, &task) != OSAL_OK) {
         (void)nx_device_gpio_write(led, NX_BOARD_LED_INACTIVE_LEVEL);
         (void)nx_device_close(led);
-        (void)nx_product_shutdown(NULL);
+        (void)nx_runtime_shutdown(NULL);
         return startup_error("task creation");
     }
 #if defined(NX_CONFIG_PLATFORM_NATIVE)
@@ -121,7 +121,7 @@ int main(void) {
         if (osal_task_join(task, OSAL_WAIT_FOREVER) != OSAL_OK) return 1;
         if (osal_task_delete(task) != OSAL_OK) return 1;
         if (nx_device_close(led) != NX_OK) return 1;
-        if (nx_product_shutdown(NULL) != NX_OK) return 1;
+        if (nx_runtime_shutdown(NULL) != NX_OK) return 1;
         return blink_failed ? 1 : 0;
     }
 #endif
@@ -131,6 +131,6 @@ int main(void) {
      * successful application start. */
     (void)nx_device_gpio_write(led, NX_BOARD_LED_INACTIVE_LEVEL);
     (void)nx_device_close(led);
-    (void)nx_product_shutdown(NULL);
+    (void)nx_runtime_shutdown(NULL);
     return 1;
 }

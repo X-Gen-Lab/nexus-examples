@@ -1,0 +1,75 @@
+"""Execute the thin runner against real finite/empty/skipped CTest projects.
+
+These temporary CMake fixtures validate orchestration and report rejection;
+they are not SDK or hardware qualification.
+"""
+import importlib.util
+import json
+import os
+from pathlib import Path
+import shutil
+import tempfile
+import unittest
+
+HERE = Path(__file__).resolve().parent
+spec = importlib.util.spec_from_file_location("examples_build", HERE / "build.py")
+runner = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(runner)
+
+
+class BuildReportContractTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix="examples runner ")
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.sdk = self.root / "sdk"
+        self.sdk.mkdir()
+        (self.sdk / "CMakeLists.txt").write_text("# developer-tooling fixture\n")
+        maintained = Path(os.environ.get("NEXUS_SOURCE", str(HERE.parent / "external/nexus"))) / "scripts/validation/junit.py"
+        self.assertTrue(maintained.is_file(), "initialize the pinned Nexus SDK")
+        helper = self.sdk / "scripts/validation/junit.py"
+        helper.parent.mkdir(parents=True)
+        shutil.copyfile(maintained, helper)
+        self.previous = runner.ROOT
+        runner.ROOT = self.root
+        self.addCleanup(setattr, runner, "ROOT", self.previous)
+        self.assertIsNotNone(shutil.which("cmake"), "CMake is required")
+        (self.root / "CMakePresets.json").write_text(json.dumps({
+            "version": 3,
+            "configurePresets": [{"name": "native-debug", "generator": "Ninja",
+                "binaryDir": "${sourceDir}/build/native-debug"}],
+            "buildPresets": [{"name": "native-debug", "configurePreset": "native-debug"}],
+            "testPresets": [{"name": "native-debug", "configurePreset": "native-debug"}]}))
+
+    def execute(self, mode):
+        (self.root / "main.c").write_text("int main(void) { return 0; }\n")
+        content = "cmake_minimum_required(VERSION 3.21)\nproject(finite_fixture C)\nenable_testing()\n"
+        if mode == "finite":
+            content += "add_executable(finite main.c)\nadd_test(NAME finite COMMAND finite)\n"
+        elif mode == "skip":
+            (self.root / "main.c").write_text("int main(void) { return 77; }\n")
+            content += "add_executable(finite main.c)\nadd_test(NAME finite COMMAND finite)\nset_tests_properties(finite PROPERTIES SKIP_RETURN_CODE 77)\n"
+        (self.root / "CMakeLists.txt").write_text(content)
+        stale = self.root / "build/native-debug/ctest-results.xml"
+        stale.parent.mkdir(parents=True)
+        stale.write_text('<testsuite tests="1"><testcase name="old-pass"/></testsuite>')
+        result = runner.main(["--preset", "native-debug", "--nexus-source", str(self.sdk),
+                              "--test", "--parallel", "2"])
+        return result, stale
+
+    def test_finite_execution_replaces_stale_report(self):
+        result, report = self.execute("finite")
+        self.assertEqual(result, 0)
+        self.assertNotIn("old-pass", report.read_text())
+
+    def test_empty_execution_fails(self):
+        result, _ = self.execute("zero")
+        self.assertNotEqual(result, 0)
+
+    def test_all_skipped_execution_fails(self):
+        result, _ = self.execute("skip")
+        self.assertNotEqual(result, 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

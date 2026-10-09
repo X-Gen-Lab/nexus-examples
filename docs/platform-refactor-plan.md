@@ -2,7 +2,7 @@
 
 本计划以 Nexus 源码 `069dcf14f9cb1cd6fc4a869d87bf9827b91ce306` 为分析基线，适用于约 10 人团队、3–6 个月交付周期。目标是把 Nexus 维护为可复用的通用嵌入式平台，把示例装配与实际产品放到独立仓库，通过公开接口和固定依赖版本协作。
 
-**本文是实施计划，不是完成报告。** 除明确列为“基线已实现”或“基线已确认缺陷”的事实外，本文的目录、目标名称、API 草案、扩展入口和阶段门槛均待实施或待验收。历史 Native 测试、交叉构建和线上检查只能证明其绑定的历史源码；本次重构必须产生新的执行证据。当前没有本计划对应的实板 HIL 结果。
+**本文保留原始规划与历史审计，并同步当前已实现 API。** 38 个任务 ID、责任／依赖、容量预算和 C01–C19 计划批次原样保留；计划批次不等于实际提交数或全部验收已完成。第 2.1／2.2 节仍描述历史 `069dcf14`，后续接口说明对应本轮实现。逐项 implementation／software／physical／commit 状态以 Nexus 的 `docs/implementation/refactor-execution.csv` 及同名 Markdown 为准。最终新 SDK pin、clean 软件矩阵与工件身份由本仓库 [platform-refactor-validation.json](../evidence/platform-refactor-validation.json) 和 [验证记录](validation.md) 绑定；本计划不预填最终 HEAD 或通过数量。全部实板 HIL 当前仍为 unverified。
 
 分析基线：[Nexus `069dcf14`](https://github.com/X-Gen-Lab/nexus/tree/069dcf14f9cb1cd6fc4a869d87bf9827b91ce306)。既有任务和 ADR 应在 Nexus 的 `docs/strategy/` 中更新；本文列出的 `RF-*` 是本轮重构任务 ID，不覆盖既有任务完成状态。
 
@@ -57,7 +57,7 @@ GD32F303 已由用户明确替换为 GD32F470，不进入本轮新增平台范�
 
 另设 `RF-HAL-05` 处理违约 provider 返回成功但 UART ticket 为 0 的隔离与恢复：基线防御路径会持有租约且缺少可达恢复入口。这是 provider 违约时的防御缺口；正常 STM32/GD32 provider 未观察到零 ticket，优先级低于上述实际配置/API 缺陷。修复不得因异常 ticket 而提前释放仍可能被硬件访问的 buffer。
 
-以下是边界或能力缺口，不能直接归类为“已确认当前实现 bug”：legacy factory 借出的裸指针没有 owner/generation；类型化 I2C 和其余设备类别尚未全覆盖；完整资源拓扑校验、MCU 运行中全局 shutdown、installed binary SDK 尚未建立；真实 HIL 未执行。legacy 与 typed 混用存在文档化限制，本轮应迁移调用者并缩减暴露面。
+以下是历史基线的边界或能力缺口，不能归类为已确认 bug：legacy factory 借出的裸指针没有 owner/generation；typed I2C 尚未全覆盖；完整资源拓扑、MCU 全局 shutdown 和 binary SDK 未建立。当前 Native typed I2C 已有实现，STM32／GD32 modern I2C provider 仍明确不支持；可重定位源码 SDK 已实现但不是 binary SDK。真实 HIL 仍未执行。正常后端、provider 违约防御和未支持能力分别验收，不扩大为所有外围已经接入。
 
 ### 2.3 市面方案的架构对照与取舍
 
@@ -73,6 +73,23 @@ GD32F303 已由用户明确替换为 GD32F470，不进入本轮新增平台范�
 优先薄 HAL/OSAL 与 source CMake SDK，是因为当前范围是两类 MCU、三首发板、10 人和 3–6 个月，且已有设备 ownership、静态 OSAL 和真实 SDK 构建基础。先把跨厂商公开合同、错误和外部装配做正确，能在有限容量内形成可交付结果。这个选择不代表完整 RTOS 平台整体较差，也不表示 Nexus 已具有它们全部资源描述、网络或包管理能力。
 
 资源描述首先使用可审核 Board manifest、窄 C 资源结构、Kconfig 和标准 CMake，并校验 pin/AF/clock/IRQ/DMA/Flash 冲突。当新增外部 Board 反复复制映射、controller/DMA/clock 组合明显增多，或出现无法由现有校验防止的资源冲突时，进入 `RF-BRD-01/02` 的资源描述升级评审。可评估采用标准 Devicetree 或明确的编译期生成输入；选一种硬件描述机制，与 Kconfig 的软件选择分别负责，不再增加平行配置 DSL。生成代码、配置 hash 与真实构建输入必须一致，公开 HAL API 不随描述工具选择而暴露 vendor 类型。
+
+### 2.4 本轮实现快照与剩余验收
+
+Runtime／typed facade／provider 边界、IRQ／GPIO AF／event mask、Log／Shell owner 与有界队列、
+Config／Storage／Security 目标拆分、外部 Board／Flash layout 和源码 SDK 已有实现与定向回归。
+具体命令、源码身份与剩余接受条件见 Nexus `docs/implementation/refactor-execution.csv`，
+不在计划中复制一份会漂移的完成状态。历史缺陷表保留原 commit／行位置，不继续视为当前未修复结论。
+
+外部仓库已是 private/main，初始五提交和 [初始 CI](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37894225307)
+已同步／成功；本轮新 SDK 的 clean／线上证据另行绑定。八应用范围为 boot_blinky、uart_echo、
+rtos_pipeline、industrial_model、shell_console、config_roundtrip、log_uart、spi_transaction。
+后三个组件及 SPI 的有限 case 与开发 ELF 证据见 [组件](component-examples.md)、[SPI](spi-example.md)。
+
+STM32／GD32 typed I2C 仍不支持。Discovery SPI1 reference fixture 与梁山派板载 Flash SPI4
+binding 是不同板级用途；本例没有梁山派 loopback／隔离工装，启明／天空星没有 SPI binding。
+RS485 有窄协议端口／部分 DE wiring，不表示完成公共 transport、微秒 timing 或实物资格。
+Ethernet／MQTT 与新增 MCU 暂缓，MCU crypto／熵源／受保护升级链未交付；所有 HIL 保持 unverified。
 
 ## 3. 目标依赖图与公共契约
 
@@ -105,17 +122,17 @@ flowchart TD
 | Board | PCB revision、晶振、电源、引脚、外部器件、CS/DE、初始电平与绑定 | 狭窄资源端口；不公开可变完整 driver instance；不决定业务安全策略 |
 | HAL core/facade | 常量描述、能力、open/close/recover、owner/generation、操作 ticket、buffer lease | 发现不启动；任务/ISR 分开；失败保留必要所有权；无隐藏堆分配和任务 |
 | OSAL | 后端选择、任务/同步/时钟、预算和 capability、对象生命周期 | 调度前/后规则明确；不伪造跨后端相同能力；不强删仍在使用的对象 |
-| Runtime | HAL/OSAL bootstrap 与 rollback、通用有界等待/派发适配 | 不拥有业务任务；组件 worker 可由调用者显式创建或驱动；deadline 覆盖排队和操作 |
+| Runtime | HAL/OSAL bootstrap 与 rollback；有界 deadline／完成派发位于独立可选 HAL runtime target | 不拥有业务任务或隐含 worker；调用者显式派发；组件／设备预算按各公开合同 |
 | 公共组件 | parser/state machine/格式/有界数据结构，以及窄端口适配 | core 不依赖具体 Board/SDK；创建、配置、shutdown 的 owner 明确；产品配置由外部输入 |
 | 外部应用 | composition、版本、任务、优先级、预算、组件顺序、分区、政策 | 不绕过平台私有状态；遵守 ISR、lease 和维护窗口合同 |
 
 ### 3.1 去 Product 身份的 bootstrap
 
-计划公开 `Nexus::Runtime` 和 `Nexus::Firmware`，保留有价值的 `Nexus::HAL`、`Nexus::OSAL` 与可选组件目标。`Nexus::Firmware` 只组成所选 Board/SoC、startup/linker、HAL/OSAL 和通用 bootstrap，不自动链接所有组件。名称最终以 ADR 和外部消费验证为准。
+当前已提供 `Nexus::Runtime` 与 `Nexus::Firmware`。公开消费另有 `Nexus::HALCore`、各 typed facade／`HALDevice`、`Nexus::OSAL` 与可选组件 targets。`Nexus::Firmware` 显式组成选定 Board／SoC、startup／linker、HAL／OSAL 和通用 bootstrap，不自动链接所有组件。真实声明见 SDK `runtime/CMakeLists.txt`、`hal/CMakeLists.txt` 及根 aliases。
 
-删除内部 `products/Kconfig` 的身份选择，也删除平台根对示例业务 `applications/Kconfig` 的强制引用。现有 `APP_STACK_SIZE` 实际是 linker 的 CPU main/exception stack 保留，`APP_HEAP_SIZE` 是 C runtime heap 保留；应迁移到含义明确的固件资源输入，不随示例目录删除。MSP、libc heap、post-build artifact 选项属于通用构建能力，示例目标和业务配置由外部仓库提供。
+本轮已移除内部 Product 身份和根应用组成，示例与业务选择由外部仓库维护。原 linker 预算现在使用 `FIRMWARE_MAIN_STACK_SIZE`（MSP／exception）和 `FIRMWARE_LIBC_HEAP_SIZE`（C runtime heap）；定义见 `cmake/Kconfig.firmware`。OSAL task stack pool、kernel object／heap 和队列 payload 分别配置／报告，不把 linker heap 当作全部内存预算。
 
-目标 API 草案，**尚未实现**：
+当前 API（SDK `runtime/include/runtime/nx_runtime.h` 与 `nx_platform_info.h`）：
 
 ```c
 const nx_platform_info_t* nx_platform_get_info(void);
@@ -124,7 +141,7 @@ nx_status_t nx_runtime_shutdown(nx_boot_report_t* report);
 nx_runtime_state_t nx_runtime_get_state(void);
 ```
 
-`nx_platform_info_t` 提供 Arch/SoC/Board/backend、内存区域和有效能力，查询不启动硬件，不包含产品 SKU 或业务 firmware version。`nx_runtime_get_state()` 表示基础设施状态，不表示产品健康。外部 firmware version 属于应用目标，例如现有 helper 的 `NEXUS_APP_VERSION`。
+`nx_platform_info_t` 提供 Arch／SoC／Board／backend、Board／layout 身份及主 SRAM／内部 Flash 与 linker 预算；不是所有内存域或完整能力清单。OSAL 能力由 `osal_get_backend_info()` 查询，设备能力由 typed HAL 查询。Native 没有物理 MCU region table。查询不启动硬件、不包含 SKU 或业务版本；Runtime READY 表示基础设施，外部应用版本由 `NEXUS_APP_VERSION` 等应用输入提供。
 
 bootstrap 保持串行单 owner：已有其他 owner 的 HAL/OSAL 初始化明确拒绝；失败回滚报告原始失败和回滚失败；部分成功但未结清时保留所有权。shutdown 必须先结清引用/操作/对象；FreeRTOS scheduler 运行期间明确 BUSY，不宣称停 kernel 后可再次启动。
 
@@ -136,7 +153,7 @@ bootstrap 保持串行单 owner：已有其他 owner 的 HAL/OSAL 初始化明�
 4. 裸机由外部应用拥有事件循环或显式 pump；不以空 task/timer 模拟不支持能力。
 5. 设备租约、组件停止和业务恢复由对应外部 owner 结清；平台只按合同报告状态和错误。
 
-旧 `nx_startup()` 的 weak board/OS hook、自动 main 包装和隐含 RTOS 分支应逐个调用者迁移后收敛。不能把未检查 init 失败、忽略 task 创建失败或递归调用 `main()` 的入口继续作为推荐 SDK 路径，也不能把未启用的旧宏分支描述为当前默认启动缺陷。
+旧 startup／main wrapper 属于审计与迁移范围，不再作为新 SDK 的推荐入口。当前外部八应用使用 Runtime；bootstrap、worker 创建及 scheduler 返回均有显式失败处理。旧兼容路径的具体保留／废弃状态以平台公开头和 execution record 为准，不把未启用的历史宏分支当作当前默认流程。
 
 ### 3.2 HAL、OSAL 与运行时边界
 
@@ -144,14 +161,14 @@ bootstrap 保持串行单 owner：已有其他 owner 的 HAL/OSAL 初始化明�
 - provider 保持硬件状态与 buffer settlement；timeout/cancel 的结果区分“等待超时”“取消已结清”“取消失败仍持有租约”。完成、错误和取消仅交付一次终态。
 - task-only facade 不伪装成 ISR-safe。ISR fast path 在确有需求时单独提供窄能力接口；不让 ISR 经 OSAL 阻塞锁或 framework callback 进入管理路径。
 - UART memory completion 与 wire TC 分开，RS485 adapter 的 DE 结清依赖 wire completion；transceiver 接线和业务帧策略由外部配置。
-- 通用 runtime adapter 可以实现有界队列、deadline 和完成派发；构造时由调用者提供队列/存储或预算，显式声明 callback 上下文和 worker 所有权。
+- 已有独立 `hal/runtime/nx_deadline.h`、`nx_completion.h` 和 `Nexus::HALRuntime`；调用者持有有界槽／队列、显式派发完成，无默认 OSAL worker。可选 `HALRuntimeOSAL` 是显式等待组合。它们没有自动接入所有 driver 回调，完整验收依各实际 adapter／证据。
 - OSAL 时间继续提供单调 ms、32 位回绕及有限预算 `< 2^31 ms`；微秒级总线时序使用明确 SoC 时间源，不能用伪时钟/循环计数替代。
 - 静态 kernel slot 释放后可复用；lifetime token 不复用以拒绝 stale handle。32 位编码的累计身份预算必须文档化和可诊断，不误写为删除一次就永久损失一个 pool slot。
 - MSP/exception stack、OSAL task stack pool、libc heap、FreeRTOS management heap、queue payload、idle/daemon stack、driver buffer 分别报告。OSAL heap seal 仅覆盖 OSAL allocator。
 
 ### 3.3 外部 Board 扩展
 
-采用一条简单、可校验的源码入口，复用现有 CMake/Kconfig，不增加第二个配置引擎或模块注册 DSL。拟支持显式 `NEXUS_BOARD_DIR` 或等价单一路径参数；名称为设计候选，当前不可当作可用参数执行。
+当前已实现显式 `NEXUS_BOARD_DIR`，复用 CMake／有效 Kconfig。包必须提供 `board.json` 和实际 CMake／资源绑定，以 `BOARD_EXTERNAL` 选择；不能同时选择内置 Board。真实选择与路径隔离见 `cmake/modules/NexusBoard.cmake`，schema／路由校验见 `scripts/configure/board_package.py`。
 
 外部 Board 包含：可版本化 manifest、配置输入、CMake 目标、窄资源绑定、引脚/晶振/初始电平、真实 linker/startup 选择依据及 HIL fixture 声明。一次 build 只选择一个 Board/backend/effective config。manifest 身份、真实输入文件 hash 与最终目标配置绑定。
 
@@ -161,21 +178,22 @@ bootstrap 保持串行单 owner：已有其他 owner 的 HAL/OSAL 初始化明�
 
 SoC 负责完整物理 Flash 的地址、擦除 block、program alignment、容量探测、读写保护与执行限制；平台不默认把末尾两块交给某个产品配置系统。
 
-目标 API 草案，**尚未实现**：
+当前公开 API 摘要（完整生命周期见 SDK `hal/base/nx_device.h`，geometry 类型见 `hal/interface/nx_flash_geometry.h`）：
 
 ```c
-nx_status_t nx_flash_query_geometry(nx_device_ref_t flash,
-                                   nx_flash_geometry_t* geometry);
-nx_status_t nx_flash_query_block(nx_device_ref_t flash, uint32_t address,
-                                nx_flash_block_t* block);
-nx_status_t nx_flash_region_init(nx_flash_region_t* region,
-                                nx_device_ref_t flash,
-                                uint32_t offset, uint32_t length);
+nx_status_t nx_device_flash_geometry(nx_device_ref_t ref, nx_flash_geometry_t* out);
+nx_status_t nx_device_flash_block(nx_device_ref_t ref, uint32_t offset,
+                                  nx_flash_block_t* out);
+nx_status_t nx_device_flash_region_open(nx_device_ref_t controller,
+                                        uint32_t offset, uint32_t size,
+                                        uint32_t permissions,
+                                        nx_device_flash_region_t* out);
+nx_status_t nx_device_flash_region_close(nx_device_flash_region_t ref);
 ```
 
-实际 API 需与类型化 Flash 设备评审一起确定。HAL 不依赖 `services/storage` 的 `nx_flash_port_t`；转换成现有存储窄端口由独立 adapter 完成。region 保存明确借用/拥有引用及有效期，不能通过复制 struct 获得另一份可独立关闭的设备 owner。
+block 参数是相对物理 Flash 的 offset，不是绝对 address。region 具有 permissions／generation 和独立 loan；复制值不新增 owner／loan，未 release 的借用使 region close 返回 BUSY。HAL 不依赖 Storage。`Nexus::StorageHAL`／`nexus/hal_flash_storage.h` 的 bind／begin／end／unbind 将已打开的 region 转成窄端口；要求完整 uniform erase blocks，共享整次 open／load／save 的单一预算，不自动选区或 unlock。
 
-外部 layout 可以定义 app、bootloader、状态、参数、OTA slot 等区域，但名称和选择属于示例/产品。构建时从同一 layout 输入生成 linker 和 adapter 配置，验证：
+当前 `NEXUS_FLASH_LAYOUT_FILE` 从单一 JSON 输入生成 linker／region 身份。默认 image 使用整块物理 Flash，不自动预留参数区；当前仅支持从 Flash 基址启动，非零 image offset 明确拒绝。区域命名与选择归外部应用；描述 boot／OTA 区域不等于提供 bootloader、VTOR relocation 或 A/B install 链。验收要求继续包括：
 
 - 物理探测容量、SoC geometry 与 linker 声明一致；不默认把 STM32F407ZG/VG 的容量用于 VE。
 - 分区不溢出、不重叠，不跨禁止区域；整数加法/乘法溢出明确失败。
@@ -190,12 +208,12 @@ nx_status_t nx_flash_region_init(nx_flash_region_t* region,
 
 | 组件 | core | 显式 adapter | 外部应用责任 |
 |---|---|---|---|
-| Log | 格式、级别过滤、有界记录和丢失统计 | runtime queue、UART、console、file、存储 sink | 选择 sink、队列、deadline、限流和 worker；定义业务可接受丢失 |
-| Shell | parser、编辑/历史、命令表与输出端口 | typed UART、stdio、runtime eventloop | 注册命令、权限/维护政策、缓冲预算和设备 owner |
-| Config | namespace/schema、格式、事务和串行管理合同 | storage、crypto provider | 参数定义、默认值、迁移、key/vault 和维护 owner |
-| Storage | 有界提交/恢复、CRC/generation 格式 | generic flash region、file flash | region/layout、写频率、寿命、维护窗口和格式迁移 |
-| 协议 | 有界 parser/state machine、CRC 与明确端口 | typed UART/RS485、网络 transport | 地址/寄存器映射、轮询/重连政策、优先级和收发线程 |
-| Security/Update | 维护中的 provider 端口、清单校验和通用状态机 | OpenSSL 或 MCU provider、安装/计数/信任端口 | 熵源、key lifecycle、bootloader、产品健康与确认政策 |
+| Log | `LogCore` 无状态 formatter | `LogRuntime` 过滤／同步／可选队列，caller-owned `LogUART`；其他 sink 显式提供 | 选择 sink、队列、deadline、限流和 worker；定义业务可接受丢失 |
+| Shell | `Shell` parser、编辑／历史、命令表与输出端口；当前 singleton／动态存储 | `ShellUART`；Native stdio 在应用侧 | 注册命令、权限／维护政策、缓冲预算和设备 owner |
+| Config | `ConfigCore` 类型／namespace、格式、快照和串行管理 | `ConfigRAM`、可选 `ConfigFlash`；crypto facade／provider 显式组合 | 参数、默认值、迁移、key／vault 和维护 owner |
+| Storage | StorageCore 提交／恢复、CRC／generation 格式 | `StorageHAL` typed region 和 Native file flash | region／layout、写频率、寿命、维护窗口和格式迁移 |
+| 协议 | parser／state machine／CRC 与 IO 窄端口 | 完整公共 UART／RS485／网络 transport 后续独立接入 | 地址／寄存器映射、轮询／重连政策、优先级和收发线程 |
+| Security/Update | provider capability facade、清单校验和通用状态机 | 显式 Native OpenSSL；MCU crypto／安装／可信计数端口未交付 | 熵源、key lifecycle、bootloader、产品健康与确认政策 |
 
 core 的能力按组件实际需要定义，不为了拆目录而复制 API。OS-independent core 不默认依赖 OSAL；适配器依赖关系明确出现在目标图中。Mock/Fake 与故障注入单独编译为测试目标，不能成为 production 的隐式 fallback。
 
@@ -218,9 +236,11 @@ core 的能力按组件实际需要定义，不为了拆目录而复制 API。OS
 - vendor 升级单独提交，先运行 header/signature、startup/vector、IRQ、clock、geometry 和驱动契约验证，再更新 examples pin；不混入广泛 API 重构。
 - 工具链入口保持官方 archive/hash 与 CI 本地一致；第三方包缺失时明确阻断，不用自写 stub 冒充真实 ARM 构建。
 
-### 6.3 installed SDK 是后续独立交付
+### 6.3 已实现的可重定位源码 SDK
 
-先证明 source SDK 的纯 C/C++ 父工程、非 Nexus 工程根、路径含空格、独立 output、public/private 边界和配置隔离。再评估 `install/export`：CMake package、组件与配置身份、可重定位路径、Board 扩展、startup/linker/注册对象打包和 ABI/toolchain 限制。不能仅生成 `NexusConfig.cmake` 就宣布完成 binary SDK。
+当前 `cmake/package/package_source_sdk.py` 及 `nexus_package_source_sdk(OUTPUT_DIRECTORY ...)` 已提供源码 package／verify，消费使用 `find_package(Nexus 0.1.0 EXACT CONFIG REQUIRED)` 和实际 application helper。package 记录源码／依赖／许可／逐文件与导出身份，consumer 自行选择 Board／layout／config／toolchain 并重新编译。
+
+开发工作树 snapshot 必须显式 DEVELOPMENT_FIXTURE／consumer opt-in，manifest publishable=false，不能用于 promotion。已经实际移动路径并执行开发 consumer 回归；最终 clean 默认严格包及完整消费矩阵仍待交付证据绑定。这不是 installed binary SDK，不提供跨配置／工具链预编译 ABI 保证。完整流程见 [构建集成](build-integration.md) 与 SDK `cmake/package/README.md`。
 
 ### 6.4 跨平台构建与验证入口收敛
 
@@ -355,7 +375,7 @@ core 的能力按组件实际需要定义，不为了拆目录而复制 API。OS
 
 ## 12. 当前执行入口与完成定义
 
-立即顺序为：建立独立仓库和 fixed SDK consumer → 获取 clean 基线 → 逐项修复 IRQ/AF/event API 错误 → 保留 bootstrap 保障并删除 Product 身份 → typed caller 与 Log/Shell 迁移 → Board/Flash/layout → 示例迁出 → 多仓证据 → 实板资格。
+原实施顺序已推进至通用接口、组件和外部八应用。接下来按 execution CSV 收敛剩余软件验收、最终 clean SDK／examples pair、源码包与多仓证据，再执行实板资格。历史已通过检查不复用为新 revision 的证据；有新增代码／失败／未关闭条件时运行相应回归，阶段候选时执行完整受支持矩阵。
 
 最终交付必须同时具备：
 

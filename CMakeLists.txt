@@ -11,7 +11,7 @@ if(NOT EXISTS "${NEXUS_SOURCE}/CMakeLists.txt")
     message(FATAL_ERROR "Initialize external/nexus recursively or pass -DNEXUS_SOURCE=/absolute/sdk/path")
 endif()
 set(NEXUS_BUILD_TESTS OFF CACHE BOOL "SDK development tests" FORCE)
-set(NEXUS_BUILD_EXAMPLES OFF CACHE BOOL "SDK in-tree examples" FORCE)
+set(NEXUS_BUILD_CONTRACTS OFF CACHE BOOL "SDK in-tree link fixtures" FORCE)
 add_subdirectory("${NEXUS_SOURCE}" nexus)
 
 get_target_property(nexus_resolved_configuration Nexus::Config NEXUS_CONFIG_CMAKE)
@@ -22,6 +22,26 @@ nexus_add_application(TARGET boot_blinky VERSION "0.1.0"
 if(CONFIG_OSAL_NATIVE OR CONFIG_OSAL_FREERTOS)
     nexus_add_application(TARGET rtos_pipeline VERSION "0.1.0"
         SOURCES apps/rtos_pipeline/main.c)
+endif()
+
+if(CONFIG_FRAMEWORK_CONFIG)
+    nexus_add_application(TARGET config_roundtrip VERSION "0.1.0"
+        SOURCES apps/config_roundtrip/main.c
+        EXTRA_DEPS Nexus::ConfigCore Nexus::ConfigRAM)
+endif()
+
+# SPI reference wiring is qualified in software only for Native/Discovery.
+if(CONFIG_PLATFORM_NATIVE OR
+   (CONFIG_BOARD_STM32F4DISCOVERY AND CONFIG_STM32_SPI_ENABLE AND CONFIG_STM32_SPI1_ENABLE))
+    nexus_add_application(TARGET spi_transaction VERSION "0.1.0"
+        SOURCES apps/spi_transaction/main.c EXTRA_DEPS Nexus::HALDevice)
+    if(CONFIG_PLATFORM_NATIVE)
+        target_compile_definitions(spi_transaction PRIVATE
+            NEXUS_EXAMPLE_SPI_DEVICE="SPI0" NEXUS_EXAMPLE_SPI_CS=3)
+    else()
+        target_compile_definitions(spi_transaction PRIVATE
+            NEXUS_EXAMPLE_SPI_DEVICE="SPI1" NEXUS_EXAMPLE_SPI_CS=0)
+    endif()
 endif()
 
 if(CONFIG_PLATFORM_NATIVE)
@@ -35,19 +55,35 @@ if(CONFIG_PLATFORM_NATIVE)
             "-Wl,-Map,$<TARGET_FILE_DIR:industrial_model>/industrial_model.map")
     endif()
     enable_testing()
+    nexus_add_application(TARGET shell_console VERSION "0.1.0"
+        SOURCES apps/shell_console/main.c EXTRA_DEPS Nexus::Shell)
     add_test(NAME boot_blinky_finite COMMAND boot_blinky --cycles 2)
     add_test(NAME rtos_pipeline_finite COMMAND rtos_pipeline --run-ms 400)
     add_test(NAME industrial_protocol_and_fault COMMAND industrial_model)
+    add_test(NAME shell_console_finite COMMAND shell_console --smoke)
+    add_test(NAME config_roundtrip_finite COMMAND config_roundtrip)
+    add_test(NAME spi_transaction_finite COMMAND spi_transaction)
     set_tests_properties(boot_blinky_finite rtos_pipeline_finite
-        industrial_protocol_and_fault PROPERTIES TIMEOUT 15 LABELS "native;example")
+        industrial_protocol_and_fault shell_console_finite config_roundtrip_finite spi_transaction_finite
+        PROPERTIES TIMEOUT 15 LABELS "native;example")
 else()
     nexus_add_application(TARGET uart_echo VERSION "0.1.0"
         SOURCES apps/uart_echo/main.c)
+    if(CONFIG_FRAMEWORK_LOG)
+        nexus_add_application(TARGET log_uart VERSION "0.1.0"
+            SOURCES apps/log_uart/main.c EXTRA_DEPS Nexus::LogRuntime Nexus::LogUART)
+    endif()
     if(CONFIG_BOARD_STM32F4DISCOVERY)
         target_compile_definitions(uart_echo PRIVATE
             NEXUS_EXAMPLE_CONSOLE_DEVICE="UART1")
+        if(TARGET log_uart)
+            target_compile_definitions(log_uart PRIVATE NEXUS_EXAMPLE_CONSOLE_DEVICE="UART1")
+        endif()
     else()
         target_compile_definitions(uart_echo PRIVATE
             NEXUS_EXAMPLE_CONSOLE_DEVICE="UART0")
+        if(TARGET log_uart)
+            target_compile_definitions(log_uart PRIVATE NEXUS_EXAMPLE_CONSOLE_DEVICE="UART0")
+        endif()
     endif()
 endif()

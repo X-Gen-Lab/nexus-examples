@@ -1,49 +1,56 @@
-# 本次交付与远端同步状态
+# 交付与远端同步状态
 
-记录日期：2026-10-09（Asia/Shanghai）。本次交付是独立示例仓库首批实现与完整平台重构计划。
-平台计划中的未来任务没有被标为已实现。
+记录日期：2026-10-09（Asia/Shanghai）。独立示例仓库已创建；本文件区分初始交付、
+本轮新 API 实现与仍待收敛的最终证据，不把规划任务或软件结果写成实板资格。
 
-## 本地交付
+## 已同步的初始历史
 
-本地仓库：`/workspace/nexus-examples`，默认分支 `main`。
+远端为私有 [X-Gen-Lab/nexus-examples](https://github.com/X-Gen-Lab/nexus-examples)，
+默认分支 `main`；本地 `origin` 指向同一仓库。初始五个提交已同步：
 
-| 已完成实现批次 | 提交 |
-|---|---|
+| 初始批次 | 提交 |
+| --- | --- |
 | 固定源码 SDK、外部 CMake 工程、四个应用 | `2a7b555` |
 | 依赖身份核验、薄构建入口、CI 定义 | `7196841` |
-| 板卡说明、示例路线图、38 项平台任务与 19 个计划批次 | `e1453ef` |
-| 3 项 Native、8 组 ARM、20 ELF 的实际证据 | `24ef09c` |
+| 板卡说明、示例路线图、38 项任务与 19 个计划批次 | `e1453ef` |
+| 绑定旧 SDK 的 Native／ARM 实际软件证据 | `24ef09c` |
+| 初始交付记录 | `1d517fe` |
 
-本文件随随后一项交付记录提交保存；上表只列实现、计划与验证批次。
-完整检查范围与未执行项见 [validation.md](validation.md)。
-Nexus 仓库本次未修改，仍固定为 `069dcf14`。
+初始 [GitHub Actions run 37894225307](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37894225307)
+已成功。它对应当时的提交与 SDK，不能证明本轮 Runtime／组件／SPI 调用者或新 pin 已完成线上验收。
+之前记录的仓库创建／连接限制是历史过程，已不再作为当前交付阻碍。
 
-## GitHub 状态
+## 本轮实现范围
 
-目标名称为 `X-Gen-Lab/nexus-examples`。当前连接没有创建 repository 的工具；
-通过 GitHub CLI 创建私有初始仓库的联网工具调用被中止，未取得创建成功结果。
-后续连接查询返回 GitHub HTTP 404，可能是仓库不存在或连接无权访问；
-本地没有 `origin`，没有完成任何远端推送。没有观察到本次创建操作的 HTTP 403，
-也不能把 404 推断为已确定的组织权限拒绝。
+调用者已迁移至 `nx_runtime_bootstrap()`／`Nexus::Firmware`，增加 `shell_console`、
+`config_roundtrip`、`log_uart`、`spi_transaction`，与原四应用形成八应用源码集合。
+组件例程只消费公开 headers／targets；SPI 使用 Native 正常 echo 模型并在 Discovery
+参考配置链接。启明／天空星未绑定 SPI，梁山派板载 Flash 的 SPI4 尚无本例专用
+loopback／隔离工装，因此三板不注册该示例 target。详细资源、有限执行和错误路径见
+[组件说明](component-examples.md) 与 [SPI 说明](spi-example.md)。
 
-继续同步所需条件是以下任一项：允许执行环境的 CLI 联网创建仓库；或先在 GitHub
-组织下建立一个空的 `nexus-examples`，并将其纳入连接可写范围。
-不需要提供密码或 token，不需要合并 Nexus 既有 PR。
+Nexus 本轮已经修改通用 Runtime、HAL、OSAL、Board／Flash、组件目标、构建与源码 SDK。
+历史 `069dcf14` 只保留为重构前审计与首批验证身份，不再描述为本轮唯一平台实现。
+正式依赖由 `external/nexus` Gitlink 和 `dependencies/nexus.lock.json` 一起更新、核验；
+最终 clean SHA pair、全预设矩阵、源码包和远端新 CI 结果仍待统一记录。
+本文件不预填最终 HEAD、测试总数或新 pin 的成功结论。
 
-远端创建并确认可写后，顺序推送现有 `main` 历史，并核验远端 HEAD。
-此后才记录 GitHub Actions 的实际执行；不能用本地通过代替线上结果。
+平台 38 项任务的逐项 implementation／software／physical／commit 状态由 Nexus 的
+`docs/implementation/refactor-execution.csv` 和同名 Markdown 维护。本仓库
+[重构计划](platform-refactor-plan.md) 保留原任务 ID、预算和 C01–C19 计划批次，
+其执行要求不等于所有验收条件已经关闭。
 
-## 可迁移工件
+## 验证和移交边界
 
-工作区另生成 `/workspace/nexus-examples.bundle`，包含本仓库所有提交和引用；
-最终 bundle 在交付记录提交后重新生成并执行 `git bundle verify`。
+历史基线及本轮机器记录见 [validation.md](validation.md) 和 `evidence/`。
+开发覆盖的定向运行／静态产物仅证明其实际源码；不能沿用旧报告推断新提交通过。
+候选证据必须绑定准确双仓 revision、有效配置、Board／layout、工具链与同工件摘要。
 
-```sh
-git clone /path/to/nexus-examples.bundle nexus-examples
-cd nexus-examples
-git submodule update --init --recursive
-```
+所有真实 HIL 当前仍为 **unverified**：板卡刷写／读回、IRQ／AF、UART 最后一位、
+SPI／DMA、Flash 物理掉电、栈峰值和长期负载尚不具备本轮合格结论。
+MCU typed I2C 未接入；RS485、网络、受保护 bootloader、MCU crypto／熵源和可信计数器
+没有因模型或构建通过而成为已交付能力。
 
-bundle 保存 SDK Gitlink 和依赖锁，不包含 Nexus 或其第三方子模块对象。
-递归获取仍需网络访问或本地完整 SDK；开发覆盖路径的身份检查见
-[build-integration.md](build-integration.md)。
+可迁移 bundle 只是某一时刻的 Git 历史快照，需要重新生成并 `git bundle verify` 后
+才能用于对应交付；它不包含 SDK 或第三方子模块对象，也不替代远端和依赖身份核验。
+默认示例不执行 Flash 擦写、制造注入或真实升级安装。

@@ -74,9 +74,18 @@ def main(argv=None):
             "--no-tests=error", "--parallel", str(args.parallel),
             "--output-junit", str(output / "ctest-results.xml"),
         ])
+        commands.append([
+            sys.executable, str(source / "scripts/validation/junit.py"),
+            "--report", str(output / "ctest-results.xml"),
+        ])
     with (output / "build.log").open("w", encoding="utf-8") as log:
         try:
             for command in commands:
+                if command[0] == "ctest":
+                    (output / "ctest-results.xml").unlink(missing_ok=True)
+                    test_started_ns = time.time_ns()
+                elif "--report" in command:
+                    command.extend(["--not-before-ns", str(test_started_ns)])
                 code = run(command, environment, log)
                 if code:
                     return code

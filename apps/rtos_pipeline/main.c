@@ -2,7 +2,7 @@
  * Queue waits are bounded; the queue owns data-ready synchronization. A
  * separate semaphore gates worker startup until all tasks/resources exist. */
 #include "hal/base/nx_device.h"
-#include "product/product.h"
+#include "runtime/nx_runtime.h"
 #include "nexus_board.h"
 #include "nexus_config.h"
 #include "osal/osal.h"
@@ -219,7 +219,7 @@ static int stop_and_cleanup(int result) {
                (unsigned long)statistics.dropped);
         if (led.descriptor && nx_device_close(led) != NX_OK) result = 1;
         else led = (nx_device_ref_t){0};
-        if (nx_product_shutdown(NULL) != NX_OK) result = 1;
+        if (nx_runtime_shutdown(NULL) != NX_OK) result = 1;
     } else {
         result = 1;
     }
@@ -243,13 +243,13 @@ int main(int argc, char** argv) {
 #else
 int main(void) {
 #endif
-    if (nx_product_boot(NULL) != NX_OK) return 1;
+    if (nx_runtime_bootstrap(NULL) != NX_OK) return 1;
     char name[16];
     int written = snprintf(name, sizeof(name), "GPIO%c%u", NX_BOARD_LED_GPIO_PORT,
                             (unsigned)NX_BOARD_LED_GPIO_PIN);
     if (written < 0 || (size_t)written >= sizeof(name) ||
         nx_device_open(name, NX_DEVICE_CLASS_GPIO, (uintptr_t)&led, &led) != NX_OK) {
-        (void)nx_product_shutdown(NULL);
+        (void)nx_runtime_shutdown(NULL);
         return 1;
     }
     if (nx_device_gpio_write(led, NX_BOARD_LED_INACTIVE_LEVEL) != NX_OK) return stop_and_cleanup(1);

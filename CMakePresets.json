@@ -16,7 +16,7 @@
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "NEXUS_SOURCE": "${sourceDir}/external/nexus",
         "NEXUS_BUILD_TESTS": "OFF",
-        "NEXUS_BUILD_EXAMPLES": "OFF"
+        "NEXUS_BUILD_CONTRACTS": "OFF"
       }
     },
     {
@@ -34,7 +34,7 @@
       "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake",
       "cacheVariables": {
         "NEXUS_PLATFORM": "stm32",
-        "NEXUS_CONFIG_FILE": "$env{NEXUS_SOURCE}/configs/stm32f407_baremetal_defconfig"
+        "NEXUS_CONFIG_FILE": "${sourceDir}/configs/mcu/stm32-discovery-baremetal-release.conf"
       }
     },
     {
@@ -43,7 +43,7 @@
       "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake",
       "cacheVariables": {
         "NEXUS_PLATFORM": "stm32",
-        "NEXUS_CONFIG_FILE": "$env{NEXUS_SOURCE}/configs/stm32f407_freertos_defconfig"
+        "NEXUS_CONFIG_FILE": "${sourceDir}/configs/mcu/stm32-discovery-freertos-release.conf"
       }
     },
     {
@@ -52,7 +52,7 @@
       "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake",
       "cacheVariables": {
         "NEXUS_PLATFORM": "stm32",
-        "NEXUS_CONFIG_FILE": "$env{NEXUS_SOURCE}/configs/stm32f407zg_qiming_v31_baremetal_defconfig"
+        "NEXUS_CONFIG_FILE": "${sourceDir}/configs/mcu/stm32-qiming-baremetal-release.conf"
       }
     },
     {
@@ -61,7 +61,7 @@
       "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake",
       "cacheVariables": {
         "NEXUS_PLATFORM": "stm32",
-        "NEXUS_CONFIG_FILE": "$env{NEXUS_SOURCE}/configs/stm32f407zg_qiming_v31_freertos_defconfig"
+        "NEXUS_CONFIG_FILE": "${sourceDir}/configs/mcu/stm32-qiming-freertos-release.conf"
       }
     },
     {
@@ -70,7 +70,7 @@
       "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake",
       "cacheVariables": {
         "NEXUS_PLATFORM": "stm32",
-        "NEXUS_CONFIG_FILE": "$env{NEXUS_SOURCE}/configs/stm32f407ve_sky_qingchun_baremetal_defconfig"
+        "NEXUS_CONFIG_FILE": "${sourceDir}/configs/mcu/stm32-sky-baremetal-release.conf"
       }
     },
     {
@@ -79,7 +79,7 @@
       "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake",
       "cacheVariables": {
         "NEXUS_PLATFORM": "stm32",
-        "NEXUS_CONFIG_FILE": "$env{NEXUS_SOURCE}/configs/stm32f407ve_sky_qingchun_freertos_defconfig"
+        "NEXUS_CONFIG_FILE": "${sourceDir}/configs/mcu/stm32-sky-freertos-release.conf"
       }
     },
     {
@@ -88,7 +88,7 @@
       "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake",
       "cacheVariables": {
         "NEXUS_PLATFORM": "gd32f470",
-        "NEXUS_CONFIG_FILE": "$env{NEXUS_SOURCE}/configs/gd32f470_baremetal_defconfig"
+        "NEXUS_CONFIG_FILE": "${sourceDir}/configs/mcu/gd32-liangshan-baremetal-release.conf"
       }
     },
     {
@@ -97,7 +97,7 @@
       "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake",
       "cacheVariables": {
         "NEXUS_PLATFORM": "gd32f470",
-        "NEXUS_CONFIG_FILE": "$env{NEXUS_SOURCE}/configs/gd32f470_freertos_defconfig"
+        "NEXUS_CONFIG_FILE": "${sourceDir}/configs/mcu/gd32-liangshan-freertos-release.conf"
       }
     }
   ],
