@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "a4e0ac5b5ce65668101816b585b2fcff92327f85",
-  "tree": "1beed663c025b3f2fad5ba18bea835f04fdf8ea9",
+  "commit": "a8766d67b48172a2b5aa39ff29a560b21ff78403",
+  "tree": "c774d973f656731f9e728a99eb9f721e3eed246d",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
   "baseline_status": "software refactor; physical HIL not executed",
