@@ -1,0 +1,112 @@
+name: Example source SDK integration
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: examples-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native:
+    name: Native build and execution
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout pinned SDK and recursive dependencies
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.11'
+      - name: Prepare host build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build gcc g++ libssl-dev
+          python3 -m pip install kconfiglib==14.1.0
+      - name: Verify source dependency identity
+        run: python3 scripts/test_repository.py --report build/native-debug/dependency-identity.json
+      - name: Build and run Native examples
+        run: python3 scripts/build.py --preset native-debug --test --parallel 4
+      - name: Retain Native artifacts and execution evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: examples-native-debug
+          path: |
+            build/native-debug/build.log
+            build/native-debug/ctest-results.xml
+            build/native-debug/dependency-identity.json
+            build/native-debug/CMakeCache.txt
+            build/native-debug/compile_commands.json
+            build/native-debug/nexus/generated/*
+            build/native-debug/nexus/bin/*
+          retention-days: 14
+
+  arm:
+    name: ${{ matrix.preset }} linked firmware
+    needs: native
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        preset:
+          - stm32-discovery-baremetal-release
+          - stm32-discovery-freertos-release
+          - stm32-qiming-baremetal-release
+          - stm32-qiming-freertos-release
+          - stm32-sky-baremetal-release
+          - stm32-sky-freertos-release
+          - gd32-liangshan-baremetal-release
+          - gd32-liangshan-freertos-release
+    steps:
+      - name: Checkout pinned SDK and recursive dependencies
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.11'
+      - name: Prepare host build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build gcc g++
+          python3 -m pip install kconfiglib==14.1.0
+      - name: Verify source dependency identity
+        run: python3 scripts/test_repository.py --report build/${{ matrix.preset }}/dependency-identity.json
+      - name: Prepare SHA-256 locked ARM GNU toolchain
+        run: |
+          python3 external/nexus/scripts/ci/install_arm_toolchain.py --install-dir "$RUNNER_TEMP/nexus-arm-toolchain"
+          echo "$RUNNER_TEMP/nexus-arm-toolchain/bin" >> "$GITHUB_PATH"
+      - name: Build real ARM firmware
+        run: python3 scripts/build.py --preset ${{ matrix.preset }} --parallel 4
+      - name: Verify linked firmware static contract
+        run: >-
+          python3 external/nexus/scripts/ci/validate_firmware_elf.py
+          --build-dir build/${{ matrix.preset }}/nexus
+          --report build/${{ matrix.preset }}/firmware-static-contract.json
+      - name: Retain firmware and static validation evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: examples-${{ matrix.preset }}
+          path: |
+            build/${{ matrix.preset }}/build.log
+            build/${{ matrix.preset }}/dependency-identity.json
+            build/${{ matrix.preset }}/firmware-static-contract.json
+            build/${{ matrix.preset }}/CMakeCache.txt
+            build/${{ matrix.preset }}/compile_commands.json
+            build/${{ matrix.preset }}/nexus/generated/*
+            build/${{ matrix.preset }}/nexus/bin/*
+          retention-days: 14
