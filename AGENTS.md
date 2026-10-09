@@ -1,25 +1,34 @@
 # Nexus examples maintenance
 
-This repository owns public application examples and their composition. Nexus
-owns the reusable platform. Keep proprietary products, credentials and private
-PCB data in their own repositories.
+This repository owns public application examples and composition. Nexus owns
+common platform code. Proprietary products, credentials and PCB data belong to
+separate product repositories.
 
-- Use the pinned source SDK at `external/nexus`; update its Gitlink and
-  `dependencies/nexus.lock.json` together with actual integration evidence.
-- Do not copy HAL/OSAL/vendor implementations or introduce fallback success.
-- Samples must state supported boards/backends, resources and electrical setup.
-- Separate Native model execution, ARM static artifact validation and real HIL.
-- Keep task/ISR context, deadlines, buffer ownership and error recovery explicit.
-- Platform API changes and the corresponding example caller changes require
-  separate reviewable commits and compatible dependency pins.
-- Presets are the build source of truth; scripts only forward CMake/CTest.
-- Use the documented two-repository refactor plan and the platform execution
-  record. Consume runtime/nx_runtime.h and Nexus::Firmware; bootstrap only owns
-  HAL/OSAL infrastructure. Applications explicitly own workers, component and
-  provider selection, Board/layout, resources and recovery policy.
-- Distinguish implemented public APIs from outstanding qualification. External
-  Board/layout and relocatable source-package inputs exist; their final clean
-  evidence must bind the pinned SDK. MCU typed I2C and physical HIL remain
-  unsupported/unverified; do not infer them from Native models or compilation.
-- Run meaningful integration tests, reject zero tests and record final commits.
-- Never run Flash erase examples automatically on hardware or embed real keys.
+- Use the source SDK at `external/nexus`; update its Gitlink and
+  `dependencies/nexus.lock.json` together only with actual integration evidence.
+- Consume public `nexus/core`, `nexus/io`, `nexus/os`, `nexus/components` and
+  generated bindings. Do not copy providers, vendor implementation or restore
+  registry/factory/owner references. Public types use the selected SDK ABI.
+- The sole configuration is `assemblies/*.json`; CMake presets define seven
+  maintained builds. Separate build roots prevent stale effective configuration.
+- `nx_platform_start/stop` own selected infrastructure. Applications own workers,
+  scheduler start, component composition, budgets and recovery. No implicit main.
+- Document task/ISR context, absolute clock-domain deadlines, admission, caller
+  buffer borrowing, cancellation, service progress and final settlement.
+- REJECTED retains no borrow. ACCEPTED retains descriptor and bytes through
+  SETTLED. QUARANTINED still retains them; timeout never revokes ownership.
+- Fixed Board facts distinguish exact part/PCB/wiring from SoC capability. Do not
+  infer unknown SPI/I2C/ADC/PWM/EXTI wiring or physical support from compilation.
+- Preserve SDK `.clang-format`/`.editorconfig` and backslash Doxygen headers.
+  Public headers own full contracts; source omits duplicate param/return tags.
+  Install `python scripts/setup_dev_tools.py` in every clone. Hooks are read-only
+  staged style/text and Conventional Commit checks; CI checks all tracked files.
+- Separate Native model execution, linked ARM ELF budgets and physical HIL.
+  User defers physical boards. Record unexecuted timing/electrical/reset/power-cut
+  tests honestly. Do not issue automatic destructive Flash examples on equipment.
+- Run meaningful tests, reject empty/stale/all-skipped JUnit, retain actual
+  commands/exits, source/dependency/config/toolchain and artifact hashes.
+- An explicit local SDK path never bypasses source-lock/Gitlink/clean checks.
+  Uncommitted development fixtures must remain nonpublishable. Historical source
+  counts or evidence cannot qualify this changed implementation.
+- Conventional Commit examples: `feat(examples): ...`, `fix(uart): ...`.

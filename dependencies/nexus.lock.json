@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2",
-  "tree": "1a5d811afe5b6978d6902c56272763110437905f",
+  "commit": "038b16d3348a0399f4b4cea574fdaf761a4c0ee4",
+  "tree": "3dc33408b05a6f66113de7dfcde9e4ebff0e4d88",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "software refactor; physical HIL not executed",
-  "public_api": "Nexus::Runtime / nx_runtime_bootstrap and explicit component targets"
+  "baseline_status": "next-generation common platform; software qualification in candidate evidence; physical HIL not executed",
+  "public_api": "Nexus::Platform / generated fixed typed bindings / explicit OS and common component targets"
 }

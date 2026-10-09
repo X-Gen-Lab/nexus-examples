@@ -17,10 +17,8 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 DEPENDENCIES = (
     "ext/freertos",
-    "ext/googletest",
     "vendors/arm/CMSIS_5",
     "vendors/st/cmsis_device_f4",
-    "vendors/st/stm32f4xx_hal_driver",
 )
 
 
@@ -72,8 +70,8 @@ def verify_presets():
         sections[section] = indexed
     configured = sections["configurePresets"]
     visible = {name for name, entry in configured.items() if not entry.get("hidden", False)}
-    if len(visible) != 9 or "native-debug" not in visible:
-        raise ValueError("The reference matrix requires Native and eight ARM configure presets")
+    if len(visible) != 7 or "native-debug" not in visible:
+        raise ValueError("The reference matrix requires Native and six ARM configure presets")
     for name, entry in configured.items():
         inherited = entry.get("inherits", [])
         if isinstance(inherited, str):

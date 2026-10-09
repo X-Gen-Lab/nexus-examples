@@ -1,3 +1,7 @@
+> Historical previous-architecture record. This plan/result does not qualify
+> the current static-port architecture. See [current validation](refactor-validation.md)
+> and the pinned SDK `docs/design/next-generation-execution.csv` for current scope.
+
 # Nexus 通用嵌入式平台重构与独立示例交付计划
 
 本计划以 Nexus 源码 `069dcf14f9cb1cd6fc4a869d87bf9827b91ce306` 为分析基线，适用于约 10 人团队、3–6 个月交付周期。目标是把 Nexus 维护为可复用的通用嵌入式平台，把示例装配与实际产品放到独立仓库，通过公开接口和固定依赖版本协作。
