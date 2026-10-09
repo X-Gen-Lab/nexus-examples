@@ -1,7 +1,7 @@
 # Nexus Examples
 
 [X-Gen-Lab/nexus-examples](https://github.com/X-Gen-Lab/nexus-examples) 是独立维护的私有示例仓库。
-2026-10-09（Asia/Shanghai）最终被测实现为 Nexus `5498b2b6` 与示例 `272200f4`：
+2026-10-09（Asia/Shanghai）上一轮被测实现为 Nexus `5498b2b6` 与示例 `272200f4`：
 Native 6 项测试、8 组 ARM 配置的 38 个 ELF 全部通过；
 [示例 GitHub Actions](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37908306631)
 9 个 job 全部成功。平台完整 Native 1810 项、8 个平台 ELF、严格可重定位源码 SDK
@@ -18,13 +18,18 @@ Nexus 提供通用平台，本仓库提供应用装配。私有产品、客户�
 | Target | Native | MCU 裸机 | MCU FreeRTOS |
 | --- | --- | --- | --- |
 | `boot_blinky` | 有限运行与 GPIO 检查 | 四板 LED 心跳 | 四板 LED 任务 |
-| `uart_echo` | 不创建；Native 无 typed UART port | 四板事件／票据式回显 | 四板回显任务 |
+| `uart_echo` | 不创建；此例需要硬件 console RX source | 四板事件／票据式回显 | 四板回显任务 |
 | `rtos_pipeline` | 有限 producer／consumer | 不创建 | 四板队列、同步、LED 和统计 |
 | `industrial_model` | Modbus、虚拟 plant、健康监督 | 不创建 | 不创建 |
 | `shell_console` | 有限 `--smoke` 或标准流交互 | 不创建 | 不创建 |
 | `config_roundtrip` | 非加密类型、命名空间和 RAM 快照 | 四板有限检查 | 四板有限任务 |
-| `log_uart` | 不创建；Native 无 typed UART port | 四板固定队列、pump／flush | 四板单 owner 任务 |
+| `log_uart` | 有限 12 条 TX 模型、满队列检查、Runtime 关闭 | 四板固定队列、pump／flush | 四板单 owner 任务 |
 | `spi_transaction` | 有限同步／queued echo 与取消 settlement | Discovery SPI1 参考工装 | Discovery SPI1 参考工装 |
+
+当前 Native 注册 7 个有限 CTest，新增 `log_uart_finite` 通过真实 typed UART provider
+验证固定队列、12 条记录、一次显式 FULL 和 Runtime 回到 OFFLINE。Native UART 将 TX
+复制到宿主模型的观察缓冲区；本例显式预算 512 B，没有串口设备或自动 RX producer。
+本轮定向执行通过，干净 SDK pin 和完整双仓矩阵仍由最终证据绑定；上面的 6 项属于旧 snapshot。
 
 四板为启明欣欣 STM32F407ZGT6 V3.1、天空星 STM32F407VET6 青春版、梁山派
 GD32F470ZGT6、STM32F4Discovery。启明／天空星尚无 SPI binding；梁山派已有板载

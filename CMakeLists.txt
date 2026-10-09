@@ -63,6 +63,14 @@ if(CONFIG_PLATFORM_NATIVE)
     enable_testing()
     nexus_add_application(TARGET shell_console VERSION "0.1.0"
         SOURCES apps/shell_console/main.c EXTRA_DEPS Nexus::Shell)
+    if(CONFIG_FRAMEWORK_LOG)
+        nexus_add_application(TARGET log_uart VERSION "0.1.0"
+            SOURCES apps/log_uart/main.c EXTRA_DEPS Nexus::LogRuntime Nexus::LogUART)
+        target_compile_definitions(log_uart PRIVATE NEXUS_EXAMPLE_CONSOLE_DEVICE="UART0")
+        add_test(NAME log_uart_finite COMMAND log_uart)
+        set_tests_properties(log_uart_finite
+            PROPERTIES TIMEOUT 15 LABELS "native;example")
+    endif()
     add_test(NAME boot_blinky_finite COMMAND boot_blinky --cycles 2)
     add_test(NAME rtos_pipeline_finite COMMAND rtos_pipeline --run-ms 400)
     add_test(NAME industrial_protocol_and_fault COMMAND industrial_model)

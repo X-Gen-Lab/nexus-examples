@@ -7,7 +7,7 @@
 | --- | --- | --- | --- |
 | `shell_console` | Native | `Nexus::Shell` | 真实标准输入输出、typed GPIO、有限 `--smoke` |
 | `config_roundtrip` | Native、MCU 裸机／FreeRTOS | `Nexus::ConfigCore Nexus::ConfigRAM` | 非加密类型、命名空间、JSON／binary v2、RAM 快照恢复 |
-| `log_uart` | MCU 裸机／FreeRTOS | `Nexus::LogRuntime Nexus::LogUART` | caller-owned 四槽队列、有界背压、显式 pump 与 wire-idle flush |
+| `log_uart` | Native、MCU 裸机／FreeRTOS | `Nexus::LogRuntime Nexus::LogUART` | caller-owned 四槽队列、有界背压、显式 pump 与 wire-idle flush |
 
 `nexus_add_application` 自身组合 `Nexus::Firmware`，包含选定 Board、SoC、启动与 Runtime。
 选择关闭的组件时对应 target 不存在；不能通过隐式 include 路径补齐依赖。
@@ -23,21 +23,22 @@ nexus_add_application(TARGET log_uart VERSION "0.1.0"
     SOURCES apps/log_uart/main.c EXTRA_DEPS Nexus::LogRuntime Nexus::LogUART)
 ```
 
-第一项只在 Native 配置创建，第三项只在 MCU 配置创建。MCU console 由应用显式定义：
-Discovery 为 `NEXUS_EXAMPLE_CONSOLE_DEVICE="UART1"`，其他三块参考板为 `"UART0"`。
+Shell 只在 Native 配置创建；Log 在启用 `FRAMEWORK_LOG` 的 Native／MCU 配置创建。
+Native 选择 `NEXUS_EXAMPLE_CONSOLE_DEVICE="UART0"`。MCU console 由应用显式定义：
+Discovery 为 `"UART1"`，其他三块参考板为 `"UART0"`。
 逻辑设备与实际引脚的对应关系见 [板卡与接线](boards.md)。
 
 ## Native 执行
 
-Native 配置启用 `FRAMEWORK_SHELL`、`FRAMEWORK_CONFIG` 和 `SERVICE_SECURITY`；
+Native 配置启用 `FRAMEWORK_SHELL`、`FRAMEWORK_CONFIG`、`FRAMEWORK_LOG` 和 `SERVICE_SECURITY`；
 `CRYPTO_PROVIDER_OPENSSL=n`。ConfigCore 使用中性 crypto facade，但本例不选择 crypto provider，
 也不创建加密配置。RAM 后端通过公开的 `config_ram_backend.h` 和 `config_set_backend` 显式绑定。
 
 ```sh
 cmake --preset native-debug -DNEXUS_SOURCE:PATH=/workspace/nexus
-cmake --build --preset native-debug --target shell_console config_roundtrip --parallel 4
+cmake --build --preset native-debug --target shell_console config_roundtrip log_uart --parallel 4
 ctest --test-dir build/native-debug --output-on-failure --no-tests=error \
-  -R '^(shell_console_finite|config_roundtrip_finite)$'
+  -R '^(shell_console_finite|config_roundtrip_finite|log_uart_finite)$'
 ```
 
 上面的开发覆盖指向本机 SDK checkout；正式验证应使用依赖锁固定的 `external/nexus`。
@@ -46,7 +47,8 @@ CTest 注册须使用以下实际可执行命令，超时 15 秒：
 ```cmake
 add_test(NAME shell_console_finite COMMAND shell_console --smoke)
 add_test(NAME config_roundtrip_finite COMMAND config_roundtrip)
-set_tests_properties(shell_console_finite config_roundtrip_finite
+add_test(NAME log_uart_finite COMMAND log_uart)
+set_tests_properties(shell_console_finite config_roundtrip_finite log_uart_finite
     PROPERTIES TIMEOUT 15 LABELS "native;example")
 ```
 
@@ -61,6 +63,17 @@ Config 检查七种值的精确读回，两个命名空间的同名键隔离，�
 `commit → 修改三个命名空间 → load` 恢复十一条记录。binary v2 使用既有 namespace ID，
 须在相同命名空间映射下导入。RAM snapshot 在 deinit 或复位后消失，不提供掉电持久化。
 快照 `load` 会替换命名空间映射，示例先关闭所有 namespace handles，再恢复并按名字重新打开。
+
+Native Log 使用正常的 typed UART provider，没有导入测试 helper 或注入 RX。
+provider 把 TX 字节复制到有界观察环后立即结清；`wire_idle` 在此代表模型已完成复制，
+不代表物理串口测量。这个有限应用没有观察环消费者，`UART0_TX_BUFFER_SIZE=512` 显式
+容纳十二条记录，Native 编译断言检查总记录的最大字节预算。默认 256 B 会触发真实
+`NX_ERR_FULL`，不能通过丢弃观察数据或绕过 provider 把失败变成成功。
+
+`log_uart_finite` 检查同一个四槽／FULL／十二条完成序列，然后实际 unregister／close、
+logger deinit 和 `nx_runtime_shutdown()`，要求返回成功且 Runtime 为 OFFLINE。
+联合开发的完整 Native CTest 当前 7／7、工具 helper 9／9 通过；这些定向工作树检查
+不替代最终 clean source pair、ARM 或在线 CI。历史 source-bound 的 6 项结果保留原身份。
 
 ## MCU 执行与资源
 
@@ -127,7 +140,8 @@ logger dispatch 只复制到固定队列；没有隐式线程、timer 或 UART s
 UART provider 借用的是永久 `uart_sink.messages`，发送者的格式化栈不被借用。
 
 成功时先验证 completed=12、dropped=1、failed=0、pending=0、buffer_leased=false，
-再 unregister／close 和 logger deinit。第五条 probe 应被拒绝，线上只能看到 sequence 0–11。
+再 unregister／close 和 logger deinit；Native 随后验证 Runtime 关闭到 OFFLINE。
+第五条 probe 应被拒绝，MCU 线上应只看到 sequence 0–11，实际捕获仍须 HIL。
 失败保留静态 sink、logger 所有权和任何尚未结束的 provider buffer lease，锁存
 `log_uart_example_result/status/failure/stats`；应用随后可决定恢复、丢弃或复位。
 本例不自动选择此类产品策略，不把超时当作可以释放缓冲区的证据。

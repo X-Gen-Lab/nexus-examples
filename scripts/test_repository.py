@@ -97,16 +97,32 @@ def verify_presets():
     return sorted(visible)
 
 
-def verify(source, override):
+def candidate_commit(value):
+    if not re.fullmatch(r"[0-9a-f]{40}", value):
+        raise argparse.ArgumentTypeError("candidate Nexus reference must be a complete lowercase 40-digit commit SHA")
+    return value
+
+
+def verify(source, override, candidate_revision=None):
     identity = load_identity()
     presets = verify_presets()
     if not (source / "CMakeLists.txt").is_file():
         raise ValueError("Nexus checkout is missing; initialize external/nexus")
+    checkout_root = Path(checked_output(["git", "rev-parse", "--show-toplevel"], source).strip()).resolve()
+    if checkout_root != source.resolve():
+        raise ValueError("Nexus source must be its own complete Git checkout, not an ancestor repository")
+    if candidate_revision is not None:
+        if not re.fullmatch(r"[0-9a-f]{40}", candidate_revision):
+            raise ValueError("Candidate Nexus reference must be a complete lowercase commit SHA")
+        origin = checked_output(["git", "remote", "get-url", "origin"], source).strip()
+        if origin.removesuffix(".git") != identity["repository"].removesuffix(".git"):
+            raise ValueError("Candidate SDK origin does not match the formal source repository")
     revision = checked_output(["git", "rev-parse", "HEAD"], source).strip()
-    if revision != identity["commit"]:
-        raise ValueError(f"Nexus revision mismatch: expected {identity['commit']}, got {revision}")
+    selected = candidate_revision or identity["commit"]
+    if revision != selected:
+        raise ValueError(f"Nexus revision mismatch: expected {selected}, got {revision}")
     tree = checked_output(["git", "rev-parse", "HEAD^{tree}"], source).strip()
-    if tree != identity["tree"]:
+    if candidate_revision is None and tree != identity["tree"]:
         raise ValueError(f"Nexus tree mismatch: expected {identity['tree']}, got {tree}")
     if checked_output(["git", "status", "--porcelain", "--untracked-files=normal"], source):
         raise ValueError("Nexus source or its dependency checkouts have uncommitted changes")
@@ -139,7 +155,13 @@ def verify(source, override):
     ], ROOT)
     return {
         "schema_version": 1,
-        "kind": "example-source-dependency-identity",
+        "kind": ("example-candidate-source-dependency-identity" if candidate_revision
+                 else "example-source-dependency-identity"),
+        "candidate_validation": candidate_revision is not None,
+        "candidate_nexus_revision": candidate_revision,
+        "formal_locked_nexus_revision": identity["commit"],
+        "formal_locked_nexus_tree": identity["tree"],
+        "source_revision_matches_lock": revision == identity["commit"] and tree == identity["tree"],
         "nexus_repository": repository,
         "nexus_revision": revision,
         "nexus_tree": tree,
@@ -156,6 +178,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--nexus-source", type=Path,
                         help="local SDK checkout override; source lock and example Gitlink remain checked")
+    parser.add_argument("--candidate-nexus-commit", type=candidate_commit,
+                        help="explicit candidate commit; validate without changing the formal Gitlink or lock")
     parser.add_argument("--report", type=Path,
                         help="optional JSON source/dependency identity report")
     args = parser.parse_args(argv)
@@ -163,7 +187,8 @@ def main(argv=None):
         if args.report:
             args.report.unlink(missing_ok=True)
         source = (args.nexus_source or ROOT / "external/nexus").resolve()
-        report = verify(source, source != (ROOT / "external/nexus").resolve())
+        report = verify(source, source != (ROOT / "external/nexus").resolve(),
+                        args.candidate_nexus_commit)
         if args.report:
             args.report.parent.mkdir(parents=True, exist_ok=True)
             args.report.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
@@ -172,7 +197,9 @@ def main(argv=None):
     print(f"Verified Nexus {report['nexus_revision']}, "
           f"{len(report['reference_presets'])} presets, "
           f"{len(report['submodules'])} recursive dependency checkouts and the reviewed GD32 import")
-    if report["source_override"]:
+    if report["candidate_validation"]:
+        print("Candidate SDK validation; formal source lock and example Gitlink remain unchanged")
+    elif report["source_override"]:
         print("Local SDK checkout location override; source lock, tree and example Gitlink verified")
     return 0
 

@@ -4,12 +4,18 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      candidate_nexus_ref:
+        description: 'Optional complete lowercase Nexus commit SHA; empty validates the formal pin'
+        required: false
+        type: string
+        default: ''
 
 permissions:
   contents: read
 
 concurrency:
-  group: examples-${{ github.workflow }}-${{ github.ref }}
+  group: examples-${{ github.workflow }}-${{ github.ref }}-${{ inputs.candidate_nexus_ref || 'pinned' }}
   cancel-in-progress: true
 
 jobs:
@@ -23,6 +29,24 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+      - name: Validate candidate reference
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
+        run: |
+          if [[ -n "$CANDIDATE_NEXUS_REF" && ! "$CANDIDATE_NEXUS_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Candidate must be a complete lowercase 40-digit commit SHA" >&2
+            exit 1
+          fi
+      - name: Checkout explicit candidate SDK and recursive dependencies
+        if: github.event_name == 'workflow_dispatch' && inputs.candidate_nexus_ref != ''
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: X-Gen-Lab/nexus
+          ref: ${{ inputs.candidate_nexus_ref }}
+          path: external/nexus
+          submodules: recursive
+          fetch-depth: 0
       - name: Setup Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
@@ -33,16 +57,23 @@ jobs:
           sudo apt-get install -y cmake ninja-build gcc g++ libssl-dev
           python3 -m pip install kconfiglib==14.1.0
       - name: Verify source dependency identity
-        run: python3 scripts/test_repository.py --report build/native-debug/dependency-identity.json
+        env:
+          CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
+        run: |
+          candidate_arguments=()
+          if [[ -n "$CANDIDATE_NEXUS_REF" ]]; then
+            candidate_arguments+=(--candidate-nexus-commit "$CANDIDATE_NEXUS_REF")
+          fi
+          python3 scripts/test_repository.py "${candidate_arguments[@]}" --report build/native-debug/dependency-identity.json
       - name: Verify runner rejects empty and skipped execution
-        run: python3 -m unittest discover -s scripts -p test_build.py -v
+        run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Build and run Native examples
         run: python3 scripts/build.py --preset native-debug --test --parallel 4
       - name: Retain Native artifacts and execution evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: examples-native-debug
+          name: examples-native-debug-${{ inputs.candidate_nexus_ref || 'pinned' }}
           path: |
             build/native-debug/build.log
             build/native-debug/ctest-results.xml
@@ -76,6 +107,24 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+      - name: Validate candidate reference
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
+        run: |
+          if [[ -n "$CANDIDATE_NEXUS_REF" && ! "$CANDIDATE_NEXUS_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Candidate must be a complete lowercase 40-digit commit SHA" >&2
+            exit 1
+          fi
+      - name: Checkout explicit candidate SDK and recursive dependencies
+        if: github.event_name == 'workflow_dispatch' && inputs.candidate_nexus_ref != ''
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: X-Gen-Lab/nexus
+          ref: ${{ inputs.candidate_nexus_ref }}
+          path: external/nexus
+          submodules: recursive
+          fetch-depth: 0
       - name: Setup Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
@@ -86,7 +135,14 @@ jobs:
           sudo apt-get install -y cmake ninja-build gcc g++
           python3 -m pip install kconfiglib==14.1.0
       - name: Verify source dependency identity
-        run: python3 scripts/test_repository.py --report build/${{ matrix.preset }}/dependency-identity.json
+        env:
+          CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
+        run: |
+          candidate_arguments=()
+          if [[ -n "$CANDIDATE_NEXUS_REF" ]]; then
+            candidate_arguments+=(--candidate-nexus-commit "$CANDIDATE_NEXUS_REF")
+          fi
+          python3 scripts/test_repository.py "${candidate_arguments[@]}" --report build/${{ matrix.preset }}/dependency-identity.json
       - name: Prepare SHA-256 locked ARM GNU toolchain
         run: |
           python3 external/nexus/scripts/ci/install_arm_toolchain.py --install-dir "$RUNNER_TEMP/nexus-arm-toolchain"
@@ -102,7 +158,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: examples-${{ matrix.preset }}
+          name: examples-${{ matrix.preset }}-${{ inputs.candidate_nexus_ref || 'pinned' }}
           path: |
             build/${{ matrix.preset }}/build.log
             build/${{ matrix.preset }}/dependency-identity.json

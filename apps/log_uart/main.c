@@ -4,10 +4,10 @@
 #include "log/log_uart.h"
 #include "osal/osal.h"
 #include "runtime/nx_runtime.h"
-
 #if defined(NX_CONFIG_PLATFORM_NATIVE)
-#error "log_uart requires an MCU provider with typed UART TX capabilities"
+#include <stdio.h>
 #endif
+
 #ifndef NEXUS_EXAMPLE_CONSOLE_DEVICE
 #error "The application must select its board UART device"
 #endif
@@ -16,6 +16,13 @@ enum { EXAMPLE_NOT_RUN = -1, EXAMPLE_PASSED = 0, EXAMPLE_FAILED = 1 };
 enum { TX_BUDGET_MS = 100, FLUSH_BUDGET_MS = 1000, WORKER_STACK_BYTES = 2048 };
 _Static_assert(LOG_UART_QUEUE_DEPTH == 4u, "This example demonstrates four slots");
 _Static_assert(LOG_UART_MESSAGE_SIZE == 256u, "This example budgets 256-byte slots");
+#if defined(NX_CONFIG_PLATFORM_NATIVE)
+/* The host model retains copied TX observations until an external consumer
+ * drains them. Budget the entire finite run; do not drop bytes to make room. */
+_Static_assert(NX_CONFIG_UART0_TX_BUFFER_SIZE >=
+                   12u * (sizeof("nexus log_uart sequence=11\r\n") - 1u),
+               "Native UART observation storage must hold all twelve records");
+#endif
 
 /* Permanent application-owned storage. A failed flush/cancel/close may retain
  * a provider buffer lease; never clear this object or let it leave scope. */
@@ -119,7 +126,7 @@ static void logging_task(void* unused) {
     (void)unused;
     (void)run_logging_example();
     /* The finite worker finishes. Its OSAL TCB and the running kernel remain
-     * firmware-owned; global runtime shutdown is not a supported MCU operation. */
+     * firmware-owned; a running MCU kernel rejects runtime shutdown with BUSY. */
 }
 #endif
 
@@ -146,8 +153,28 @@ int main(void) {
     log_uart_example_failure = "scheduler returned";
     return 1;
 #else
-    /* Baremetal runs the same finite sequence from main, with no hidden task.
-     * MCU clocks/platform remain owned until an application-controlled reset. */
-    return run_logging_example();
+    /* Native and baremetal run the same finite sequence with no hidden task.
+     * The MCU application separately owns its shutdown/reset policy. */
+    int result = run_logging_example();
+#if defined(NX_CONFIG_PLATFORM_NATIVE)
+    if (result != 0) {
+        fprintf(stderr, "log_uart failed at %s: log=%d UART=%d pending=%zu\n",
+                log_uart_example_failure ? log_uart_example_failure : "unknown",
+                (int)log_uart_example_status,
+                (int)log_uart_example_stats.last_status,
+                log_uart_example_stats.pending);
+    } else {
+        nx_status_t status = nx_runtime_shutdown(NULL);
+        if (status != NX_OK || nx_runtime_get_state() != NX_RUNTIME_OFFLINE) {
+            log_uart_example_result = EXAMPLE_FAILED;
+            log_uart_example_status = LOG_ERROR_BACKEND;
+            log_uart_example_failure = "runtime shutdown";
+            fprintf(stderr, "log_uart runtime shutdown failed: status=%d state=%d\n",
+                    (int)status, (int)nx_runtime_get_state());
+            return 1;
+        }
+    }
+#endif
+    return result;
 #endif
 }

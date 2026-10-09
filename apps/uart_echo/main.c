@@ -11,7 +11,7 @@
 #error "The application must select a console from the reference board wiring"
 #endif
 #if defined(NX_CONFIG_PLATFORM_NATIVE)
-#error "The current Native UART has no typed event/ticket provider"
+#error "uart_echo requires a hardware console RX source and is built only for MCU boards"
 #endif
 
 static nx_device_ref_t console;

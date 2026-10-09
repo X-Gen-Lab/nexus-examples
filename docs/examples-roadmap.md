@@ -11,18 +11,21 @@
 | 应用 | 实际组成与支持组合 | 当前证明边界 |
 | --- | --- | --- |
 | `boot_blinky` | Runtime、typed GPIO；Native 有限检查，四板裸机／FreeRTOS 心跳 | MCU 初始电平／周期待 HIL |
-| `uart_echo` | 四板 MCU-only，typed RX event／TX ticket | Native 无 typed UART provider；线速、取消和溢出实测待 HIL |
+| `uart_echo` | 四板 MCU-only，typed RX event／TX ticket | 此例需要硬件 console RX source；线速、取消和溢出实测待 HIL |
 | `rtos_pipeline` | Native／四板 FreeRTOS；producer／consumer／heartbeat／statistics 四任务 | 调度、队列负载、栈峰值和长期 MCU 行为待 HIL |
 | `industrial_model` | Native Modbus、虚拟 plant 与健康监督 | 不证明 MCU 控制、RS485、物理 watchdog 或执行器安全 |
 | `shell_console` | Native 标准流 console、typed GPIO、有限十命令 `--smoke` | 最终 Native 矩阵实际执行；未提供 MCU stdio console |
 | `config_roundtrip` | Native／四板裸机和 FreeRTOS；类型、namespace、JSON／binary v2、显式 RAM snapshot | 最终 Native 执行及 8 个 ARM ELF 静态检查通过；没有掉电持久化 |
-| `log_uart` | 四板 MCU；caller-owned 4×256 B、单 owner pump、100／1000 ms TX／flush | 最终 8 个 ARM ELF 静态检查通过；buffer lease 和 wire-idle 实板待 HIL |
+| `log_uart` | Native／四板 MCU；caller-owned 4×256 B、单 owner pump、100／1000 ms TX／flush | Native 检查 12 条 TX、FULL、settlement 与 Runtime OFFLINE；MCU buffer lease 和 wire-idle 实板待 HIL |
 | `spi_transaction` | Native 有限模型；Discovery SPI1 参考配置裸机／FreeRTOS | Native 三个 case 实际执行、两个 ARM ELF；物理 loopback／DMA 待 HIL |
 
 详细实际定向证据见 [组件例程](component-examples.md) 和 [SPI 例程](spi-example.md)。
 已测试的 clean 实现 snapshot Nexus `5498b2b6`／示例 `272200f4` 的 Native 6 项测试和
 8 组 ARM 配置、38 个 ELF 全部通过，0 跳过；交付 pin、完整身份和摘要见
 [最终软件验证](refactor-validation.md)，新 revision 不自动继承该 snapshot 的结论。
+当前 Native 新增 `log_uart_finite` 后共注册 7 项；联合开发定向运行 7／7 通过，
+不将历史 6／6 重标为新 revision 的证据。Log 的 Native TX 观察环预算 512 B，
+完整记录保留期间存在有界背压，不生成硬件串口或 echo RX。最终 clean pin／在线矩阵另绑定。
 全部物理结果为 **unverified**。三首发板 HIL 只读准入与未配置 station 的设备前拒绝
 已经验证，完整 IRQ／DMA、掉电和长期负载 workload runner 仍需实现。
 启明／天空星没有 SPI binding，梁山派已有板载 Flash SPI4 binding，但尚无本例 loopback
