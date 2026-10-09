@@ -4,7 +4,7 @@
 首发范围为启明 F407ZG、天空星 F407VE、梁山派 F470ZG，并保留 F407VG Discovery。
 `069dcf14` 是历史分析基线；当前调用者已使用通用 Runtime。正式 SDK 身份与最终 clean
 执行矩阵由 [机器证据](../evidence/platform-refactor-validation.json) 和
-[验证记录](validation.md) 维护，不将旧报告套用到新 pin。
+[最终软件验证](refactor-validation.md) 维护，不将旧报告套用到新 pin。
 
 ## 当前八应用源码
 
@@ -14,13 +14,17 @@
 | `uart_echo` | 四板 MCU-only，typed RX event／TX ticket | Native 无 typed UART provider；线速、取消和溢出实测待 HIL |
 | `rtos_pipeline` | Native／四板 FreeRTOS；producer／consumer／heartbeat／statistics 四任务 | 调度、队列负载、栈峰值和长期 MCU 行为待 HIL |
 | `industrial_model` | Native Modbus、虚拟 plant 与健康监督 | 不证明 MCU 控制、RS485、物理 watchdog 或执行器安全 |
-| `shell_console` | Native 标准流 console、typed GPIO、有限十命令 `--smoke` | Native 定向实际执行；未提供 MCU stdio console |
-| `config_roundtrip` | Native／四板裸机和 FreeRTOS；类型、namespace、JSON／binary v2、显式 RAM snapshot | Native 定向实际执行和部分 ARM ELF；没有掉电持久化 |
-| `log_uart` | 四板 MCU；caller-owned 4×256 B、单 owner pump、100／1000 ms TX／flush | 部分真实 ARM ELF；buffer lease 和 wire-idle 实板待 HIL |
+| `shell_console` | Native 标准流 console、typed GPIO、有限十命令 `--smoke` | 最终 Native 矩阵实际执行；未提供 MCU stdio console |
+| `config_roundtrip` | Native／四板裸机和 FreeRTOS；类型、namespace、JSON／binary v2、显式 RAM snapshot | 最终 Native 执行及 8 个 ARM ELF 静态检查通过；没有掉电持久化 |
+| `log_uart` | 四板 MCU；caller-owned 4×256 B、单 owner pump、100／1000 ms TX／flush | 最终 8 个 ARM ELF 静态检查通过；buffer lease 和 wire-idle 实板待 HIL |
 | `spi_transaction` | Native 有限模型；Discovery SPI1 参考配置裸机／FreeRTOS | Native 三个 case 实际执行、两个 ARM ELF；物理 loopback／DMA 待 HIL |
 
 详细实际定向证据见 [组件例程](component-examples.md) 和 [SPI 例程](spi-example.md)。
-最终固定 SDK 的完整矩阵仍待绑定；全部物理结果为 **unverified**。
+已测试的 clean 实现 snapshot Nexus `db6ca0c4`／示例 `fcc17963` 的 Native 6 项测试和
+8 组 ARM 配置、38 个 ELF 全部通过，0 跳过；后续交付 pin、完整身份和摘要见
+[最终软件验证](refactor-validation.md)，新 revision 不自动继承该 snapshot 的结论。
+全部物理结果为 **unverified**。三首发板 HIL 只读准入与未配置 station 的设备前拒绝
+已经验证，完整 IRQ／DMA、掉电和长期负载 workload runner 仍需实现。
 启明／天空星没有 SPI binding，梁山派已有板载 Flash SPI4 binding，但尚无本例 loopback
 和器件隔离工装，三板不注册 `spi_transaction`。MCU newlib-nosys 不是已接入的 UART console；
 Config／SPI 用 debugger 状态，日志用显式 typed UART sink。
@@ -84,7 +88,9 @@ MCU typed I2C 当前明确不支持，Native 成功不能证明 MCU provider 已
 `find_package(Nexus CONFIG REQUIRED)`，随后调用 `nexus_add_application()`。
 `NEXUS_BOARD_DIR` 与 `NEXUS_FLASH_LAYOUT_FILE` 已提供；它们只在维护的 SoC／已校验
 资源范围内扩展，不能让任意 PCB／controller 自动可用。image 默认覆盖全物理 Flash，
-当前非零 offset 明确拒绝，不提供 A/B bootloader 链。正式 clean 源码包验收仍待最终证据。
+当前非零 offset 明确拒绝，不提供 A/B bootloader 链。严格 clean 可重定位源码包已完成
+3 个 Native consumer 运行、2 个 STM32 C／C++ ELF 检查和 6 项拒绝测试，具体配置和
+证明范围见 [最终软件验证](refactor-validation.md)。这是源码 SDK，不提供预编译 ABI 保证。
 
 ## 3–6 个月实施容量
 

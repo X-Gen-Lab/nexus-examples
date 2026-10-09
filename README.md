@@ -1,8 +1,11 @@
 # Nexus Examples
 
-[X-Gen-Lab/nexus-examples](https://github.com/X-Gen-Lab/nexus-examples) 是已创建的私有示例仓库，
-初始五个提交已同步至 `main`，初始 [GitHub Actions](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37894225307)
-执行成功。这些历史结果不代表本轮重构与新 SDK pin 的最终验收。
+[X-Gen-Lab/nexus-examples](https://github.com/X-Gen-Lab/nexus-examples) 是独立维护的私有示例仓库。
+2026-10-09（Asia/Shanghai）已验证的 clean 实现 snapshot 为 Nexus `db6ca0c4` 与示例 `fcc17963`：
+Native 6 项测试、8 组 ARM 配置的 38 个 ELF 全部通过；
+[示例 GitHub Actions](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37906701359)
+9 个 job 全部成功。交付 pin、后续门禁修复及其实际验证范围见
+[最终软件验证](docs/refactor-validation.md)。本页不把上述 snapshot 当作后续 HEAD 的验证结论。
 
 Nexus 提供通用平台，本仓库提供应用装配。私有产品、客户协议、密钥和私有 PCB 数据
 由各自产品仓库维护。应用使用公开 typed HAL、OSAL、`Nexus::Firmware` 和
@@ -43,9 +46,10 @@ python3 scripts/build.py --preset gd32-liangshan-freertos-release
 ```
 
 联合开发可显式传 `--nexus-source /absolute/path/to/nexus`；它允许验证新 API 调用者，
-不跳过正式依赖核验，不作为最终 clean SHA pair 的证据。本轮新 API、八应用和源码 SDK
-的最终 clean 消费验收仍待统一记录；准确 pin、实际测试枚举及完整预设矩阵以
-[验证记录](docs/validation.md) 与机器证据为准。
+不跳过正式依赖核验。最终矩阵核验了该 checkout 与 Gitlink／锁文件的一致身份和干净状态，
+准确测试 snapshot、交付 pin、实际测试枚举及工件摘要见 [最终软件验证](docs/refactor-validation.md) 和
+[机器证据](evidence/platform-refactor-validation.json)。后续文档／证据提交与已测试的实现
+revision 分开记录，不宣称新 HEAD 已经重跑。
 
 当前源码 SDK 已提供 `NEXUS_BOARD_DIR`、`NEXUS_FLASH_LAYOUT_FILE` 和可重定位的
 `find_package(Nexus CONFIG REQUIRED)` 源码包。消费工程自行选择配置／工具链并重新编译，
@@ -57,8 +61,9 @@ python3 scripts/build.py --preset gd32-liangshan-freertos-release
 
 - [平台重构计划](docs/platform-refactor-plan.md)：历史审计、本轮实现、责任、预算和验收。
 - [示例路线图](docs/examples-roadmap.md)：现有八应用与尚未交付的后续实例。
-- [交付状态](docs/delivery.md)：远端历史与本轮验收边界。
-- [验证记录](docs/validation.md)：实际执行的源码和工件范围。
+- [交付状态](docs/delivery.md)：本轮交付、远端同步及验收边界。
+- [最终软件验证](docs/refactor-validation.md)：固定双仓实现和同一组工件的证据。
+- [历史首批验证](docs/validation.md)：旧 SDK 的初始结果，不替代当前验证。
 
 Native 模型不证明 MCU 电气、DMA 或实时行为；newlib-nosys 不等于 UART console。
 MCU typed I2C 仍不支持，RS485／网络及 MCU 安全升级链未在本轮承诺。示例默认不写

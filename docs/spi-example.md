@@ -80,9 +80,11 @@ mode 0／MSB 顺序、CS 边界、DMA／IRQ 及任务栈余量。
 Native case 通过、ARM ELF 链接成功和实板执行是不同证据。默认例程不写 Flash，
 CI 不自动运行任何硬件交易；供电／时序／DMA／误接线及错误恢复需要单独 HIL 记录。
 
-开发 SDK 联合验证已实际执行 Native `spi_transaction_finite`：1 项 CTest、三个交易 case，
-零失败、零跳过。Discovery 裸机与 FreeRTOS 两个真实 ELF 均通过向量、强中断绑定、
-设备记录和物理内存范围静态校验。报告在
-`build/component-check/native/spi-results.xml` 与
-`build/spi-check/{discovery-baremetal,discovery-freertos}/firmware-static-contract.json`，
-均未建立实板执行结论。正式交付需在最终固定 SDK 及仓库 root CMake 下重跑对应预设。
+已测试的 clean 实现 snapshot Nexus `db6ca0c4`／示例 `fcc17963` 仓库完整矩阵已实际执行
+`spi_transaction_finite`：1 项 CTest、三个交易 case，零失败、零跳过。Discovery 裸机
+与 FreeRTOS 两个真实 ELF 均通过向量、强中断绑定、设备记录和内存范围静态校验。
+完整源码、配置与工件摘要见 [最终软件验证](refactor-validation.md) 和
+[机器证据](../evidence/platform-refactor-validation.json)。后续交付 pin 及其实际检查单独
+记录，不把 snapshot 的执行结论套到新 HEAD。早期
+`build/component-check/native/spi-results.xml` 及 `build/spi-check/` 只保留历史开发记录。
+本轮没有执行实板 SPI 交易，物理 loopback／DMA 和错误恢复仍待专用工装验收。

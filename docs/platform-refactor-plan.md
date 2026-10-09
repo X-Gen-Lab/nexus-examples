@@ -2,7 +2,7 @@
 
 本计划以 Nexus 源码 `069dcf14f9cb1cd6fc4a869d87bf9827b91ce306` 为分析基线，适用于约 10 人团队、3–6 个月交付周期。目标是把 Nexus 维护为可复用的通用嵌入式平台，把示例装配与实际产品放到独立仓库，通过公开接口和固定依赖版本协作。
 
-**本文保留原始规划与历史审计，并同步当前已实现 API。** 38 个任务 ID、责任／依赖、容量预算和 C01–C19 计划批次原样保留；计划批次不等于实际提交数或全部验收已完成。第 2.1／2.2 节仍描述历史 `069dcf14`，后续接口说明对应本轮实现。逐项 implementation／software／physical／commit 状态以 Nexus 的 `docs/implementation/refactor-execution.csv` 及同名 Markdown 为准。最终新 SDK pin、clean 软件矩阵与工件身份由本仓库 [platform-refactor-validation.json](../evidence/platform-refactor-validation.json) 和 [验证记录](validation.md) 绑定；本计划不预填最终 HEAD 或通过数量。全部实板 HIL 当前仍为 unverified。
+**本文保留原始规划与历史审计，并同步当前已实现 API。** 38 个任务 ID、责任／依赖、容量预算和 C01–C19 计划批次原样保留；计划批次不等于实际提交数或全部验收已完成。第 2.1／2.2 节仍描述历史 `069dcf14`，后续接口说明对应本轮实现。逐项 implementation／software／physical／commit 状态以 Nexus 的 `docs/implementation/refactor-execution.csv` 及同名 Markdown 为准。已测试的 clean 软件 snapshot 为 Nexus `db6ca0c4`／示例 `fcc17963`，由本仓库 [platform-refactor-validation.json](../evidence/platform-refactor-validation.json) 和 [最终软件验证](refactor-validation.md) 绑定源码及工件身份；后续门禁修复、交付 pin 及文档提交分别记录，不沿用旧 snapshot 声称新 HEAD 已通过。记录日期为 2026-10-09（Asia/Shanghai）。本轮按用户要求交付软件和 HIL 工装准备，全部实板 HIL 当前仍为 unverified，38 项任务的硬件条件未因此全部关闭。
 
 分析基线：[Nexus `069dcf14`](https://github.com/X-Gen-Lab/nexus/tree/069dcf14f9cb1cd6fc4a869d87bf9827b91ce306)。既有任务和 ADR 应在 Nexus 的 `docs/strategy/` 中更新；本文列出的 `RF-*` 是本轮重构任务 ID，不覆盖既有任务完成状态。
 
@@ -82,9 +82,14 @@ Config／Storage／Security 目标拆分、外部 Board／Flash layout 和源码
 不在计划中复制一份会漂移的完成状态。历史缺陷表保留原 commit／行位置，不继续视为当前未修复结论。
 
 外部仓库已是 private/main，初始五提交和 [初始 CI](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37894225307)
-已同步／成功；本轮新 SDK 的 clean／线上证据另行绑定。八应用范围为 boot_blinky、uart_echo、
+已同步／成功；截至上述测试 snapshot，21 个平台提交与 3 个示例实现提交也已推送。八应用范围为 boot_blinky、uart_echo、
 rtos_pipeline、industrial_model、shell_console、config_roundtrip、log_uart、spi_transaction。
-后三个组件及 SPI 的有限 case 与开发 ELF 证据见 [组件](component-examples.md)、[SPI](spi-example.md)。
+组件及 SPI 的具体行为见 [组件](component-examples.md)、[SPI](spi-example.md)。上述测试 snapshot 的平台
+Native 1810 项测试、8 组平台 ARM contract ELF、示例 Native 6 项测试与 38 个 ARM ELF
+全部通过，失败／错误／跳过均为 0；示例 [线上 CI](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37906701359)
+9 个 job 全部成功。平台线上 CI／Security 的最终结论由 [最终软件验证](refactor-validation.md)
+记录，不预填成功。三首发板 HIL 只读准入和未配置 station 在设备前拒绝已验证；完整 IRQ／DMA、
+物理掉电和长期负载 workload runner 仍需实现，不替代任何实板资格。
 
 STM32／GD32 typed I2C 仍不支持。Discovery SPI1 reference fixture 与梁山派板载 Flash SPI4
 binding 是不同板级用途；本例没有梁山派 loopback／隔离工装，启明／天空星没有 SPI binding。
@@ -240,7 +245,7 @@ core 的能力按组件实际需要定义，不为了拆目录而复制 API。OS
 
 当前 `cmake/package/package_source_sdk.py` 及 `nexus_package_source_sdk(OUTPUT_DIRECTORY ...)` 已提供源码 package／verify，消费使用 `find_package(Nexus 0.1.0 EXACT CONFIG REQUIRED)` 和实际 application helper。package 记录源码／依赖／许可／逐文件与导出身份，consumer 自行选择 Board／layout／config／toolchain 并重新编译。
 
-开发工作树 snapshot 必须显式 DEVELOPMENT_FIXTURE／consumer opt-in，manifest publishable=false，不能用于 promotion。已经实际移动路径并执行开发 consumer 回归；最终 clean 默认严格包及完整消费矩阵仍待交付证据绑定。这不是 installed binary SDK，不提供跨配置／工具链预编译 ABI 保证。完整流程见 [构建集成](build-integration.md) 与 SDK `cmake/package/README.md`。
+开发工作树 snapshot 必须显式 DEVELOPMENT_FIXTURE／consumer opt-in，manifest publishable=false，不能用于 promotion。已测试 snapshot `db6ca0c4` 的默认严格 clean 源码包已经移至含空格、独立父仓库下的路径并重新核验；3 个 Native consumer 实际运行、2 个 STM32 C／C++ ELF 检查和 6 项拒绝测试通过，证据见 [最终软件验证](refactor-validation.md)。这不是 installed binary SDK，不提供跨配置／工具链预编译 ABI 保证。完整流程见 [构建集成](build-integration.md) 与 SDK `cmake/package/README.md`。
 
 ### 6.4 跨平台构建与验证入口收敛
 
@@ -375,7 +380,11 @@ core 的能力按组件实际需要定义，不为了拆目录而复制 API。OS
 
 ## 12. 当前执行入口与完成定义
 
-原实施顺序已推进至通用接口、组件和外部八应用。接下来按 execution CSV 收敛剩余软件验收、最终 clean SDK／examples pair、源码包与多仓证据，再执行实板资格。历史已通过检查不复用为新 revision 的证据；有新增代码／失败／未关闭条件时运行相应回归，阶段候选时执行完整受支持矩阵。
+本轮已完成通用接口、组件、外部八应用、clean SDK／examples 软件 snapshot 矩阵与源码包验证，
+交付范围为软件和 HIL 工装准备。准确双仓实现身份、同工件摘要及线上结果见
+[最终软件验证](refactor-validation.md)；后续按 execution CSV 收敛 MCU I2C、完整硬件
+workload runner 与实板资格等未关闭条件。历史通过检查不复用为新 revision 的证据；
+有新增代码／失败／未关闭条件时运行相应回归，阶段候选时执行完整受支持矩阵。
 
 最终交付必须同时具备：
 

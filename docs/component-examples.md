@@ -109,7 +109,13 @@ Debugger 的 `config_example_heap_{begin,end,break,high_water}` 记录 arena bre
 
 联合验证证据位于 `build/component-check/native/component-results.xml` 和
 `build/component-check/{qiming-baremetal,liangshan-freertos}/firmware-static-contract.json`。
-后者均明确 `hardware_verified=false`。正式交付仍须在最终固定 SDK 上执行仓库完整预设矩阵。
+后者均明确 `hardware_verified=false`。它们保留为历史开发证据。本轮已测试的 clean
+实现 snapshot Nexus `db6ca0c4`／示例 `fcc17963` 完整矩阵中，Native 6 项 CTest 全部通过，
+其中包含 Shell 与 Config；Config、Log 各有四板裸机／FreeRTOS 共 8 个 ELF 静态检查
+通过，Config 的 8 个 ELF 均核验应用提供的强 `_sbrk` 与 8192 B heap 预留。
+详见 [最终软件验证](refactor-validation.md) 和
+[机器证据](../evidence/platform-refactor-validation.json)，后续交付 pin 及其实际验证单独
+记录，不将上述 snapshot 写成新 HEAD 的执行结论。MCU 用例没有实际运行。
 
 MCU Config 不假定 newlib `_write` 已重定向为 UART console，也不尝试标准流输出。
 它执行同一有限检查，在 debugger 中观察 `config_example_result`（-1 未运行、0 通过、1 失败）、

@@ -1,7 +1,7 @@
 # 交付与远端同步状态
 
-记录日期：2026-10-09（Asia/Shanghai）。独立示例仓库已创建；本文件区分初始交付、
-本轮新 API 实现与仍待收敛的最终证据，不把规划任务或软件结果写成实板资格。
+记录日期：2026-10-09（Asia/Shanghai）。独立示例仓库已创建；本轮交付软件和 HIL 工装
+准备。实际硬件暂未接入，规划任务和软件结果不代表实板资格。
 
 ## 已同步的初始历史
 
@@ -31,9 +31,32 @@ loopback／隔离工装，因此三板不注册该示例 target。详细资源�
 
 Nexus 本轮已经修改通用 Runtime、HAL、OSAL、Board／Flash、组件目标、构建与源码 SDK。
 历史 `069dcf14` 只保留为重构前审计与首批验证身份，不再描述为本轮唯一平台实现。
-正式依赖由 `external/nexus` Gitlink 和 `dependencies/nexus.lock.json` 一起更新、核验；
-最终 clean SHA pair、全预设矩阵、源码包和远端新 CI 结果仍待统一记录。
-本文件不预填最终 HEAD、测试总数或新 pin 的成功结论。
+正式依赖由 `external/nexus` Gitlink 和 `dependencies/nexus.lock.json` 一起更新、核验。
+截至下述测试 snapshot，21 个平台提交和 3 个示例实现提交已推送；平台变更保留在
+[PR #3](https://github.com/X-Gen-Lab/nexus/pull/3)，示例实现已同步 `main`。
+
+本轮已经实际验证的 clean 实现 snapshot 为：
+
+| 仓库 | 已测试实现 commit | tree |
+| --- | --- | --- |
+| Nexus | `db6ca0c4e6907dea70fa7aee3d9b93379d7b0ef0` | `a6c717f4ffe93c0d5170c87399b6715cbe99b85d` |
+| nexus-examples | `fcc1796392b237a2a0a627a2d4eae04eb808ae06` | `5f85a20bcab3d1334202ab90c83a9879e0e4af89` |
+
+平台 Native 完整测试 **1810／1810** 通过，失败／错误／跳过均为 0；8 组平台 ARM
+配置各有 1 个 contract ELF 通过。示例 Native **6／6** 通过，8 组 ARM 配置共
+**38 个 ELF** 编译、链接和静态检查通过，0 跳过。严格 clean 可重定位源码 SDK
+完成 3 个 Native consumer 实际运行、2 个 STM32 C／C++ ELF 检查和 6 项拒绝测试。
+三首发板 `uart_echo` 的 HIL 只读准入检查通过；未配置 station 在访问设备前全部拒绝。
+上述结果绑定这组 snapshot 的源码和工件，详见 [最终软件验证](refactor-validation.md) 与
+[机器证据](../evidence/platform-refactor-validation.json)。平台线上后置打包门禁发现
+Native 工件名称校验问题，后续修复的准确 SHA、交付 pin 和实际检查由同一报告单独记录。
+后续代码、文档／证据提交不自动沿用 snapshot 的运行结论，也不预填新 HEAD 已经重跑。
+
+[示例 Actions run 37906701359](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37906701359)
+在实现 `fcc17963` 上的 9 个 job 全部成功。平台
+[CI run 37906644672](https://github.com/X-Gen-Lab/nexus/actions/runs/37906644672) 与
+[Security run 37906644285](https://github.com/X-Gen-Lab/nexus/actions/runs/37906644285)
+的最终线上结论由最终验证报告记录；本文不预填其成功状态。
 
 平台 38 项任务的逐项 implementation／software／physical／commit 状态由 Nexus 的
 `docs/implementation/refactor-execution.csv` 和同名 Markdown 维护。本仓库
@@ -42,12 +65,16 @@ Nexus 本轮已经修改通用 Runtime、HAL、OSAL、Board／Flash、组件目�
 
 ## 验证和移交边界
 
-历史基线及本轮机器记录见 [validation.md](validation.md) 和 `evidence/`。
+本轮完整记录见 [最终软件验证](refactor-validation.md) 和
+[platform-refactor-validation.json](../evidence/platform-refactor-validation.json)；
+[validation.md](validation.md) 与 `evidence/validation.json` 保留首批历史基线。
 开发覆盖的定向运行／静态产物仅证明其实际源码；不能沿用旧报告推断新提交通过。
 候选证据必须绑定准确双仓 revision、有效配置、Board／layout、工具链与同工件摘要。
 
-所有真实 HIL 当前仍为 **unverified**：板卡刷写／读回、IRQ／AF、UART 最后一位、
-SPI／DMA、Flash 物理掉电、栈峰值和长期负载尚不具备本轮合格结论。
+所有真实 HIL 当前仍为 **unverified**：本轮没有刷写、读回或执行任何 MCU 镜像。
+已准备的准入／租约／超时拒绝工具不能替代 IRQ／AF、UART 最后一位、SPI／DMA、
+Flash 物理掉电、栈峰值和长期负载的测量；完整 IRQ／DMA、掉电和长期负载 workload
+runner 仍需后续实现与实板验收。
 MCU typed I2C 未接入；RS485、网络、受保护 bootloader、MCU crypto／熵源和可信计数器
 没有因模型或构建通过而成为已交付能力。
 

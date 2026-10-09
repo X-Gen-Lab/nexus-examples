@@ -1,7 +1,11 @@
-# 首批示例的软件验证记录
+# 历史首批示例的软件验证记录
 
-记录日期：2026-10-09（Asia/Shanghai）。这是独立示例仓库的首批软件集成证据，
-不是整个平台重构完成报告，也不是实板资格或产品发布报告。
+记录日期：2026-10-09（Asia/Shanghai）。本页冻结 Nexus `069dcf14` 的首批历史软件
+集成证据，下面的 3 项 Native 测试、20 个 ARM ELF 和当时未执行项仅属于该基线。
+本轮已测试 snapshot Nexus `db6ca0c4`／示例 `fcc17963`、后续交付 pin 与完整结果见
+[最终软件验证](refactor-validation.md) 和
+[platform-refactor-validation.json](../evidence/platform-refactor-validation.json)。
+历史报告不替代当前软件验收，也不构成实板资格或产品发布报告。
 
 ## 源码与执行环境
 
