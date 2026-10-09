@@ -1,11 +1,12 @@
 # Nexus Examples
 
 [X-Gen-Lab/nexus-examples](https://github.com/X-Gen-Lab/nexus-examples) 是独立维护的私有示例仓库。
-2026-10-09（Asia/Shanghai）已验证的 clean 实现 snapshot 为 Nexus `db6ca0c4` 与示例 `fcc17963`：
+2026-10-09（Asia/Shanghai）最终被测实现为 Nexus `5498b2b6` 与示例 `272200f4`：
 Native 6 项测试、8 组 ARM 配置的 38 个 ELF 全部通过；
-[示例 GitHub Actions](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37906701359)
-9 个 job 全部成功。交付 pin、后续门禁修复及其实际验证范围见
-[最终软件验证](docs/refactor-validation.md)。本页不把上述 snapshot 当作后续 HEAD 的验证结论。
+[示例 GitHub Actions](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37908306631)
+9 个 job 全部成功。平台完整 Native 1810 项、8 个平台 ELF、严格可重定位源码 SDK
+及最终 GitHub CI 均通过，详见 [最终软件验证](docs/refactor-validation.md)。
+后续文档／证据提交单独记录，全部物理资格保持未验证。
 
 Nexus 提供通用平台，本仓库提供应用装配。私有产品、客户协议、密钥和私有 PCB 数据
 由各自产品仓库维护。应用使用公开 typed HAL、OSAL、`Nexus::Firmware` 和

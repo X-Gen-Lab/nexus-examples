@@ -1,0 +1,2943 @@
+{
+  "schema": 1,
+  "kind": "nexus-github-validation",
+  "observed_at": "2026-10-09 09:07:31 UTC",
+  "overall_conclusion": "success",
+  "software_validation_only": true,
+  "hardware_verified": false,
+  "source_pair": {
+    "platform": {
+      "repository": "X-Gen-Lab/nexus",
+      "revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "tree": "ea178ba746a991c7feb21242215aa1a18e6afb05"
+    },
+    "examples": {
+      "repository": "X-Gen-Lab/nexus-examples",
+      "revision": "272200f40eca5b414e4aa97f5c5be67a0659bc78",
+      "tree": "38d8bd2920af45d806ef97ba5e9c6648ed1ba3ee",
+      "platform_pin": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "pin_evidence_job_id": 113747051245
+    }
+  },
+  "pull_request": {
+    "number": 3,
+    "url": "https://github.com/X-Gen-Lab/nexus/pull/3",
+    "state": "open",
+    "merged": false,
+    "head_revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+    "actual_checkout_revision": "9fc34d3c5ba48fc0854823b302e039d24a53d090",
+    "checkout_tree": "ea178ba746a991c7feb21242215aa1a18e6afb05",
+    "same_tree_as_head": true,
+    "parents": [
+      "7a203266082ad1f655b6686713b2b7950ba31ec6",
+      "5498b2b6988cc1cf28cf4255c5c281d56394d614"
+    ],
+    "checkout_evidence_job_id": 113746369073,
+    "checkout_log_highlights": [
+      "2026-10-09T08:56:44.6293977Z Uses: X-Gen-Lab/nexus/.github/workflows/quality-checks.yml@refs/pull/3/merge (9fc34d3c5ba48fc0854823b302e039d24a53d090)",
+      "2026-10-09T08:56:46.3136959Z HEAD is now at 9fc34d3 Merge 5498b2b6988cc1cf28cf4255c5c281d56394d614 into 7a203266082ad1f655b6686713b2b7950ba31ec6"
+    ]
+  },
+  "runs": [
+    {
+      "repository": "X-Gen-Lab/nexus",
+      "id": 37908075556,
+      "name": "CI",
+      "event": "pull_request",
+      "head_revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "url": "https://github.com/X-Gen-Lab/nexus/actions/runs/37908075556",
+      "created_at": "2026-10-09T08:56:24Z",
+      "updated_at": "2026-10-09T09:04:23Z",
+      "success_jobs": 18,
+      "expected_skipped_jobs": [
+        "Documentation / Deploy to Pages"
+      ],
+      "jobs": [
+        {
+          "id": 113746281878,
+          "name": "Detect Changes",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Run dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369052,
+          "name": "Build & Test / ASan and UBSan platform contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Build platform contract targets",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Run instrumented platform contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Upload Sanitizer Evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 15,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 16,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369063,
+          "name": "Build & Test / Coverage Analysis",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Test",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Generate Coverage",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Upload Coverage Report",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 18,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369073,
+          "name": "Code Quality / Required static analysis",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Initialize pinned maintained dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Run ./.github/actions/setup-build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Install analyzers",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure actual compilation database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Test analyzer execution policy",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Run required clang analyzer",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Run required cppcheck",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 10,
+              "name": "Retain reports on success and failure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Post Run ./.github/actions/setup-build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 20,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 21,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369321,
+          "name": "Build & Test / STM32F407 Baremetal Release",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369324,
+          "name": "Build & Test / Linux Clang Release (compile only)",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369371,
+          "name": "Build & Test / GD32F470ZG Liangshan FreeRTOS Release",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369373,
+          "name": "Build & Test / STM32F407ZG Qiming V3.1 Baremetal Release",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369383,
+          "name": "Build & Test / STM32F407ZG Qiming V3.1 FreeRTOS Release",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369408,
+          "name": "Build & Test / STM32F407VE Sky Youth FreeRTOS Release",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369410,
+          "name": "Build & Test / STM32F407 FreeRTOS Release",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369436,
+          "name": "Build & Test / GD32F470ZG Liangshan Baremetal Release",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369466,
+          "name": "Build & Test / Linux GCC Debug (compile only)",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369468,
+          "name": "Build & Test / STM32F407VE Sky Youth Baremetal Release",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369614,
+          "name": "Documentation / Build Docs",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Build Doxygen",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Build Sphinx (English)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build Sphinx (Chinese)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Prepare Pages",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Upload Pages Artifact",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Post Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 18,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746369634,
+          "name": "Build & Test / Linux GCC Release contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Install locked ARM compiler for source SDK relocation contracts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Initialize Maintained Dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Configure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify ARM Firmware Static Contract",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 9,
+              "name": "Run Native contracts and verify fresh JUnit",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 10,
+              "name": "Verify ARM Artifact Rejection Paths",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 11,
+              "name": "Verify actual release configuration and production compile database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Upload Artifacts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 23,
+              "name": "Post Setup Build Environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 24,
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 25,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746768932,
+          "name": "Documentation / Deploy to Pages",
+          "status": "completed",
+          "conclusion": "skipped",
+          "steps": []
+        },
+        {
+          "id": 113747679465,
+          "name": "Build & Test / SDK configuration, release gates and HIL readiness",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Run ./.github/actions/setup-build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Initialize maintained test dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Download actual Native Release evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Download actual ARM contract evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Verify Python syntax and action locks",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Test Board generator and build entry points",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Test SDK configuration and independent consumers",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 10,
+              "name": "Test CI and release gates with actual linked artifacts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Test strict reports and preset subprocess failures",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Test HIL readiness and nonphysical adapter rejection paths",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 13,
+              "name": "Parse workflow contracts and execute their real test commands",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 14,
+              "name": "Retain tooling execution logs",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 27,
+              "name": "Post Run ./.github/actions/setup-build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 28,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 29,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113748980390,
+          "name": "CI Status",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Check required results",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "X-Gen-Lab/nexus",
+      "id": 37908075125,
+      "name": "Security Analysis",
+      "event": "pull_request",
+      "head_revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "url": "https://github.com/X-Gen-Lab/nexus/actions/runs/37908075125",
+      "created_at": "2026-10-09T08:56:23Z",
+      "updated_at": "2026-10-09T09:03:31Z",
+      "success_jobs": 4,
+      "expected_skipped_jobs": [],
+      "jobs": [
+        {
+          "id": 113746279991,
+          "name": "Secret scan",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Detect verified and unknown secret candidates",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746280469,
+          "name": "CodeQL analysis (cpp)",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Initialize pinned build dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Run github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Configure native compiler environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Trace the actual native build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Run github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Post Run github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Post Configure native compiler environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 13,
+              "name": "Post Run github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 14,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 15,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746280535,
+          "name": "CodeQL analysis (python)",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Initialize pinned build dependencies",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 4,
+              "name": "Run github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Configure native compiler environment",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 6,
+              "name": "Trace the actual native build",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "number": 7,
+              "name": "Run github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Post Run github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 13,
+              "name": "Post Run github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 14,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 15,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746280567,
+          "name": "Audit resolved Python dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Resolve project dependencies and isolate the scanner",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Audit the actual resolved project environment",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Preserve scanner evidence on success or failure",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 13,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "X-Gen-Lab/nexus",
+      "id": 37908075309,
+      "name": "Enterprise Delivery Tools",
+      "event": "pull_request",
+      "head_revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "url": "https://github.com/X-Gen-Lab/nexus/actions/runs/37908075309",
+      "created_at": "2026-10-09T08:56:23Z",
+      "updated_at": "2026-10-09T08:56:44Z",
+      "success_jobs": 2,
+      "expected_skipped_jobs": [],
+      "jobs": [
+        {
+          "id": 113746280031,
+          "name": "Delivery contracts and requirement consistency (3.13)",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Exercise adapter and tamper failure boundaries",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Validate approved roles and requirement mapping",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Preserve consistency result",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 13,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113746280347,
+          "name": "Delivery contracts and requirement consistency (3.11)",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Exercise adapter and tamper failure boundaries",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Validate approved roles and requirement mapping",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Preserve consistency result",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 11,
+              "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 12,
+              "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 13,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "X-Gen-Lab/nexus-examples",
+      "id": 37908306631,
+      "name": "Example source SDK integration",
+      "event": "push",
+      "head_revision": "272200f40eca5b414e4aa97f5c5be67a0659bc78",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "url": "https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37908306631",
+      "created_at": "2026-10-09T08:58:39Z",
+      "updated_at": "2026-10-09T09:02:08Z",
+      "success_jobs": 9,
+      "expected_skipped_jobs": [],
+      "jobs": [
+        {
+          "id": 113747051245,
+          "name": "Native build and execution",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Prepare host build dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Verify source dependency identity",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Verify runner rejects empty and skipped execution",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build and run Native examples",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Retain Native artifacts and execution evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 15,
+              "name": "Post Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 16,
+              "name": "Post Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113747501797,
+          "name": "stm32-sky-freertos-release linked firmware",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Prepare host build dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Verify source dependency identity",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Prepare SHA-256 locked ARM GNU toolchain",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build real ARM firmware",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify linked firmware static contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Retain firmware and static validation evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Post Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 18,
+              "name": "Post Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113747501801,
+          "name": "stm32-discovery-freertos-release linked firmware",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Prepare host build dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Verify source dependency identity",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Prepare SHA-256 locked ARM GNU toolchain",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build real ARM firmware",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify linked firmware static contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Retain firmware and static validation evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Post Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 18,
+              "name": "Post Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113747501828,
+          "name": "stm32-sky-baremetal-release linked firmware",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Prepare host build dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Verify source dependency identity",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Prepare SHA-256 locked ARM GNU toolchain",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build real ARM firmware",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify linked firmware static contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Retain firmware and static validation evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Post Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 18,
+              "name": "Post Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113747501849,
+          "name": "stm32-qiming-freertos-release linked firmware",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Prepare host build dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Verify source dependency identity",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Prepare SHA-256 locked ARM GNU toolchain",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build real ARM firmware",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify linked firmware static contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Retain firmware and static validation evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Post Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 18,
+              "name": "Post Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113747501867,
+          "name": "stm32-discovery-baremetal-release linked firmware",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Prepare host build dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Verify source dependency identity",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Prepare SHA-256 locked ARM GNU toolchain",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build real ARM firmware",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify linked firmware static contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Retain firmware and static validation evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Post Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 18,
+              "name": "Post Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113747501897,
+          "name": "gd32-liangshan-freertos-release linked firmware",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Prepare host build dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Verify source dependency identity",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Prepare SHA-256 locked ARM GNU toolchain",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build real ARM firmware",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify linked firmware static contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Retain firmware and static validation evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Post Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 18,
+              "name": "Post Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113747501960,
+          "name": "stm32-qiming-baremetal-release linked firmware",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Prepare host build dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Verify source dependency identity",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Prepare SHA-256 locked ARM GNU toolchain",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build real ARM firmware",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify linked firmware static contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Retain firmware and static validation evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Post Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 18,
+              "name": "Post Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 113747502012,
+          "name": "gd32-liangshan-baremetal-release linked firmware",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "number": 1,
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 2,
+              "name": "Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 3,
+              "name": "Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 4,
+              "name": "Prepare host build dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 5,
+              "name": "Verify source dependency identity",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 6,
+              "name": "Prepare SHA-256 locked ARM GNU toolchain",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 7,
+              "name": "Build real ARM firmware",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 8,
+              "name": "Verify linked firmware static contract",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 9,
+              "name": "Retain firmware and static validation evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 17,
+              "name": "Post Setup Python",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 18,
+              "name": "Post Checkout pinned SDK and recursive dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "number": 19,
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "log_highlights": [
+    {
+      "job_id": 113746369634,
+      "url": "https://github.com/X-Gen-Lab/nexus/actions/runs/37908075556/job/113746369634",
+      "scope": "Native Release",
+      "tests_passed": 1810,
+      "tests_failed": 0,
+      "tests_skipped": 0,
+      "junit_strict_check": "success",
+      "junit_sha256": "229612f0639095e699cfafabec17bd8448489e06fd1bf66f611b1e91181eb84d",
+      "sanitizer_diagnostics_present": false,
+      "observed_log_lines": [
+        "2026-10-09T08:59:40.1091550Z  788/1810 Test    #5: installed_source_sdk ..................................................................   Passed   23.69 sec",
+        "2026-10-09T09:00:24.8187074Z 100% tests passed, 0 tests failed out of 1810",
+        "2026-10-09T09:00:24.9069862Z Verified 1810 passed, 0 skipped; JUnit SHA-256 229612f0639095e699cfafabec17bd8448489e06fd1bf66f611b1e91181eb84d",
+        "2026-10-09T09:00:25.1330608Z test_actual_effective_build_and_compile_database (__main__.ActualReleaseCompileDatabaseTests.test_actual_effective_build_and_compile_database) ... ok"
+      ]
+    },
+    {
+      "job_id": 113746369063,
+      "url": "https://github.com/X-Gen-Lab/nexus/actions/runs/37908075556/job/113746369063",
+      "scope": "Coverage",
+      "tests_passed": 1810,
+      "tests_failed": 0,
+      "tests_skipped": 0,
+      "junit_strict_check": "success",
+      "junit_sha256": "2fff754cf7cbf1741c59644d2f1fc2f11058115a28c22731e9cd5f863a58e755",
+      "sanitizer_diagnostics_present": false,
+      "observed_log_lines": [
+        "2026-10-09T08:59:01.2966075Z  694/1810 Test    #5: installed_source_sdk ..................................................................   Passed   19.55 sec",
+        "2026-10-09T09:00:08.1710446Z 100% tests passed, 0 tests failed out of 1810",
+        "2026-10-09T09:00:08.3095820Z Verified 1810 passed, 0 skipped; JUnit SHA-256 2fff754cf7cbf1741c59644d2f1fc2f11058115a28c22731e9cd5f863a58e755"
+      ]
+    },
+    {
+      "job_id": 113746369052,
+      "url": "https://github.com/X-Gen-Lab/nexus/actions/runs/37908075556/job/113746369052",
+      "scope": "ASan/UBSan/LSan platform contracts",
+      "tests_passed": 1810,
+      "tests_failed": 0,
+      "tests_skipped": 0,
+      "junit_strict_check": "success",
+      "junit_sha256": "ec3f31e334c9aa6a429649239d4c3e12d5a2107020a5977e369a9f07b136e2d7",
+      "sanitizer_diagnostics_present": false,
+      "observed_log_lines": [
+        "2026-10-09T08:59:46.5694782Z    5/1810 Test    #5: installed_source_sdk ..................................................................   Passed   13.30 sec",
+        "2026-10-09T09:04:10.6513760Z 100% tests passed, 0 tests failed out of 1810",
+        "2026-10-09T09:04:10.8227843Z Verified 1810 passed, 0 skipped; JUnit SHA-256 ec3f31e334c9aa6a429649239d4c3e12d5a2107020a5977e369a9f07b136e2d7"
+      ]
+    },
+    {
+      "job_id": 113746369634,
+      "scope": "Source SDK relocation regression",
+      "case": "installed_source_sdk",
+      "status": "passed",
+      "observed_log_line": "2026-10-09T08:59:40.1091550Z  788/1810 Test    #5: installed_source_sdk ..................................................................   Passed   23.69 sec",
+      "locked_arm_install_step": "success",
+      "package_kind": "development fixture used by source SDK regression; not a publishable release package qualification",
+      "acceptance": "Test source defines relocated C/C++ Native programs, independent parent target, and real startup/linker ARM consumers when ARM toolchain is available. Native Release installed the locked ARM toolchain before running this case.",
+      "qualification_limit": "Formal clean publishable SDK qualification is recorded separately by the maintainer; this report records actual remote regression execution."
+    },
+    {
+      "job_id": 113747679465,
+      "url": "https://github.com/X-Gen-Lab/nexus/actions/runs/37908075556/job/113747679465",
+      "scope": "SDK configuration / actual artifact release gates / HIL readiness models",
+      "tests_passed": 287,
+      "suites": [
+        {
+          "count": 18,
+          "seconds": 0.651,
+          "scope": "configure"
+        },
+        {
+          "count": 37,
+          "seconds": 38.885,
+          "scope": "kconfig"
+        },
+        {
+          "count": 173,
+          "seconds": 25.097,
+          "scope": "CI/release"
+        },
+        {
+          "count": 25,
+          "seconds": 2.809,
+          "scope": "validation"
+        },
+        {
+          "count": 26,
+          "seconds": 0.207,
+          "scope": "HIL readiness models"
+        },
+        {
+          "count": 8,
+          "seconds": 1.749,
+          "scope": "workflow contracts"
+        }
+      ],
+      "hardware_verified": false,
+      "observed_log_lines": [
+        "2026-10-09T09:01:32.0482810Z Ran 18 tests in 0.651s",
+        "2026-10-09T09:01:32.0483197Z OK",
+        "2026-10-09T09:02:11.0253053Z Ran 37 tests in 38.885s",
+        "2026-10-09T09:02:11.0253489Z OK",
+        "2026-10-09T09:02:12.6349289Z test_actual_effective_build_and_compile_database (test_package_release.ActualReleaseCompileDatabaseTests.test_actual_effective_build_and_compile_database) ... ok",
+        "2026-10-09T09:02:36.5363090Z Ran 173 tests in 25.097s",
+        "2026-10-09T09:02:36.5363734Z OK",
+        "2026-10-09T09:02:39.4233767Z Ran 25 tests in 2.809s",
+        "2026-10-09T09:02:39.4234037Z OK",
+        "2026-10-09T09:02:39.8056611Z Ran 26 tests in 0.207s",
+        "2026-10-09T09:02:39.8056990Z OK",
+        "2026-10-09T09:02:42.1152991Z Ran 8 tests in 1.749s",
+        "2026-10-09T09:02:42.1153280Z OK"
+      ]
+    },
+    {
+      "job_id": 113747051245,
+      "url": "https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37908306631/job/113747051245",
+      "scope": "Examples Native and pinned platform",
+      "observed_log_lines": [
+        "2026-10-09T08:58:47.3895108Z Submodule path 'external/nexus': checked out '5498b2b6988cc1cf28cf4255c5c281d56394d614'",
+        "2026-10-09T08:59:39.1128486Z Verified Nexus 5498b2b6988cc1cf28cf4255c5c281d56394d614, 9 presets, 7 recursive dependency checkouts and the reviewed GD32 import",
+        "2026-10-09T08:59:40.9473566Z 100% tests passed, 0 tests failed out of 1",
+        "2026-10-09T08:59:41.4413679Z 100% tests passed, 0 tests failed out of 1",
+        "2026-10-09T08:59:53.3024756Z 100% tests passed, 0 tests failed out of 6"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11604954922,
+      "name": "required-static-analysis",
+      "size": 67982,
+      "digest": "sha256:f4fccc1314e8e1c61d59c672a2fbcaedd322d45318ceed581e55f1af3cf1118f",
+      "expired": false,
+      "run_id": 37908075556
+    },
+    {
+      "id": 11604928933,
+      "name": "platform-tooling-evidence",
+      "size": 8764,
+      "digest": "sha256:67d9de2c5bc94acd37e2a59afa312e050d30ba76cffcec42862258c3dcb91d23",
+      "expired": false,
+      "run_id": 37908075556
+    }
+  ],
+  "historical_failure_report": "../refactor-github-final/report.json"
+}

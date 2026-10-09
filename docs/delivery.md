@@ -32,31 +32,39 @@ loopback／隔离工装，因此三板不注册该示例 target。详细资源�
 Nexus 本轮已经修改通用 Runtime、HAL、OSAL、Board／Flash、组件目标、构建与源码 SDK。
 历史 `069dcf14` 只保留为重构前审计与首批验证身份，不再描述为本轮唯一平台实现。
 正式依赖由 `external/nexus` Gitlink 和 `dependencies/nexus.lock.json` 一起更新、核验。
-截至下述测试 snapshot，21 个平台提交和 3 个示例实现提交已推送；平台变更保留在
-[PR #3](https://github.com/X-Gen-Lab/nexus/pull/3)，示例实现已同步 `main`。
+平台本轮 22 个变更提交已推送 [PR #3](https://github.com/X-Gen-Lab/nexus/pull/3)，
+示例本轮四个实现／依赖提交已同步 `main`，随后单独提交最终文档与机器证据。
 
-本轮已经实际验证的 clean 实现 snapshot 为：
+最终实际验证的 clean 源码为：
 
 | 仓库 | 已测试实现 commit | tree |
 | --- | --- | --- |
-| Nexus | `db6ca0c4e6907dea70fa7aee3d9b93379d7b0ef0` | `a6c717f4ffe93c0d5170c87399b6715cbe99b85d` |
-| nexus-examples | `fcc1796392b237a2a0a627a2d4eae04eb808ae06` | `5f85a20bcab3d1334202ab90c83a9879e0e4af89` |
+| Nexus | `5498b2b6988cc1cf28cf4255c5c281d56394d614` | `ea178ba746a991c7feb21242215aa1a18e6afb05` |
+| nexus-examples | `272200f40eca5b414e4aa97f5c5be67a0659bc78` | `38d8bd2920af45d806ef97ba5e9c6648ed1ba3ee` |
 
-平台 Native 完整测试 **1810／1810** 通过，失败／错误／跳过均为 0；8 组平台 ARM
-配置各有 1 个 contract ELF 通过。示例 Native **6／6** 通过，8 组 ARM 配置共
-**38 个 ELF** 编译、链接和静态检查通过，0 跳过。严格 clean 可重定位源码 SDK
-完成 3 个 Native consumer 实际运行、2 个 STM32 C／C++ ELF 检查和 6 项拒绝测试。
-三首发板 `uart_echo` 的 HIL 只读准入检查通过；未配置 station 在访问设备前全部拒绝。
-上述结果绑定这组 snapshot 的源码和工件，详见 [最终软件验证](refactor-validation.md) 与
-[机器证据](../evidence/platform-refactor-validation.json)。平台线上后置打包门禁发现
-Native 工件名称校验问题，后续修复的准确 SHA、交付 pin 和实际检查由同一报告单独记录。
-后续代码、文档／证据提交不自动沿用 snapshot 的运行结论，也不预填新 HEAD 已经重跑。
+平台 Native **1810／1810**、8 组平台 ARM contract ELF、示例 Native **6／6** 及
+8 组 ARM 配置共 **38 个 ELF** 全部通过；执行测试失败／错误／跳过均为 0。
+严格 clean、publishable 源码 SDK 完成实际搬迁、3 个 Native 运行、2 个 STM32 C／C++
+ELF 检查与 6 项拒绝测试。三首发板 `uart_echo` 的只读 HIL 准入通过，空 station
+全部在访问设备前拒绝。结果和工件摘要见 [最终软件验证](refactor-validation.md) 及
+[机器证据](../evidence/platform-refactor-validation.json)。
 
-[示例 Actions run 37906701359](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37906701359)
-在实现 `fcc17963` 上的 9 个 job 全部成功。平台
-[CI run 37906644672](https://github.com/X-Gen-Lab/nexus/actions/runs/37906644672) 与
-[Security run 37906644285](https://github.com/X-Gen-Lab/nexus/actions/runs/37906644285)
-的最终线上结论由最终验证报告记录；本文不预填其成功状态。
+最终远端结果为：
+
+- [平台 CI 37908075556](https://github.com/X-Gen-Lab/nexus/actions/runs/37908075556)：成功；Native／Coverage／sanitizer 实际各执行 1810 项，严格报告通过，打包与 SDK 门禁通过。
+- [Security 37908075125](https://github.com/X-Gen-Lab/nexus/actions/runs/37908075125)：4 个 job 成功。
+- [Enterprise 37908075309](https://github.com/X-Gen-Lab/nexus/actions/runs/37908075309)：成功。
+- [示例 CI 37908306631](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37908306631)：`272200f4` 的 9 个 job 全部成功，使用正式递归子模块 checkout。
+
+PR 工作流实际 checkout 为合成 merge `9fc34d3c5ba48fc0854823b302e039d24a53d090`，
+tree 与平台 `5498b2b6` 完全一致；PR 的 Pages 部署按设计跳过，不是测试跳过。
+最终文档／证据提交不改应用、配置或 SDK pin，也不冒称新的 Git HEAD 已重新执行上述测试。
+交付 archive manifest 单独记录文档 HEAD 与被测源码 pair，避免 SHA 自递归。
+
+`db6ca0c4` 曾因 Native 打包校验仍要求 ARM 固件名而使 CI 失败；该失败没有改记为成功。
+最后提交按平台限定真实 contract 名称，保留架构／类型／目录拒绝，83 项生产打包回归及
+实际 Native／ARM 两项检查通过，再以这组最终源码完整重建验证。此前同目录切换测试
+fixture 遗留异架构 ELF 也已在测试本身清理，不放宽生产校验。
 
 平台 38 项任务的逐项 implementation／software／physical／commit 状态由 Nexus 的
 `docs/implementation/refactor-execution.csv` 和同名 Markdown 维护。本仓库

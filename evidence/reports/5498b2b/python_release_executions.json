@@ -1,0 +1,168 @@
+{
+  "arm_matrix": {
+    "path": "build/refactor-arm-matrix/final-5498b2b/results.json",
+    "preset": "stm32-qiming-armgcc-freertos-release",
+    "sha256": "0d0087caa553bda6ae1ccdeff8212163f4777fbe9cf57b6b979cc3bf6c0210b4",
+    "source_after": {
+      "complete": true,
+      "dirty": false,
+      "files_sha256": "4e43b19d7597365e0b0cb31f519aaa209e1405633721f3c0584ff0662d807d5d",
+      "head_after": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "head_before": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "path": "/workspace/nexus/build/refactor-arm-matrix/final-5498b2b/stm32-qiming-armgcc-freertos-release/source-after.json",
+      "sha256": "b1bb72f5b61a360b4117f4edba9e38c41e7558a0c585a794fda78250e7066efb"
+    },
+    "source_before": {
+      "complete": true,
+      "dirty": false,
+      "files_sha256": "4e43b19d7597365e0b0cb31f519aaa209e1405633721f3c0584ff0662d807d5d",
+      "head_after": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "head_before": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "path": "/workspace/nexus/build/refactor-arm-matrix/final-5498b2b/stm32-qiming-armgcc-freertos-release/source-before.json",
+      "sha256": "633b6c993f6db8b51c30045b2f5564603e6409b161d6ab9653e159c76a3924d5"
+    }
+  },
+  "expected_source_commit": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+  "hardware_verified": false,
+  "kind": "final-clean-platform-release-gates",
+  "native_ctest": {
+    "errors": 0,
+    "failures": 0,
+    "passed": 1810,
+    "report_sha256": "cf523ea9bb697cb2a26bdb00ca0cbdf3fb5ffd402b98721bced4f1c612d91d63",
+    "skipped": 0,
+    "tests": 1810
+  },
+  "native_run_log": {
+    "path": "build/refactor-native-final-5498b2b.log",
+    "sha256": "aaf50993e4d1c98dfcb553302466dae33200eb1fa1c8969c5cfc5b0b1fcaeb02"
+  },
+  "platform_code_equivalence": {
+    "all_other_tracked_paths_unchanged": true,
+    "base_commit": "db6ca0c4e6907dea70fa7aee3d9b93379d7b0ef0",
+    "changed_paths": [
+      "scripts/ci/package_release.py",
+      "scripts/ci/test_package_release.py"
+    ],
+    "current_commit": "5498b2b6988cc1cf28cf4255c5c281d56394d614"
+  },
+  "remote_github_actions_executed": false,
+  "results": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "scripts/ci/test_package_release.py",
+        "ActualReleaseCompileDatabaseTests",
+        "-v"
+      ],
+      "artifacts_after": {
+        "build/stm32-qiming-armgcc-freertos-release/bin/nexus_contract_firmware.elf": "15e81526caee0cc5aa0a37d68c94a319ef10686833425cccc57e2c82a90bf45e",
+        "build/stm32-qiming-armgcc-freertos-release/compile_commands.json": "54a9c3d782531b1970acafe7c7f04734d79045684c65e1e79724f3b91fae6e9f",
+        "build/stm32-qiming-armgcc-freertos-release/generated/board-identity.json": "b7164087f1395d49cb64edd651d23e599af7f3f9a0aef77f7f95678ae9bf923a",
+        "build/stm32-qiming-armgcc-freertos-release/generated/effective.config": "3436e5dacb39a00fe36b557da1320ec03a4df8ceb841a8e0881d28f141d65682"
+      },
+      "artifacts_before": {
+        "build/stm32-qiming-armgcc-freertos-release/bin/nexus_contract_firmware.elf": "15e81526caee0cc5aa0a37d68c94a319ef10686833425cccc57e2c82a90bf45e",
+        "build/stm32-qiming-armgcc-freertos-release/compile_commands.json": "54a9c3d782531b1970acafe7c7f04734d79045684c65e1e79724f3b91fae6e9f",
+        "build/stm32-qiming-armgcc-freertos-release/generated/board-identity.json": "b7164087f1395d49cb64edd651d23e599af7f3f9a0aef77f7f95678ae9bf923a",
+        "build/stm32-qiming-armgcc-freertos-release/generated/effective.config": "3436e5dacb39a00fe36b557da1320ec03a4df8ceb841a8e0881d28f141d65682"
+      },
+      "artifacts_unchanged": true,
+      "cwd": "/workspace/nexus",
+      "environment": {
+        "NEXUS_RELEASE_TEST_BUILD": "/workspace/nexus/build/stm32-qiming-armgcc-freertos-release",
+        "NEXUS_RELEASE_TEST_PRESET": "stm32-qiming-armgcc-freertos-release"
+      },
+      "exit_code": 0,
+      "log": "build/final-python-gates-5498b2b/actual-arm-release.log",
+      "log_sha256": "546eedfbb5c9e4e31e870ea33cc2f0cf295d24925268030d582ea2498b6a5e31",
+      "status": "pass",
+      "suite": "actual-arm-release",
+      "tests": 1,
+      "unittest_seconds": 0.054,
+      "wall_seconds": 0.215
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "scripts/ci/test_package_release.py",
+        "ActualReleaseCompileDatabaseTests",
+        "-v"
+      ],
+      "artifacts_after": {
+        "build/linux-gcc-release/compile_commands.json": "54151c7aab7f512610e0b346b5aae6c87e7d001b2c103e2890816a8e3386757f",
+        "build/linux-gcc-release/ctest-results.xml": "cf523ea9bb697cb2a26bdb00ca0cbdf3fb5ffd402b98721bced4f1c612d91d63",
+        "build/linux-gcc-release/generated/board-identity.json": "10e6b195dc5c9bcfa86954cca6d8378769166c03103f848dc7caae7154b549f7",
+        "build/linux-gcc-release/generated/effective.config": "d1c54d3f6322c3de40eee9f80bcb905a6994dadfdd5ab6f5efe2c21da3d060b6"
+      },
+      "artifacts_before": {
+        "build/linux-gcc-release/compile_commands.json": "54151c7aab7f512610e0b346b5aae6c87e7d001b2c103e2890816a8e3386757f",
+        "build/linux-gcc-release/ctest-results.xml": "cf523ea9bb697cb2a26bdb00ca0cbdf3fb5ffd402b98721bced4f1c612d91d63",
+        "build/linux-gcc-release/generated/board-identity.json": "10e6b195dc5c9bcfa86954cca6d8378769166c03103f848dc7caae7154b549f7",
+        "build/linux-gcc-release/generated/effective.config": "d1c54d3f6322c3de40eee9f80bcb905a6994dadfdd5ab6f5efe2c21da3d060b6"
+      },
+      "artifacts_unchanged": true,
+      "cwd": "/workspace/nexus",
+      "environment": {
+        "NEXUS_RELEASE_TEST_BUILD": "/workspace/nexus/build/linux-gcc-release",
+        "NEXUS_RELEASE_TEST_PRESET": "linux-gcc-release"
+      },
+      "exit_code": 0,
+      "log": "build/final-python-gates-5498b2b/actual-native-release.log",
+      "log_sha256": "b621fe5e18d9fb460878c9b968049c8fe750dcebe66a58c28ae1d96d1fe7ec8b",
+      "status": "pass",
+      "suite": "actual-native-release",
+      "tests": 1,
+      "unittest_seconds": 0.172,
+      "wall_seconds": 0.368
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "scripts/ci/test_package_release.py",
+        "ReleaseTests",
+        "-v"
+      ],
+      "artifacts_after": {},
+      "artifacts_before": {},
+      "artifacts_unchanged": true,
+      "cwd": "/workspace/nexus",
+      "environment": {},
+      "exit_code": 0,
+      "log": "build/final-python-gates-5498b2b/package-fixtures.log",
+      "log_sha256": "b65f73ba29ef77c05c21b9785b75a4d6ed028de0a99de9ac8f5365c19a15bc40",
+      "status": "pass",
+      "suite": "package-fixtures",
+      "tests": 83,
+      "unittest_seconds": 23.651,
+      "wall_seconds": 23.808
+    }
+  ],
+  "schema": 1,
+  "source_after": {
+    "commit": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+    "files_sha256": {
+      "scripts/ci/package_release.py": "0e1138295f5c6e15e90fb6b77cb57ca335c7f633c6f9bf2917d97b97d12f9de9",
+      "scripts/ci/test_package_release.py": "f689be75a008ac56f34f5736a16f5df9a686e219893781ec707ccbfd08735d49"
+    },
+    "porcelain": "",
+    "tree": "ea178ba746a991c7feb21242215aa1a18e6afb05",
+    "utc": "2026-10-09T09:01:52.771608+00:00"
+  },
+  "source_before": {
+    "commit": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+    "files_sha256": {
+      "scripts/ci/package_release.py": "0e1138295f5c6e15e90fb6b77cb57ca335c7f633c6f9bf2917d97b97d12f9de9",
+      "scripts/ci/test_package_release.py": "f689be75a008ac56f34f5736a16f5df9a686e219893781ec707ccbfd08735d49"
+    },
+    "porcelain": "",
+    "tree": "ea178ba746a991c7feb21242215aa1a18e6afb05",
+    "utc": "2026-10-09T09:01:28.888947+00:00"
+  },
+  "source_unchanged": true,
+  "summary": {
+    "failed_checks": 0,
+    "skipped": 0,
+    "tests": 85
+  }
+}

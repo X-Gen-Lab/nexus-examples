@@ -20,8 +20,8 @@
 | `spi_transaction` | Native 有限模型；Discovery SPI1 参考配置裸机／FreeRTOS | Native 三个 case 实际执行、两个 ARM ELF；物理 loopback／DMA 待 HIL |
 
 详细实际定向证据见 [组件例程](component-examples.md) 和 [SPI 例程](spi-example.md)。
-已测试的 clean 实现 snapshot Nexus `db6ca0c4`／示例 `fcc17963` 的 Native 6 项测试和
-8 组 ARM 配置、38 个 ELF 全部通过，0 跳过；后续交付 pin、完整身份和摘要见
+已测试的 clean 实现 snapshot Nexus `5498b2b6`／示例 `272200f4` 的 Native 6 项测试和
+8 组 ARM 配置、38 个 ELF 全部通过，0 跳过；交付 pin、完整身份和摘要见
 [最终软件验证](refactor-validation.md)，新 revision 不自动继承该 snapshot 的结论。
 全部物理结果为 **unverified**。三首发板 HIL 只读准入与未配置 station 的设备前拒绝
 已经验证，完整 IRQ／DMA、掉电和长期负载 workload runner 仍需实现。

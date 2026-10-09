@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "kind": "common-platform-software-and-hil-readiness-delivery",
+  "recorded_at_utc": "2026-10-09T09:08:40.768658+00:00",
+  "user_facing_date": "2026-10-09",
+  "user_facing_timezone": "Asia/Shanghai",
+  "source_pair": {
+    "platform": {
+      "repository": "X-Gen-Lab/nexus",
+      "revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "tree": "ea178ba746a991c7feb21242215aa1a18e6afb05"
+    },
+    "examples": {
+      "repository": "X-Gen-Lab/nexus-examples",
+      "revision": "272200f40eca5b414e4aa97f5c5be67a0659bc78",
+      "tree": "38d8bd2920af45d806ef97ba5e9c6648ed1ba3ee",
+      "platform_pin": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "pin_evidence_job_id": 113747051245
+    }
+  },
+  "evidence_commit_is_separate_from_tested_implementation": true,
+  "evidence_commit_note": "A follow-up documentation/evidence commit records this tested pair; its SHA is recorded by the external delivery archive manifest, avoiding source revision self-recursion.",
+  "status": "software-scope-passed-and-hil-tooling-ready",
+  "hardware_verified": false,
+  "eligible_physical_hil": false,
+  "physical_device_operations": [],
+  "source_boundary": {
+    "platform": "Arch, SoC, Board, typed HAL, OSAL, Runtime, general mechanisms, build/SDK/CI/HIL tooling",
+    "examples": "public applications, assembly, reviewed application budgets and reference use cases",
+    "private_product_data": "external product repositories"
+  },
+  "reports": {
+    "native": {
+      "path": "evidence/reports/5498b2b/native.json",
+      "sha256": "aaa02a6cdbdd982ef62bf96c537fbd2b3ea09ab8729d64f85925501363676db6",
+      "size": 20677,
+      "original_path": "/workspace/nexus/build/refactor-native-final-evidence-5498b2b/report.json"
+    },
+    "platform_arm": {
+      "path": "evidence/reports/5498b2b/platform_arm.json",
+      "sha256": "0d0087caa553bda6ae1ccdeff8212163f4777fbe9cf57b6b979cc3bf6c0210b4",
+      "size": 111218,
+      "original_path": "/workspace/nexus/build/refactor-arm-matrix/final-5498b2b/results.json"
+    },
+    "examples": {
+      "path": "evidence/reports/5498b2b/examples.json",
+      "sha256": "9c2af1bb522eba9dcf3845c57addb14b2a4cad449fb55b88e392fcd6e717774b",
+      "size": 958297,
+      "original_path": "/workspace/nexus-examples/build/refactor-final-matrix-5498b2b/results.json"
+    },
+    "source_sdk": {
+      "path": "evidence/reports/5498b2b/source_sdk.json",
+      "sha256": "c20671aed1fd2df083495ccfe0ec89b0bf284a312ca8739fbb025d446b3115f3",
+      "size": 21522,
+      "original_path": "/workspace/nexus/build/refactor-source-sdk-final-5498b2b/report.json"
+    },
+    "hil_admission": {
+      "path": "evidence/reports/5498b2b/hil_admission.json",
+      "sha256": "66fd18284583c26a981dd89e305394fd601244dbad849a21e4f2ec51a302c09f",
+      "size": 19003,
+      "original_path": "/workspace/nexus/build/refactor-arm-matrix/final-5498b2b/hil-readonly/results.json"
+    },
+    "github": {
+      "path": "evidence/reports/5498b2b/github.json",
+      "sha256": "a0eb639b241ae58e1443582fbbfabe994e2db2fb9444731564a47b23e15acee1",
+      "size": 93770,
+      "original_path": "/workspace/nexus/build/refactor-github-final-5498b2b/report.json"
+    },
+    "python_gates": {
+      "path": "evidence/reports/5498b2b/python_gates.json",
+      "sha256": "9e1ddea48ebadd33c2a355999b9535a574d9c7563e4d16ae80599edec46c831d",
+      "size": 8744,
+      "original_path": "/workspace/nexus/build/final-python-gates-5498b2b/gate-summary.json"
+    },
+    "python_release_executions": {
+      "path": "evidence/reports/5498b2b/python_release_executions.json",
+      "sha256": "5040eda62ac982c0f2c1275d94df20cef06e8eb5c5bbb961e989636e98e8af79",
+      "size": 7830,
+      "original_path": "/workspace/nexus/build/final-python-gates-5498b2b/release-gates.json"
+    },
+    "inherited_python": {
+      "path": "evidence/reports/5498b2b/inherited_python.json",
+      "sha256": "c35af6bba24238f342df0d60983916a7d7f999cbc1023e06160c509dedf0089c",
+      "size": 15064,
+      "original_path": "/workspace/nexus/build/final-python-gates-db6ca0c4/python-gates.json"
+    },
+    "inherited_arm_workflow": {
+      "path": "evidence/reports/5498b2b/inherited_arm_workflow.json",
+      "sha256": "31949811eb07d52930d5264aa20c2b9c87f1d5f4ee24bdf2fe2679c051cda1ae",
+      "size": 6638,
+      "original_path": "/workspace/nexus/build/final-python-gates-db6ca0c4/actual-arm-gates.json"
+    },
+    "package_fix": {
+      "path": "evidence/reports/5498b2b/package_fix.json",
+      "sha256": "ca371c3c4d2f6579916a2b1d16032afcf21fe22f76d87aa435073195aaeef824",
+      "size": 4205,
+      "original_path": "/workspace/nexus/build/final-python-gates-db6ca0c4/package-contract-name-fix.json"
+    }
+  },
+  "native_platform": {
+    "preset": "linux-gcc-release",
+    "tests": 1810,
+    "passed": 1810,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "sha256": "cf523ea9bb697cb2a26bdb00ca0cbdf3fb5ffd402b98721bced4f1c612d91d63",
+    "source_files_unchanged_after_execution": true
+  },
+  "platform_arm": {
+    "presets": 8,
+    "contract_elfs": 8,
+    "build_and_static_contract_passed": true,
+    "hardware_execution": false
+  },
+  "examples": {
+    "presets": 9,
+    "native_tests": 6,
+    "native_failed": 0,
+    "native_skipped": 0,
+    "arm_presets": 8,
+    "arm_elfs": 38,
+    "derived_bin_hex_checks": 76,
+    "config_heap_checks": 8,
+    "config_libc_heap_bytes": 8192,
+    "local_consumption": "explicit source-location override with exact Gitlink/lock/clean identity verification",
+    "github_consumption": "formal recursive submodule checkout",
+    "hardware_execution": false
+  },
+  "source_sdk": {
+    "kind": "relocatable-source-sdk",
+    "binary_sdk": false,
+    "publishable": true,
+    "files": 5341,
+    "dependency_records": 6,
+    "snapshot_sha256": "ec90bb850f4af1201be5c259c56df5045c0451ada284b488195e249bbbb10d4f",
+    "native_executables_actually_run": 3,
+    "arm_c_and_cpp_elfs_validated": 2,
+    "identity_and_tamper_rejections": 6,
+    "restored_package_verified": true,
+    "archive": {
+      "archive": "/workspace/nexus-source-sdk-5498b2b.zip",
+      "size": 33711986,
+      "sha256": "90e7dfbb94320a6fa899109488bd9e361fa07ef60e4e7d827e5c030fdae2372c",
+      "source_revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "source_sdk": true,
+      "binary_sdk": false,
+      "hardware_verified": false
+    }
+  },
+  "hil_readiness": {
+    "first_board_artifact_admissions": 3,
+    "empty_station_refusals": 3,
+    "device_operations": [],
+    "hardware_verified": false,
+    "fixture_directory": "Nexus:scripts/hil/fixtures",
+    "handoff_document": "Nexus:docs/implementation/hil-readiness.md"
+  },
+  "python_gates": {
+    "final_source_package_fixture_tests": 83,
+    "actual_fresh_native_and_arm_checks": 2,
+    "failed": 0,
+    "skipped": 0,
+    "inherited_scope": "214 Python and 9 workflow/ELF checks actually executed on db6ca0c4; final-source report records unchanged tested definitions and explicit changed-module exceptions. These are not relabelled as final-source executions.",
+    "hosted_scope": "Final GitHub SDK/configuration gate independently executes its recorded helper suites on the final PR tree."
+  },
+  "github": {
+    "runs": [
+      {
+        "repository": "X-Gen-Lab/nexus",
+        "id": 37908075556,
+        "name": "CI",
+        "event": "pull_request",
+        "head_revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/X-Gen-Lab/nexus/actions/runs/37908075556"
+      },
+      {
+        "repository": "X-Gen-Lab/nexus",
+        "id": 37908075125,
+        "name": "Security Analysis",
+        "event": "pull_request",
+        "head_revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/X-Gen-Lab/nexus/actions/runs/37908075125"
+      },
+      {
+        "repository": "X-Gen-Lab/nexus",
+        "id": 37908075309,
+        "name": "Enterprise Delivery Tools",
+        "event": "pull_request",
+        "head_revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/X-Gen-Lab/nexus/actions/runs/37908075309"
+      },
+      {
+        "repository": "X-Gen-Lab/nexus-examples",
+        "id": 37908306631,
+        "name": "Example source SDK integration",
+        "event": "push",
+        "head_revision": "272200f40eca5b414e4aa97f5c5be67a0659bc78",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37908306631"
+      }
+    ],
+    "pull_request": {
+      "number": 3,
+      "url": "https://github.com/X-Gen-Lab/nexus/pull/3",
+      "state": "open",
+      "merged": false,
+      "head_revision": "5498b2b6988cc1cf28cf4255c5c281d56394d614",
+      "actual_checkout_revision": "9fc34d3c5ba48fc0854823b302e039d24a53d090",
+      "checkout_tree": "ea178ba746a991c7feb21242215aa1a18e6afb05",
+      "same_tree_as_head": true,
+      "parents": [
+        "7a203266082ad1f655b6686713b2b7950ba31ec6",
+        "5498b2b6988cc1cf28cf4255c5c281d56394d614"
+      ],
+      "checkout_evidence_job_id": 113746369073,
+      "checkout_log_highlights": [
+        "2026-10-09T08:56:44.6293977Z Uses: X-Gen-Lab/nexus/.github/workflows/quality-checks.yml@refs/pull/3/merge (9fc34d3c5ba48fc0854823b302e039d24a53d090)",
+        "2026-10-09T08:56:46.3136959Z HEAD is now at 9fc34d3 Merge 5498b2b6988cc1cf28cf4255c5c281d56394d614 into 7a203266082ad1f655b6686713b2b7950ba31ec6"
+      ]
+    },
+    "note": "PR workflows execute the recorded synthetic merge; its Git tree is identical to the platform head."
+  },
+  "planning": {
+    "tasks": 38,
+    "planned_batches": 19,
+    "roles": 10,
+    "horizon_months": [
+      3,
+      6
+    ],
+    "plan": "docs/platform-refactor-plan.md",
+    "qualification_note": "Software delivery does not close all 38 implementation/physical/release acceptance conditions."
+  },
+  "remaining": [
+    {
+      "task": "RF-HAL-03",
+      "scope": "STM32/GD32 typed MCU I2C provider and actual bus qualification; currently NOT_SUPPORTED"
+    },
+    {
+      "task": "RF-CMP-02",
+      "scope": "Shell singleton/dynamic core storage and further lifecycle/resource hardening"
+    },
+    {
+      "task": "RF-HIL-01/02/03",
+      "scope": "Full IRQ/DMA/power-cut/long-load workload runners and physical station execution"
+    },
+    {
+      "task": "RF-FLS-02",
+      "scope": "Nonzero image offsets, bootloader/VTOR and A/B install/recovery; currently explicitly rejected"
+    },
+    {
+      "task": "RF-CMP-03",
+      "scope": "MCU cryptography, entropy, vault/trusted counter and secure boot/install chain"
+    },
+    {
+      "task": "RF-EX-02",
+      "scope": "Future persistent parameters, physical RS485 transport and additional reference applications"
+    },
+    {
+      "task": "RF-REL-01/02",
+      "scope": "Physical timing, dynamic stack/pool peaks, long stability, reviewer ownership and release promotion"
+    }
+  ],
+  "not_created": [
+    "platform main merge",
+    "release/tag",
+    "hardware qualification",
+    "binary SDK ABI commitment"
+  ]
+}
