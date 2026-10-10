@@ -8,6 +8,7 @@
  */
 #include "nexus_bindings.h"
 #include "nexus_config.h"
+#include "nexus_factory.h"
 #if defined(NEXUS_BACKEND_FREERTOS)
 #include "nexus/os/freertos.h"
 #endif
@@ -18,11 +19,11 @@
 static nx_uart_tx_request_t s_transmit;
 
 /** \brief Map an application console role to one generated physical port. */
-static nx_uart_port_t* console(void) {
+static const nx_uart_port_t* console(void) {
 #if defined(NEXUS_UART1_SELECTED)
-    return nx_binding_uart1;
+    return nx_factory_uart(NX_UART_ID_UART1);
 #else
-    return nx_binding_uart0;
+    return nx_factory_uart(NX_UART_ID_UART0);
 #endif
 }
 
@@ -56,7 +57,8 @@ static nx_result_t send_bytes(const uint8_t* bytes, size_t length) {
 
 /** \brief Execute a serialized iteration with explicit RX error decisions. */
 static nx_result_t iteration(void) {
-    nx_result_t result = nx_gpio_port_toggle(nx_binding_led0, NEXUS_LED0_MASK);
+    nx_result_t result =
+        nx_gpio_port_toggle(nx_factory_gpio(NX_GPIO_ID_LED0), NEXUS_LED0_MASK);
     if (result != NX_SUCCESS) {
         return result;
     }
@@ -89,7 +91,7 @@ static StackType_t s_stack[256];
 /** \brief The external application creates and owns this sole worker. */
 static void application(void* context) {
     (void)context;
-    static const uint8_t greeting[] = "Nexus static ports\r\n";
+    static const uint8_t greeting[] = "Nexus static factory\r\n";
     if (send_bytes(greeting, sizeof(greeting) - 1U) != NX_SUCCESS) {
         return;
     }
@@ -120,17 +122,19 @@ int main(void) {
 #elif defined(NEXUS_BACKEND_NATIVE)
     static const uint8_t ping[] = {'p', 'i', 'n', 'g'};
     for (size_t i = 0U; i < sizeof(ping); ++i) {
-        if (nx_native_uart_receive(ping[i], 0U) != NX_SUCCESS) {
+        if (nx_native_uart_model_receive(console(), ping[i], 0U) !=
+            NX_SUCCESS) {
             return 4;
         }
     }
     if (iteration() != NX_SUCCESS ||
-        nx_native_gpio_output() != NEXUS_LED0_MASK) {
+        nx_native_gpio_model_output(nx_factory_gpio(NX_GPIO_ID_LED0)) !=
+            NEXUS_LED0_MASK) {
         return 5;
     }
     return nx_platform_stop() == NX_SUCCESS ? 0 : 6;
 #else
-    static const uint8_t greeting[] = "Nexus static ports\r\n";
+    static const uint8_t greeting[] = "Nexus static factory\r\n";
     if (send_bytes(greeting, sizeof(greeting) - 1U) != NX_SUCCESS) {
         return 7;
     }

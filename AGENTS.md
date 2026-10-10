@@ -8,8 +8,10 @@ separate product repositories.
   `dependencies/nexus.lock.json` together only with actual integration evidence.
 - Consume public `nexus/core`, `nexus/io`, `nexus/os`, `nexus/components` and
   generated bindings. Do not copy providers, vendor implementation or restore
-  registry/factory/owner references. Public types use the selected SDK ABI.
-- The sole configuration is `assemblies/*.json`; CMake presets define seven
+  registry or implicit ownership. Use generated typed factory IDs to obtain
+  readonly faces; factory lookup has no allocation or hardware side effects.
+  Public types use the selected SDK ABI.
+- The sole authored configuration is `assemblies/*.toml`; CMake presets define seven
   maintained builds. Separate build roots prevent stale effective configuration.
 - `nx_platform_start/stop` own selected infrastructure. Applications own workers,
   scheduler start, component composition, budgets and recovery. No implicit main.
@@ -32,3 +34,10 @@ separate product repositories.
   Uncommitted development fixtures must remain nonpublishable. Historical source
   counts or evidence cannot qualify this changed implementation.
 - Conventional Commit examples: `feat(examples): ...`, `fix(uart): ...`.
+
+Use TDD for changed behavior: capture a failing contract, implement the smallest
+correct change and refactor after it passes. Nexus firmware contract development
+uses the SDK repository's pinned GoogleTest/GoogleMock host framework; the target
+application remains C11 and contains no host test runtime. Python tooling tests
+cover configuration, invocation and evidence boundaries. A hook pass alone does
+not establish the historical order of edits or physical board qualification.

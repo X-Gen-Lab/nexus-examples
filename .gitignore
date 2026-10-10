@@ -6,3 +6,6 @@ __pycache__/
 /CMakeUserPresets.json
 /.tools/
 /.venv/
+
+# Preserve executed TDD machine output byte-for-byte.
+!evidence/reports/*.log

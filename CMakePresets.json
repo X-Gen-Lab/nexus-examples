@@ -12,7 +12,7 @@
             "binaryDir": "${sourceDir}/build/native-debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/native.json",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/native.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF",
                 "NEXUS_ENABLE_SANITIZERS": "ON"
@@ -24,7 +24,7 @@
             "binaryDir": "${sourceDir}/build/stm32-qiming-baremetal",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/qiming-baremetal.json",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/qiming-baremetal.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
@@ -36,7 +36,7 @@
             "binaryDir": "${sourceDir}/build/stm32-qiming-freertos",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/qiming-freertos.json",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/qiming-freertos.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
@@ -48,7 +48,7 @@
             "binaryDir": "${sourceDir}/build/stm32-sky-baremetal",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/sky-baremetal.json",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/sky-baremetal.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
@@ -60,7 +60,7 @@
             "binaryDir": "${sourceDir}/build/stm32-sky-freertos",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/sky-freertos.json",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/sky-freertos.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
@@ -72,7 +72,7 @@
             "binaryDir": "${sourceDir}/build/gd32-liangshan-baremetal",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/liangshan-baremetal.json",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/liangshan-baremetal.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
@@ -84,7 +84,7 @@
             "binaryDir": "${sourceDir}/build/gd32-liangshan-freertos",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/liangshan-freertos.json",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/liangshan-freertos.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },

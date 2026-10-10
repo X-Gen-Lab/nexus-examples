@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.31)
 project(nexus_examples VERSION 1.0.0 LANGUAGES C ASM)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # The SDK owns reusable mechanisms. This repository owns every application,
 # entry point, task, domain mapping and recovery decision.

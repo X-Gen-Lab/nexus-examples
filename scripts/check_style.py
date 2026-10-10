@@ -20,7 +20,7 @@ from sdk_tools import ROOT, load, sdk_root
 
 EXCLUDED = {"external", "build", "out", "dist", ".venv", ".git", ".tools"}
 C_SUFFIXES = {".c", ".h", ".cc", ".cpp", ".hpp"}
-TEXT_SUFFIXES = C_SUFFIXES | {".py", ".json", ".md", ".cmake", ".txt", ".yml", ".yaml"}
+TEXT_SUFFIXES = C_SUFFIXES | {".py", ".json", ".toml", ".md", ".cmake", ".txt", ".yml", ".yaml"}
 TEXT_NAMES = {"CMakeLists.txt", ".gitignore", ".gitmodules", ".editorconfig"}
 # Original raw JSON for these two historical snapshots is retained byte-for-byte.
 # This is neither a source style baseline nor an exclusion of current evidence.

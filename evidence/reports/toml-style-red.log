@@ -1,0 +1,23 @@
+test_owned_toml_configuration_obeys_text_checks (test_style.StyleIntegrationTest.test_owned_toml_configuration_obeys_text_checks) ... FAIL
+test_real_formatter_and_comment_policy (test_style.StyleIntegrationTest.test_real_formatter_and_comment_policy) ... ok
+test_selection_rejects_escape_and_symlink_but_excludes_sdk (test_style.StyleIntegrationTest.test_selection_rejects_escape_and_symlink_but_excludes_sdk) ... ok
+
+======================================================================
+FAIL: test_owned_toml_configuration_obeys_text_checks (test_style.StyleIntegrationTest.test_owned_toml_configuration_obeys_text_checks)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/nexus-examples/scripts/test_style.py", line 63, in test_owned_toml_configuration_obeys_text_checks
+    self.assertEqual(selected, [assembly])
+AssertionError: Lists differ: [] != [PosixPath('/tmp/tmp79swu6_n/native.toml')]
+
+Second list contains 1 additional elements.
+First extra element 0:
+PosixPath('/tmp/tmp79swu6_n/native.toml')
+
+- []
++ [PosixPath('/tmp/tmp79swu6_n/native.toml')]
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.166s
+
+FAILED (failures=1)

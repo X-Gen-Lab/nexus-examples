@@ -1,0 +1,90 @@
+test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) ... 
+  test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='native-debug') ... FAIL
+  test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='stm32-qiming-baremetal') ... FAIL
+  test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='stm32-qiming-freertos') ... FAIL
+  test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='stm32-sky-baremetal') ... FAIL
+  test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='stm32-sky-freertos') ... FAIL
+  test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='gd32-liangshan-baremetal') ... FAIL
+  test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='gd32-liangshan-freertos') ... FAIL
+
+======================================================================
+FAIL: test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='native-debug')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/nexus-examples/scripts/test_assembly.py", line 26, in test_every_visible_preset_selects_one_resolvable_toml_input
+    self.assertEqual(assembly.suffix, ".toml")
+AssertionError: '.json' != '.toml'
+- .json
++ .toml
+
+
+======================================================================
+FAIL: test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='stm32-qiming-baremetal')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/nexus-examples/scripts/test_assembly.py", line 26, in test_every_visible_preset_selects_one_resolvable_toml_input
+    self.assertEqual(assembly.suffix, ".toml")
+AssertionError: '.json' != '.toml'
+- .json
++ .toml
+
+
+======================================================================
+FAIL: test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='stm32-qiming-freertos')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/nexus-examples/scripts/test_assembly.py", line 26, in test_every_visible_preset_selects_one_resolvable_toml_input
+    self.assertEqual(assembly.suffix, ".toml")
+AssertionError: '.json' != '.toml'
+- .json
++ .toml
+
+
+======================================================================
+FAIL: test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='stm32-sky-baremetal')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/nexus-examples/scripts/test_assembly.py", line 26, in test_every_visible_preset_selects_one_resolvable_toml_input
+    self.assertEqual(assembly.suffix, ".toml")
+AssertionError: '.json' != '.toml'
+- .json
++ .toml
+
+
+======================================================================
+FAIL: test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='stm32-sky-freertos')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/nexus-examples/scripts/test_assembly.py", line 26, in test_every_visible_preset_selects_one_resolvable_toml_input
+    self.assertEqual(assembly.suffix, ".toml")
+AssertionError: '.json' != '.toml'
+- .json
++ .toml
+
+
+======================================================================
+FAIL: test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='gd32-liangshan-baremetal')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/nexus-examples/scripts/test_assembly.py", line 26, in test_every_visible_preset_selects_one_resolvable_toml_input
+    self.assertEqual(assembly.suffix, ".toml")
+AssertionError: '.json' != '.toml'
+- .json
++ .toml
+
+
+======================================================================
+FAIL: test_every_visible_preset_selects_one_resolvable_toml_input (test_assembly.ExampleAssemblyTests.test_every_visible_preset_selects_one_resolvable_toml_input) (preset='gd32-liangshan-freertos')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/nexus-examples/scripts/test_assembly.py", line 26, in test_every_visible_preset_selects_one_resolvable_toml_input
+    self.assertEqual(assembly.suffix, ".toml")
+AssertionError: '.json' != '.toml'
+- .json
++ .toml
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=7)

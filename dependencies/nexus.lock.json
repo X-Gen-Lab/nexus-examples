@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "7e7a03edf417c1b033c30a8cd5c34d692423bab4",
-  "tree": "601e89f7510d41e736bd63056865d01911cc7e00",
+  "commit": "e8a6758b0e356646c135f21fd9411f0245740629",
+  "tree": "be82ed3d76fcd237004c3c829ca9693585952f19",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "next-generation common platform; software qualification in candidate evidence; physical HIL not executed",
-  "public_api": "Nexus::Platform / generated fixed typed bindings / explicit OS and common component targets"
+  "baseline_status": "static factory/TOML common platform; integration evidence binds this source; physical HIL not executed",
+  "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

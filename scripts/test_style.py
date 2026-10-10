@@ -60,6 +60,18 @@ class StyleIntegrationTest(unittest.TestCase):
                                 for issue in report["issues"]))
             self.assertEqual((root / historical).read_bytes(), raw)
 
+    def test_owned_toml_configuration_obeys_text_checks(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            assembly = root / "native.toml"
+            assembly.write_bytes(b'schema = 2  \r\n')
+            selected = check_style.select_files(root, ["native.toml"])
+            self.assertEqual(selected, [assembly])
+            with patch.object(check_style, "ROOT", root):
+                report = check_style.check(sdk_root(), selected)
+            self.assertEqual(report["status"], "failed")
+            self.assertTrue(any("require LF" in issue for issue in report["issues"]))
+
 
 if __name__ == "__main__":
     unittest.main()

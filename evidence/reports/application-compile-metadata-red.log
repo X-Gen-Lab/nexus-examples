@@ -1,0 +1,18 @@
+test_native_exports_all_applications_with_sanitizer_instrumentation (test_build_contracts.ApplicationBuildContracts.test_native_exports_all_applications_with_sanitizer_instrumentation) ... FAIL
+
+======================================================================
+FAIL: test_native_exports_all_applications_with_sanitizer_instrumentation (test_build_contracts.ApplicationBuildContracts.test_native_exports_all_applications_with_sanitizer_instrumentation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/nexus-examples/scripts/test_build_contracts.py", line 27, in test_native_exports_all_applications_with_sanitizer_instrumentation
+    self.assertEqual(set(applications), {
+AssertionError: Items in the second set but not the first:
+'sensor_spi'
+'platform_reference'
+'journal'
+'modbus_registers'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.917s
+
+FAILED (failures=1)

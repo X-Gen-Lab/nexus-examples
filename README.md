@@ -3,7 +3,7 @@
 本仓库维护公开应用示例、装配配置和集成验证。Nexus 维护通用平台；客户协议、
 私有产品、密钥、PCB 数据和部署策略由对应产品仓库维护。
 
-当前代码消费新的静态 typed ports：`nexus/core`、`nexus/io`、`nexus/os` 和
+当前代码消费静态 factory 与共享多态接口：`nexus/core`、`nexus/io`、`nexus/os` 和
 `nexus/components`。`nx_platform_start()` 只建立已选择的基础设施，应用自己决定
 任务、组件、资源预算和恢复策略。依赖通过 `external/nexus` Gitlink 和
 [源码锁](dependencies/nexus.lock.json) 固定，最终验收必须与该身份一致。
@@ -42,13 +42,19 @@ ARM 构建还需 SDK 固定的 GNU Arm 工具链，可用
 `external/nexus/scripts/ci/install_arm_toolchain.py --install-dir <目录>` 安装。
 Windows 使用 `.venv/Scripts/python.exe` 并将工具路径加入 PATH。
 
-每个配置使用自己的 `build/<preset>`，唯一配置输入是 `assemblies/*.json`。
-配置器生成有效配置、直接绑定 C、链接脚本和预算，不引入运行时 registry/factory。
+每个配置使用自己的 `build/<preset>`，唯一手写配置输入是 `assemblies/*.toml`。
+配置器生成定型实例、只读接口、factory ID、链接脚本和预算。
+`nx_factory_uart(NX_UART_ID_UART0)` 仅返回静态实例，不分配内存或启动硬件；
+SPI 设备使用 `nx_factory_spi_device`，控制器与外部设备身份分开。
 本仓库有 Native 加三板两后端共七个 preset；ARM 每组产生一个实际链接的 ELF。
 
 提交钩子检查暂存文件的格式、机械注释、文本和 Conventional Commit，不改写或
 暂存源文件。C 格式和注释规则复用固定 SDK，避免复制一套逐渐漂移的规则。
 手动钩子检查工作区；CI 执行完整检查。绕过本地钩子的提交仍由 CI 拒绝。
+
+变更行为先用失败测试定义合同，通过后再重构。Nexus 通用固件合同使用
+GoogleTest／GoogleMock 宿主测试；示例固件保持 C11，目标映像没有测试框架。
+Python 边界测试执行真实配置器，并检查七组 TOML、生成 factory 和报告拒绝逻辑。
 
 本地 `--nexus-source /absolute/path` 只改变 SDK 位置；正式依赖检查仍要求锁、
 Gitlink、tree、干净源码和供应商身份一致。未提交的联合开发可以显式使用临时装配，
