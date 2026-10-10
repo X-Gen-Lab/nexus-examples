@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "e8a6758b0e356646c135f21fd9411f0245740629",
-  "tree": "be82ed3d76fcd237004c3c829ca9693585952f19",
+  "commit": "fb52096a46522b429c4f0eca2d78fddabd86011b",
+  "tree": "c6b16cd16a6054d164c4b273b1f8d21d281d2722",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
   "baseline_status": "static factory/TOML common platform; integration evidence binds this source; physical HIL not executed",
