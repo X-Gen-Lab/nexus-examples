@@ -72,9 +72,28 @@ reclaimed.
 FreeRTOS creation before `vTaskStartScheduler()` has a different meaning: none
 of those static tasks has executed. Rollback uses the public
 `nx_freertos_task_discard_before_scheduler()` in reverse creation order. It does
-not wait for entry completion or call join with a stopped scheduler. Once the
-scheduler is started, this startup protocol rejects the call and the ordinary
-cooperative shutdown retains kernel clocks/Tick.
+not wait for entry completion or call join with a stopped scheduler. The
+`scheduler_started` guard is set before attempting scheduler startup; it does
+not infer whether the kernel is currently running. Once attempted, prestart
+rollback rejects the call. Ordinary cooperative shutdown under a running
+scheduler retains kernel clocks/Tick.
+
+An unexpected return from `vTaskStartScheduler()` enters the explicit terminal
+policy in `scheduler_return.c`. It publishes startup stage 8 and `NX_ERROR_IO`
+before calling the product fail-stop sink. It preserves all application task,
+TCB/stack, notification, accepted-buffer, IRQ and platform storage. Kernel
+startup may already have created its Idle task, masked interrupts, marked itself
+running, installed priorities and configured Tick/FP state. A current
+`NOT_STARTED` observation would not prove that tasks never executed or that
+these effects were undone. The example therefore does not call prestart
+discard, join, platform stop, retry creation or return to the C runtime.
+
+The default terminal sink masks configurable interrupts and invokes the public
+weak FreeRTOS fail-stop hook. It retains clocks and static storage through a
+non-returning product diagnostic/reset action. If an override unexpectedly
+returns, the example remains parked. Safe external outputs and a complete reset
+or scheduler-stop port still require explicit product implementation; this
+policy does not establish hardware safety or reclaim kernel-owned effects.
 
 Successful rollback milestones are not repeated. A failed join, drain, IRQ
 detachment, notification destruction or platform stop retains its effects and
@@ -107,6 +126,11 @@ creates actual Native owner/producer threads, injects a failed next creation,
 and verifies queued settlement, joins and notification destruction. Its 256 KiB
 host stacks serve instrumented host execution, not MCU stack qualification.
 Fresh discovery establishes the current case count.
+`tests/scheduler_return_test.cpp` had two executed RED cases before the terminal
+policy was implemented. The actual C11 policy publishes diagnostic state and
+retains the irreversible guard before a mocked external terminal sink. The
+test sink throws a host-only marker so tests can inspect retained storage; it
+does not execute or simulate the MCU scheduler-start hardware path.
 
 Native CTest executes this fixture and the actual threaded application. The
 GoogleTest runner discovers all cases, executes them without user filters and

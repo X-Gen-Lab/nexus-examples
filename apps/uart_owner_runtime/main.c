@@ -16,6 +16,7 @@
 #include "nexus/components/uart_owner.h"
 #include "nexus_bindings.h"
 #include "nexus_factory.h"
+#include "scheduler_return.h"
 #if defined(NEXUS_BACKEND_NATIVE)
 #include "nexus/io/native/model.h"
 #include "nexus/os/native.h"
@@ -70,6 +71,7 @@ typedef struct {
     example_owner_phase_t phase;
     uint32_t owner_stop;
     uint32_t status;
+    uint32_t scheduler_return_stage;
     size_t reclaimed_notifications;
     example_owner_bootstrap_t bootstrap;
 #if !defined(NEXUS_BACKEND_BAREMETAL)
@@ -471,6 +473,20 @@ static void coordinator_entry(void* context) {
 }
 #endif
 
+#if defined(NEXUS_BACKEND_FREERTOS)
+/** \brief Retain all startup effects through a product-owned terminal hook. */
+static _Noreturn void scheduler_failure_sink(void* context) {
+    (void)context;
+    /* Kernel startup may have configured Tick, priorities and task contexts.
+     * Only a product reset or proved whole-port teardown may reclaim them.
+     */
+    (void)nx_arch_irq_save();
+    nx_freertos_assert_failed(__FILE__, __LINE__);
+    for (;;) {
+    }
+}
+#endif
+
 int main(void) {
     nx_platform_start_result_t startup = nx_platform_start();
     s_application.bootstrap.platform_live =
@@ -544,7 +560,10 @@ int main(void) {
     ++s_application.bootstrap.workers;
     s_application.bootstrap.scheduler_started = true;
     vTaskStartScheduler();
-    return 8;
+    example_owner_scheduler_returned(
+        &s_application.bootstrap, &s_application.status,
+        &s_application.scheduler_return_stage,
+        (example_owner_fail_stop_port_t){NULL, scheduler_failure_sink});
 #else
     for (size_t i = 0; i < PRODUCERS; ++i) {
         producer_submit(&s_application.producer[i]);

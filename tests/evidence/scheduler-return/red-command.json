@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "/workspace/nexus-examples/build/native-debug/tests/owner_lifecycle_test",
+    "--gtest_filter=*",
+    "--gtest_repeat=1",
+    "--gtest_also_run_disabled_tests",
+    "--gtest_output=xml:/workspace/nexus-os-iteration-evidence/examples/scheduler-return/red.xml"
+  ],
+  "exit_code": 1,
+  "started_ns": 1791736468450548021
+}

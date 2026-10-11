@@ -24,8 +24,10 @@ typedef enum {
  *                  use creation-order indices. Retain this record, all objects
  *                  and borrowed bytes after any rollback failure. Native
  * workers may already have submitted requests; unstarted FreeRTOS tasks have
- * never executed. Do not use this protocol after starting the FreeRTOS
- * scheduler; use the normal cooperative shutdown.
+ * never executed. scheduler_started marks the scheduler-start attempt, not a
+ * proved current kernel state. Once attempted, never use prestart rollback:
+ * running tasks use cooperative shutdown; an unexpected scheduler return
+ * retains effects through the terminal scheduler_return policy.
  */
 typedef struct {
     size_t notifications;

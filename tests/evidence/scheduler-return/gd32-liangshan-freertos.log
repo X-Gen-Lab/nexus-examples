@@ -1,0 +1,41 @@
++ cmake --preset gd32-liangshan-freertos -DNEXUS_SOURCE:PATH=/workspace/nexus-examples/external/nexus
+Preset CMake variables:
+
+  CMAKE_BUILD_TYPE="Release"
+  CMAKE_TOOLCHAIN_FILE:FILEPATH="/workspace/nexus-examples/external/nexus/cmake/toolchains/arm-gcc.cmake"
+  NEXUS_ASSEMBLY_FILE="/workspace/nexus-examples/assemblies/liangshan-freertos.toml"
+  NEXUS_BUILD_TESTS="OFF"
+  NEXUS_BUILD_WORKLOAD="OFF"
+
+-- Found Python3: /workspace/nexus-examples/.venv/bin/python3.12 (found suitable version "3.12.14", minimum required is "3.11") found components: Interpreter
+-- Nexus: GD32F470ZGT6/freertos, Os
+-- Sole resolved configuration: /workspace/nexus-examples/build/gd32-liangshan-freertos/nexus/generated/resolved.json
+-- Found Python3: /workspace/nexus-examples/.venv/bin/python3.12 (found version "3.12.14") found components: Interpreter
+-- Configuring done (0.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/nexus-examples/build/gd32-liangshan-freertos
+Exit 0; elapsed 0.436s
++ cmake --build --preset gd32-liangshan-freertos --parallel 1
+[1/20] Building C object nexus/os/freertos/CMakeFiles/nx_freertos_kernel.dir/__/__/ext/freertos/tasks.c.obj
+[2/20] Building C object nexus/os/freertos/CMakeFiles/nx_freertos_kernel.dir/__/__/ext/freertos/queue.c.obj
+[3/20] Building C object nexus/os/freertos/CMakeFiles/nx_freertos_kernel.dir/__/__/ext/freertos/list.c.obj
+[4/20] Building C object nexus/os/freertos/CMakeFiles/nx_freertos_kernel.dir/__/__/ext/freertos/portable/GCC/ARM_CM4F/port.c.obj
+[5/20] Building C object nexus/soc/gd32f470/CMakeFiles/nexus_soc_gd32f470.dir/drivers/gpio.c.obj
+[6/20] Building C object nexus/soc/gd32f470/CMakeFiles/nexus_soc_gd32f470.dir/drivers/uart.c.obj
+[7/20] Building C object nexus/CMakeFiles/nexus_platform.dir/generated/bindings.c.obj
+[8/20] Linking C static library nexus/lib/libnx_freertos_kernel.a
+[9/20] Building C object nexus/os/freertos/CMakeFiles/nexus_os_freertos.dir/freertos.c.obj
+[10/20] Linking C static library nexus/lib/libnexus_soc_gd32f470.a
+[11/20] Building C object CMakeFiles/platform_reference.dir/apps/platform_reference/main.c.obj
+[12/20] Building C object CMakeFiles/uart_owner_runtime.dir/apps/uart_owner_runtime/main.c.obj
+[13/20] Building C object CMakeFiles/uart_owner_runtime.dir/apps/uart_owner_runtime/bootstrap.c.obj
+[14/20] Building C object CMakeFiles/uart_owner_runtime.dir/apps/uart_owner_runtime/scheduler_return.c.obj
+[15/20] Linking C static library nexus/lib/libnexus_platform.a
+[16/20] Building C object nexus/os/freertos/CMakeFiles/nx_freertos_hooks.dir/hooks.c.obj
+[17/20] Linking C static library nexus/lib/libnexus_os_freertos.a
+[18/20] Building C object nexus/os/freertos/CMakeFiles/nx_freertos_optional_hooks.dir/lowpower.c.obj
+[19/20] Linking C executable bin/platform_reference.elf
+ELF budget: passed
+[20/20] Linking C executable bin/uart_owner_runtime.elf
+ELF budget: passed
+Exit 0; elapsed 1.273s

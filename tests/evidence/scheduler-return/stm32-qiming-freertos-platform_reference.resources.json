@@ -1,0 +1,116 @@
+{
+  "board": "stm32f407zg-qiming-v31",
+  "budget": {
+    "path": "/workspace/nexus-examples/build/stm32-qiming-freertos/nexus/generated/resource-budget.json",
+    "sha256": "a62f7fad79c1b379afcc7f8cefa0fc059ec01d238ca1f9b82f20c2bfc084970f",
+    "size": 184
+  },
+  "configuration_inputs": [
+    {
+      "file": {
+        "path": "/workspace/nexus-examples/assemblies/qiming-freertos.toml",
+        "sha256": "3ef8d01677d51fc193ebd5e63cd9b2f9fb5f13178af425121b5c7114ef4681ed",
+        "size": 434
+      },
+      "label": "external/qiming-freertos.toml"
+    },
+    {
+      "file": {
+        "path": "/workspace/nexus-examples/external/nexus/boards/stm32f407_qiming_v31/board.json",
+        "sha256": "b9afd240f0d50996139c4e2147a3760babd18a5780629bc5cb3e4af4939598c9",
+        "size": 1870
+      },
+      "label": "boards/stm32f407_qiming_v31/board.json"
+    },
+    {
+      "file": {
+        "path": "/workspace/nexus-examples/external/nexus/soc/stm32f407/routes.json",
+        "sha256": "68f05674a57de6bb76cc166a35df6aa3fa1f48026c78b526f59795a26ce9cc39",
+        "size": 7595
+      },
+      "label": "soc/stm32f407/routes.json"
+    },
+    {
+      "file": {
+        "path": "/workspace/nexus-examples/external/nexus/soc/stm32f407/soc.json",
+        "sha256": "b828f8f0d0ada4b48bba5140848d8949cff79f752a8e66ff7634b45cd2eec1c6",
+        "size": 5813
+      },
+      "label": "soc/stm32f407/soc.json"
+    }
+  ],
+  "elf": {
+    "path": "/workspace/nexus-examples/build/stm32-qiming-freertos/bin/platform_reference.elf",
+    "sha256": "67f620a8aca09d7e747a3227e046a4e6ed9a9e2c807c79ecff5ad36cfe5d01a6",
+    "size": 31280
+  },
+  "kind": "elf_resource_budget",
+  "metrics": {
+    "accounting": "LOAD physical file bytes include RAM initialization; RAM is allocated-section/reservation interval union, excluding unallocated segment address gaps and never adding MSP/heap twice",
+    "cycles_latency": "not_measured",
+    "dynamic_high_water": "not_measured",
+    "flash": {
+      "capacity_bytes": 1048576,
+      "footprint_bytes": 11304,
+      "loaded_bytes": 11304,
+      "ranges": [
+        [
+          134217728,
+          134229032
+        ]
+      ]
+    },
+    "ram": {
+      "ccm": {
+        "capacity_bytes": 65536,
+        "linker_supported": false,
+        "ranges": [],
+        "reserved_bytes": 0
+      },
+      "sram": {
+        "capacity_bytes": 131072,
+        "linker_supported": true,
+        "ranges": [
+          [
+            536870912,
+            536870956
+          ],
+          [
+            536870960,
+            536873720
+          ],
+          [
+            536999936,
+            537001984
+          ]
+        ],
+        "reserved_bytes": 4852
+      }
+    },
+    "reservations": {
+      "heap": {
+        "bytes": 0,
+        "domain": "sram",
+        "end": 536873720,
+        "start": 536873720
+      },
+      "msp": {
+        "bytes": 2048,
+        "domain": "sram",
+        "end": 537001984,
+        "start": 536999936
+      }
+    }
+  },
+  "part": "STM32F407ZGT6",
+  "physical_status": "not_executed",
+  "resolved": {
+    "path": "/workspace/nexus-examples/build/stm32-qiming-freertos/nexus/generated/resolved.json",
+    "sha256": "c0b01ddd7ab840718a8d4f374e4d94ae4043cc68851ec3a5541c70004cd6fb68",
+    "size": 16986
+  },
+  "schema_version": 1,
+  "soc_family": "stm32f407",
+  "status": "passed",
+  "violations": []
+}
