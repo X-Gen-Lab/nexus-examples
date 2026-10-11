@@ -57,3 +57,20 @@ add_test(NAME owner_lifecycle_google COMMAND "${Python3_EXECUTABLE}" -B
     --output "${CMAKE_CURRENT_BINARY_DIR}/google-execution")
 set_tests_properties(owner_lifecycle_google PROPERTIES TIMEOUT 30
     LABELS "native;example;GoogleTest")
+
+add_executable(product_fault_policy_test fault_policy_test.cpp
+    "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime/fault_policy.c"
+    "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime/fault_observer.c")
+target_include_directories(product_fault_policy_test PRIVATE
+    "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime")
+target_compile_features(product_fault_policy_test PRIVATE cxx_std_17)
+set_target_properties(product_fault_policy_test PROPERTIES CXX_EXTENSIONS OFF)
+target_link_libraries(product_fault_policy_test PRIVATE Nexus::Core Nexus::Arch
+    GTest::gmock_main nexus_owned_warnings nexus_build_options)
+add_test(NAME product_fault_policy_google COMMAND "${Python3_EXECUTABLE}" -B
+    "${PROJECT_SOURCE_DIR}/scripts/run_google.py"
+    --nexus-source "${NEXUS_SOURCE}"
+    --binary "$<TARGET_FILE:product_fault_policy_test>"
+    --output "${CMAKE_CURRENT_BINARY_DIR}/fault-google-execution")
+set_tests_properties(product_fault_policy_google PROPERTIES TIMEOUT 30
+    LABELS "native;example;GoogleTest")

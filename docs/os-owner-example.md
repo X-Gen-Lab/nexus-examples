@@ -110,12 +110,62 @@ running, installed priorities and configured Tick/FP state. A current
 these effects were undone. The example therefore does not call prestart
 discard, join, platform stop, retry creation or return to the C runtime.
 
-The default terminal sink masks configurable interrupts and invokes the public
-weak FreeRTOS fail-stop hook. It retains clocks and static storage through a
-non-returning product diagnostic/reset action. If an override unexpectedly
-returns, the example remains parked. Safe external outputs and a complete reset
-or scheduler-stop port still require explicit product implementation; this
-policy does not establish hardware safety or reclaim kernel-owned effects.
+The terminal sink calls the public Core fault observer before masking and
+invoking the weak FreeRTOS terminal hook. A returning observer does not allow
+scheduler progress or reclaim storage. A direct strong FreeRTOS terminal override
+must retain observation and never return. The SDK kernel ceiling does not prove
+that DMA, NMI or external outputs are quiescent.
+
+`fault_observer.c` supplies an actual strong `nx_fault_observe` implementation.
+It forwards scalar origin/reason/line to the application's static
+`example_fault_policy_t` without reading an unknown filename or using an OS lock.
+Recovery escalation and unexpected scheduler return both reach this observer;
+these paths retain loans and expose the same first-fault record.
+
+The policy claims the first fault, release-publishes its diagnostics, then calls
+an explicitly bound product output port. Nested reporting returns BUSY; a later
+report cannot replay output actions or replace the first reason. A concurrent
+snapshot during the action reports BUSY for the output result without reading
+the later result store. Diagnostic storage and the port/context must remain
+valid even before main and throughout terminal reporting; initialization is
+serialized cold composition. Lock-free atomic operations do not establish a
+physical worst-case execution bound or operation after stack corruption.
+The explicit Cortex-M4 `-fshort-enums -Os` object probe measured 24 bytes for
+the product record and 12 bytes for a snapshot. These are caller-owned ABI
+measurements; other compiler ABIs may differ. The Core weak observer itself
+retains no state.
+
+The example binds an explicit action returning UNSUPPORTED and performs no
+GPIO operation. An absent or failed output action remains UNPROVEN. Product
+engineers must replace the binding with reviewed actions for their actual PCB,
+transceiver and safe levels, then measure and accept them on hardware. A callback
+returning SUCCESS only reports software execution, not electrical safety. The
+port must preserve incoming masks, use no allocation/OS lock, and neither reset,
+retry nor release requests. Reset and safety policies remain product decisions.
+
+`tests/fault_policy_test.cpp` executes the actual policy and strong observer with
+a mocked external output action. Seven cases had a real RED before implementation
+and a subsequent complete GREEN. They check publication before action, retained
+ACTIVE request after absent/failed action, duplicate/nested suppression, invalid
+snapshot rejection and unknown filename handling. Development tests consume the
+explicit current source SDK; final committed SDK pin, full CTest and MCU image
+qualification require the separate integration gate. No physical safety result is
+claimed.
+
+Fault reporting does not normalize the incoming context. An observer may run
+with interrupts already masked, from an ISR, or from an unprivileged failing
+caller. Product output actions must be valid in the actual caller context and
+must not weaken masks. A record published successfully does not prove that the
+clock, stack, kernel or transport is healthy. An unbound output action stays
+UNPROVEN, and external recovery must first establish the retained publishers
+and loans rather than treating a diagnostic or timeout as ownership return.
+
+The current committed SDK pin predates this Core observer API. Its complete
+Native build is expected to reject the new source until the coordinated pin
+update; this is an integration boundary, not a skipped contract. Existing
+development RED/GREEN evidence is retained unchanged. Current-pin checks and the
+required final matrix are separated in
+[delivery preparation](delivery-preparation.md).
 
 Successful rollback milestones are not repeated. A failed join, drain, IRQ
 detachment, notification destruction or platform stop retains its effects and

@@ -22,6 +22,6 @@ repos:
         language: python
         additional_dependencies: [PyYAML==6.0.3]
         stages: [pre-commit]
-        pass_filenames: true
+        pass_filenames: false
         always_run: true
         require_serial: true

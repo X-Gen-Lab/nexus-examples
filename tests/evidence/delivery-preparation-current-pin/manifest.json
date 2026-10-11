@@ -1,0 +1,1097 @@
+{
+  "schema_version": 1,
+  "kind": "example_current_pin_preparation",
+  "status": "partial_passed_complete_build_blocked",
+  "qualifies_candidate": false,
+  "qualifies_final_sdk": false,
+  "physical": "not_executed",
+  "sdk_pin": {
+    "schema_version": 1,
+    "repository": "https://github.com/X-Gen-Lab/nexus.git",
+    "commit": "6fc1ed75ba4e13d53c5b93c15ebaa73baaae9a21",
+    "tree": "069604a85d8c4dfa075fabe2daae133a37e690fd",
+    "consumption": "source-add_subdirectory",
+    "recursive_submodules": true,
+    "baseline_status": "static factory/TOML common platform with explicit OS services and opt-in security profiles; integration evidence binds this source; physical HIL not executed",
+    "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
+  },
+  "sdk_pin_modified": false,
+  "git_mutation_performed": false,
+  "source_before": {
+    ".pre-commit-config.yaml": {
+      "path": "/workspace/nexus-examples/.pre-commit-config.yaml",
+      "sha256": "777cb792e63441ce094daefcdd5eff757a536c4e3dedd36b2b6885b81bb75b40",
+      "bytes": 946
+    },
+    "AGENTS.md": {
+      "path": "/workspace/nexus-examples/AGENTS.md",
+      "sha256": "7d576316b99e740eaec54801664a4fe6697c152566bb6d0e254e333cf9522435",
+      "bytes": 3239
+    },
+    "CMakeLists.txt": {
+      "path": "/workspace/nexus-examples/CMakeLists.txt",
+      "sha256": "aa2b66ddc022d9ffb569a3b3b65cfd508bdf19970a9b1cb5b3113cfbdbb183eb",
+      "bytes": 2364
+    },
+    "CMakePresets.json": {
+      "path": "/workspace/nexus-examples/CMakePresets.json",
+      "sha256": "32a240ac76462973970431d5005a9616ace6e3934249e81d21fdd94d08d17c4d",
+      "bytes": 4891
+    },
+    "apps/journal/main.c": {
+      "path": "/workspace/nexus-examples/apps/journal/main.c",
+      "sha256": "3438df78682e4476de6515062699969174d93b93647b2543c66db9794aa81a47",
+      "bytes": 1810
+    },
+    "apps/modbus_registers/main.c": {
+      "path": "/workspace/nexus-examples/apps/modbus_registers/main.c",
+      "sha256": "1fa8c3144c96e89accc3bb2346a6fa73514fc9b711963eed167d27776d70479a",
+      "bytes": 10508
+    },
+    "apps/platform_reference/main.c": {
+      "path": "/workspace/nexus-examples/apps/platform_reference/main.c",
+      "sha256": "ae9ca74c27ecaf42d4f8a8f2048f068aad7f325f4eff40e95c8c33ea3ba7430d",
+      "bytes": 4893
+    },
+    "apps/sensor_spi/main.c": {
+      "path": "/workspace/nexus-examples/apps/sensor_spi/main.c",
+      "sha256": "23a2bf7b42d938c536fc54499e76752878bdbf936ca95232d91c9841c671ca41",
+      "bytes": 2944
+    },
+    "apps/uart_owner_runtime/backend_policy.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/backend_policy.h",
+      "sha256": "7178eb0fee12ee3f3ef3b93703f6902dddaa0e5c94ad1a9aaa49414125dcfb3c",
+      "bytes": 726
+    },
+    "apps/uart_owner_runtime/bootstrap.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/bootstrap.c",
+      "sha256": "1f8695077fc3215720572239c751285ccd08bbae5835db3f68fbbadc522fe99a",
+      "bytes": 2216
+    },
+    "apps/uart_owner_runtime/bootstrap.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/bootstrap.h",
+      "sha256": "37ecb0807b0692eb39e5ab942c58d7382115f4f0a7e9601f881efbfb47f07e35",
+      "bytes": 3494
+    },
+    "apps/uart_owner_runtime/fault_observer.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/fault_observer.c",
+      "sha256": "a9ce3b169e7980fa1ce8c2d5f3c27011703ab3413848dca2b8fc325fd9b3e034",
+      "bytes": 645
+    },
+    "apps/uart_owner_runtime/fault_policy.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/fault_policy.c",
+      "sha256": "3a99c3dd998d03c49412c5050d7fc391241531b8f5847fd120e69a8c4cfb1416",
+      "bytes": 3126
+    },
+    "apps/uart_owner_runtime/fault_policy.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/fault_policy.h",
+      "sha256": "2eaf6864777ed255309c181a22dcb1ae920a9bb0545f26df292e9e8758c2f01e",
+      "bytes": 3740
+    },
+    "apps/uart_owner_runtime/lifecycle.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/lifecycle.c",
+      "sha256": "71ebb17908cd5bbbf8cf04006fd2e64279f9b918193678d503c3b5d472ef12a4",
+      "bytes": 2637
+    },
+    "apps/uart_owner_runtime/lifecycle.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/lifecycle.h",
+      "sha256": "218624b586b3a2ee0c3f0ff822f496552390932a12e005ab213aac0e448c6b41",
+      "bytes": 3748
+    },
+    "apps/uart_owner_runtime/main.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/main.c",
+      "sha256": "ef1dee0cc1e6c501b5c9c9edc81b382355e1ec10b1eb487ba22fed253a57d9e8",
+      "bytes": 23123
+    },
+    "apps/uart_owner_runtime/quarantine_policy.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/quarantine_policy.c",
+      "sha256": "02f392133ccd975e2efe124a34fc2eea6c3a7211d800e72ceeb7732c79cc7f83",
+      "bytes": 4700
+    },
+    "apps/uart_owner_runtime/quarantine_policy.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/quarantine_policy.h",
+      "sha256": "b8f745323235f699ac4a3c9504a87b493ff26a5ecdf176a23e5c676e42805436",
+      "bytes": 3194
+    },
+    "apps/uart_owner_runtime/scheduler_return.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/scheduler_return.c",
+      "sha256": "a3721ecaa562b7a6a1e7f8deac625f17fbe145f6beb0e966f6087016759261c7",
+      "bytes": 980
+    },
+    "apps/uart_owner_runtime/scheduler_return.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/scheduler_return.h",
+      "sha256": "371026ea639fa67d62cc5a4ef5219ae692fc93ff6ba1b418eeed7c016bf78585",
+      "bytes": 2242
+    },
+    "assemblies/liangshan-baremetal.toml": {
+      "path": "/workspace/nexus-examples/assemblies/liangshan-baremetal.toml",
+      "sha256": "f4dc27528516ca45ab45d10a007a4bb1a8fd9bd34d5e3f6ad983d4ea0cf678a4",
+      "bytes": 444
+    },
+    "assemblies/liangshan-freertos.toml": {
+      "path": "/workspace/nexus-examples/assemblies/liangshan-freertos.toml",
+      "sha256": "31559473cdd61bb1d55119ac0890b17e3c3720912b9a4578507f2c5bc9cc17f2",
+      "bytes": 443
+    },
+    "assemblies/native.toml": {
+      "path": "/workspace/nexus-examples/assemblies/native.toml",
+      "sha256": "421051f44856f4b7e7c66b33bda05d044754dceb331ea4a1e944e6603988fe60",
+      "bytes": 587
+    },
+    "assemblies/qiming-baremetal.toml": {
+      "path": "/workspace/nexus-examples/assemblies/qiming-baremetal.toml",
+      "sha256": "a5321b50d4534af1d295122be3377fc0d605870e2a6fd18c77d4be0eab7fb24b",
+      "bytes": 435
+    },
+    "assemblies/qiming-freertos.toml": {
+      "path": "/workspace/nexus-examples/assemblies/qiming-freertos.toml",
+      "sha256": "3ef8d01677d51fc193ebd5e63cd9b2f9fb5f13178af425121b5c7114ef4681ed",
+      "bytes": 434
+    },
+    "assemblies/sky-baremetal.toml": {
+      "path": "/workspace/nexus-examples/assemblies/sky-baremetal.toml",
+      "sha256": "aa98b6ed6ff92ec4f556ec5bea08e5d15c35ce802e5e42ffaa0fd48b98329cd0",
+      "bytes": 439
+    },
+    "assemblies/sky-freertos.toml": {
+      "path": "/workspace/nexus-examples/assemblies/sky-freertos.toml",
+      "sha256": "4916aae246b035b0c97a37b92a93e9f28de929278b8de4cf84c8bc6011a7162d",
+      "bytes": 438
+    },
+    "dependencies/nexus.lock.json": {
+      "path": "/workspace/nexus-examples/dependencies/nexus.lock.json",
+      "sha256": "301d790d1e2552b46bb03dd3ce57efd6795ed7c51a976790b6af495b4f587cd7",
+      "bytes": 571
+    },
+    "docs/boards.md": {
+      "path": "/workspace/nexus-examples/docs/boards.md",
+      "sha256": "8b7c9ee24c12c77a8d0426409b903737027f221fb8d6e4730bb3ecf70f357944",
+      "bytes": 1882
+    },
+    "docs/build-integration.md": {
+      "path": "/workspace/nexus-examples/docs/build-integration.md",
+      "sha256": "32602ae2b467bfac358e53f6fe80f1b56b1d55d8106469d0b3edb8894e30507c",
+      "bytes": 2799
+    },
+    "docs/component-examples.md": {
+      "path": "/workspace/nexus-examples/docs/component-examples.md",
+      "sha256": "6d81f052f5492d9183ec1a6e567dda4f469212f43759a3a0e01d9e92c58f35e8",
+      "bytes": 1763
+    },
+    "docs/delivery.md": {
+      "path": "/workspace/nexus-examples/docs/delivery.md",
+      "sha256": "d0f52a890cab5f927d17ebaf1b270d25b0c0b9ebcd4c7cc4421db126262525e2",
+      "bytes": 1162
+    },
+    "docs/examples-roadmap.md": {
+      "path": "/workspace/nexus-examples/docs/examples-roadmap.md",
+      "sha256": "72f58fc687a39b3f23af531377e712a9184ba997a73ff8388fc116b658cbe1d3",
+      "bytes": 1636
+    },
+    "docs/os-owner-example.md": {
+      "path": "/workspace/nexus-examples/docs/os-owner-example.md",
+      "sha256": "907f1f504b72fc5d55937e396df8c6be414b068cd2b74b81092c2c7116817fa3",
+      "bytes": 13245
+    },
+    "docs/platform-refactor-plan.md": {
+      "path": "/workspace/nexus-examples/docs/platform-refactor-plan.md",
+      "sha256": "fda726f15c9c7eb5a1b2e2db51941942eb3474507043c38782970d3d567bf8f1",
+      "bytes": 53156
+    },
+    "docs/refactor-validation.md": {
+      "path": "/workspace/nexus-examples/docs/refactor-validation.md",
+      "sha256": "8db1e7c59cb14791d7aeb04db039e505bf0cd93d7e75562e6c50c7971cc5b736",
+      "bytes": 2353
+    },
+    "docs/requirements/README.md": {
+      "path": "/workspace/nexus-examples/docs/requirements/README.md",
+      "sha256": "0f2b5e7a3a265a4cf86c468b4e86c1be33431db65d1f44f04f44ba19fa9b7cf9",
+      "bytes": 1166
+    },
+    "docs/requirements/industrial-reference.json": {
+      "path": "/workspace/nexus-examples/docs/requirements/industrial-reference.json",
+      "sha256": "5ff3a306adf7d8c9d376622df803340bec060e28b25135cf21f1d987f45499ae",
+      "bytes": 4724
+    },
+    "docs/spi-example.md": {
+      "path": "/workspace/nexus-examples/docs/spi-example.md",
+      "sha256": "59a56cc4aaade29e24f5c6b928d24ad12a45dd8e7c5ea22a091a29de3e40a711",
+      "bytes": 1057
+    },
+    "docs/validation.md": {
+      "path": "/workspace/nexus-examples/docs/validation.md",
+      "sha256": "1a071a885019f07ef187e042f2c7a005bb6cf4932b9f935ebfbc391a021e762f",
+      "bytes": 4834
+    },
+    "scripts/build.py": {
+      "path": "/workspace/nexus-examples/scripts/build.py",
+      "sha256": "849c43b3d3ba964318ce2b560df1a09bee1e8259b3a69b734617eb52531e897c",
+      "bytes": 3837
+    },
+    "scripts/check_commit_message.py": {
+      "path": "/workspace/nexus-examples/scripts/check_commit_message.py",
+      "sha256": "364bc2f270e404941838aca7537cf353a17b12c840d38816d711145f790f0276",
+      "bytes": 459
+    },
+    "scripts/check_style.py": {
+      "path": "/workspace/nexus-examples/scripts/check_style.py",
+      "sha256": "3f548a5415b25d646db0144cd9bf2a9cb1ddd42ed11f21dcef6aca5500851810",
+      "bytes": 6290
+    },
+    "scripts/run_google.py": {
+      "path": "/workspace/nexus-examples/scripts/run_google.py",
+      "sha256": "a2b6dae8e529e4d87415cff866119cf55c8dd11f0feff3f5f00a54f966832f82",
+      "bytes": 4997
+    },
+    "scripts/sdk_tools.py": {
+      "path": "/workspace/nexus-examples/scripts/sdk_tools.py",
+      "sha256": "09a1b8b076f4164d5f0d540bf29d645ae0857ba8fb4a150ae8212ef2e30c5a66",
+      "bytes": 875
+    },
+    "scripts/setup_dev_tools.py": {
+      "path": "/workspace/nexus-examples/scripts/setup_dev_tools.py",
+      "sha256": "06b65b31a6351317fbbd5e17702c3312c37a290b3a679560f8613c0be64c3bcd",
+      "bytes": 1862
+    },
+    "scripts/tdd_gate.py": {
+      "path": "/workspace/nexus-examples/scripts/tdd_gate.py",
+      "sha256": "ae99a9eff06dea1f9d8b804b8e6beddd5ea63670568b356a169a68cff86d785d",
+      "bytes": 10130
+    },
+    "scripts/test_assembly.py": {
+      "path": "/workspace/nexus-examples/scripts/test_assembly.py",
+      "sha256": "ada0369fc0e4d4a4adb03af6f7b9e8e3b5e23d5c1ff503966191dda85f104cca",
+      "bytes": 2059
+    },
+    "scripts/test_build.py": {
+      "path": "/workspace/nexus-examples/scripts/test_build.py",
+      "sha256": "057d65bd60ef402d97aabaf2f3afa349d8fa22e6a9b408268e26c454ce9db807",
+      "bytes": 3412
+    },
+    "scripts/test_build_contracts.py": {
+      "path": "/workspace/nexus-examples/scripts/test_build_contracts.py",
+      "sha256": "a88c3eede059e311f800cc71b6eed86aa6db4d138583ce9742a9f10bd2daae2f",
+      "bytes": 1800
+    },
+    "scripts/test_candidate_sdk.py": {
+      "path": "/workspace/nexus-examples/scripts/test_candidate_sdk.py",
+      "sha256": "e8e88028b19a917a123e170021a8e5b4720a3297a5534aa399f3e8b13aa2122d",
+      "bytes": 7116
+    },
+    "scripts/test_repository.py": {
+      "path": "/workspace/nexus-examples/scripts/test_repository.py",
+      "sha256": "fd63965a7cd73b73fbd3646a1662d0eed9056a5e60176a8be3c88408094ad27e",
+      "bytes": 10571
+    },
+    "scripts/test_run_google.py": {
+      "path": "/workspace/nexus-examples/scripts/test_run_google.py",
+      "sha256": "0fe895db1981e2ea2334a247cf8d211f1399e4ec4c5f5c77f6e4b720c54d64f3",
+      "bytes": 3872
+    },
+    "scripts/test_style.py": {
+      "path": "/workspace/nexus-examples/scripts/test_style.py",
+      "sha256": "e1201f76e7b86f9f0955be757705f699f8a46e9bec412bf8b501199a579216cc",
+      "bytes": 3964
+    },
+    "scripts/test_tdd_gate.py": {
+      "path": "/workspace/nexus-examples/scripts/test_tdd_gate.py",
+      "sha256": "5c9f451015b3e42ef24a2ce82e57e2a2c729010b50016988c0961098dbc5f970",
+      "bytes": 12446
+    },
+    "scripts/test_workflow.py": {
+      "path": "/workspace/nexus-examples/scripts/test_workflow.py",
+      "sha256": "6b1ac74775c746e2a7ad1904122b98fd22cceb51b98ce2ac237621c148883e74",
+      "bytes": 2882
+    },
+    "tests/CMakeLists.txt": {
+      "path": "/workspace/nexus-examples/tests/CMakeLists.txt",
+      "sha256": "67a294a94989360ec6a1f4ce20687b5264aa84d4ca3faec4b77ac5aeefd66fc7",
+      "bytes": 4229
+    },
+    "tests/backend_policy.c": {
+      "path": "/workspace/nexus-examples/tests/backend_policy.c",
+      "sha256": "297f6fabbfd33aefb04610f97c355ea769e613a053701148a17c6adb34ddcd2f",
+      "bytes": 476
+    },
+    "tests/fault_policy_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/fault_policy_test.cpp",
+      "sha256": "a49b8acbc491f71441a1440566fb8c07527436b69a81809a7268f662341c93bb",
+      "bytes": 6725
+    },
+    "tests/owner_bootstrap_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/owner_bootstrap_test.cpp",
+      "sha256": "2e582d592bc5948cd103125b01493ce9cead23025c480ce2a029079b74add2f1",
+      "bytes": 12644
+    },
+    "tests/owner_lifecycle_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/owner_lifecycle_test.cpp",
+      "sha256": "7566c146b029c9b6dd3d7a4cc764ce978f5c698487f29888d058dd7e8c5c961b",
+      "bytes": 8582
+    },
+    "tests/quarantine_policy_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/quarantine_policy_test.cpp",
+      "sha256": "662db6c55442db4e1863403853612953d603bac3a32565c0296f0c979ac704b0",
+      "bytes": 8441
+    },
+    "tests/scheduler_return_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/scheduler_return_test.cpp",
+      "sha256": "320177da30d05de88dc3293b03a72eb5800735522da57f15204358e2cc0b9a2e",
+      "bytes": 2768
+    }
+  },
+  "source_after_execution": {
+    ".pre-commit-config.yaml": {
+      "path": "/workspace/nexus-examples/.pre-commit-config.yaml",
+      "sha256": "777cb792e63441ce094daefcdd5eff757a536c4e3dedd36b2b6885b81bb75b40",
+      "bytes": 946
+    },
+    "AGENTS.md": {
+      "path": "/workspace/nexus-examples/AGENTS.md",
+      "sha256": "7d576316b99e740eaec54801664a4fe6697c152566bb6d0e254e333cf9522435",
+      "bytes": 3239
+    },
+    "CMakeLists.txt": {
+      "path": "/workspace/nexus-examples/CMakeLists.txt",
+      "sha256": "aa2b66ddc022d9ffb569a3b3b65cfd508bdf19970a9b1cb5b3113cfbdbb183eb",
+      "bytes": 2364
+    },
+    "CMakePresets.json": {
+      "path": "/workspace/nexus-examples/CMakePresets.json",
+      "sha256": "32a240ac76462973970431d5005a9616ace6e3934249e81d21fdd94d08d17c4d",
+      "bytes": 4891
+    },
+    "apps/journal/main.c": {
+      "path": "/workspace/nexus-examples/apps/journal/main.c",
+      "sha256": "3438df78682e4476de6515062699969174d93b93647b2543c66db9794aa81a47",
+      "bytes": 1810
+    },
+    "apps/modbus_registers/main.c": {
+      "path": "/workspace/nexus-examples/apps/modbus_registers/main.c",
+      "sha256": "1fa8c3144c96e89accc3bb2346a6fa73514fc9b711963eed167d27776d70479a",
+      "bytes": 10508
+    },
+    "apps/platform_reference/main.c": {
+      "path": "/workspace/nexus-examples/apps/platform_reference/main.c",
+      "sha256": "ae9ca74c27ecaf42d4f8a8f2048f068aad7f325f4eff40e95c8c33ea3ba7430d",
+      "bytes": 4893
+    },
+    "apps/sensor_spi/main.c": {
+      "path": "/workspace/nexus-examples/apps/sensor_spi/main.c",
+      "sha256": "23a2bf7b42d938c536fc54499e76752878bdbf936ca95232d91c9841c671ca41",
+      "bytes": 2944
+    },
+    "apps/uart_owner_runtime/backend_policy.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/backend_policy.h",
+      "sha256": "7178eb0fee12ee3f3ef3b93703f6902dddaa0e5c94ad1a9aaa49414125dcfb3c",
+      "bytes": 726
+    },
+    "apps/uart_owner_runtime/bootstrap.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/bootstrap.c",
+      "sha256": "1f8695077fc3215720572239c751285ccd08bbae5835db3f68fbbadc522fe99a",
+      "bytes": 2216
+    },
+    "apps/uart_owner_runtime/bootstrap.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/bootstrap.h",
+      "sha256": "37ecb0807b0692eb39e5ab942c58d7382115f4f0a7e9601f881efbfb47f07e35",
+      "bytes": 3494
+    },
+    "apps/uart_owner_runtime/fault_observer.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/fault_observer.c",
+      "sha256": "a9ce3b169e7980fa1ce8c2d5f3c27011703ab3413848dca2b8fc325fd9b3e034",
+      "bytes": 645
+    },
+    "apps/uart_owner_runtime/fault_policy.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/fault_policy.c",
+      "sha256": "3a99c3dd998d03c49412c5050d7fc391241531b8f5847fd120e69a8c4cfb1416",
+      "bytes": 3126
+    },
+    "apps/uart_owner_runtime/fault_policy.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/fault_policy.h",
+      "sha256": "2eaf6864777ed255309c181a22dcb1ae920a9bb0545f26df292e9e8758c2f01e",
+      "bytes": 3740
+    },
+    "apps/uart_owner_runtime/lifecycle.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/lifecycle.c",
+      "sha256": "71ebb17908cd5bbbf8cf04006fd2e64279f9b918193678d503c3b5d472ef12a4",
+      "bytes": 2637
+    },
+    "apps/uart_owner_runtime/lifecycle.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/lifecycle.h",
+      "sha256": "218624b586b3a2ee0c3f0ff822f496552390932a12e005ab213aac0e448c6b41",
+      "bytes": 3748
+    },
+    "apps/uart_owner_runtime/main.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/main.c",
+      "sha256": "ef1dee0cc1e6c501b5c9c9edc81b382355e1ec10b1eb487ba22fed253a57d9e8",
+      "bytes": 23123
+    },
+    "apps/uart_owner_runtime/quarantine_policy.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/quarantine_policy.c",
+      "sha256": "02f392133ccd975e2efe124a34fc2eea6c3a7211d800e72ceeb7732c79cc7f83",
+      "bytes": 4700
+    },
+    "apps/uart_owner_runtime/quarantine_policy.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/quarantine_policy.h",
+      "sha256": "b8f745323235f699ac4a3c9504a87b493ff26a5ecdf176a23e5c676e42805436",
+      "bytes": 3194
+    },
+    "apps/uart_owner_runtime/scheduler_return.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/scheduler_return.c",
+      "sha256": "a3721ecaa562b7a6a1e7f8deac625f17fbe145f6beb0e966f6087016759261c7",
+      "bytes": 980
+    },
+    "apps/uart_owner_runtime/scheduler_return.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/scheduler_return.h",
+      "sha256": "371026ea639fa67d62cc5a4ef5219ae692fc93ff6ba1b418eeed7c016bf78585",
+      "bytes": 2242
+    },
+    "assemblies/liangshan-baremetal.toml": {
+      "path": "/workspace/nexus-examples/assemblies/liangshan-baremetal.toml",
+      "sha256": "f4dc27528516ca45ab45d10a007a4bb1a8fd9bd34d5e3f6ad983d4ea0cf678a4",
+      "bytes": 444
+    },
+    "assemblies/liangshan-freertos.toml": {
+      "path": "/workspace/nexus-examples/assemblies/liangshan-freertos.toml",
+      "sha256": "31559473cdd61bb1d55119ac0890b17e3c3720912b9a4578507f2c5bc9cc17f2",
+      "bytes": 443
+    },
+    "assemblies/native.toml": {
+      "path": "/workspace/nexus-examples/assemblies/native.toml",
+      "sha256": "421051f44856f4b7e7c66b33bda05d044754dceb331ea4a1e944e6603988fe60",
+      "bytes": 587
+    },
+    "assemblies/qiming-baremetal.toml": {
+      "path": "/workspace/nexus-examples/assemblies/qiming-baremetal.toml",
+      "sha256": "a5321b50d4534af1d295122be3377fc0d605870e2a6fd18c77d4be0eab7fb24b",
+      "bytes": 435
+    },
+    "assemblies/qiming-freertos.toml": {
+      "path": "/workspace/nexus-examples/assemblies/qiming-freertos.toml",
+      "sha256": "3ef8d01677d51fc193ebd5e63cd9b2f9fb5f13178af425121b5c7114ef4681ed",
+      "bytes": 434
+    },
+    "assemblies/sky-baremetal.toml": {
+      "path": "/workspace/nexus-examples/assemblies/sky-baremetal.toml",
+      "sha256": "aa98b6ed6ff92ec4f556ec5bea08e5d15c35ce802e5e42ffaa0fd48b98329cd0",
+      "bytes": 439
+    },
+    "assemblies/sky-freertos.toml": {
+      "path": "/workspace/nexus-examples/assemblies/sky-freertos.toml",
+      "sha256": "4916aae246b035b0c97a37b92a93e9f28de929278b8de4cf84c8bc6011a7162d",
+      "bytes": 438
+    },
+    "dependencies/nexus.lock.json": {
+      "path": "/workspace/nexus-examples/dependencies/nexus.lock.json",
+      "sha256": "301d790d1e2552b46bb03dd3ce57efd6795ed7c51a976790b6af495b4f587cd7",
+      "bytes": 571
+    },
+    "docs/boards.md": {
+      "path": "/workspace/nexus-examples/docs/boards.md",
+      "sha256": "8b7c9ee24c12c77a8d0426409b903737027f221fb8d6e4730bb3ecf70f357944",
+      "bytes": 1882
+    },
+    "docs/build-integration.md": {
+      "path": "/workspace/nexus-examples/docs/build-integration.md",
+      "sha256": "32602ae2b467bfac358e53f6fe80f1b56b1d55d8106469d0b3edb8894e30507c",
+      "bytes": 2799
+    },
+    "docs/component-examples.md": {
+      "path": "/workspace/nexus-examples/docs/component-examples.md",
+      "sha256": "6d81f052f5492d9183ec1a6e567dda4f469212f43759a3a0e01d9e92c58f35e8",
+      "bytes": 1763
+    },
+    "docs/delivery.md": {
+      "path": "/workspace/nexus-examples/docs/delivery.md",
+      "sha256": "d0f52a890cab5f927d17ebaf1b270d25b0c0b9ebcd4c7cc4421db126262525e2",
+      "bytes": 1162
+    },
+    "docs/examples-roadmap.md": {
+      "path": "/workspace/nexus-examples/docs/examples-roadmap.md",
+      "sha256": "72f58fc687a39b3f23af531377e712a9184ba997a73ff8388fc116b658cbe1d3",
+      "bytes": 1636
+    },
+    "docs/os-owner-example.md": {
+      "path": "/workspace/nexus-examples/docs/os-owner-example.md",
+      "sha256": "907f1f504b72fc5d55937e396df8c6be414b068cd2b74b81092c2c7116817fa3",
+      "bytes": 13245
+    },
+    "docs/platform-refactor-plan.md": {
+      "path": "/workspace/nexus-examples/docs/platform-refactor-plan.md",
+      "sha256": "fda726f15c9c7eb5a1b2e2db51941942eb3474507043c38782970d3d567bf8f1",
+      "bytes": 53156
+    },
+    "docs/refactor-validation.md": {
+      "path": "/workspace/nexus-examples/docs/refactor-validation.md",
+      "sha256": "8db1e7c59cb14791d7aeb04db039e505bf0cd93d7e75562e6c50c7971cc5b736",
+      "bytes": 2353
+    },
+    "docs/requirements/README.md": {
+      "path": "/workspace/nexus-examples/docs/requirements/README.md",
+      "sha256": "0f2b5e7a3a265a4cf86c468b4e86c1be33431db65d1f44f04f44ba19fa9b7cf9",
+      "bytes": 1166
+    },
+    "docs/requirements/industrial-reference.json": {
+      "path": "/workspace/nexus-examples/docs/requirements/industrial-reference.json",
+      "sha256": "5ff3a306adf7d8c9d376622df803340bec060e28b25135cf21f1d987f45499ae",
+      "bytes": 4724
+    },
+    "docs/spi-example.md": {
+      "path": "/workspace/nexus-examples/docs/spi-example.md",
+      "sha256": "59a56cc4aaade29e24f5c6b928d24ad12a45dd8e7c5ea22a091a29de3e40a711",
+      "bytes": 1057
+    },
+    "docs/validation.md": {
+      "path": "/workspace/nexus-examples/docs/validation.md",
+      "sha256": "1a071a885019f07ef187e042f2c7a005bb6cf4932b9f935ebfbc391a021e762f",
+      "bytes": 4834
+    },
+    "scripts/build.py": {
+      "path": "/workspace/nexus-examples/scripts/build.py",
+      "sha256": "849c43b3d3ba964318ce2b560df1a09bee1e8259b3a69b734617eb52531e897c",
+      "bytes": 3837
+    },
+    "scripts/check_commit_message.py": {
+      "path": "/workspace/nexus-examples/scripts/check_commit_message.py",
+      "sha256": "364bc2f270e404941838aca7537cf353a17b12c840d38816d711145f790f0276",
+      "bytes": 459
+    },
+    "scripts/check_style.py": {
+      "path": "/workspace/nexus-examples/scripts/check_style.py",
+      "sha256": "3f548a5415b25d646db0144cd9bf2a9cb1ddd42ed11f21dcef6aca5500851810",
+      "bytes": 6290
+    },
+    "scripts/run_google.py": {
+      "path": "/workspace/nexus-examples/scripts/run_google.py",
+      "sha256": "a2b6dae8e529e4d87415cff866119cf55c8dd11f0feff3f5f00a54f966832f82",
+      "bytes": 4997
+    },
+    "scripts/sdk_tools.py": {
+      "path": "/workspace/nexus-examples/scripts/sdk_tools.py",
+      "sha256": "09a1b8b076f4164d5f0d540bf29d645ae0857ba8fb4a150ae8212ef2e30c5a66",
+      "bytes": 875
+    },
+    "scripts/setup_dev_tools.py": {
+      "path": "/workspace/nexus-examples/scripts/setup_dev_tools.py",
+      "sha256": "06b65b31a6351317fbbd5e17702c3312c37a290b3a679560f8613c0be64c3bcd",
+      "bytes": 1862
+    },
+    "scripts/tdd_gate.py": {
+      "path": "/workspace/nexus-examples/scripts/tdd_gate.py",
+      "sha256": "ae99a9eff06dea1f9d8b804b8e6beddd5ea63670568b356a169a68cff86d785d",
+      "bytes": 10130
+    },
+    "scripts/test_assembly.py": {
+      "path": "/workspace/nexus-examples/scripts/test_assembly.py",
+      "sha256": "ada0369fc0e4d4a4adb03af6f7b9e8e3b5e23d5c1ff503966191dda85f104cca",
+      "bytes": 2059
+    },
+    "scripts/test_build.py": {
+      "path": "/workspace/nexus-examples/scripts/test_build.py",
+      "sha256": "057d65bd60ef402d97aabaf2f3afa349d8fa22e6a9b408268e26c454ce9db807",
+      "bytes": 3412
+    },
+    "scripts/test_build_contracts.py": {
+      "path": "/workspace/nexus-examples/scripts/test_build_contracts.py",
+      "sha256": "a88c3eede059e311f800cc71b6eed86aa6db4d138583ce9742a9f10bd2daae2f",
+      "bytes": 1800
+    },
+    "scripts/test_candidate_sdk.py": {
+      "path": "/workspace/nexus-examples/scripts/test_candidate_sdk.py",
+      "sha256": "e8e88028b19a917a123e170021a8e5b4720a3297a5534aa399f3e8b13aa2122d",
+      "bytes": 7116
+    },
+    "scripts/test_repository.py": {
+      "path": "/workspace/nexus-examples/scripts/test_repository.py",
+      "sha256": "fd63965a7cd73b73fbd3646a1662d0eed9056a5e60176a8be3c88408094ad27e",
+      "bytes": 10571
+    },
+    "scripts/test_run_google.py": {
+      "path": "/workspace/nexus-examples/scripts/test_run_google.py",
+      "sha256": "0fe895db1981e2ea2334a247cf8d211f1399e4ec4c5f5c77f6e4b720c54d64f3",
+      "bytes": 3872
+    },
+    "scripts/test_style.py": {
+      "path": "/workspace/nexus-examples/scripts/test_style.py",
+      "sha256": "e1201f76e7b86f9f0955be757705f699f8a46e9bec412bf8b501199a579216cc",
+      "bytes": 3964
+    },
+    "scripts/test_tdd_gate.py": {
+      "path": "/workspace/nexus-examples/scripts/test_tdd_gate.py",
+      "sha256": "5c9f451015b3e42ef24a2ce82e57e2a2c729010b50016988c0961098dbc5f970",
+      "bytes": 12446
+    },
+    "scripts/test_workflow.py": {
+      "path": "/workspace/nexus-examples/scripts/test_workflow.py",
+      "sha256": "6b1ac74775c746e2a7ad1904122b98fd22cceb51b98ce2ac237621c148883e74",
+      "bytes": 2882
+    },
+    "tests/CMakeLists.txt": {
+      "path": "/workspace/nexus-examples/tests/CMakeLists.txt",
+      "sha256": "67a294a94989360ec6a1f4ce20687b5264aa84d4ca3faec4b77ac5aeefd66fc7",
+      "bytes": 4229
+    },
+    "tests/backend_policy.c": {
+      "path": "/workspace/nexus-examples/tests/backend_policy.c",
+      "sha256": "297f6fabbfd33aefb04610f97c355ea769e613a053701148a17c6adb34ddcd2f",
+      "bytes": 476
+    },
+    "tests/fault_policy_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/fault_policy_test.cpp",
+      "sha256": "a49b8acbc491f71441a1440566fb8c07527436b69a81809a7268f662341c93bb",
+      "bytes": 6725
+    },
+    "tests/owner_bootstrap_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/owner_bootstrap_test.cpp",
+      "sha256": "2e582d592bc5948cd103125b01493ce9cead23025c480ce2a029079b74add2f1",
+      "bytes": 12644
+    },
+    "tests/owner_lifecycle_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/owner_lifecycle_test.cpp",
+      "sha256": "7566c146b029c9b6dd3d7a4cc764ce978f5c698487f29888d058dd7e8c5c961b",
+      "bytes": 8582
+    },
+    "tests/quarantine_policy_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/quarantine_policy_test.cpp",
+      "sha256": "662db6c55442db4e1863403853612953d603bac3a32565c0296f0c979ac704b0",
+      "bytes": 8441
+    },
+    "tests/scheduler_return_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/scheduler_return_test.cpp",
+      "sha256": "320177da30d05de88dc3293b03a72eb5800735522da57f15204358e2cc0b9a2e",
+      "bytes": 2768
+    }
+  },
+  "final_owned_sources": {
+    ".pre-commit-config.yaml": {
+      "path": "/workspace/nexus-examples/.pre-commit-config.yaml",
+      "sha256": "777cb792e63441ce094daefcdd5eff757a536c4e3dedd36b2b6885b81bb75b40",
+      "bytes": 946
+    },
+    "CMakeLists.txt": {
+      "path": "/workspace/nexus-examples/CMakeLists.txt",
+      "sha256": "aa2b66ddc022d9ffb569a3b3b65cfd508bdf19970a9b1cb5b3113cfbdbb183eb",
+      "bytes": 2364
+    },
+    "apps/uart_owner_runtime/main.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/main.c",
+      "sha256": "ef1dee0cc1e6c501b5c9c9edc81b382355e1ec10b1eb487ba22fed253a57d9e8",
+      "bytes": 23123
+    },
+    "apps/uart_owner_runtime/fault_observer.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/fault_observer.c",
+      "sha256": "a9ce3b169e7980fa1ce8c2d5f3c27011703ab3413848dca2b8fc325fd9b3e034",
+      "bytes": 645
+    },
+    "apps/uart_owner_runtime/fault_policy.c": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/fault_policy.c",
+      "sha256": "3a99c3dd998d03c49412c5050d7fc391241531b8f5847fd120e69a8c4cfb1416",
+      "bytes": 3126
+    },
+    "apps/uart_owner_runtime/fault_policy.h": {
+      "path": "/workspace/nexus-examples/apps/uart_owner_runtime/fault_policy.h",
+      "sha256": "2eaf6864777ed255309c181a22dcb1ae920a9bb0545f26df292e9e8758c2f01e",
+      "bytes": 3740
+    },
+    "tests/CMakeLists.txt": {
+      "path": "/workspace/nexus-examples/tests/CMakeLists.txt",
+      "sha256": "67a294a94989360ec6a1f4ce20687b5264aa84d4ca3faec4b77ac5aeefd66fc7",
+      "bytes": 4229
+    },
+    "tests/fault_policy_test.cpp": {
+      "path": "/workspace/nexus-examples/tests/fault_policy_test.cpp",
+      "sha256": "a49b8acbc491f71441a1440566fb8c07527436b69a81809a7268f662341c93bb",
+      "bytes": 6725
+    },
+    "scripts/test_workflow.py": {
+      "path": "/workspace/nexus-examples/scripts/test_workflow.py",
+      "sha256": "6b1ac74775c746e2a7ad1904122b98fd22cceb51b98ce2ac237621c148883e74",
+      "bytes": 2882
+    },
+    "README.md": {
+      "path": "/workspace/nexus-examples/README.md",
+      "sha256": "90edc05e6f5cf21b40399041bf49e426926d861cc88f686787121c54e843d893",
+      "bytes": 5217
+    },
+    "docs/delivery.md": {
+      "path": "/workspace/nexus-examples/docs/delivery.md",
+      "sha256": "77ff9acfdf9b840ac086ed78964bc153a15a9b5d25662782e8869e0cc4fef0c3",
+      "bytes": 1662
+    },
+    "docs/refactor-validation.md": {
+      "path": "/workspace/nexus-examples/docs/refactor-validation.md",
+      "sha256": "e0492107ad36f6f50bbbb9f6c8fff3cc3b85f267a274baad2d17e961f1e88565",
+      "bytes": 3065
+    },
+    "docs/examples-roadmap.md": {
+      "path": "/workspace/nexus-examples/docs/examples-roadmap.md",
+      "sha256": "5ff5aba6c623277360760f8dca75668c4f752055c1d73b9e05ca0c16f8959728",
+      "bytes": 2172
+    },
+    "docs/os-owner-example.md": {
+      "path": "/workspace/nexus-examples/docs/os-owner-example.md",
+      "sha256": "e6b254b7a643dee37de740eb0477c1b05fc436c130c56fd61e7ab7301b0c1551",
+      "bytes": 14183
+    },
+    "docs/delivery-preparation.md": {
+      "path": "/workspace/nexus-examples/docs/delivery-preparation.md",
+      "sha256": "a8d4fec7891cddaf795a24692d064a66fcb8f4f20f76709ea3d374b22700a7a9",
+      "bytes": 6660
+    }
+  },
+  "source_changes_after_execution": [
+    "README.md",
+    "docs/delivery.md",
+    "docs/refactor-validation.md",
+    "docs/examples-roadmap.md",
+    "docs/os-owner-example.md",
+    "docs/delivery-preparation.md"
+  ],
+  "changes_after_execution_scope": "Documentation only; runtime/tool sources unchanged",
+  "incoming_freeze": {
+    "path": "/workspace/nexus-io-implementation-evidence/lifecycle-tdd/example-io30-freeze.json",
+    "sha256": "6b2a9a630bae97348eda14f9d56a5ec9be76419a88d6d5309f9376cfb3b4111b",
+    "bytes": 7775
+  },
+  "incoming_hash_verified_files": 57,
+  "historical_evidence_unchanged_files": 49,
+  "full_catalogue": [
+    "uart_owner_shutdown",
+    "platform_static_ports",
+    "sensor_explicit_spi",
+    "persistent_journal",
+    "protocol_authorized_registers",
+    "owner_lifecycle_google",
+    "product_fault_policy_google"
+  ],
+  "complete_native": {
+    "status": "blocked",
+    "exit_code": 1,
+    "reason": "Current formal SDK does not contain nexus/core/fault.h",
+    "not_qualified": [
+      "uart_owner_shutdown",
+      "product_fault_policy_google"
+    ]
+  },
+  "applicable_native": {
+    "status": "passed",
+    "ctest_names": [
+      "platform_static_ports",
+      "sensor_explicit_spi",
+      "persistent_journal",
+      "protocol_authorized_registers",
+      "owner_lifecycle_google"
+    ],
+    "ctest_count": 5,
+    "google_discovered": 28,
+    "google_passed": 28,
+    "google_skipped": 0,
+    "scope": "Four unaffected finite apps and complete lifecycle Google",
+    "instrumentation": "Actual selected ASan/UBSan compilation"
+  },
+  "tooling": {
+    "passed": 39,
+    "historical_hook_replay_failed": 1,
+    "historical_edit_order_claimed": false
+  },
+  "arm": {
+    "status": "not_executed_this_preparation",
+    "required_after_final_pin": "Six presets, two independently budgeted ELF each"
+  },
+  "limitations": [
+    "Partial CTest used an explicit applicability filter; it does not qualify the unfiltered seven-test catalogue.",
+    "Changed fault-policy seven-case development evidence remains separate and is not old-pin qualification.",
+    "Examples source is not a clean committed candidate; no GitHub CI or HIL result is inferred.",
+    "No borrowed resources are reclaimed by fault observation or elapsed time.",
+    "No station, waveform, electrical safety, clock step or reset was measured."
+  ],
+  "raw": [
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/applicable-artifacts.json",
+      "sha256": "c31734d68ebeb3d320ff1837304f302cec54dc16c86f943f4098b5a258ceb1aa",
+      "bytes": 958,
+      "stored_path": "raw/applicable-artifacts.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/applicable-ctest.xml",
+      "sha256": "ac7e0cfcb79923efa5678baff1916c7c1ad4dd61636e6493ef9b29be615228b5",
+      "bytes": 1639,
+      "stored_path": "raw/applicable-ctest.xml"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/documentation-links.json",
+      "sha256": "6727b313ab91ff4e6b15d3c6352915380ab2bde7b5c962f5a80f3efeefa87c46",
+      "bytes": 2154,
+      "stored_path": "raw/documentation-links.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/examples-current-status.command.json",
+      "sha256": "f4214e7438ef521d72d679a1fd7fe61d3d801098856ca1271f824150dd968236",
+      "bytes": 588,
+      "stored_path": "raw/examples-current-status.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/examples-current-status.log",
+      "sha256": "a323ab0adf974787bf715af46538a3307afd5ba79b3b4fdab0eb9ca0a70332e6",
+      "bytes": 350,
+      "stored_path": "raw/examples-current-status.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/fault-policy-incoming-audit.json",
+      "sha256": "f6a48c98829e532e41ca1009826b6f0baf02b928377be3cb2802d37f97a9afbf",
+      "bytes": 12771,
+      "stored_path": "raw/fault-policy-incoming-audit.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/final-owned-sources.json",
+      "sha256": "6f3bb55fb1114f6f0324372a22c0ee913579e60545f7b05d7af850d955a09c5b",
+      "bytes": 3092,
+      "stored_path": "raw/final-owned-sources.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/final-owned-style.command.json",
+      "sha256": "fd78f72590c17287b89a84114a0163ec153aa116fb2fccd863103c163f4b73e8",
+      "bytes": 1203,
+      "stored_path": "raw/final-owned-style.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/final-owned-style.json",
+      "sha256": "552ccf9992bff031c37f45428737dc84f31c1994036d8ca0b2bea122f598a5c4",
+      "bytes": 2493,
+      "stored_path": "raw/final-owned-style.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/final-owned-style.log",
+      "sha256": "21d6c5b5858ec193866293763debbec16c068b4fb88d3c8b15c0c56fc2891183",
+      "bytes": 32,
+      "stored_path": "raw/final-owned-style.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/hook-green.yaml.raw",
+      "sha256": "777cb792e63441ce094daefcdd5eff757a536c4e3dedd36b2b6885b81bb75b40",
+      "bytes": 946,
+      "stored_path": "raw/hook-green.yaml.raw"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/hook-historical-replay-red.command.json",
+      "sha256": "153675199a08b784d496dcea5f09bdf258d1692ace559ffe7fb655858102de32",
+      "bytes": 728,
+      "stored_path": "raw/hook-historical-replay-red.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/hook-historical-replay-red.log",
+      "sha256": "2971f67084966edd9441fe0edaedf2676e028dc06b16c71ba2a22eaf85c0cc58",
+      "bytes": 838,
+      "stored_path": "raw/hook-historical-replay-red.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/hook-historical-replay.yaml.raw",
+      "sha256": "e8900070815737c9c2a1f1b543d02b833f48a625d015cc60cc2a55af15168ef6",
+      "bytes": 945,
+      "stored_path": "raw/hook-historical-replay.yaml.raw"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/hook-tdd.json",
+      "sha256": "ed2807405a53b3b67183a396e235014ac43c34fc6ad01acbe3b4bacb0af25555",
+      "bytes": 28380,
+      "stored_path": "raw/hook-tdd.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/native-applicable-build.command.json",
+      "sha256": "c1cb1367391486e595ef88dccaad23fc73e9f62145c800ed525ad636bc241d9c",
+      "bytes": 778,
+      "stored_path": "raw/native-applicable-build.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/native-applicable-build.log",
+      "sha256": "e860684a20cd495bf3e2e2a7084b865a6d233df5de50fa1752f9a6dd33740c4d",
+      "bytes": 402,
+      "stored_path": "raw/native-applicable-build.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/native-current-pin-applicable-ctest.command.json",
+      "sha256": "55650db3c81a9f1b6b495b885fb0901652b31c6f40243f0e7c5950940ab6f551",
+      "bytes": 949,
+      "stored_path": "raw/native-current-pin-applicable-ctest.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/native-current-pin-applicable-ctest.log",
+      "sha256": "0cf3adfac378478dd71a788bdffb90dffac1c02cad65c608525ce9ed22bc9c7d",
+      "bytes": 894,
+      "stored_path": "raw/native-current-pin-applicable-ctest.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/native-current-pin-full-build.command.json",
+      "sha256": "ee5a6ebf45135cb09c97a8ebed627a1181f7db185d5ebc74f956129e9d494b54",
+      "bytes": 693,
+      "stored_path": "raw/native-current-pin-full-build.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/native-current-pin-full-build.log",
+      "sha256": "71a17a2ace6104d3eab1949e8b16459ef3745003a24d3367c9fd7f83b06e035e",
+      "bytes": 2834,
+      "stored_path": "raw/native-current-pin-full-build.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/native-unfiltered-catalogue.command.json",
+      "sha256": "b366b59e4b7921122e535442dc0dd0786ee63e338d23c13a76c63226560857c8",
+      "bytes": 659,
+      "stored_path": "raw/native-unfiltered-catalogue.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/native-unfiltered-catalogue.log",
+      "sha256": "7adf774bc3d624b035235c1321eca9c457cd7939831bb1943a38cdddcaabce50",
+      "bytes": 6096,
+      "stored_path": "raw/native-unfiltered-catalogue.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/owned-diff-check.command.json",
+      "sha256": "a37f4410237c74d1a5bcb01bd6f34c7b4c3fe8002a3c96501a00d8b361125335",
+      "bytes": 573,
+      "stored_path": "raw/owned-diff-check.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/owned-diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "stored_path": "raw/owned-diff-check.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/owner-google-commands.json",
+      "sha256": "f6d31b066915aae32177d2e4bf01e4fff97f63ab768acfac1557755d608d40d4",
+      "bytes": 404,
+      "stored_path": "raw/owner-google-commands.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/owner-google-discovery.log",
+      "sha256": "000e942d35299565574fe451d0091b920562efd19428e9dd3d4278cb7b960569",
+      "bytes": 1669,
+      "stored_path": "raw/owner-google-discovery.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/owner-google-execution.json",
+      "sha256": "3414d6812807389e6c7d2b83fd0ace19cda9b820f3cdd5a6f0c49382d810ef94",
+      "bytes": 4895,
+      "stored_path": "raw/owner-google-execution.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/owner-google-execution.log",
+      "sha256": "e5827a4a432421c97ab378df198fca340210f97bf98effcb9e3d5e500ec60bb1",
+      "bytes": 5410,
+      "stored_path": "raw/owner-google-execution.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/owner-google-google-results.xml",
+      "sha256": "e496ec3b8fb7f4b6f009748a0e1e3ffc123bf18d073c840eddd8d5aa39a0e16a",
+      "bytes": 8259,
+      "stored_path": "raw/owner-google-google-results.xml"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/scripts-green.command.json",
+      "sha256": "6058907401af76a5584ed42a9cf3fb27e77d3a14c97a4875b8043e67f84ead2a",
+      "bytes": 681,
+      "stored_path": "raw/scripts-green.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/scripts-green.log",
+      "sha256": "9283c997f937a2c963be3665587152291c4ab1fc6d45f494565f5147fa838858",
+      "bytes": 10466,
+      "stored_path": "raw/scripts-green.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-clean.command.json",
+      "sha256": "0dccb62cd0f17f5d95ce1f882060d0b70f591f9f4d0587ab06e39a74b64da0fe",
+      "bytes": 612,
+      "stored_path": "raw/sdk-current-clean.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-clean.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "stored_path": "raw/sdk-current-clean.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-head.command.json",
+      "sha256": "2bb2853257d5625a280ab1a70aaf289f5e8446142c42fc9acf2f2b9534548286",
+      "bytes": 608,
+      "stored_path": "raw/sdk-current-head.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-head.log",
+      "sha256": "91855a511e30e2275af64545683af5c7c67ce6c07f8da837c600d3f6e0ed8f66",
+      "bytes": 41,
+      "stored_path": "raw/sdk-current-head.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-pin-final.command.json",
+      "sha256": "cb041a00321c44f78b40da6f36daaddcc59d53f180e78d6938c0f5d51fb54c10",
+      "bytes": 617,
+      "stored_path": "raw/sdk-current-pin-final.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-pin-final.log",
+      "sha256": "341889e773d87f5d4a64f63e3bfdb95a3fcf7af10b553b484bba009bb1710fc4",
+      "bytes": 130,
+      "stored_path": "raw/sdk-current-pin-final.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-pin.command.json",
+      "sha256": "5515eced23502f8a257394f62fec52fd56eb37d8112c07be1d40bb819367d844",
+      "bytes": 611,
+      "stored_path": "raw/sdk-current-pin.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-pin.log",
+      "sha256": "341889e773d87f5d4a64f63e3bfdb95a3fcf7af10b553b484bba009bb1710fc4",
+      "bytes": 130,
+      "stored_path": "raw/sdk-current-pin.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-tree.command.json",
+      "sha256": "9b0a508a1a65bd22379a72fbe4c5663531c99ea095fb1b3ba054259959a39699",
+      "bytes": 615,
+      "stored_path": "raw/sdk-current-tree.command.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-tree.log",
+      "sha256": "993bf20b056934c88b304da7a4d35987c5f1daf7503c2234a96476dcd62273ae",
+      "bytes": 41,
+      "stored_path": "raw/sdk-current-tree.log"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/source-after-applicable.json",
+      "sha256": "93afdf70ada2c10a02e1ca3e12d93b12f20605f8ab7782a9b9fc99e5e40e59ef",
+      "bytes": 13442,
+      "stored_path": "raw/source-after-applicable.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/source-after-full-build.json",
+      "sha256": "93afdf70ada2c10a02e1ca3e12d93b12f20605f8ab7782a9b9fc99e5e40e59ef",
+      "bytes": 13442,
+      "stored_path": "raw/source-after-full-build.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/source-before.json",
+      "sha256": "93afdf70ada2c10a02e1ca3e12d93b12f20605f8ab7782a9b9fc99e5e40e59ef",
+      "bytes": 13442,
+      "stored_path": "raw/source-before.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/style.json",
+      "sha256": "552ccf9992bff031c37f45428737dc84f31c1994036d8ca0b2bea122f598a5c4",
+      "bytes": 2493,
+      "stored_path": "raw/style.json"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/capture.py",
+      "sha256": "33c76e803ef0c380351aee8a6cf70402d7defac0a4c93694efa823dc215c8380",
+      "bytes": 6617,
+      "stored_path": "raw/capture.py.raw"
+    },
+    {
+      "path": "/workspace/nexus-examples-delivery-preparation/seal.py",
+      "sha256": "bac9dd8510a1c6202ce98b7245ce74a5ade4789c2fe67eacee156a1d550723a7",
+      "bytes": 7801,
+      "stored_path": "raw/seal.py.raw"
+    }
+  ]
+}

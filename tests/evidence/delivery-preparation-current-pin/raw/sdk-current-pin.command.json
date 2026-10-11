@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/workspace/nexus/.venv/bin/python",
+    "scripts/test_repository.py"
+  ],
+  "cwd": "/workspace/nexus-examples",
+  "exit_code": 0,
+  "started_ns": 1791752729274741148,
+  "ended_ns": 1791752729460200610,
+  "log": {
+    "path": "/workspace/nexus-examples-delivery-preparation/sdk-current-pin.log",
+    "sha256": "341889e773d87f5d4a64f63e3bfdb95a3fcf7af10b553b484bba009bb1710fc4",
+    "bytes": 130
+  },
+  "driver": {
+    "path": "/workspace/nexus-examples-delivery-preparation/capture.py",
+    "sha256": "33c76e803ef0c380351aee8a6cf70402d7defac0a4c93694efa823dc215c8380",
+    "bytes": 6617
+  }
+}

@@ -6,6 +6,7 @@
  * \date            2026-10-11
  * \copyright       Copyright (c) 2026 Nexus Team
  */
+#include "fault_policy.h"
 #include "nexus_config.h"
 #include "quarantine_policy.h"
 
@@ -75,6 +76,7 @@ typedef struct {
     uint32_t owner_stop;
     uint32_t status;
     uint32_t scheduler_return_stage;
+    example_fault_policy_t fault_policy;
     size_t reclaimed_notifications;
     example_owner_bootstrap_t bootstrap;
 #if !defined(NEXUS_BACKEND_BAREMETAL)
@@ -120,6 +122,7 @@ static void recovery_fault(void* context, example_recovery_stage_t stage,
     nx_atomic_u32_store_release(&app->recovery_stage, (uint32_t)stage);
     if (reason != NX_SUCCESS) {
         nx_atomic_u32_store_release(&app->status, (uint32_t)reason);
+        nx_fault_observe(NX_FAULT_PLATFORM, reason, __FILE__, __LINE__);
     }
     (void)app->coordinator_wake.wake(app->coordinator_wake.context);
 }
@@ -502,6 +505,7 @@ static void coordinator_entry(void* context) {
 /** \brief Retain all startup effects through a product-owned terminal hook. */
 static _Noreturn void scheduler_failure_sink(void* context) {
     (void)context;
+    nx_fault_observe(NX_FAULT_PLATFORM, NX_ERROR_IO, __FILE__, __LINE__);
     /* Kernel startup may have configured Tick, priorities and task contexts.
      * Only a product reset or proved whole-port teardown may reclaim them.
      */
@@ -512,7 +516,27 @@ static _Noreturn void scheduler_failure_sink(void* context) {
 }
 #endif
 
+/** \brief No board-specific output action is inferred by this reference app. */
+static nx_result_t unbound_safe_outputs(void* context, nx_fault_domain_t domain,
+                                        nx_result_t reason) {
+    (void)context;
+    (void)domain;
+    (void)reason;
+    return NX_ERROR_UNSUPPORTED;
+}
+
+/** \brief Product composition owns one stable first-fault record. */
+example_fault_policy_t* example_owner_fault_policy(void) {
+    return &s_application.fault_policy;
+}
+
 int main(void) {
+    if (example_fault_policy_initialize(
+            &s_application.fault_policy,
+            (example_safe_output_port_t){NULL, unbound_safe_outputs}) !=
+        NX_SUCCESS) {
+        return 1;
+    }
     nx_platform_start_result_t startup = nx_platform_start();
     s_application.bootstrap.platform_live =
         startup.primary == NX_SUCCESS || startup.remaining_effects != 0U;

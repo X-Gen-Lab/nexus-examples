@@ -1,0 +1,27 @@
+[
+  {
+    "path": "/workspace/nexus-examples/build/native-debug/tests/owner_lifecycle_test",
+    "sha256": "cc6ddc429043f1c8b2abd521487e85ee4dcbbc0056da2a2026c210e2ca145736",
+    "bytes": 15634424
+  },
+  {
+    "path": "/workspace/nexus-examples/build/native-debug/bin/platform_reference",
+    "sha256": "11b6f49abe9d5e500a3960b901d08031f256440eafe6ea250bf5985a19077d78",
+    "bytes": 677072
+  },
+  {
+    "path": "/workspace/nexus-examples/build/native-debug/bin/sensor_spi",
+    "sha256": "566ad8865aadc0ddb2b8f4086ba6d216d68839eba9e53608ca184147789f01d1",
+    "bytes": 722888
+  },
+  {
+    "path": "/workspace/nexus-examples/build/native-debug/bin/journal",
+    "sha256": "64e92793c9764a948c34a0cbeab3cb884d3449c49e6c2b7df7520df0a1545f5f",
+    "bytes": 155488
+  },
+  {
+    "path": "/workspace/nexus-examples/build/native-debug/bin/modbus_registers",
+    "sha256": "741bb7566d8907a7bcd97d5c3baa30e2a7ac196adbd74317f6bc7bc890c3f4e2",
+    "bytes": 857384
+  }
+]

@@ -10,6 +10,19 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class ExampleWorkflow(unittest.TestCase):
+    def test_whole_index_tdd_hook_never_receives_changed_filenames(self):
+        document = yaml.safe_load(
+            (ROOT / '.pre-commit-config.yaml').read_text())
+        hook = next(hook for repository in document['repos']
+                    for hook in repository['hooks']
+                    if hook['id'] == 'nexus-example-tdd')
+        # The entry validates the complete index itself and accepts no paths.
+        self.assertEqual(hook['entry'],
+                         'python scripts/tdd_gate.py --staged')
+        self.assertIs(hook['pass_filenames'], False)
+        self.assertIs(hook['always_run'], True)
+        self.assertIs(hook['require_serial'], True)
+
     def test_python_tdd_hook_declares_the_pinned_workflow_parser(self):
         pins = [line for line in
                 (ROOT / 'external/nexus/requirements.txt').read_text().splitlines()

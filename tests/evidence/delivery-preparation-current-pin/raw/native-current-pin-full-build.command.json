@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "/workspace/nexus/.venv/bin/python",
+    "scripts/build.py",
+    "--preset",
+    "native-debug",
+    "--test",
+    "--parallel",
+    "1"
+  ],
+  "cwd": "/workspace/nexus-examples",
+  "exit_code": 1,
+  "started_ns": 1791752729567391562,
+  "ended_ns": 1791752730710272073,
+  "log": {
+    "path": "/workspace/nexus-examples-delivery-preparation/native-current-pin-full-build.log",
+    "sha256": "71a17a2ace6104d3eab1949e8b16459ef3745003a24d3367c9fd7f83b06e035e",
+    "bytes": 2834
+  },
+  "driver": {
+    "path": "/workspace/nexus-examples-delivery-preparation/capture.py",
+    "sha256": "33c76e803ef0c380351aee8a6cf70402d7defac0a4c93694efa823dc215c8380",
+    "bytes": 6617
+  }
+}

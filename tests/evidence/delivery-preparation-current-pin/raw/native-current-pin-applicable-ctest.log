@@ -1,0 +1,21 @@
+Internal ctest changing into directory: /workspace/nexus-examples/build/native-debug
+Test project /workspace/nexus-examples/build/native-debug
+    Start 2: platform_static_ports
+1/5 Test #2: platform_static_ports ............   Passed    0.01 sec
+    Start 3: sensor_explicit_spi
+2/5 Test #3: sensor_explicit_spi ..............   Passed    0.01 sec
+    Start 4: persistent_journal
+3/5 Test #4: persistent_journal ...............   Passed    0.01 sec
+    Start 5: protocol_authorized_registers
+4/5 Test #5: protocol_authorized_registers ....   Passed    0.01 sec
+    Start 6: owner_lifecycle_google
+5/5 Test #6: owner_lifecycle_google ...........   Passed    0.08 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Label Time Summary:
+GoogleTest    =   0.08 sec*proc (1 test)
+example       =   0.10 sec*proc (5 tests)
+native        =   0.10 sec*proc (5 tests)
+
+Total Test time (real) =   0.10 sec

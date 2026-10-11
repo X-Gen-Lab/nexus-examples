@@ -18,10 +18,16 @@
 | `modbus_registers` | 实际 UART 模型、CRC、写权限、异常回复、有限日志 | 暂无 RS485 收发器接线和方向时序验收 |
 | `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 三板两后端，显式静态任务或裸机 pump |
 
-Native 注册五个有限应用 CTest 和完整 GoogleTest lifecycle 执行；UART 由应用显式注入接收事实，服务推进发送并等待真正
+Native 注册五个有限应用 CTest，以及完整 lifecycle 和故障策略两组 GoogleTest 执行。
+UART 由应用显式注入接收事实，服务推进发送并等待真正
 TC 完成。模型没有自动串口设备或后台 RX 生产者。Flash 文件示例验证宿主恢复流程，
 不证明 MCU 掉电安全。三板为启明欣欣 F407ZG V3.1、天空星 F407VE 青春版和梁山派
 GD32F470ZG；当前实板未接入，所有物理资格均未验证。
+
+新的故障策略使用 Core `nx_fault_observe`；当前锁定的 `6fc1ed75` SDK 尚未提供
+该接口，因此这组变更的完整构建暂被版本差异阻断。已保留旧 pin 下适用测试与
+真实失败，最终 SDK 更新后的完整 Native 与十二个 ARM ELF 必须重新验收。
+[交付准备](docs/delivery-preparation.md) 区分这一阶段和最终软件资格。
 
 ## 开发与构建
 

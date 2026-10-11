@@ -1,0 +1,7 @@
+{
+  "command": [
+    "/workspace/nexus-examples/build/fault-iteration/bin/uart_owner_runtime"
+  ],
+  "cwd": "/workspace/nexus-examples",
+  "exit_code": 0
+}
