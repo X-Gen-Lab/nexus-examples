@@ -23,13 +23,15 @@ set(INSTALL_GTEST OFF CACHE BOOL "Host test-only framework" FORCE)
 set(BUILD_GMOCK ON CACHE BOOL "Host product lifecycle tests" FORCE)
 add_subdirectory("${google_root}" google-build EXCLUDE_FROM_ALL)
 add_executable(owner_lifecycle_test owner_lifecycle_test.cpp
-    "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime/lifecycle.c")
+    owner_bootstrap_test.cpp
+    "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime/lifecycle.c"
+    "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime/bootstrap.c")
 target_include_directories(owner_lifecycle_test PRIVATE
     "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime")
 target_compile_features(owner_lifecycle_test PRIVATE cxx_std_17)
 set_target_properties(owner_lifecycle_test PROPERTIES CXX_EXTENSIONS OFF)
 target_link_libraries(owner_lifecycle_test PRIVATE Nexus::BusOwner
-    GTest::gmock_main nexus_owned_warnings nexus_build_options)
+    Nexus::OSNative GTest::gmock_main nexus_owned_warnings nexus_build_options)
 foreach(backend IN ITEMS native baremetal freertos)
     string(TOUPPER "${backend}" backend_upper)
     add_library(example_policy_${backend} OBJECT backend_policy.c)

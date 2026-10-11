@@ -9,6 +9,7 @@
 #include "nexus_config.h"
 
 #include "backend_policy.h"
+#include "bootstrap.h"
 #include "lifecycle.h"
 #include "nexus/arch/arch.h"
 #include "nexus/arch/atomic.h"
@@ -70,6 +71,7 @@ typedef struct {
     uint32_t owner_stop;
     uint32_t status;
     size_t reclaimed_notifications;
+    example_owner_bootstrap_t bootstrap;
 #if !defined(NEXUS_BACKEND_BAREMETAL)
     application_task_t owner_task;
 #endif
@@ -228,8 +230,8 @@ static nx_result_t join_producers(void* context) {
         }
         nx_result_t result = NX_SUCCESS;
 #endif
-        if (result != NX_SUCCESS || producer->result != NX_SUCCESS) {
-            return result != NX_SUCCESS ? result : producer->result;
+        if (result != NX_SUCCESS) {
+            return result;
         }
     }
     return NX_SUCCESS;
@@ -300,11 +302,19 @@ static nx_result_t configure_model(void) {
 
 static nx_result_t initialize(application_t* app) {
     nx_result_t result = configure_model();
-    if (result != NX_SUCCESS ||
-        (result = notification_init(&app->owner_event)) != NX_SUCCESS ||
-        (result = notification_init(&app->coordinator_event)) != NX_SUCCESS) {
+    if (result != NX_SUCCESS) {
         return result;
     }
+    result = notification_init(&app->owner_event);
+    if (result != NX_SUCCESS) {
+        return result;
+    }
+    ++app->bootstrap.notifications;
+    result = notification_init(&app->coordinator_event);
+    if (result != NX_SUCCESS) {
+        return result;
+    }
+    ++app->bootstrap.notifications;
     app->owner_wake = notification_port(&app->owner_event);
     app->coordinator_wake = notification_port(&app->coordinator_event);
     for (size_t i = 0; i < PRODUCERS; ++i) {
@@ -316,6 +326,7 @@ static nx_result_t initialize(application_t* app) {
         if (result != NX_SUCCESS) {
             return result;
         }
+        ++app->bootstrap.notifications;
         producer->completion = notification_port(&producer->completed);
     }
     nx_owner_guard_port_t guard = {NULL, enter, leave};
@@ -327,6 +338,7 @@ static nx_result_t initialize(application_t* app) {
     if (result != NX_SUCCESS) {
         return result;
     }
+    app->bootstrap.owner_initialized = true;
     app->irq_wake = (nx_irq_wake_t) {
         &app->owner_wake, irq_hint,
 #if defined(NEXUS_BACKEND_FREERTOS)
@@ -349,6 +361,76 @@ static nx_result_t initialize(application_t* app) {
 static nx_result_t stop_platform(void* context) {
     (void)context;
     return nx_platform_stop();
+}
+
+/** \brief Retire actual workers according to their execution phase. */
+static nx_result_t retire_startup_workers(void* context,
+                                          example_owner_workers_t execution,
+                                          size_t count) {
+    application_t* app = context;
+    (void)count;
+#if defined(NEXUS_BACKEND_NATIVE)
+    if (execution != EXAMPLE_WORKERS_NATIVE_RUNNING) {
+        return NX_ERROR_CONTEXT;
+    }
+    nx_result_t result = join_producers(app);
+    return result == NX_SUCCESS ? join_owner(app) : result;
+#elif defined(NEXUS_BACKEND_FREERTOS)
+    if (execution != EXAMPLE_WORKERS_FREERTOS_UNSTARTED) {
+        return NX_ERROR_CONTEXT;
+    }
+    /* These tasks have not executed their entries. No request can be borrowed,
+     * and scheduler-not-started discard must not wait for entry completion. */
+    application_task_t* tasks[PRODUCERS + 2U] = {
+        &app->owner_task, &app->producer[0].task, &app->producer[1].task,
+        &app->coordinator_task};
+    for (size_t i = PRODUCERS + 2U; i != 0U; --i) {
+        if (tasks[i - 1U]->handle != NULL) {
+            nx_result_t result =
+                nx_freertos_task_discard_before_scheduler(tasks[i - 1U]);
+            if (result != NX_SUCCESS) {
+                return result;
+            }
+        }
+    }
+    return NX_SUCCESS;
+#else
+    (void)app;
+    (void)execution;
+    return NX_ERROR_CONTEXT;
+#endif
+}
+
+/** \brief Reverse only notification creations recorded as successful. */
+static nx_result_t destroy_startup_notification(void* context, size_t index) {
+    application_t* app = context;
+    if (index >= PRODUCERS + 2U) {
+        return NX_ERROR_INVALID;
+    }
+    notification_t* notification = index == 0U ? &app->owner_event
+                                   : index == 1U
+                                       ? &app->coordinator_event
+                                       : &app->producer[index - 2U].completed;
+    return notification_destroy(notification);
+}
+
+/** \brief Record a boot failure and roll back only established effects. */
+static int startup_failed(application_t* app, int code) {
+    example_owner_bootstrap_port_t port = {
+        app, retire_startup_workers, quiesce_publishers,
+        destroy_startup_notification, stop_platform};
+    nx_result_t result =
+        example_owner_bootstrap_abort(&app->bootstrap, &app->owner, port);
+    nx_atomic_u32_store_release(
+        &app->status, (uint32_t)(result == NX_SUCCESS ? NX_ERROR_IO : result));
+    if (result != NX_SUCCESS) {
+        /* A product supplies recovery or reset. Keep callbacks, IRQ sinks,
+         * caller stacks and any quarantined bytes alive without claiming stop.
+         */
+        for (;;) {
+        }
+    }
+    return code;
 }
 
 /** \brief Application policy retains all static storage on any drain failure.
@@ -391,55 +473,76 @@ static void coordinator_entry(void* context) {
 
 int main(void) {
     nx_platform_start_result_t startup = nx_platform_start();
+    s_application.bootstrap.platform_live =
+        startup.primary == NX_SUCCESS || startup.remaining_effects != 0U;
     if (startup.primary != NX_SUCCESS || startup.cleanup != NX_SUCCESS ||
-        startup.remaining_effects != 0U ||
-        initialize(&s_application) != NX_SUCCESS) {
-        return 1;
+        startup.remaining_effects != 0U) {
+        return startup_failed(&s_application, 1);
+    }
+    s_application.bootstrap.publishers_live = true;
+    if (initialize(&s_application) != NX_SUCCESS) {
+        return startup_failed(&s_application, 1);
     }
 #if defined(NEXUS_BACKEND_NATIVE)
+    s_application.bootstrap.execution = EXAMPLE_WORKERS_NATIVE_RUNNING;
     if (nx_native_task_start(&s_application.owner_task, s_host_stacks[0],
                              sizeof(s_host_stacks[0]), owner_entry,
                              &s_application) != NX_SUCCESS) {
-        return 2;
+        return startup_failed(&s_application, 2);
     }
+    ++s_application.bootstrap.workers;
     for (size_t i = 0; i < PRODUCERS; ++i) {
         if (nx_native_task_start(&s_application.producer[i].task,
                                  s_host_stacks[i + 1U],
                                  sizeof(s_host_stacks[i + 1U]), producer_entry,
                                  &s_application.producer[i]) != NX_SUCCESS) {
-            return 3;
+            return startup_failed(&s_application, 3);
         }
+        ++s_application.bootstrap.workers;
     }
     nx_time_us_t deadline = nx_deadline_after(nx_time_now_us(), 1000000U);
     if (nx_wait_until(&s_application.coordinator_wake, started, &s_application,
                       deadline) != NX_SUCCESS ||
         nx_wait_until(&s_application.coordinator_wake, active, &s_application,
-                      deadline) != NX_SUCCESS ||
-        shutdown_application(&s_application) != NX_SUCCESS) {
-        return 4;
+                      deadline) != NX_SUCCESS) {
+        return startup_failed(&s_application, 4);
+    }
+    nx_result_t result = shutdown_application(&s_application);
+    if (result != NX_SUCCESS) {
+        nx_atomic_u32_store_release(&s_application.status, (uint32_t)result);
+        /* Normal shutdown has its own completed milestones. A failed drain
+         * cannot reuse the startup record to destroy already reclaimed objects.
+         */
+        for (;;) {
+        }
     }
     puts("UARTOwner: two producers, active cancel/drain, joined publishers");
     return 0;
 #elif defined(NEXUS_BACKEND_FREERTOS)
+    s_application.bootstrap.execution = EXAMPLE_WORKERS_FREERTOS_UNSTARTED;
     if (nx_freertos_task_start(&s_application.owner_task, "owner",
                                s_mcu_stacks[0], TASK_STACK_WORDS, 2U,
                                owner_entry, &s_application) != NX_SUCCESS) {
-        return 5;
+        return startup_failed(&s_application, 5);
     }
+    ++s_application.bootstrap.workers;
     for (size_t i = 0; i < PRODUCERS; ++i) {
         if (nx_freertos_task_start(&s_application.producer[i].task, "producer",
                                    s_mcu_stacks[i + 1U], TASK_STACK_WORDS, 3U,
                                    producer_entry,
                                    &s_application.producer[i]) != NX_SUCCESS) {
-            return 6;
+            return startup_failed(&s_application, 6);
         }
+        ++s_application.bootstrap.workers;
     }
     if (nx_freertos_task_start(&s_application.coordinator_task, "stop",
                                s_mcu_stacks[PRODUCERS + 1U], TASK_STACK_WORDS,
                                1U, coordinator_entry,
                                &s_application) != NX_SUCCESS) {
-        return 7;
+        return startup_failed(&s_application, 7);
     }
+    ++s_application.bootstrap.workers;
+    s_application.bootstrap.scheduler_started = true;
     vTaskStartScheduler();
     return 8;
 #else

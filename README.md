@@ -16,7 +16,7 @@
 | `sensor_spi` | BMP280 SPI 端口、芯片身份与 Bosch 参考结果 | 暂无审定传感器板级接线 |
 | `journal` | 文件 NOR 模型、关闭重开后恢复记录 | 暂无指定产品 Flash 分区与电源测试 |
 | `modbus_registers` | 实际 UART 模型、CRC、写权限、异常回复、有限日志 | 暂无 RS485 收发器接线和方向时序验收 |
-| `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、active cancel/drain/join | 三板两后端，显式静态任务或裸机 pump |
+| `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 三板两后端，显式静态任务或裸机 pump |
 
 Native 注册五个有限应用 CTest 和完整 GoogleTest lifecycle 执行；UART 由应用显式注入接收事实，服务推进发送并等待真正
 TC 完成。模型没有自动串口设备或后台 RX 生产者。Flash 文件示例验证宿主恢复流程，

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "kind": "example_startup_rollback_development_tdd",
+  "scope": "Development working tree against previously pinned source SDK; changed FreeRTOS discard consumer still needs updated clean SDK pin and actual ARM integration",
+  "physical_status": "not_executed",
+  "source_sdk_qualification": false,
+  "red": {
+    "argv": [
+      "build/native-debug/tests/owner_lifecycle_test",
+      "--gtest_filter=Bootstrap.*",
+      "--gtest_output=xml:/workspace/nexus-os-iteration-evidence/examples/startup-rollback/red.xml"
+    ],
+    "exit_code": 1,
+    "executed_cases": 8,
+    "failed_cases": 8,
+    "reason": "New rollback interface initially reported UNSUPPORTED and did not perform recorded cleanup"
+  },
+  "green": {
+    "executed_google_cases": 20,
+    "executed_ctest_cases": 6,
+    "exit_code": 0,
+    "source": "fresh unfiltered Google discovery/execution and complete Native CTest"
+  },
+  "records": [
+    {
+      "path": "tests/evidence/startup-rollback/red.log",
+      "sha256": "31d61a1be728dd4e909400db246a63b13a3edca4889391a609c563730a6243a3",
+      "size": 9191
+    },
+    {
+      "path": "tests/evidence/startup-rollback/red.xml",
+      "sha256": "f121fe979275c12f3828986bc4f615e026ded215e7325bfc6113812d87841809",
+      "size": 18221
+    },
+    {
+      "path": "tests/evidence/startup-rollback/final-build.log",
+      "sha256": "8213bdf039537394f17c83b99e93c2e15e1b9d13d7836925806cc5c59d64afef",
+      "size": 639
+    },
+    {
+      "path": "tests/evidence/startup-rollback/final-ctest.log",
+      "sha256": "7ba4a6f5d1495745e5de5f036948865c319f27197181bb6e4987b5d52cdc4e1a",
+      "size": 996
+    },
+    {
+      "path": "tests/evidence/startup-rollback/final-ctest.xml",
+      "sha256": "6758935cdbd0afda9724879a4c11b27a9a9e91124255a07f25a5b7d10eef423c",
+      "size": 1933
+    },
+    {
+      "path": "tests/evidence/startup-rollback/final-style.json",
+      "sha256": "5e082a9735c85199d68111f399b5fc677c82873ee402d1b04c7c4ac3abc526ab",
+      "size": 1510
+    },
+    {
+      "path": "tests/evidence/startup-rollback/google-.nexus-google-owner.json",
+      "sha256": "7b45f41f74b51a644b9bb5b76f8ca0ea50e702b6d866e408f9ec8372272cbe6c",
+      "size": 64
+    },
+    {
+      "path": "tests/evidence/startup-rollback/google-commands.json",
+      "sha256": "378952ff32e90927c7aa8132db6a939636c3c0f56e8fa87d8cb38486e3152611",
+      "size": 417
+    },
+    {
+      "path": "tests/evidence/startup-rollback/google-execution.json",
+      "sha256": "9f5c035a19850e0446c45e73fda46a786ca00014b03f86eed69900871fd054a7",
+      "size": 3758
+    },
+    {
+      "path": "tests/evidence/startup-rollback/google-google-results.xml",
+      "sha256": "5889ffd3783aae9b0d633828ae52317ac38c367852f2df5ef716fdbfd778d70e",
+      "size": 5877
+    },
+    {
+      "path": "tests/evidence/startup-rollback/google-execution.log",
+      "sha256": "aaea7d03affcfa71bcb864922864e9ded0ff2443608d51ba94c3d7305615b773",
+      "size": 3880
+    },
+    {
+      "path": "tests/evidence/startup-rollback/google-discovery.log",
+      "sha256": "86378fb17decf2ac73d80fa1f931c7e562abf0f978f0e3eb853217031fc62f8d",
+      "size": 1218
+    }
+  ]
+}

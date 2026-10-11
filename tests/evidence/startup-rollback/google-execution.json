@@ -1,0 +1,132 @@
+{
+  "tests": 20,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "passed": 20,
+  "cases": [
+    {
+      "name": "ClosesAdmissionBeforeProducerJoinThenReclaimsAfterAllJoins",
+      "classname": "Lifecycle",
+      "status": "passed"
+    },
+    {
+      "name": "ProducerTimeoutRetainsNotificationsAndOwnerProgress",
+      "classname": "Lifecycle",
+      "status": "passed"
+    },
+    {
+      "name": "OwnerJoinFailureDoesNotDetachHardwareOrReclaimStorage",
+      "classname": "Lifecycle",
+      "status": "passed"
+    },
+    {
+      "name": "IdleCheckRejectsPrematureOwnerJoinBeforePublicationExits",
+      "classname": "Lifecycle",
+      "status": "passed"
+    },
+    {
+      "name": "QuiescenceFailureRetainsStorageAndRetriesOnlyThatMilestone",
+      "classname": "Lifecycle",
+      "status": "passed"
+    },
+    {
+      "name": "InvalidInputHasNoSchedulingOrHardwareEffects",
+      "classname": "Lifecycle",
+      "status": "passed"
+    },
+    {
+      "name": "RunningSchedulerRetainsPlatformClocksAndTickAfterIOReclaim",
+      "classname": "Lifecycle",
+      "status": "passed"
+    },
+    {
+      "name": "StoppedSchedulerMayStopPlatformOnlyOnceAfterReclaim",
+      "classname": "Lifecycle",
+      "status": "passed"
+    },
+    {
+      "name": "PlatformStopFailureRetainsReclaimMilestoneAndCanRetry",
+      "classname": "Lifecycle",
+      "status": "passed"
+    },
+    {
+      "name": "PlatformStopRejectsCallsBeforeQuiescenceOrInvalidInputs",
+      "classname": "Lifecycle",
+      "status": "passed"
+    },
+    {
+      "name": "OnlyFreeRTOSPreservesPlatformForItsLiveScheduler",
+      "classname": "BackendPolicy",
+      "status": "passed"
+    },
+    {
+      "name": "NotificationFailureDestroysOnlyCreatedObjectsInReverseOrder",
+      "classname": "Bootstrap",
+      "status": "passed"
+    },
+    {
+      "name": "NativePartialTaskFailureClosesAdmissionBeforeJoiningLiveThreads",
+      "classname": "Bootstrap",
+      "status": "passed"
+    },
+    {
+      "name": "FreeRTOSUnstartedTasksUseDiscardActionAndNeverJoin",
+      "classname": "Bootstrap",
+      "status": "passed"
+    },
+    {
+      "name": "RunningSchedulerRejectsPrestartRollbackWithoutSideEffects",
+      "classname": "Bootstrap",
+      "status": "passed"
+    },
+    {
+      "name": "FailedJoinRetainsPublishersNotificationsAndWorkerRecord",
+      "classname": "Bootstrap",
+      "status": "passed"
+    },
+    {
+      "name": "DestroyFailureRetriesOnlyUnreclaimedEffects",
+      "classname": "Bootstrap",
+      "status": "passed"
+    },
+    {
+      "name": "UndrainedOwnerNeverDetachesPublishersOrReclaimsLoans",
+      "classname": "Bootstrap",
+      "status": "passed"
+    },
+    {
+      "name": "InvalidOrInconsistentRecordCannotInvokeExternalActions",
+      "classname": "Bootstrap",
+      "status": "passed"
+    },
+    {
+      "name": "FailedNextCreationDrainsAndJoinsActualRunningThreads",
+      "classname": "BootstrapNative",
+      "status": "passed"
+    }
+  ],
+  "report_sha256": "5889ffd3783aae9b0d633828ae52317ac38c367852f2df5ef716fdbfd778d70e",
+  "schema_version": 1,
+  "kind": "example_google_execution",
+  "discovered": 20,
+  "binary": "/workspace/nexus-examples/build/native-debug/tests/owner_lifecycle_test",
+  "commands": [
+    {
+      "argv": [
+        "/workspace/nexus-examples/build/native-debug/tests/owner_lifecycle_test",
+        "--gtest_list_tests"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/workspace/nexus-examples/build/native-debug/tests/owner_lifecycle_test",
+        "--gtest_output=xml:/workspace/nexus-os-iteration-evidence/examples/startup-rollback/final-execution/google-results.xml"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "qualifies_source_sdk": false,
+  "limits": "Execution only; source/SDK/HIL need separate identity"
+}

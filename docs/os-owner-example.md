@@ -56,9 +56,30 @@ partial progress so already destroyed objects are not retried. QUARANTINED remai
 a retained borrow and requires product recovery; the example supplies no automatic
 reset, destructive Flash operation or forced thread cancellation.
 
-At startup, any failed admission/task creation retains global storage. A real
-product owns startup rollback or fail-stop policy before proceeding. Once a task
-is created, do not destroy its notification or context until its proper join.
+`bootstrap.c` implements a separate partial-startup protocol. The application
+records only successful notification, owner and worker creations, along with
+retained platform and publisher effects. A notification failure destroys only
+the preceding creations, in reverse order. Partial platform startup preserves
+the platform's own remaining-effects result and retries its explicit stop.
+
+Native task creation starts a real thread immediately. Failure creating a later
+worker first closes admission, joins the created producers while the owner still
+drains their accepted requests, then joins the owner. A producer rejected after
+admission closes has no loan; its operation result does not prohibit joining.
+UART publishers are quiesced before notifications and platform storage are
+reclaimed.
+
+FreeRTOS creation before `vTaskStartScheduler()` has a different meaning: none
+of those static tasks has executed. Rollback uses the public
+`nx_freertos_task_discard_before_scheduler()` in reverse creation order. It does
+not wait for entry completion or call join with a stopped scheduler. Once the
+scheduler is started, this startup protocol rejects the call and the ordinary
+cooperative shutdown retains kernel clocks/Tick.
+
+Successful rollback milestones are not repeated. A failed join, drain, IRQ
+detachment, notification destruction or platform stop retains its effects and
+static storage. The example records the error and parks for an explicit product
+recovery decision; it does not free borrowed buffers or silently reset equipment.
 
 ## Budgets and validation
 
@@ -78,8 +99,14 @@ reclamation, resumable quiescence and invalid inputs. The initial six cases had 
 RED execution before implementation. Additional teardown regressions had a
 separate RED: a live kernel must retain clocks/Tick, while a stopped kernel may
 stop only after reclaim, failures retain the phase and repeat stop is suppressed.
-The current fixture also compiles the production backend policy for all three
-backends and executes eleven GoogleTest cases.
+The fixture also compiles the production backend policy for all three backends.
+`tests/owner_bootstrap_test.cpp` exercises partial creations, unstarted/running
+task distinctions, reverse rollback, retry and retained loans. Eight initial
+startup contracts had an executed RED before implementation. A further fixture
+creates actual Native owner/producer threads, injects a failed next creation,
+and verifies queued settlement, joins and notification destruction. Its 256 KiB
+host stacks serve instrumented host execution, not MCU stack qualification.
+Fresh discovery establishes the current case count.
 
 Native CTest executes this fixture and the actual threaded application. The
 GoogleTest runner discovers all cases, executes them without user filters and
