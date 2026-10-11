@@ -3,6 +3,7 @@ board = "gd32f470_liangshan"
 backend = "baremetal"
 clock = "hxtal25-pll200"
 optimization = "Os"
+components = ["uart-owner"]
 
 [memory]
 main_stack_bytes = 2048

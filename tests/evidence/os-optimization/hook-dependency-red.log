@@ -1,0 +1,16 @@
+test_complete_google_execution_is_retained (test_workflow.ExampleWorkflow.test_complete_google_execution_is_retained) ... ok
+test_python_tdd_hook_declares_the_pinned_workflow_parser (test_workflow.ExampleWorkflow.test_python_tdd_hook_declares_the_pinned_workflow_parser) ... FAIL
+test_uart_owner_firmware_has_an_independent_actual_elf_budget (test_workflow.ExampleWorkflow.test_uart_owner_firmware_has_an_independent_actual_elf_budget) ... ok
+
+======================================================================
+FAIL: test_python_tdd_hook_declares_the_pinned_workflow_parser (test_workflow.ExampleWorkflow.test_python_tdd_hook_declares_the_pinned_workflow_parser)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/nexus-examples/scripts/test_workflow.py", line 24, in test_python_tdd_hook_declares_the_pinned_workflow_parser
+    self.assertIn(pins[0], hook.get('additional_dependencies', []))
+AssertionError: 'PyYAML==6.0.3' not found in []
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.037s
+
+FAILED (failures=1)

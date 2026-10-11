@@ -84,6 +84,7 @@ jobs:
             build/native-debug/dependency-identity.json
             build/native-debug/CMakeCache.txt
             build/native-debug/compile_commands.json
+            build/native-debug/tests/google-execution/
             build/native-debug/nexus/generated/*
             build/native-debug/bin/*
             build/quality/style.json
@@ -161,6 +162,13 @@ jobs:
           --resolved build/${{ matrix.preset }}/nexus/generated/resolved.json
           --budget build/${{ matrix.preset }}/nexus/generated/resource-budget.json
           --report build/${{ matrix.preset }}/firmware-resource-budget.json
+      - name: Verify UART owner firmware resources
+        run: >-
+          python3 external/nexus/tools/measurement/resources.py
+          --elf build/${{ matrix.preset }}/bin/uart_owner_runtime.elf
+          --resolved build/${{ matrix.preset }}/nexus/generated/resolved.json
+          --budget build/${{ matrix.preset }}/nexus/generated/resource-budget.json
+          --report build/${{ matrix.preset }}/uart-owner-resource-budget.json
       - name: Prepare the unbound physical station work plan
         env:
           PRESET: ${{ matrix.preset }}
@@ -184,6 +192,7 @@ jobs:
             build/${{ matrix.preset }}/build.log
             build/${{ matrix.preset }}/dependency-identity.json
             build/${{ matrix.preset }}/firmware-resource-budget.json
+            build/${{ matrix.preset }}/uart-owner-resource-budget.json
             build/${{ matrix.preset }}/hil-preparation.json
             build/${{ matrix.preset }}/CMakeCache.txt
             build/${{ matrix.preset }}/compile_commands.json

@@ -1,0 +1,261 @@
+Running main() from gmock_main.cc
+[==========] Running 6 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 6 tests from Lifecycle
+[ RUN      ] Lifecycle.ClosesAdmissionBeforeProducerJoinThenReclaimsAfterAllJoins
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:93: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:94: Failure
+Expected equality of these values:
+  phase
+    Which is: 0
+  EXAMPLE_OWNER_RECLAIMABLE
+    Which is: 5
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:95: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:92: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, reclaim())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:91: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, publishers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:90: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:78: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+[  FAILED  ] Lifecycle.ClosesAdmissionBeforeProducerJoinThenReclaimsAfterAllJoins (0 ms)
+[ RUN      ] Lifecycle.ProducerTimeoutRetainsNotificationsAndOwnerProgress
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:100: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_ERROR_TIMEOUT
+    Which is: 4
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:101: Failure
+Expected equality of these values:
+  phase
+    Which is: 0
+  EXAMPLE_OWNER_ADMISSION_CLOSED
+    Which is: 1
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:108: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:107: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, reclaim())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:106: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, publishers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:105: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:99: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:104: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+[  FAILED  ] Lifecycle.ProducerTimeoutRetainsNotificationsAndOwnerProgress (0 ms)
+[ RUN      ] Lifecycle.OwnerJoinFailureDoesNotDetachHardwareOrReclaimStorage
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:115: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_ERROR_BUSY
+    Which is: 2
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:116: Failure
+Expected equality of these values:
+  phase
+    Which is: 0
+  EXAMPLE_OWNER_PRODUCERS_JOINED
+    Which is: 2
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:120: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:119: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, reclaim())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:118: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, publishers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:114: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:117: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:113: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+[  FAILED  ] Lifecycle.OwnerJoinFailureDoesNotDetachHardwareOrReclaimStorage (0 ms)
+[ RUN      ] Lifecycle.IdleCheckRejectsPrematureOwnerJoinBeforePublicationExits
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:134: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_ERROR_STATE
+    Which is: 3
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:135: Failure
+Expected equality of these values:
+  phase
+    Which is: 0
+  EXAMPLE_OWNER_PRODUCERS_JOINED
+    Which is: 2
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:136: Failure
+Expected equality of these values:
+  nx_bus_owner_service(&bus)
+    Which is: 2
+  NX_SUCCESS
+    Which is: 0
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:133: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:132: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+[  FAILED  ] Lifecycle.IdleCheckRejectsPrematureOwnerJoinBeforePublicationExits (0 ms)
+[ RUN      ] Lifecycle.QuiescenceFailureRetainsStorageAndRetriesOnlyThatMilestone
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:145: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_ERROR_BUSY
+    Which is: 2
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:146: Failure
+Expected equality of these values:
+  phase
+    Which is: 0
+  EXAMPLE_OWNER_JOINED
+    Which is: 3
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:149: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:148: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, reclaim())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:144: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, publishers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:147: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, publishers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:143: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:142: Failure
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+
+[  FAILED  ] Lifecycle.QuiescenceFailureRetainsStorageAndRetriesOnlyThatMilestone (0 ms)
+[ RUN      ] Lifecycle.InvalidInputHasNoSchedulingOrHardwareEffects
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:153: Failure
+Expected equality of these values:
+  example_owner_shutdown(nullptr, &bus, port)
+    Which is: 7
+  NX_ERROR_INVALID
+    Which is: 1
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:154: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, nullptr, port)
+    Which is: 7
+  NX_ERROR_INVALID
+    Which is: 1
+
+/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:157: Failure
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, incomplete)
+    Which is: 7
+  NX_ERROR_INVALID
+    Which is: 1
+
+[  FAILED  ] Lifecycle.InvalidInputHasNoSchedulingOrHardwareEffects (0 ms)
+[----------] 6 tests from Lifecycle (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 6 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 6 tests, listed below:
+[  FAILED  ] Lifecycle.ClosesAdmissionBeforeProducerJoinThenReclaimsAfterAllJoins
+[  FAILED  ] Lifecycle.ProducerTimeoutRetainsNotificationsAndOwnerProgress
+[  FAILED  ] Lifecycle.OwnerJoinFailureDoesNotDetachHardwareOrReclaimStorage
+[  FAILED  ] Lifecycle.IdleCheckRejectsPrematureOwnerJoinBeforePublicationExits
+[  FAILED  ] Lifecycle.QuiescenceFailureRetainsStorageAndRetriesOnlyThatMilestone
+[  FAILED  ] Lifecycle.InvalidInputHasNoSchedulingOrHardwareEffects
+
+ 6 FAILED TESTS

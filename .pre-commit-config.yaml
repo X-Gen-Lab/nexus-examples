@@ -16,3 +16,12 @@ repos:
         entry: python scripts/check_commit_message.py
         language: python
         stages: [commit-msg]
+      - id: nexus-example-tdd
+        name: Nexus pinned SDK and complete Native TDD contracts
+        entry: python scripts/tdd_gate.py --staged
+        language: python
+        additional_dependencies: [PyYAML==6.0.3]
+        stages: [pre-commit]
+        pass_filenames: true
+        always_run: true
+        require_serial: true

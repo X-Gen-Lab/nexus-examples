@@ -23,8 +23,11 @@ separate product repositories.
   infer unknown SPI/I2C/ADC/PWM/EXTI wiring or physical support from compilation.
 - Preserve SDK `.clang-format`/`.editorconfig` and backslash Doxygen headers.
   Public headers own full contracts; source omits duplicate param/return tags.
-  Install `python scripts/setup_dev_tools.py` in every clone. Hooks are read-only
-  staged style/text and Conventional Commit checks; CI checks all tracked files.
+  Install `python scripts/setup_dev_tools.py` in every clone. Hooks check staged
+  style/text, Conventional Commits and complete Native/Google contracts. The TDD
+  gate verifies the clean SDK lock and Gitlink, rejects differing unstaged or
+  untracked behavior, and checks fresh full CTest and Google execution. Hooks
+  never stage changes or bypass checks; CI checks all owned files independently.
 - Separate Native model execution, linked ARM ELF budgets and physical HIL.
   User defers physical boards. Record unexecuted timing/electrical/reset/power-cut
   tests honestly. Do not issue automatic destructive Flash examples on equipment.

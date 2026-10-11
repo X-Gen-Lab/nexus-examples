@@ -25,7 +25,8 @@ class ApplicationBuildContracts(unittest.TestCase):
             applications = {Path(item['file']).parent.name: item['command']
                             for item in commands if 'apps' in Path(item['file']).parts}
             self.assertEqual(set(applications), {
-                'platform_reference', 'sensor_spi', 'journal', 'modbus_registers'})
+                'platform_reference', 'sensor_spi', 'journal', 'modbus_registers',
+                'uart_owner_runtime'})
             for name, command in applications.items():
                 with self.subTest(application=name):
                     self.assertTrue(any('-fsanitize=' in flag and 'address' in flag

@@ -8,7 +8,7 @@
 任务、组件、资源预算和恢复策略。依赖通过 `external/nexus` Gitlink 和
 [源码锁](dependencies/nexus.lock.json) 固定，最终验收必须与该身份一致。
 
-## 四个应用
+## 五个应用
 
 | Target | Native 有限执行 | MCU 裸机 / FreeRTOS |
 | --- | --- | --- |
@@ -16,8 +16,9 @@
 | `sensor_spi` | BMP280 SPI 端口、芯片身份与 Bosch 参考结果 | 暂无审定传感器板级接线 |
 | `journal` | 文件 NOR 模型、关闭重开后恢复记录 | 暂无指定产品 Flash 分区与电源测试 |
 | `modbus_registers` | 实际 UART 模型、CRC、写权限、异常回复、有限日志 | 暂无 RS485 收发器接线和方向时序验收 |
+| `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、active cancel/drain/join | 三板两后端，显式静态任务或裸机 pump |
 
-Native 注册四个有限 CTest；UART 由应用显式注入接收事实，服务推进发送并等待真正
+Native 注册五个有限应用 CTest 和完整 GoogleTest lifecycle 执行；UART 由应用显式注入接收事实，服务推进发送并等待真正
 TC 完成。模型没有自动串口设备或后台 RX 生产者。Flash 文件示例验证宿主恢复流程，
 不证明 MCU 掉电安全。三板为启明欣欣 F407ZG V3.1、天空星 F407VE 青春版和梁山派
 GD32F470ZG；当前实板未接入，所有物理资格均未验证。
@@ -46,11 +47,14 @@ Windows 使用 `.venv/Scripts/python.exe` 并将工具路径加入 PATH。
 配置器生成定型实例、只读接口、factory ID、链接脚本和预算。
 `nx_factory_uart(NX_UART_ID_UART0)` 仅返回静态实例，不分配内存或启动硬件；
 SPI 设备使用 `nx_factory_spi_device`，控制器与外部设备身份分开。
-本仓库有 Native 加三板两后端共七个 preset；ARM 每组产生一个实际链接的 ELF。
+本仓库有 Native 加三板两后端共七个 preset；ARM 每组分别产生平台参考和共享 UARTOwner
+两个实际链接的 ELF，并独立检查各自预算。
 
-提交钩子检查暂存文件的格式、机械注释、文本和 Conventional Commit，不改写或
-暂存源文件。C 格式和注释规则复用固定 SDK，避免复制一套逐渐漂移的规则。
-手动钩子检查工作区；CI 执行完整检查。绕过本地钩子的提交仍由 CI 拒绝。
+提交钩子检查暂存文件的格式、机械注释、文本和 Conventional Commit，并对行为变更
+验证正式干净 SDK，执行全部工具测试、Native CTest 和 GoogleTest；不改写或暂存源文件。
+执行前后须保持相同 index/SDK 身份，拒绝未暂存行为、过滤、跳过、缺失或陈旧报告。
+C 格式和注释规则复用固定 SDK，避免复制一套规则。手动完整检查使用
+`python scripts/tdd_gate.py --all`；CI 保留实际 Google discovery、XML、commands 和退出码。
 
 变更行为先用失败测试定义合同，通过后再重构。Nexus 通用固件合同使用
 GoogleTest／GoogleMock 宿主测试；示例固件保持 C11，目标映像没有测试框架。
@@ -63,3 +67,7 @@ Gitlink、tree、干净源码和供应商身份一致。未提交的联合开发
 [构建集成](docs/build-integration.md)、[板卡](docs/boards.md)、
 [软件验证边界](docs/refactor-validation.md)、[后续迭代](docs/examples-roadmap.md)
 说明当前接口和交付范围。旧架构的测试数量与证据保留为历史记录，不能证明新架构。
+
+[多生产者 UARTOwner 示例](docs/os-owner-example.md) 说明唯一 execution owner、IRQ wake、
+active cancel/drain 和 producer/owner join 后才能回收通知的顺序。GoogleTest／GoogleMock
+只使用固定 SDK 的离线 archive 并仅进入 Native host 测试；MCU 示例保持 C11。

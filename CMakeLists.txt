@@ -17,6 +17,9 @@ add_subdirectory("${NEXUS_SOURCE}" nexus EXCLUDE_FROM_ALL)
 get_target_property(soc_family Nexus::Platform NEXUS_SOC_FAMILY)
 
 nexus_add_firmware(platform_reference SOURCES apps/platform_reference/main.c)
+nexus_add_firmware(uart_owner_runtime
+    SOURCES apps/uart_owner_runtime/main.c apps/uart_owner_runtime/lifecycle.c
+    LIBRARIES Nexus::UARTOwner Nexus::Arch)
 if(soc_family STREQUAL "native")
     enable_testing()
     nexus_add_firmware(sensor_spi SOURCES apps/sensor_spi/main.c
@@ -25,10 +28,12 @@ if(soc_family STREQUAL "native")
         LIBRARIES Nexus::Storage Nexus::FileFlash)
     nexus_add_firmware(modbus_registers SOURCES apps/modbus_registers/main.c
         LIBRARIES Nexus::ModbusRTU Nexus::Log)
+    add_subdirectory(tests)
+    add_test(NAME uart_owner_shutdown COMMAND uart_owner_runtime)
     add_test(NAME platform_static_ports COMMAND platform_reference)
     add_test(NAME sensor_explicit_spi COMMAND sensor_spi)
     add_test(NAME persistent_journal COMMAND journal "${CMAKE_CURRENT_BINARY_DIR}/journal.dat")
     add_test(NAME protocol_authorized_registers COMMAND modbus_registers)
     set_tests_properties(platform_static_ports sensor_explicit_spi persistent_journal
-        protocol_authorized_registers PROPERTIES TIMEOUT 10 LABELS "native;example")
+        protocol_authorized_registers uart_owner_shutdown PROPERTIES TIMEOUT 10 LABELS "native;example")
 endif()
