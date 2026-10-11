@@ -56,6 +56,28 @@ partial progress so already destroyed objects are not retried. QUARANTINED remai
 a retained borrow and requires product recovery; the example supplies no automatic
 reset, destructive Flash operation or forced thread cancellation.
 
+`quarantine_policy.c` is an explicit application policy used at every actual
+owner-progress site in `main.c`. BUSY remains normal waiting. A real service
+error closes admission and publishes `FAULT_OBSERVED`; a reversed observation
+clock, arithmetic overflow or the authored cleanup budget publishes
+`ESCALATED_RETAINED`. The reference budget is 100 service steps and 100 ms after
+the first fault. These limits govern escalation, not permission to reclaim.
+
+Every later progress call still executes the real owner service step. It never
+kills the owner, resets hardware, replays the operation or frees quarantined
+buffers. Actual owner idle publishes `LOAN_DRAINED`, after which the ordinary
+join, IRQ-detach, hardware-stop and notification-destruction sequence still
+applies. The bounded fault sink records stage/status and wakes the coordinator;
+product-specific safe outputs and recovery decisions remain external.
+
+`tests/quarantine_policy_test.cpp` exercises the production policy and actual
+BusOwner with GoogleMock external hardware/fault ports. Six new cases had a true
+stub RED before implementation and cover BUSY, retained step/deadline exhaustion,
+clock reversal, deadline-add overflow and later successful drain. The shared
+lifecycle Google binary now runs 28 cases. This development iteration preserves
+the existing clean SDK pin; it does not claim physical timing or a new release
+qualification until the complete clean-source integration runs.
+
 `bootstrap.c` implements a separate partial-startup protocol. The application
 records only successful notification, owner and worker creations, along with
 retained platform and publisher effects. A notification failure destroys only

@@ -25,9 +25,11 @@ add_subdirectory("${google_root}" google-build EXCLUDE_FROM_ALL)
 add_executable(owner_lifecycle_test owner_lifecycle_test.cpp
     owner_bootstrap_test.cpp
     scheduler_return_test.cpp
+    quarantine_policy_test.cpp
     "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime/lifecycle.c"
     "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime/bootstrap.c"
-    "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime/scheduler_return.c")
+    "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime/scheduler_return.c"
+    "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime/quarantine_policy.c")
 target_include_directories(owner_lifecycle_test PRIVATE
     "${PROJECT_SOURCE_DIR}/apps/uart_owner_runtime")
 target_compile_features(owner_lifecycle_test PRIVATE cxx_std_17)

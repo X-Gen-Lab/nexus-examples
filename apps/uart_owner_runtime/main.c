@@ -7,6 +7,7 @@
  * \copyright       Copyright (c) 2026 Nexus Team
  */
 #include "nexus_config.h"
+#include "quarantine_policy.h"
 
 #include "backend_policy.h"
 #include "bootstrap.h"
@@ -60,6 +61,8 @@ typedef struct {
 /** \brief The external application supplies every queue slot and OS object. */
 typedef struct {
     nx_bus_owner_t owner;
+    example_owner_recovery_t recovery;
+    uint32_t recovery_stage;
     nx_owner_slot_t slots[PRODUCERS];
     nx_uart_owner_executor_t uart;
     notification_t owner_event;
@@ -107,6 +110,18 @@ static void leave(void* context, uintptr_t value) {
 static nx_time_us_t now(void* context) {
     (void)context;
     return nx_time_now_us();
+}
+
+/** \brief Publish platform fault stages while all retained storage stays live.
+ */
+static void recovery_fault(void* context, example_recovery_stage_t stage,
+                           nx_result_t reason) {
+    application_t* app = context;
+    nx_atomic_u32_store_release(&app->recovery_stage, (uint32_t)stage);
+    if (reason != NX_SUCCESS) {
+        nx_atomic_u32_store_release(&app->status, (uint32_t)reason);
+    }
+    (void)app->coordinator_wake.wake(app->coordinator_wake.context);
 }
 
 /** \brief Initialize exact per-object storage without hidden workers. */
@@ -198,7 +213,7 @@ static void producer_entry(void* context) {
 static void owner_entry(void* context) {
     application_t* app = context;
     for (;;) {
-        (void)nx_bus_owner_service(&app->owner);
+        (void)example_owner_recovery_progress(&app->recovery, nx_time_now_us());
         (void)app->coordinator_wake.wake(app->coordinator_wake.context);
         uint32_t sequence = app->owner_wake.arm(app->owner_wake.context);
         if (nx_atomic_u32_load_acquire(&app->owner_stop) != 0U &&
@@ -228,7 +243,8 @@ static nx_result_t join_producers(void* context) {
                 : NX_SUCCESS;
 #else
         while (producer->result == NX_SUCCESS && !settled(producer)) {
-            (void)nx_bus_owner_service(&app->owner);
+            (void)example_owner_recovery_progress(&app->recovery,
+                                                  nx_time_now_us());
         }
         nx_result_t result = NX_SUCCESS;
 #endif
@@ -251,7 +267,7 @@ static nx_result_t join_owner(void* context) {
                : NX_SUCCESS;
 #else
     while (!nx_bus_owner_idle(&app->owner)) {
-        (void)nx_bus_owner_service(&app->owner);
+        (void)example_owner_recovery_progress(&app->recovery, nx_time_now_us());
     }
     return NX_SUCCESS;
 #endif
@@ -341,6 +357,15 @@ static nx_result_t initialize(application_t* app) {
         return result;
     }
     app->bootstrap.owner_initialized = true;
+    /* Application escalation budget; the worker keeps draining after it
+     * expires.
+     */
+    result = example_owner_recovery_initialize(
+        &app->recovery, &app->owner, 100U, 100000U,
+        (example_recovery_fault_port_t){app, recovery_fault});
+    if (result != NX_SUCCESS) {
+        return result;
+    }
     app->irq_wake = (nx_irq_wake_t) {
         &app->owner_wake, irq_hint,
 #if defined(NEXUS_BACKEND_FREERTOS)
@@ -568,7 +593,8 @@ int main(void) {
     for (size_t i = 0; i < PRODUCERS; ++i) {
         producer_submit(&s_application.producer[i]);
     }
-    (void)nx_bus_owner_service(&s_application.owner);
+    (void)example_owner_recovery_progress(&s_application.recovery,
+                                          nx_time_now_us());
     return shutdown_application(&s_application) == NX_SUCCESS ? 0 : 9;
 #endif
 }

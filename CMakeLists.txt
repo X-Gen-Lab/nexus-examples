@@ -21,6 +21,7 @@ nexus_add_firmware(uart_owner_runtime
     SOURCES apps/uart_owner_runtime/main.c apps/uart_owner_runtime/lifecycle.c
         apps/uart_owner_runtime/bootstrap.c
         apps/uart_owner_runtime/scheduler_return.c
+        apps/uart_owner_runtime/quarantine_policy.c
     LIBRARIES Nexus::UARTOwner Nexus::Arch)
 if(soc_family STREQUAL "native")
     enable_testing()
