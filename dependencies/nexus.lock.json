@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "3728b334b02eb2eb70bcf5d4caafbb9746837dd3",
-  "tree": "48ba820e5c2d4c372bf7eb6e909c49850cc1fe76",
+  "commit": "63b3cc9a3213a6f6fd760d4e9447f3707dd5dd4e",
+  "tree": "40572407be68cbe587c9bb4406435012f16b92fd",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "SoC refinement software source with H743 and U575 constrained reference platforms; integration evidence binds this exact source; physical HIL not executed",
+  "baseline_status": "SoC extension software source; examples select H743 fixed HSI64 Cache-off IRQ UART and U575 TZEN0 MSIS4; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }
