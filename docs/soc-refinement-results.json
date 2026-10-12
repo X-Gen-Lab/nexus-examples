@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "kind": "examples_soc_refinement_record",
+  "date": "2026-10-12",
+  "status": "software_execution_passed",
+  "qualified_code": {
+    "repository": "https://github.com/X-Gen-Lab/nexus-examples",
+    "commit": "f02b91867bb64abfa31e3c1d4b6004bd1a38b091",
+    "tree": "731e54ace34d9b9f5a3fb473b184306158d15fb8",
+    "pull_request": "https://github.com/X-Gen-Lab/nexus-examples/pull/2"
+  },
+  "sdk": {
+    "repository": "https://github.com/X-Gen-Lab/nexus.git",
+    "commit": "3728b334b02eb2eb70bcf5d4caafbb9746837dd3",
+    "tree": "48ba820e5c2d4c372bf7eb6e909c49850cc1fe76",
+    "formal_gitlink_and_lock_verified": true,
+    "recursive_dependency_checkouts": 9
+  },
+  "results": {
+    "native_ctest": {
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "xml_sha256": "4a379365ed8c3f7da1ad1bed6d8e8bafcf4c44e0e19f9d128eb0a3604fc406dd"
+    },
+    "google": {
+      "programs": {
+        "owner_lifecycle_google": {
+          "passed": 28,
+          "failed": 0,
+          "skipped": 0,
+          "xml_sha256": "30217b252335b04945ce3c0df8b5715fd6019646ddb16975d76375c62c5b4035"
+        },
+        "product_fault_policy_google": {
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "xml_sha256": "d1560c5603499c3969d3c40e3caf0122de8a714ef6042bbcf517385aa51a4ca2"
+        },
+        "reference_rx_policy_google": {
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0,
+          "xml_sha256": "2c47be29afbacbb5cbefeddf3a2a800b2d8376ee7396ab625f1d83e78ac5a364"
+        }
+      },
+      "passed_total": 43
+    },
+    "python_tools": {
+      "passed": 44,
+      "failed": 0,
+      "skipped": 0,
+      "raw_archive_member": "tdd/tools.log",
+      "raw_sha256": "fc3c06025ca30f0726bd45ec39dd9d4d8eeead267aaf4dd5d5113e2e1ee68f9e"
+    },
+    "arm": {
+      "presets": 10,
+      "linked_elfs": 20,
+      "passed_resource_checks": 20,
+      "failed_resource_checks": 0
+    },
+    "hil": {
+      "plans": 10,
+      "status": "prepared_unbound",
+      "physical_status": "not_executed"
+    },
+    "formal_runner": {
+      "commands": 46,
+      "nonzero_exits": 0,
+      "source_stable": true,
+      "sdk_identity_stable": true,
+      "native_origin": "normal commit hook; attached without rerun"
+    }
+  },
+  "evidence": {
+    "location_scope": "External local workspace archive; not a published GitHub artifact or release.",
+    "report": {
+      "path": "/workspace/nexus-soc-qualification-20261012/examples-reference/formal-f02b9186-v2/report.json",
+      "size": 173336,
+      "sha256": "46c305cefefc108e4e98bf6df26bea25b5a53edeef0e58e56be5f0b4f0f3d779"
+    },
+    "source_before": {
+      "path": "/workspace/nexus-soc-qualification-20261012/examples-reference/formal-f02b9186-v2/source-before.json",
+      "size": 93230,
+      "sha256": "0bf4f0a19c9e79d218f5a7b43ac4c17b389f0500b362e214c83b56449f555cc9"
+    },
+    "source_after": {
+      "path": "/workspace/nexus-soc-qualification-20261012/examples-reference/formal-f02b9186-v2/source-after.json",
+      "size": 93230,
+      "sha256": "0bf4f0a19c9e79d218f5a7b43ac4c17b389f0500b362e214c83b56449f555cc9"
+    },
+    "sdk_before": {
+      "path": "/workspace/nexus-soc-qualification-20261012/examples-reference/formal-f02b9186-v2/sdk-before.json",
+      "size": 2259,
+      "sha256": "00d040b25d4c9b8729891ba8d7da4a9dbc770bbaa3b05cd9d15d40fa134bca8f"
+    },
+    "sdk_after": {
+      "path": "/workspace/nexus-soc-qualification-20261012/examples-reference/formal-f02b9186-v2/sdk-after.json",
+      "size": 2259,
+      "sha256": "00d040b25d4c9b8729891ba8d7da4a9dbc770bbaa3b05cd9d15d40fa134bca8f"
+    },
+    "commands": {
+      "path": "/workspace/nexus-soc-qualification-20261012/examples-reference/formal-f02b9186-v2/commands.json",
+      "size": 39966,
+      "sha256": "1b128edf031dd20653b6fe6bb861d32e0fd1c2ae2ea2106576c925c617ff5331"
+    },
+    "native_archive": {
+      "path": "/workspace/nexus-soc-qualification-20261012/examples-reference/formal-f02b9186-v2/native-debug-hook-executed.tar.gz",
+      "size": 8970130,
+      "sha256": "b2b711df0cc0ff6415941ed6cd2a6ff3593365b3d5dcca2de2a05d0f49d99c35"
+    },
+    "archive_index": "report.json:archives",
+    "executed_archives": 11,
+    "preserved_prior_archives": 10,
+    "prior_archives_qualify_this_execution": false
+  },
+  "limits": {
+    "publishable": false,
+    "physical_status": "not_executed",
+    "cycles_status": "not_measured",
+    "github_ci": "not_established_by_this_local_record",
+    "documentation_changes": "This record qualifies the named code commit only; later documentation commits are not new software execution.",
+    "reference_platforms": "H743 HSI64 Cache-off and U575 MSIS4 TZEN0 GPIO/IRQ-byte UART only; no new DMA/cache/TrustZone/deep-STOP qualification."
+  },
+  "historical_records": [
+    {
+      "kind": "earlier_software_snapshot",
+      "examples_commit": "1f4116ae70b0948a90d2efba0b9debd644c85d68",
+      "sdk_commit": "23cde7e57a4781db8ffe2e75849c02f976c4304d",
+      "report": {
+        "path": "/workspace/nexus-soc-qualification-20261012/examples-reference/formal-1f4116ae/report.json",
+        "size": 153120,
+        "sha256": "730e1b921d7d0b97efca05456949a484decd7a35371de233dc9ba7de4cf7ad9b"
+      },
+      "qualifies_current_code": false
+    }
+  ],
+  "invocation_note": "An earlier invocation rejected a copied hook-report path before ARM execution. The recorded v2 run uses the original hook evidence; that invocation rejection is not a firmware failure or TDD RED."
+}
