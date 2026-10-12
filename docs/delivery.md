@@ -6,10 +6,10 @@ source/dependency verification, finite Native execution and real MCU ELF budgets
 Platform providers remain in Nexus; product policies remain external.
 
 The software execution recorded on 2026-10-12 passed for examples code commit
-`f02b91867bb64abfa31e3c1d4b6004bd1a38b091`, tree
-`731e54ace34d9b9f5a3fb473b184306158d15fb8`, using the clean pinned Nexus SDK
-`3728b334b02eb2eb70bcf5d4caafbb9746837dd3`, tree
-`48ba820e5c2d4c372bf7eb6e909c49850cc1fe76`.
+`3de8523811b00da8bd887abf53e61eedbaf5161e`, tree
+`1b9b3245da8a1b5c797479d68bb5001f73f06dbf`, using the clean pinned Nexus SDK
+`98270512ea2ff7eefe8ff79720018e582be3a949`, tree
+`8d3e69d3179d7b0d2382c5fd074c970dfc9348d9`.
 
 The normal commit hook executed all eight Native CTests: five finite applications
 and three GoogleTest programs containing 43 cases (28 lifecycle, seven fault
@@ -25,7 +25,9 @@ normal hook after checking its exact index tree and SDK identity; it was not
 rerun or counted twice. The formal runner completed 46 commands with zero exit
 codes and unchanged source/SDK snapshots. This record describes the named code
 commit; a later documentation commit does not establish new execution at its HEAD.
-The earlier `1f4116ae` / SDK `23cde7e5` report remains historical. The recorded
+The earlier `8cbc6e49` / SDK `646a331c`, `f02b9186` / SDK
+`3728b334` and `1f4116ae` / SDK
+`23cde7e5` reports remain historical. The recorded
 matrix above was executed again after pinning the corrected SDK; no previous
 ARM result was promoted to qualify the changed source.
 

@@ -5,8 +5,8 @@ matrix. Old counts, CI runs and `evidence/platform-refactor-validation.json`
 remain historical; they do not qualify this implementation.
 
 The [2026-10-12 result record](soc-refinement-results.json) binds clean software
-execution to examples code commit `f02b91867bb64abfa31e3c1d4b6004bd1a38b091`
-and pinned Nexus SDK `3728b334b02eb2eb70bcf5d4caafbb9746837dd3`. Both exact
+execution to examples code commit `3de8523811b00da8bd887abf53e61eedbaf5161e`
+and pinned Nexus SDK `98270512ea2ff7eefe8ff79720018e582be3a949`. Both exact
 trees and before/after source hashes are recorded there. All eight Native CTests,
 43 GoogleTest cases across three programs, 44 Python tooling tests and twenty
 ARM ELF budget checks passed without failures or skips. The twenty images cover
@@ -18,11 +18,11 @@ evidence, then executed the ARM and HIL preparation matrix. Its 46 commands
 returned zero; source and SDK identities remained unchanged. Documentation
 updates record this code snapshot and do not qualify a subsequent documentation
 HEAD or imply a separate GitHub Actions result.
-The earlier `1f4116ae` / SDK `23cde7e5` report is retained as a historical
-snapshot. It does not qualify this SDK update. An initial invocation for the new
-snapshot rejected a copied hook-report path before ARM execution; the successful
-`formal-f02b9186-v2` invocation used the required original hook evidence. That
-invocation rejection is neither a firmware regression nor TDD RED evidence.
+The earlier `8cbc6e49` / SDK `646a331c`, `f02b9186` / SDK
+`3728b334` and `1f4116ae` / SDK
+`23cde7e5` reports remain historical. Their passes and invocation failures do
+not qualify this SDK update. The current matrix was executed again after the
+new pin passed its normal commit hook.
 
 Original JSON reports beneath the exact historical roots
 `evidence/reports/a4d5ac6/` and `evidence/reports/5498b2b/` are preserved
@@ -49,15 +49,19 @@ Current required software checks are:
 The build helper records commands and exits. CI is configured to retain raw logs, JUnit, source
 identity, compile commands, effective configuration, ELF/BIN/MAP and resource
 reports. This execution retains its raw evidence outside the Git repository at
-`/workspace/nexus-soc-qualification-20261012/examples-reference/formal-f02b9186-v2/`.
+`/dev/shm/nexus-soc-final-98270512/verification/examples/`.
 The report SHA-256 is
-`46c305cefefc108e4e98bf6df26bea25b5a53edeef0e58e56be5f0b4f0f3d779`.
+`84c884b6b14283b53f9b4cba440ac4be8c3f26ad95332c0172ac88c622b9e787`.
 Its artifact index includes eleven executed archives (Native plus ten ARM) and
 ten preserved prior ARM archives; prior archives are not new qualification.
 The archives include ELF/BIN/MAP, configuration, compile metadata and original
 execution logs with per-file hashes. This local archive location is not a
-published GitHub artifact URL. Reports bind actual inputs and outputs; an older
-successful report cannot qualify changed behavior.
+published GitHub artifact URL. A verified durable copy is retained at
+`/workspace/nexus-soc-delivery-98270512/examples-evidence.tar.gz`
+(SHA-256 `c7f6f4824c85142b86ff43a428d88fb680f8725fae9e8b7f0fd57d1bdf70db9c`).
+Resolve the original execution directory beneath its `examples/` prefix;
+original reports retain their recorded paths and bytes. Reports bind actual
+inputs and outputs; an older successful report cannot qualify changed behavior.
 
 Joint development in `build/nextgen-development/` is deliberately uncommitted
 and `publishable=false`. It is useful implementation feedback, not a sealed

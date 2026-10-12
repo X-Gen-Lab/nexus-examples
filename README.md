@@ -26,7 +26,7 @@ GD32F470ZG。新增 NUCLEO-H743ZI2 和 NUCLEO-U575ZI-Q 软件参考配置；当�
 未接入，所有物理资格均未验证。
 
 故障策略使用 Core `nx_fault_observe`。正式 SDK 身份以源码锁和 Gitlink 为准。
-代码提交 `f02b9186` 与固定 SDK `3728b334` 已通过 8 项 Native CTest、三组共
+代码提交 `3de85238` 与固定 SDK `98270512` 已通过 8 项 Native CTest、三组共
 43 项 GoogleTest、44 项 Python 工具测试，以及十个 ARM 配置的 20 个实际 ELF
 预算检查。[验收记录](docs/soc-refinement-results.json) 固定完整提交、tree 和原始证据
 哈希；后续文档提交不会自动获得新的代码资格。10 份 HIL 计划已准备，实板未执行。
