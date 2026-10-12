@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "23cde7e57a4781db8ffe2e75849c02f976c4304d",
-  "tree": "df291729c84d6cd5afdb8e3b7963fb8df4732782",
+  "commit": "3728b334b02eb2eb70bcf5d4caafbb9746837dd3",
+  "tree": "48ba820e5c2d4c372bf7eb6e909c49850cc1fe76",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
   "baseline_status": "SoC refinement software source with H743 and U575 constrained reference platforms; integration evidence binds this exact source; physical HIL not executed",
