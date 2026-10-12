@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "646a331c6b0ccde25ced0694067458acfa23d873",
-  "tree": "20d632422d877ce8b67d97bf4d3c71681e1b2b87",
+  "commit": "98270512ea2ff7eefe8ff79720018e582be3a949",
+  "tree": "8d3e69d3179d7b0d2382c5fd074c970dfc9348d9",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
   "baseline_status": "SoC extension software source; examples select H743 fixed HSI64 Cache-off IRQ UART and U575 TZEN0 MSIS4; physical HIL not executed",
