@@ -12,22 +12,23 @@
 
 | Target | Native 有限执行 | MCU 裸机 / FreeRTOS |
 | --- | --- | --- |
-| `platform_reference` | GPIO、显式 RX 注入、IRQ TX 完成和停止 | 三板 LED 与 UART；FreeRTOS 静态任务 |
+| `platform_reference` | GPIO、显式 RX 注入、IRQ TX 完成和停止 | 五板软件配置的 LED 与 UART；FreeRTOS 静态任务 |
 | `sensor_spi` | BMP280 SPI 端口、芯片身份与 Bosch 参考结果 | 暂无审定传感器板级接线 |
 | `journal` | 文件 NOR 模型、关闭重开后恢复记录 | 暂无指定产品 Flash 分区与电源测试 |
 | `modbus_registers` | 实际 UART 模型、CRC、写权限、异常回复、有限日志 | 暂无 RS485 收发器接线和方向时序验收 |
-| `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 三板两后端，显式静态任务或裸机 pump |
+| `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 五板两后端，显式静态任务或裸机 pump |
 
-Native 注册五个有限应用 CTest，以及完整 lifecycle 和故障策略两组 GoogleTest 执行。
+Native 注册五个有限应用 CTest，以及 lifecycle、故障策略和接收策略三组 GoogleTest 执行。
 UART 由应用显式注入接收事实，服务推进发送并等待真正
 TC 完成。模型没有自动串口设备或后台 RX 生产者。Flash 文件示例验证宿主恢复流程，
 不证明 MCU 掉电安全。三板为启明欣欣 F407ZG V3.1、天空星 F407VE 青春版和梁山派
-GD32F470ZG；当前实板未接入，所有物理资格均未验证。
+GD32F470ZG。新增 NUCLEO-H743ZI2 和 NUCLEO-U575ZI-Q 软件参考配置；当前实板
+未接入，所有物理资格均未验证。
 
-新的故障策略使用 Core `nx_fault_observe`；当前锁定的 `6fc1ed75` SDK 尚未提供
-该接口，因此这组变更的完整构建暂被版本差异阻断。已保留旧 pin 下适用测试与
-真实失败，最终 SDK 更新后的完整 Native 与十二个 ARM ELF 必须重新验收。
-[交付准备](docs/delivery-preparation.md) 区分这一阶段和最终软件资格。
+故障策略使用 Core `nx_fault_observe`。正式 SDK 身份以源码锁和 Gitlink 为准。
+新增 H743/U575 配置需要包含对应 Board/SoC 的 SDK；本轮正式更新必须重新执行完整
+Native、十个 ARM 配置的二十个 ELF 及各自预算。旧 pin 的成功或失败只描述历史快照。
+[交付准备](docs/delivery-preparation.md) 区分开发证据和最终软件资格。
 
 ## 开发与构建
 
@@ -43,6 +44,8 @@ python scripts/build.py --preset native-debug --test
 python scripts/build.py --preset stm32-qiming-baremetal
 python scripts/build.py --preset stm32-sky-freertos
 python scripts/build.py --preset gd32-liangshan-freertos
+python scripts/build.py --preset stm32-h743-nucleo-baremetal
+python scripts/build.py --preset stm32-u575-nucleo-freertos
 ```
 
 ARM 构建还需 SDK 固定的 GNU Arm 工具链，可用
@@ -53,8 +56,14 @@ Windows 使用 `.venv/Scripts/python.exe` 并将工具路径加入 PATH。
 配置器生成定型实例、只读接口、factory ID、链接脚本和预算。
 `nx_factory_uart(NX_UART_ID_UART0)` 仅返回静态实例，不分配内存或启动硬件；
 SPI 设备使用 `nx_factory_spi_device`，控制器与外部设备身份分开。
-本仓库有 Native 加三板两后端共七个 preset；ARM 每组分别产生平台参考和共享 UARTOwner
+本仓库有 Native 加五板两后端共十一个 preset；ARM 每组分别产生平台参考和共享 UARTOwner
 两个实际链接的 ELF，并独立检查各自预算。
+
+H743 初始范围是 HSI64、Cache off、PB0 LED 与 USART3 PD8/PD9 IRQ byte RX；
+U575 是 MSIS4、TZEN0、PC7 LED 与 USART1 PA9/PA10 IRQ byte RX。两个软件参考均不
+启用 DMA、Cache 或 TrustZone。`platform_reference` 优先读取公共 event 接口，只有
+UNSUPPORTED 才转到公共 byte 接口；事件损坏或 byte overflow 会停止回显，不制造
+字符、时间戳或丢失恢复结果。产品协议与恢复策略仍由产品仓库决定。
 
 提交钩子检查暂存文件的格式、机械注释、文本和 Conventional Commit，并对行为变更
 验证正式干净 SDK，执行全部工具测试、Native CTest 和 GoogleTest；不改写或暂存源文件。
@@ -64,7 +73,7 @@ C 格式和注释规则复用固定 SDK，避免复制一套规则。手动完�
 
 变更行为先用失败测试定义合同，通过后再重构。Nexus 通用固件合同使用
 GoogleTest／GoogleMock 宿主测试；示例固件保持 C11，目标映像没有测试框架。
-Python 边界测试执行真实配置器，并检查七组 TOML、生成 factory 和报告拒绝逻辑。
+Python 边界测试执行真实配置器，并检查十一组 TOML、生成 factory 和报告拒绝逻辑。
 
 本地 `--nexus-source /absolute/path` 只改变 SDK 位置；正式依赖检查仍要求锁、
 Gitlink、tree、干净源码和供应商身份一致。未提交的联合开发可以显式使用临时装配，

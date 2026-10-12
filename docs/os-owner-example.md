@@ -28,8 +28,10 @@ provider and actual pthread notification/task adapters execute in the example.
 The owner pumps periodically even if a hint is coalesced or publishing fails.
 The example's 1 ms wake interval is an explicit product choice, not a platform
 latency guarantee. IRQ wakes use the actual generated board console priority and
-selected kernel ceiling. Only Native model injections are synthetic; the six ARM
-builds retain the existing reviewed board console route.
+selected kernel ceiling. Only Native model injections are synthetic; the ten ARM
+configurations retain their selected reviewed Board console routes. The H743 and
+U575 software references use byte reception and the same public TX/settlement
+contract. No provider or vendor declaration enters the application.
 
 FreeRTOS may observe a genuine successful completion before stop; that first
 terminal result remains valid. The example accepts SUCCESS or CANCELLED and

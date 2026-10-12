@@ -6,6 +6,13 @@ OS backend and optional component targets. Its `nexus_add_firmware()` helper
 adds MCU startup, selected providers, linker configuration and real ELF budget
 checks. Application sources remain in this repository.
 
+The maintained matrix has one Native configuration and five boards with two
+backends each. H743 and U575 software references use `stm32-h743-nucleo-*` and
+`stm32-u575-nucleo-*`; each links `platform_reference` and `uart_owner_runtime`.
+Both applications consume generated public faces. The logical `uart1` instance
+maps to H743 USART3 or U575 USART1 through the authored Board binding, without
+exposing vendor types or deriving hardware indices in application code.
+
 `assemblies/*.toml` selects one Board package, clock profile, OS backend,
 controllers, endpoints, IRQ policy and memory budget. Unsupported routes,
 conflicting resources, contradictory configuration and malformed inputs fail
@@ -42,3 +49,7 @@ verifies the formal commit/tree, example Gitlink, clean dependencies and GD32
 import. Explicit candidate validation requires a full SHA and matching origin;
 it does not rewrite or promote the formal lock. Dirty joint-development builds
 require temporary external Board paths and cannot serve as release evidence.
+The dependency identity includes all seven maintained top-level SDK submodules
+and their recursive children, including both reviewed H7 and U5 device closures.
+Fresh Native Google execution includes the public event/byte receive policy;
+CI retains its discovery and XML separately from lifecycle and fault policy.

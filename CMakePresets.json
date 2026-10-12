@@ -89,6 +89,54 @@
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
             "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+        },
+        {
+            "name": "stm32-h743-nucleo-baremetal",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/stm32-h743-nucleo-baremetal",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/h743-nucleo-baremetal.toml",
+                "NEXUS_BUILD_TESTS": "OFF",
+                "NEXUS_BUILD_WORKLOAD": "OFF"
+            },
+            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+        },
+        {
+            "name": "stm32-h743-nucleo-freertos",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/stm32-h743-nucleo-freertos",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/h743-nucleo-freertos.toml",
+                "NEXUS_BUILD_TESTS": "OFF",
+                "NEXUS_BUILD_WORKLOAD": "OFF"
+            },
+            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+        },
+        {
+            "name": "stm32-u575-nucleo-baremetal",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/stm32-u575-nucleo-baremetal",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/u575-nucleo-baremetal.toml",
+                "NEXUS_BUILD_TESTS": "OFF",
+                "NEXUS_BUILD_WORKLOAD": "OFF"
+            },
+            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+        },
+        {
+            "name": "stm32-u575-nucleo-freertos",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/stm32-u575-nucleo-freertos",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/assemblies/u575-nucleo-freertos.toml",
+                "NEXUS_BUILD_TESTS": "OFF",
+                "NEXUS_BUILD_WORKLOAD": "OFF"
+            },
+            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
         }
     ],
     "buildPresets": [
@@ -119,6 +167,22 @@
         {
             "name": "gd32-liangshan-freertos",
             "configurePreset": "gd32-liangshan-freertos"
+        },
+        {
+            "name": "stm32-h743-nucleo-baremetal",
+            "configurePreset": "stm32-h743-nucleo-baremetal"
+        },
+        {
+            "name": "stm32-h743-nucleo-freertos",
+            "configurePreset": "stm32-h743-nucleo-freertos"
+        },
+        {
+            "name": "stm32-u575-nucleo-baremetal",
+            "configurePreset": "stm32-u575-nucleo-baremetal"
+        },
+        {
+            "name": "stm32-u575-nucleo-freertos",
+            "configurePreset": "stm32-u575-nucleo-freertos"
         }
     ],
     "testPresets": [

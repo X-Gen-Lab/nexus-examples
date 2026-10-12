@@ -74,3 +74,19 @@ add_test(NAME product_fault_policy_google COMMAND "${Python3_EXECUTABLE}" -B
     --output "${CMAKE_CURRENT_BINARY_DIR}/fault-google-execution")
 set_tests_properties(product_fault_policy_google PROPERTIES TIMEOUT 30
     LABELS "native;example;GoogleTest")
+
+add_executable(reference_rx_policy_test reference_rx_policy_test.cpp
+    "${PROJECT_SOURCE_DIR}/apps/platform_reference/rx_policy.c")
+target_include_directories(reference_rx_policy_test PRIVATE
+    "${PROJECT_SOURCE_DIR}/apps/platform_reference")
+target_compile_features(reference_rx_policy_test PRIVATE cxx_std_17)
+set_target_properties(reference_rx_policy_test PROPERTIES CXX_EXTENSIONS OFF)
+target_link_libraries(reference_rx_policy_test PRIVATE Nexus::IO
+    GTest::gmock_main nexus_owned_warnings nexus_build_options)
+add_test(NAME reference_rx_policy_google COMMAND "${Python3_EXECUTABLE}" -B
+    "${PROJECT_SOURCE_DIR}/scripts/run_google.py"
+    --nexus-source "${NEXUS_SOURCE}"
+    --binary "$<TARGET_FILE:reference_rx_policy_test>"
+    --output "${CMAKE_CURRENT_BINARY_DIR}/reference-google-execution")
+set_tests_properties(reference_rx_policy_google PROPERTIES TIMEOUT 30
+    LABELS "native;example;GoogleTest")

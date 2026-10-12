@@ -117,7 +117,7 @@ class ExampleTddGateTests(unittest.TestCase):
         index = self.git("write-tree")
         report = self.run_gate()
         self.assertEqual(report["index_tree"], index)
-        self.assertEqual(report["ctest"]["passed"], 6)
+        self.assertEqual(report["ctest"]["passed"], len(gate.EXPECTED_CTEST_NAMES))
         self.assertEqual(report["google"]["passed"], 1)
         self.assertEqual(self.git("write-tree"), index)
         self.assertEqual(len(self.commands), 5)

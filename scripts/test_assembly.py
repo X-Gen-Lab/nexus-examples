@@ -15,7 +15,7 @@ class ExampleAssemblyTests(unittest.TestCase):
         presets = json.loads((ROOT / "CMakePresets.json").read_text())
         visible = [entry for entry in presets["configurePresets"]
                    if not entry.get("hidden")]
-        self.assertEqual(len(visible), 7)
+        self.assertEqual(len(visible), 11)
         source = sdk_root()
         with tempfile.TemporaryDirectory(prefix="example TOML resolution ") as value:
             directory = Path(value)

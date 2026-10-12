@@ -85,6 +85,8 @@ jobs:
             build/native-debug/CMakeCache.txt
             build/native-debug/compile_commands.json
             build/native-debug/tests/google-execution/
+            build/native-debug/tests/fault-google-execution/
+            build/native-debug/tests/reference-google-execution/
             build/native-debug/nexus/generated/*
             build/native-debug/bin/*
             build/quality/style.json
@@ -105,6 +107,10 @@ jobs:
           - stm32-sky-freertos
           - gd32-liangshan-baremetal
           - gd32-liangshan-freertos
+          - stm32-h743-nucleo-baremetal
+          - stm32-h743-nucleo-freertos
+          - stm32-u575-nucleo-baremetal
+          - stm32-u575-nucleo-freertos
     steps:
       - name: Checkout pinned SDK and recursive dependencies
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -177,6 +183,8 @@ jobs:
             stm32-qiming-*) fixture=stm32f407_qiming_v31 ;;
             stm32-sky-*) fixture=stm32f407ve_sky_qingchun ;;
             gd32-liangshan-*) fixture=gd32f470_liangshan ;;
+            stm32-h743-nucleo-*) fixture=stm32h743_nucleo_zi2 ;;
+            stm32-u575-nucleo-*) fixture=stm32u575_nucleo_zi_q ;;
             *) exit 1 ;;
           esac
           python3 -B external/nexus/tools/hil/prepare.py \

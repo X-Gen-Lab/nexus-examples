@@ -21,6 +21,7 @@ RELEVANT_FILES = {"CMakeLists.txt", "CMakePresets.json", ".pre-commit-config.yam
 EXPECTED_CTEST_NAMES = (
     "uart_owner_shutdown", "platform_static_ports", "sensor_explicit_spi",
     "persistent_journal", "protocol_authorized_registers", "owner_lifecycle_google",
+    "product_fault_policy_google", "reference_rx_policy_google",
 )
 
 

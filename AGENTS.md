@@ -11,7 +11,7 @@ separate product repositories.
   registry or implicit ownership. Use generated typed factory IDs to obtain
   readonly faces; factory lookup has no allocation or hardware side effects.
   Public types use the selected SDK ABI.
-- The sole authored configuration is `assemblies/*.toml`; CMake presets define seven
+- The sole authored configuration is `assemblies/*.toml`; CMake presets define eleven
   maintained builds. Separate build roots prevent stale effective configuration.
 - `nx_platform_start/stop` own selected infrastructure. Applications own workers,
   scheduler start, component composition, budgets and recovery. No implicit main.

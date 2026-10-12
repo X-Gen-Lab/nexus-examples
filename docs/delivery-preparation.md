@@ -1,11 +1,12 @@
 # Delivery preparation and retained failures
 
-This preparation leaves `external/nexus` and `dependencies/nexus.lock.json`
-unchanged. Their current commit is
+The first part of this document retains the historical preparation against
+`external/nexus` and `dependencies/nexus.lock.json` at commit
 `6fc1ed75ba4e13d53c5b93c15ebaa73baaae9a21`, with tree
-`069604a85d8c4dfa075fabe2daae133a37e690fd`. The source/dependency checker verifies
-the clean SDK, its Gitlink and actual lock. The examples working tree still
-contains development changes and is not a sealed candidate.
+`069604a85d8c4dfa075fabe2daae133a37e690fd`. It describes that earlier development
+snapshot, not the current formal SDK pin. Current identity comes from the actual
+source lock and Gitlink; the source/dependency checker verifies both. Historical
+raw evidence remains unchanged and cannot qualify the new software references.
 
 The new product fault policy depends on public `nexus/core/fault.h` and
 `nx_fault_observe`, which that pin does not provide. A real full `native-debug`
@@ -95,14 +96,15 @@ station procedure; it is never an automatic example startup action.
 
 ## Final software integration
 
-The coordinated final step updates the Gitlink and source lock to the same
-reviewed clean Core commit. It then verifies all seven authored presets:
+The current coordinated final step updates the Gitlink and source lock to the
+same reviewed clean Core commit. It verifies all eleven authored presets,
+including H743/NUCLEO-H743ZI2 and U575/NUCLEO-U575ZI-Q under both MCU backends:
 
-1. Complete unfiltered Native catalogue: five finite apps and both Google
+1. Complete unfiltered Native catalogue: five finite apps and all three Google
    targets, with fresh case identities, raw exits and no skipped cases.
-2. Six board/backend builds, each producing the two real ARM ELF targets,
+2. Ten board/backend builds, each producing the two real ARM ELF targets,
    with independent memory budgets, vectors, selected configuration and source
-   identities; twelve images in total.
+   identities; twenty images in total.
 3. Exact SDK dependencies, source closure, format/comment/text checks and
    normal commit hooks. New clean execution cannot inherit an older run.
 

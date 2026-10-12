@@ -1,6 +1,6 @@
 /**
  * \file            main.c
- * \brief           Application-owned LED and UART composition on three boards
+ * \brief           Application-owned LED and UART reference composition
  * \author          Nexus Team
  * \version         1.0.0
  * \date            2026-10-09
@@ -9,6 +9,7 @@
 #include "nexus_bindings.h"
 #include "nexus_config.h"
 #include "nexus_factory.h"
+#include "rx_policy.h"
 #if defined(NEXUS_BACKEND_FREERTOS)
 #include "nexus/os/freertos.h"
 #endif
@@ -62,24 +63,14 @@ static nx_result_t iteration(void) {
     if (result != NX_SUCCESS) {
         return result;
     }
-    nx_uart_rx_event_t events[8];
+    uint8_t echo[8];
     size_t count = 0U;
-    result = nx_uart_port_read_events(console(), events, 8U, &count);
+    result = example_reference_read(console(), echo, sizeof(echo), &count);
     if (result == NX_ERROR_EMPTY) {
         return NX_SUCCESS;
     }
     if (result != NX_SUCCESS) {
         return result;
-    }
-    uint8_t echo[8];
-    for (size_t i = 0U; i < count; ++i) {
-        if (events[i].flags != 0U) {
-            /* This reference stops on damaged RX facts. A real product owns
-             * its loss accounting, protocol resynchronization and retry policy.
-             */
-            return NX_ERROR_IO;
-        }
-        echo[i] = events[i].byte;
     }
     return count == 0U ? NX_SUCCESS : send_bytes(echo, count);
 }

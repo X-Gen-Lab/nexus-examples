@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "535ca530042792d8cc83de0cba3982c96c0d7c20",
-  "tree": "614a397bf2aa9b1525e6e817c6787accfa7fae9a",
+  "commit": "23cde7e57a4781db8ffe2e75849c02f976c4304d",
+  "tree": "df291729c84d6cd5afdb8e3b7963fb8df4732782",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "common platform delivery source; integration evidence binds this exact source; physical HIL not executed",
+  "baseline_status": "SoC refinement software source with H743 and U575 constrained reference platforms; integration evidence binds this exact source; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

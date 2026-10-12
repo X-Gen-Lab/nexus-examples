@@ -17,11 +17,11 @@ Current required software checks are:
    dependencies and reviewed GD32 import; a clean checkout is mandatory.
 2. SDK-locked format/comment/text tools and Conventional Commit hooks; complete
    CI checks plus real formatter/boundary regression tests.
-3. Five actual finite Native applications under ASan/UBSan and both complete
-   lifecycle/fault-policy Google targets: seven CTests with fresh nonempty JUnit
+3. Five actual finite Native applications under ASan/UBSan and three complete
+   lifecycle/fault-policy/reference-RX Google targets: eight CTests with fresh nonempty JUnit
    and unfiltered discovery/identity comparison; no skipped cases.
-4. Twelve real ARM linked images: `platform_reference.elf` and
-   `uart_owner_runtime.elf` for three boards by two OS backends. Each checks reset
+4. Twenty real ARM linked images: `platform_reference.elf` and
+   `uart_owner_runtime.elf` for five boards by two OS backends. Each checks reset
    vector, resolved configuration digest, loaded
    Flash, address footprint, distinct RAM domains, MSP and zero libc heap against
    assembly budgets. Static reserved bytes are not measured dynamic high-water.
@@ -36,14 +36,13 @@ Joint development in `build/nextgen-development/` is deliberately uncommitted
 and `publishable=false`. It is useful implementation feedback, not a sealed
 release result. The formal dependency checker has no dirty-source bypass.
 
-The fault observer changes require a newer Core API than the existing
-`6fc1ed75` pin. A complete current-pin build fails at the missing public
-`nexus/core/fault.h`; this failure is retained. The four unaffected finite
-applications and complete lifecycle Google target are applicable development
-checks, not a substitute for the full seven-test catalogue. See
-[delivery preparation](delivery-preparation.md) for the actual preparation scope.
-The new fault-policy development evidence remains explicitly nonpublishable
-until the coordinated clean SDK pin and complete matrix are verified.
+Historical preparation against `6fc1ed75` failed at its missing public
+`nexus/core/fault.h`; that raw failure and its partial applicable execution stay
+retained. It no longer describes the formal lock, whose exact identity is in
+`dependencies/nexus.lock.json`. See [delivery preparation](delivery-preparation.md)
+for the historical scope. H743/U575 integration and the new receive-policy
+development evidence require a fresh coordinated clean SDK pin and the complete
+current matrix; neither inherits qualification from that earlier preparation.
 
 All physical timing, interrupt-load, oscillator/reset, connector/electrical,
 Flash power-cut and watchdog behavior remains **not executed**. A Native model
