@@ -1,5 +1,10 @@
 # Current validation scope
 
+This page preserves the 2026-10-12 software qualification and its original
+evidence identities. The current Nexus 0.1.0 pin and required fresh integration
+are described in [release integration](release-0.1.0.md). The historical counts,
+archives and GitHub runs below do not qualify that new SDK source.
+
 The current architecture replaces the previous HAL/OSAL/Runtime and eight-app
 matrix. Old counts, CI runs and `evidence/platform-refactor-validation.json`
 remain historical; they do not qualify this implementation.

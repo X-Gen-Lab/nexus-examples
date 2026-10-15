@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "98270512ea2ff7eefe8ff79720018e582be3a949",
-  "tree": "8d3e69d3179d7b0d2382c5fd074c970dfc9348d9",
+  "commit": "58297516d707fdee117bd27b5df6af09d72edd2e",
+  "tree": "06feab8ef3e89df60b4cdc5671c66ab0e3c08c21",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "SoC extension software source; examples select H743 fixed HSI64 Cache-off IRQ UART and U575 TZEN0 MSIS4; physical HIL not executed",
+  "baseline_status": "Nexus 0.1.0 Source SDK developer preview; exact final main source; five-board baremetal/FreeRTOS examples retain their selected reference modes; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

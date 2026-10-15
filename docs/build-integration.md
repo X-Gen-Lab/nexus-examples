@@ -6,6 +6,13 @@ OS backend and optional component targets. Its `nexus_add_firmware()` helper
 adds MCU startup, selected providers, linker configuration and real ELF budget
 checks. Application sources remain in this repository.
 
+The current integration pins the Nexus 0.1.0 Source SDK developer preview at
+`58297516d707fdee117bd27b5df6af09d72edd2e`, with the exact tree in
+`dependencies/nexus.lock.json`. This repository's independent application project
+version remains `1.0.0`. The SDK compatibility JSON owns its `0.1.0` version;
+source interface epoch `1` and authored TOML schema `2` remain separate contracts.
+See [release integration](release-0.1.0.md) for source, tools and evidence boundaries.
+
 The maintained matrix has one Native configuration and five boards with two
 backends each. H743 and U575 software references use `stm32-h743-nucleo-*` and
 `stm32-u575-nucleo-*`; each links `platform_reference` and `uart_owner_runtime`.
