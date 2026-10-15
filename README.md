@@ -1,76 +1,96 @@
 # Nexus Examples
 
-[X-Gen-Lab/nexus-examples](https://github.com/X-Gen-Lab/nexus-examples) 是独立维护的私有示例仓库。
-2026-10-09（Asia/Shanghai）上一轮被测实现为 Nexus `5498b2b6` 与示例 `272200f4`：
-Native 6 项测试、8 组 ARM 配置的 38 个 ELF 全部通过；
-[示例 GitHub Actions](https://github.com/X-Gen-Lab/nexus-examples/actions/runs/37908306631)
-9 个 job 全部成功。平台完整 Native 1810 项、8 个平台 ELF、严格可重定位源码 SDK
-及最终 GitHub CI 均通过，详见 [最终软件验证](docs/refactor-validation.md)。
-后续文档／证据提交单独记录，全部物理资格保持未验证。
+本仓库维护公开应用示例、装配配置和集成验证。Nexus 维护通用平台；客户协议、
+私有产品、密钥、PCB 数据和部署策略由对应产品仓库维护。
 
-Nexus 提供通用平台，本仓库提供应用装配。私有产品、客户协议、密钥和私有 PCB 数据
-由各自产品仓库维护。应用使用公开 typed HAL、OSAL、`Nexus::Firmware` 和
-`runtime/nx_runtime.h`，由 `nx_runtime_bootstrap()` 建立 HAL→OSAL；组件和 worker
-由应用显式选择。
+当前代码消费静态 factory 与共享多态接口：`nexus/core`、`nexus/io`、`nexus/os` 和
+`nexus/components`。`nx_platform_start()` 只建立已选择的基础设施，应用自己决定
+任务、组件、资源预算和恢复策略。依赖通过 `external/nexus` Gitlink 和
+[源码锁](dependencies/nexus.lock.json) 固定，最终验收必须与该身份一致。
 
-## 当前八个应用
+当前集成固定 Nexus **0.1.0 Source SDK 开发者预览版**的最终 main 源码
+`58297516d707fdee117bd27b5df6af09d72edd2e`。本仓库独立的应用工程版本仍为
+`1.0.0`；它不替代 SDK 版本或依赖身份。精确范围、工具和本次执行证据的定位见
+[0.1.0 集成说明](docs/release-0.1.0.md)。MCU 实板 HIL 保持 `not_executed`。
 
-| Target | Native | MCU 裸机 | MCU FreeRTOS |
-| --- | --- | --- | --- |
-| `boot_blinky` | 有限运行与 GPIO 检查 | 四板 LED 心跳 | 四板 LED 任务 |
-| `uart_echo` | 不创建；此例需要硬件 console RX source | 四板事件／票据式回显 | 四板回显任务 |
-| `rtos_pipeline` | 有限 producer／consumer | 不创建 | 四板队列、同步、LED 和统计 |
-| `industrial_model` | Modbus、虚拟 plant、健康监督 | 不创建 | 不创建 |
-| `shell_console` | 有限 `--smoke` 或标准流交互 | 不创建 | 不创建 |
-| `config_roundtrip` | 非加密类型、命名空间和 RAM 快照 | 四板有限检查 | 四板有限任务 |
-| `log_uart` | 有限 12 条 TX 模型、满队列检查、Runtime 关闭 | 四板固定队列、pump／flush | 四板单 owner 任务 |
-| `spi_transaction` | 有限同步／queued echo 与取消 settlement | Discovery SPI1 参考工装 | Discovery SPI1 参考工装 |
+## 五个应用
 
-当前 Native 注册 7 个有限 CTest，新增 `log_uart_finite` 通过真实 typed UART provider
-验证固定队列、12 条记录、一次显式 FULL 和 Runtime 回到 OFFLINE。Native UART 将 TX
-复制到宿主模型的观察缓冲区；本例显式预算 512 B，没有串口设备或自动 RX producer。
-本轮定向执行通过，干净 SDK pin 和完整双仓矩阵仍由最终证据绑定；上面的 6 项属于旧 snapshot。
+| Target | Native 有限执行 | MCU 裸机 / FreeRTOS |
+| --- | --- | --- |
+| `platform_reference` | GPIO、显式 RX 注入、IRQ TX 完成和停止 | 五板软件配置的 LED 与 UART；FreeRTOS 静态任务 |
+| `sensor_spi` | BMP280 SPI 端口、芯片身份与 Bosch 参考结果 | 暂无审定传感器板级接线 |
+| `journal` | 文件 NOR 模型、关闭重开后恢复记录 | 暂无指定产品 Flash 分区与电源测试 |
+| `modbus_registers` | 实际 UART 模型、CRC、写权限、异常回复、有限日志 | 暂无 RS485 收发器接线和方向时序验收 |
+| `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 五板两后端，显式静态任务或裸机 pump |
 
-四板为启明欣欣 STM32F407ZGT6 V3.1、天空星 STM32F407VET6 青春版、梁山派
-GD32F470ZGT6、STM32F4Discovery。启明／天空星尚无 SPI binding；梁山派已有板载
-SPI4 Flash binding，但没有本例专用 loopback／隔离工装，因此只为 Discovery 创建
-该 SPI 示例。所有实板结果当前均为 **unverified**。资源预算、接线和执行边界见
-[板卡说明](docs/boards.md)、[组件示例](docs/component-examples.md) 和 [SPI 示例](docs/spi-example.md)。
+Native 注册五个有限应用 CTest，以及 lifecycle、故障策略和接收策略三组 GoogleTest 执行。
+UART 由应用显式注入接收事实，服务推进发送并等待真正
+TC 完成。模型没有自动串口设备或后台 RX 生产者。Flash 文件示例验证宿主恢复流程，
+不证明 MCU 掉电安全。三板为启明欣欣 F407ZG V3.1、天空星 F407VE 青春版和梁山派
+GD32F470ZG。新增 NUCLEO-H743ZI2 和 NUCLEO-U575ZI-Q 软件参考配置；当前实板
+未接入，所有物理资格均未验证。
 
-## 构建与依赖
+故障策略使用 Core `nx_fault_observe`。正式 SDK 身份以源码锁和 Gitlink 为准。
+历史代码提交 `3de85238` 与固定 SDK `98270512` 已通过 8 项 Native CTest、三组共
+43 项 GoogleTest、44 项 Python 工具测试，以及十个 ARM 配置的 20 个实际 ELF
+预算检查。[验收记录](docs/soc-refinement-results.json) 固定完整提交、tree 和原始证据
+哈希；后续文档提交不会自动获得新的代码资格。10 份 HIL 计划已准备，实板未执行。
+旧 pin 的成功或失败只描述历史快照。
+[交付准备](docs/delivery-preparation.md) 区分开发证据和最终软件资格。
 
-`external/nexus` Gitlink 与 [nexus.lock.json](dependencies/nexus.lock.json) 固定正式 SDK 身份。
-使用完整 checkout 和锁定工具链，不跟踪浮动分支：
+## 开发与构建
 
 ```sh
 git submodule update --init --recursive
-python3 scripts/test_repository.py
-python3 scripts/build.py --preset native-debug --test
-python3 scripts/build.py --preset stm32-qiming-baremetal-release
-python3 scripts/build.py --preset stm32-sky-freertos-release
-python3 scripts/build.py --preset gd32-liangshan-freertos-release
+python3 scripts/setup_dev_tools.py
+.venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
+. .venv/bin/activate
+python scripts/test_repository.py
+python scripts/check_style.py --all
+python -m unittest discover -s scripts -p 'test_*.py' -v
+python scripts/build.py --preset native-debug --test
+python scripts/build.py --preset stm32-qiming-baremetal
+python scripts/build.py --preset stm32-sky-freertos
+python scripts/build.py --preset gd32-liangshan-freertos
+python scripts/build.py --preset stm32-h743-nucleo-baremetal
+python scripts/build.py --preset stm32-u575-nucleo-freertos
 ```
 
-联合开发可显式传 `--nexus-source /absolute/path/to/nexus`；它允许验证新 API 调用者，
-不跳过正式依赖核验。最终矩阵核验了该 checkout 与 Gitlink／锁文件的一致身份和干净状态，
-准确测试 snapshot、交付 pin、实际测试枚举及工件摘要见 [最终软件验证](docs/refactor-validation.md) 和
-[机器证据](evidence/platform-refactor-validation.json)。后续文档／证据提交与已测试的实现
-revision 分开记录，不宣称新 HEAD 已经重跑。
+ARM 构建还需 SDK 固定的 GNU Arm 工具链，可用
+`external/nexus/scripts/ci/install_arm_toolchain.py --install-dir <目录>` 安装。
+Windows 使用 `.venv/Scripts/python.exe` 并将工具路径加入 PATH。
 
-当前源码 SDK 已提供 `NEXUS_BOARD_DIR`、`NEXUS_FLASH_LAYOUT_FILE` 和可重定位的
-`find_package(Nexus CONFIG REQUIRED)` 源码包。消费工程自行选择配置／工具链并重新编译，
-没有预编译 binary SDK 或跨配置 ABI 承诺。接入方式见 [构建集成](docs/build-integration.md)。
+每个配置使用自己的 `build/<preset>`，唯一手写配置输入是 `assemblies/*.toml`。
+配置器生成定型实例、只读接口、factory ID、链接脚本和预算。
+`nx_factory_uart(NX_UART_ID_UART0)` 仅返回静态实例，不分配内存或启动硬件；
+SPI 设备使用 `nx_factory_spi_device`，控制器与外部设备身份分开。
+本仓库有 Native 加五板两后端共十一个 preset；ARM 每组分别产生平台参考和共享 UARTOwner
+两个实际链接的 ELF，并独立检查各自预算。
 
-## 计划与能力边界
+H743 初始范围是 HSI64、Cache off、PB0 LED 与 USART3 PD8/PD9 IRQ byte RX；
+U575 是 MSIS4、TZEN0、PC7 LED 与 USART1 PA9/PA10 IRQ byte RX。两个软件参考均不
+启用 DMA、Cache 或 TrustZone。`platform_reference` 优先读取公共 event 接口，只有
+UNSUPPORTED 才转到公共 byte 接口；事件损坏或 byte overflow 会停止回显，不制造
+字符、时间戳或丢失恢复结果。产品协议与恢复策略仍由产品仓库决定。
 
-约 10 人、3–6 个月的完整规划保留 38 项任务和 19 个计划批次；计划批次不是已完成提交数。
+提交钩子检查暂存文件的格式、机械注释、文本和 Conventional Commit，并对行为变更
+验证正式干净 SDK，执行全部工具测试、Native CTest 和 GoogleTest；不改写或暂存源文件。
+执行前后须保持相同 index/SDK 身份，拒绝未暂存行为、过滤、跳过、缺失或陈旧报告。
+C 格式和注释规则复用固定 SDK，避免复制一套规则。手动完整检查使用
+`python scripts/tdd_gate.py --all`；CI 保留实际 Google discovery、XML、commands 和退出码。
 
-- [平台重构计划](docs/platform-refactor-plan.md)：历史审计、本轮实现、责任、预算和验收。
-- [示例路线图](docs/examples-roadmap.md)：现有八应用与尚未交付的后续实例。
-- [交付状态](docs/delivery.md)：本轮交付、远端同步及验收边界。
-- [最终软件验证](docs/refactor-validation.md)：固定双仓实现和同一组工件的证据。
-- [历史首批验证](docs/validation.md)：旧 SDK 的初始结果，不替代当前验证。
+变更行为先用失败测试定义合同，通过后再重构。Nexus 通用固件合同使用
+GoogleTest／GoogleMock 宿主测试；示例固件保持 C11，目标映像没有测试框架。
+Python 边界测试执行真实配置器，并检查十一组 TOML、生成 factory 和报告拒绝逻辑。
 
-Native 模型不证明 MCU 电气、DMA 或实时行为；newlib-nosys 不等于 UART console。
-MCU typed I2C 仍不支持，RS485／网络及 MCU 安全升级链未在本轮承诺。示例默认不写
-Flash、不注入制造秘密、不安装升级。平台基础问题修回 Nexus，本仓库固定新依赖后验证公开调用方式。
+本地 `--nexus-source /absolute/path` 只改变 SDK 位置；正式依赖检查仍要求锁、
+Gitlink、tree、干净源码和供应商身份一致。未提交的联合开发可以显式使用临时装配，
+但其输出只能标为 `publishable=false`，不能冒充已封存发行验收。
+
+[构建集成](docs/build-integration.md)、[板卡](docs/boards.md)、
+[软件验证边界](docs/refactor-validation.md)、[后续迭代](docs/examples-roadmap.md)
+说明当前接口和交付范围。旧架构的测试数量与证据保留为历史记录，不能证明新架构。
+
+[多生产者 UARTOwner 示例](docs/os-owner-example.md) 说明唯一 execution owner、IRQ wake、
+active cancel/drain 和 producer/owner join 后才能回收通知的顺序。GoogleTest／GoogleMock
+只使用固定 SDK 的离线 archive 并仅进入 Native host 测试；MCU 示例保持 C11。

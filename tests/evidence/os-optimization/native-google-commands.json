@@ -1,0 +1,16 @@
+[
+  {
+    "argv": [
+      "/workspace/nexus-examples/build/os-owner-development/tests/owner_lifecycle_test",
+      "--gtest_list_tests"
+    ],
+    "exit_code": 0
+  },
+  {
+    "argv": [
+      "/workspace/nexus-examples/build/os-owner-development/tests/owner_lifecycle_test",
+      "--gtest_output=xml:/workspace/nexus-examples/build/os-owner-development/tests/google-execution/google-results.xml"
+    ],
+    "exit_code": 0
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "cmake",
+    "--build",
+    "build/native-debug",
+    "--target",
+    "owner_lifecycle_test",
+    "--parallel",
+    "1"
+  ],
+  "exit_code": 1,
+  "started_ns": 1791736420944844450
+}

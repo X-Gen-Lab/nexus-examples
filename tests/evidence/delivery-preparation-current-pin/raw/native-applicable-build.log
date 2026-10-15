@@ -1,0 +1,7 @@
+[1/7] Building C object CMakeFiles/sensor_spi.dir/apps/sensor_spi/main.c.o
+[2/7] Building C object CMakeFiles/modbus_registers.dir/apps/modbus_registers/main.c.o
+[3/7] Linking C static library nexus/lib/libnexus_platform.a
+[4/7] Linking C executable bin/platform_reference
+[5/7] Linking C executable bin/sensor_spi
+[6/7] Linking C executable bin/journal
+[7/7] Linking C executable bin/modbus_registers

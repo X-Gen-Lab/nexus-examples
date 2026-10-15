@@ -1,0 +1,15 @@
+[0/1] Re-running CMake...
+-- Nexus: NATIVE_MODEL/native, Os
+-- Sole resolved configuration: /workspace/nexus-examples/build/native-debug/nexus/generated/resolved.json
+-- Found Python3: /workspace/nexus-examples/.venv/bin/python3.12 (found version "3.12.14") found components: Interpreter
+-- Found Python3: /workspace/nexus-examples/.venv/bin/python3.12 (found suitable version "3.12.14", minimum required is "3.11") found components: Interpreter
+-- Configuring done (0.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/nexus-examples/build/native-debug
+[1/8] Building CXX object tests/CMakeFiles/owner_lifecycle_test.dir/owner_lifecycle_test.cpp.o
+[2/8] Building CXX object tests/CMakeFiles/owner_lifecycle_test.dir/owner_bootstrap_test.cpp.o
+[3/8] Building CXX object tests/CMakeFiles/owner_lifecycle_test.dir/scheduler_return_test.cpp.o
+[4/8] Building C object tests/CMakeFiles/owner_lifecycle_test.dir/__/apps/uart_owner_runtime/lifecycle.c.o
+[5/8] Building C object tests/CMakeFiles/owner_lifecycle_test.dir/__/apps/uart_owner_runtime/bootstrap.c.o
+[6/8] Building C object tests/CMakeFiles/owner_lifecycle_test.dir/__/apps/uart_owner_runtime/scheduler_return.c.o
+[7/8] Linking CXX executable tests/owner_lifecycle_test

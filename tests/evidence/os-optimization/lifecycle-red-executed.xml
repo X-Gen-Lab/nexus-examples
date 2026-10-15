@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="6" failures="6" disabled="0" errors="0" time="0." timestamp="2026-10-11T03:35:32.879" name="AllTests">
+  <testsuite name="Lifecycle" tests="6" failures="6" disabled="0" skipped="0" errors="0" time="0." timestamp="2026-10-11T03:35:32.879">
+    <testcase name="ClosesAdmissionBeforeProducerJoinThenReclaimsAfterAllJoins" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="76" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:32.879" classname="Lifecycle">
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:93&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, &amp;bus, port)&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:93
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:94&#x0A;Expected equality of these values:&#x0A;  phase&#x0A;    Which is: 0&#x0A;  EXAMPLE_OWNER_RECLAIMABLE&#x0A;    Which is: 5&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:94
+Expected equality of these values:
+  phase
+    Which is: 0
+  EXAMPLE_OWNER_RECLAIMABLE
+    Which is: 5
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:95&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, &amp;bus, port)&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:95
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:92&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, reclaim())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:92
+Actual function call count doesn't match EXPECT_CALL(shutdown, reclaim())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:91&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, publishers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:91
+Actual function call count doesn't match EXPECT_CALL(shutdown, publishers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:90&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, owner())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:90
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:78&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, producers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:78
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+    </testcase>
+    <testcase name="ProducerTimeoutRetainsNotificationsAndOwnerProgress" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="98" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:32.879" classname="Lifecycle">
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:100&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, &amp;bus, port)&#x0A;    Which is: 7&#x0A;  NX_ERROR_TIMEOUT&#x0A;    Which is: 4&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:100
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_ERROR_TIMEOUT
+    Which is: 4
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:101&#x0A;Expected equality of these values:&#x0A;  phase&#x0A;    Which is: 0&#x0A;  EXAMPLE_OWNER_ADMISSION_CLOSED&#x0A;    Which is: 1&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:101
+Expected equality of these values:
+  phase
+    Which is: 0
+  EXAMPLE_OWNER_ADMISSION_CLOSED
+    Which is: 1
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:108&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, &amp;bus, port)&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:108
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:107&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, reclaim())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:107
+Actual function call count doesn't match EXPECT_CALL(shutdown, reclaim())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:106&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, publishers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:106
+Actual function call count doesn't match EXPECT_CALL(shutdown, publishers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:105&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, owner())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:105
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:99&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, producers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:99
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:104&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, producers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:104
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+    </testcase>
+    <testcase name="OwnerJoinFailureDoesNotDetachHardwareOrReclaimStorage" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="111" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:32.879" classname="Lifecycle">
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:115&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, &amp;bus, port)&#x0A;    Which is: 7&#x0A;  NX_ERROR_BUSY&#x0A;    Which is: 2&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:115
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_ERROR_BUSY
+    Which is: 2
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:116&#x0A;Expected equality of these values:&#x0A;  phase&#x0A;    Which is: 0&#x0A;  EXAMPLE_OWNER_PRODUCERS_JOINED&#x0A;    Which is: 2&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:116
+Expected equality of these values:
+  phase
+    Which is: 0
+  EXAMPLE_OWNER_PRODUCERS_JOINED
+    Which is: 2
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:120&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, &amp;bus, port)&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:120
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:119&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, reclaim())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:119
+Actual function call count doesn't match EXPECT_CALL(shutdown, reclaim())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:118&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, publishers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:118
+Actual function call count doesn't match EXPECT_CALL(shutdown, publishers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:114&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, owner())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:114
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:117&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, owner())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:117
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:113&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, producers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:113
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+    </testcase>
+    <testcase name="IdleCheckRejectsPrematureOwnerJoinBeforePublicationExits" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="123" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:32.879" classname="Lifecycle">
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:134&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, &amp;bus, port)&#x0A;    Which is: 7&#x0A;  NX_ERROR_STATE&#x0A;    Which is: 3&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:134
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_ERROR_STATE
+    Which is: 3
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:135&#x0A;Expected equality of these values:&#x0A;  phase&#x0A;    Which is: 0&#x0A;  EXAMPLE_OWNER_PRODUCERS_JOINED&#x0A;    Which is: 2&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:135
+Expected equality of these values:
+  phase
+    Which is: 0
+  EXAMPLE_OWNER_PRODUCERS_JOINED
+    Which is: 2
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:136&#x0A;Expected equality of these values:&#x0A;  nx_bus_owner_service(&amp;bus)&#x0A;    Which is: 2&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:136
+Expected equality of these values:
+  nx_bus_owner_service(&bus)
+    Which is: 2
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:133&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, owner())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:133
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:132&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, producers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:132
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+    </testcase>
+    <testcase name="QuiescenceFailureRetainsStorageAndRetriesOnlyThatMilestone" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="140" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:32.879" classname="Lifecycle">
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:145&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, &amp;bus, port)&#x0A;    Which is: 7&#x0A;  NX_ERROR_BUSY&#x0A;    Which is: 2&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:145
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_ERROR_BUSY
+    Which is: 2
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:146&#x0A;Expected equality of these values:&#x0A;  phase&#x0A;    Which is: 0&#x0A;  EXAMPLE_OWNER_JOINED&#x0A;    Which is: 3&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:146
+Expected equality of these values:
+  phase
+    Which is: 0
+  EXAMPLE_OWNER_JOINED
+    Which is: 3
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:149&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, &amp;bus, port)&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:149
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, port)
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:148&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, reclaim())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:148
+Actual function call count doesn't match EXPECT_CALL(shutdown, reclaim())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:144&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, publishers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:144
+Actual function call count doesn't match EXPECT_CALL(shutdown, publishers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:147&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, publishers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:147
+Actual function call count doesn't match EXPECT_CALL(shutdown, publishers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:143&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, owner())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:143
+Actual function call count doesn't match EXPECT_CALL(shutdown, owner())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:142&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(shutdown, producers())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:142
+Actual function call count doesn't match EXPECT_CALL(shutdown, producers())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+    </testcase>
+    <testcase name="InvalidInputHasNoSchedulingOrHardwareEffects" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="152" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:32.879" classname="Lifecycle">
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:153&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(nullptr, &amp;bus, port)&#x0A;    Which is: 7&#x0A;  NX_ERROR_INVALID&#x0A;    Which is: 1&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:153
+Expected equality of these values:
+  example_owner_shutdown(nullptr, &bus, port)
+    Which is: 7
+  NX_ERROR_INVALID
+    Which is: 1
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:154&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, nullptr, port)&#x0A;    Which is: 7&#x0A;  NX_ERROR_INVALID&#x0A;    Which is: 1&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:154
+Expected equality of these values:
+  example_owner_shutdown(&phase, nullptr, port)
+    Which is: 7
+  NX_ERROR_INVALID
+    Which is: 1
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:157&#x0A;Expected equality of these values:&#x0A;  example_owner_shutdown(&amp;phase, &amp;bus, incomplete)&#x0A;    Which is: 7&#x0A;  NX_ERROR_INVALID&#x0A;    Which is: 1&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/owner_lifecycle_test.cpp:157
+Expected equality of these values:
+  example_owner_shutdown(&phase, &bus, incomplete)
+    Which is: 7
+  NX_ERROR_INVALID
+    Which is: 1
+]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

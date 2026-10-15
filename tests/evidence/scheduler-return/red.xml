@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="22" failures="2" disabled="0" errors="0" time="0.005" timestamp="2026-10-11T16:34:28.457" name="AllTests">
+  <testsuite name="Lifecycle" tests="10" failures="0" disabled="0" skipped="0" errors="0" time="0.002" timestamp="2026-10-11T16:34:28.457">
+    <testcase name="ClosesAdmissionBeforeProducerJoinThenReclaimsAfterAllJoins" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="84" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.457" classname="Lifecycle" />
+    <testcase name="ProducerTimeoutRetainsNotificationsAndOwnerProgress" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="106" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.458" classname="Lifecycle" />
+    <testcase name="OwnerJoinFailureDoesNotDetachHardwareOrReclaimStorage" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="119" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.458" classname="Lifecycle" />
+    <testcase name="IdleCheckRejectsPrematureOwnerJoinBeforePublicationExits" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="131" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.458" classname="Lifecycle" />
+    <testcase name="QuiescenceFailureRetainsStorageAndRetriesOnlyThatMilestone" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="148" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.459" classname="Lifecycle" />
+    <testcase name="InvalidInputHasNoSchedulingOrHardwareEffects" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="160" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.459" classname="Lifecycle" />
+    <testcase name="RunningSchedulerRetainsPlatformClocksAndTickAfterIOReclaim" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="170" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.459" classname="Lifecycle" />
+    <testcase name="StoppedSchedulerMayStopPlatformOnlyOnceAfterReclaim" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="177" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.459" classname="Lifecycle" />
+    <testcase name="PlatformStopFailureRetainsReclaimMilestoneAndCanRetry" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="187" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.459" classname="Lifecycle" />
+    <testcase name="PlatformStopRejectsCallsBeforeQuiescenceOrInvalidInputs" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="198" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.459" classname="Lifecycle" />
+  </testsuite>
+  <testsuite name="BackendPolicy" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0." timestamp="2026-10-11T16:34:28.459">
+    <testcase name="OnlyFreeRTOSPreservesPlatformForItsLiveScheduler" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="206" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.459" classname="BackendPolicy" />
+  </testsuite>
+  <testsuite name="Bootstrap" tests="8" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2026-10-11T16:34:28.459">
+    <testcase name="NotificationFailureDestroysOnlyCreatedObjectsInReverseOrder" file="/workspace/nexus-examples/tests/owner_bootstrap_test.cpp" line="79" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.459" classname="Bootstrap" />
+    <testcase name="NativePartialTaskFailureClosesAdmissionBeforeJoiningLiveThreads" file="/workspace/nexus-examples/tests/owner_bootstrap_test.cpp" line="94" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.460" classname="Bootstrap" />
+    <testcase name="FreeRTOSUnstartedTasksUseDiscardActionAndNeverJoin" file="/workspace/nexus-examples/tests/owner_bootstrap_test.cpp" line="119" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.460" classname="Bootstrap" />
+    <testcase name="RunningSchedulerRejectsPrestartRollbackWithoutSideEffects" file="/workspace/nexus-examples/tests/owner_bootstrap_test.cpp" line="130" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.460" classname="Bootstrap" />
+    <testcase name="FailedJoinRetainsPublishersNotificationsAndWorkerRecord" file="/workspace/nexus-examples/tests/owner_bootstrap_test.cpp" line="140" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.460" classname="Bootstrap" />
+    <testcase name="DestroyFailureRetriesOnlyUnreclaimedEffects" file="/workspace/nexus-examples/tests/owner_bootstrap_test.cpp" line="152" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.460" classname="Bootstrap" />
+    <testcase name="UndrainedOwnerNeverDetachesPublishersOrReclaimsLoans" file="/workspace/nexus-examples/tests/owner_bootstrap_test.cpp" line="169" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.460" classname="Bootstrap" />
+    <testcase name="InvalidOrInconsistentRecordCannotInvokeExternalActions" file="/workspace/nexus-examples/tests/owner_bootstrap_test.cpp" line="186" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.460" classname="Bootstrap" />
+  </testsuite>
+  <testsuite name="BootstrapNative" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2026-10-11T16:34:28.460">
+    <testcase name="FailedNextCreationDrainsAndJoinsActualRunningThreads" file="/workspace/nexus-examples/tests/owner_bootstrap_test.cpp" line="285" status="run" result="completed" time="0.001" timestamp="2026-10-11T16:34:28.460" classname="BootstrapNative" />
+  </testsuite>
+  <testsuite name="SchedulerReturn" tests="2" failures="2" disabled="0" skipped="0" errors="0" time="0." timestamp="2026-10-11T16:34:28.462">
+    <testcase name="PublishesStageAndFailureBeforeCallingItsTerminalSink" file="/workspace/nexus-examples/tests/scheduler_return_test.cpp" line="34" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.462" classname="SchedulerReturn">
+      <failure message="/workspace/nexus-examples/tests/scheduler_return_test.cpp:52&#x0A;Expected: example_owner_scheduler_returned(&amp;effects, &amp;status, &amp;stage, {&amp;sink, fail_stop}) throws an exception of type Terminal.&#x0A;  Actual: it throws nothing.&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/scheduler_return_test.cpp:52
+Expected: example_owner_scheduler_returned(&effects, &status, &stage, {&sink, fail_stop}) throws an exception of type Terminal.
+  Actual: it throws nothing.
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/scheduler_return_test.cpp:40&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(sink, fail_stop())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/scheduler_return_test.cpp:40
+Actual function call count doesn't match EXPECT_CALL(sink, fail_stop())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+    </testcase>
+    <testcase name="DoesNotTreatAnUncertainSchedulerFlagAsNeverExecutedTasks" file="/workspace/nexus-examples/tests/scheduler_return_test.cpp" line="57" status="run" result="completed" time="0." timestamp="2026-10-11T16:34:28.462" classname="SchedulerReturn">
+      <failure message="/workspace/nexus-examples/tests/scheduler_return_test.cpp:72&#x0A;Expected: example_owner_scheduler_returned(&amp;effects, &amp;status, &amp;stage, {&amp;sink, fail_stop}) throws an exception of type Terminal.&#x0A;  Actual: it throws nothing.&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/scheduler_return_test.cpp:72
+Expected: example_owner_scheduler_returned(&effects, &status, &stage, {&sink, fail_stop}) throws an exception of type Terminal.
+  Actual: it throws nothing.
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/scheduler_return_test.cpp:76&#x0A;Value of: effects.scheduler_started&#x0A;  Actual: false&#x0A;Expected: true&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/scheduler_return_test.cpp:76
+Value of: effects.scheduler_started
+  Actual: false
+Expected: true
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/scheduler_return_test.cpp:64&#x0A;Actual function call count doesn&apos;t match EXPECT_CALL(sink, fail_stop())...&#x0A;         Expected: to be called once&#x0A;           Actual: never called - unsatisfied and active&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/scheduler_return_test.cpp:64
+Actual function call count doesn't match EXPECT_CALL(sink, fail_stop())...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

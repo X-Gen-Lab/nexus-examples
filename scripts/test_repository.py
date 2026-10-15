@@ -17,11 +17,20 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 DEPENDENCIES = (
     "ext/freertos",
-    "ext/googletest",
+    "ext/threadx",
     "vendors/arm/CMSIS_5",
     "vendors/st/cmsis_device_f4",
-    "vendors/st/stm32f4xx_hal_driver",
+    "vendors/st/cmsis_device_g4",
+    "vendors/st/cmsis_device_h7",
+    "vendors/st/cmsis_device_u5",
 )
+REFERENCE_PRESETS = frozenset({
+    "native-debug",
+    *(f"{board}-{backend}" for board in (
+        "stm32-qiming", "stm32-sky", "gd32-liangshan",
+        "stm32-h743-nucleo", "stm32-u575-nucleo",
+    ) for backend in ("baremetal", "freertos")),
+})
 
 
 def checked_output(arguments, directory):
@@ -72,8 +81,8 @@ def verify_presets():
         sections[section] = indexed
     configured = sections["configurePresets"]
     visible = {name for name, entry in configured.items() if not entry.get("hidden", False)}
-    if len(visible) != 9 or "native-debug" not in visible:
-        raise ValueError("The reference matrix requires Native and eight ARM configure presets")
+    if visible != REFERENCE_PRESETS:
+        raise ValueError("The reference matrix requires Native and the ten maintained ARM presets")
     for name, entry in configured.items():
         inherited = entry.get("inherits", [])
         if isinstance(inherited, str):

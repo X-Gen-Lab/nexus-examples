@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "kind": "retained_development_tdd_history",
+  "status": "development_history_only",
+  "source_sdk_qualified": false,
+  "final_candidate_qualified": false,
+  "physical_status": "not_executed",
+  "preservation": "Exact original bytes; source paths are historical provenance",
+  "boundaries": [
+    {
+      "name": "owner_lifecycle",
+      "red": "lifecycle-red-executed.log",
+      "green": "lifecycle-green.log",
+      "contract": "Real BusOwner admission, join and retained storage"
+    },
+    {
+      "name": "live_scheduler_platform_clock",
+      "red": "lifecycle-platform-stop-red.log",
+      "green": "lifecycle-platform-stop-green.log",
+      "contract": "Live kernel retains platform Tick; teardown requires reclaimed owners"
+    },
+    {
+      "name": "fresh_native_google",
+      "green": "native-google-execution.json",
+      "contract": "Eleven actual lifecycle/policy Google cases; direct dirty-SDK development build"
+    },
+    {
+      "name": "google_runner_symlink",
+      "red": "google-runner-symlink-red.log",
+      "green": "google-runner-final-green.log",
+      "contract": "Synthetic subprocess boundary; owned log symlink cannot replace executable"
+    },
+    {
+      "name": "staged_tdd_gate",
+      "red": "commit-gate-symlink-red.log",
+      "green": "commit-gate-final-green.log",
+      "contract": "Real Git fixture plus mocked build/source-command boundary, not firmware qualification"
+    },
+    {
+      "name": "independent_review_index_and_build_log",
+      "red": "commit-gate-review-red.log",
+      "green": "commit-gate-review-final-green.log",
+      "contract": "Real alternate Git index and nested SDK repo; hook Gitlink cannot borrow ordinary-index identity, build.log symlinks reject"
+    },
+    {
+      "name": "unfiltered_ctest_catalogue",
+      "red": "commit-gate-unfiltered-red.log",
+      "green": "commit-gate-review-final-green.log",
+      "contract": "Synthetic CTest subprocess boundary: test preset filters cannot hide an additional registered case"
+    },
+    {
+      "name": "failed_google_repeat_summary",
+      "red": "google-runner-repeat-red.log",
+      "green": "google-runner-review-final-green.log",
+      "contract": "Same owned output directory cannot retain prior positive summary after failed new execution"
+    },
+    {
+      "name": "isolated_hook_dependency_closure",
+      "red": "hook-isolated-python-missing-dependency.log",
+      "regression_red": "hook-dependency-red.log",
+      "green": "hook-dependency-green.log",
+      "contract": "Actual isolated pre-commit Python missed yaml; declaration is constrained to the selected SDK PyYAML pin by a failing then passing test. Green is 38 tool cases, not a final hook or hardware qualification."
+    }
+  ],
+  "limits": "These historical logs prove recorded development runs. Fresh exact-index, clean SDK, full maintained builds and physical equipment remain separate qualification authorities.",
+  "files": [
+    {
+      "path": "lifecycle-red-executed.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-red-executed.log",
+      "bytes": 10371,
+      "sha256": "501f31480527c4e7f343c1075e047853e2addbf002ece4c9d2d8e45be5c3640d"
+    },
+    {
+      "path": "lifecycle-red-executed.xml",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-red-executed.xml",
+      "bytes": 21618,
+      "sha256": "e98eca0930dd12e36be6dbabd2f04cdb3579ae95251b001ebf33f72782f151b7"
+    },
+    {
+      "path": "lifecycle-red-executed.commands.json",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-red-executed.commands.json",
+      "bytes": 3625,
+      "sha256": "9cb176f0afea844bc05379930ada0691dd0e5edaeb8d2f11fa3cecbcb8caba2a"
+    },
+    {
+      "path": "lifecycle-green.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-green.log",
+      "bytes": 1309,
+      "sha256": "e130e44c798a03da70348dc097ccdcff86d1b2b88fc7686ec351241a2cd77629"
+    },
+    {
+      "path": "lifecycle-green.xml",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-green.xml",
+      "bytes": 1844,
+      "sha256": "b702247dfa1fbc6b295f54e84cce1fd20fa0e9301c127b0338cf9700744dfd07"
+    },
+    {
+      "path": "lifecycle-green.commands.json",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-green.commands.json",
+      "bytes": 3618,
+      "sha256": "14fbeb62569e501228f0d0ac80af32800ab106faa704f367ae821c891d4a1fe8"
+    },
+    {
+      "path": "lifecycle-platform-stop-red.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-platform-stop-red.log",
+      "bytes": 4974,
+      "sha256": "1548d6d0d975997d8758aa5e5941fa7d593df4aff7530da70528a979e3f97f2f"
+    },
+    {
+      "path": "lifecycle-platform-stop-red.xml",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-platform-stop-red.xml",
+      "bytes": 9051,
+      "sha256": "9fefe8e14a9fbc0f500b6b10ea79f8b63d50329012c95a2a3c6cec64a0125fd5"
+    },
+    {
+      "path": "lifecycle-platform-stop-red.commands.json",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-platform-stop-red.commands.json",
+      "bytes": 3630,
+      "sha256": "b571da10ccff1c33c4feeeeb49347a7785c1063cb8a8706961d66f7c771af974"
+    },
+    {
+      "path": "lifecycle-platform-stop-green.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-platform-stop-green.log",
+      "bytes": 1968,
+      "sha256": "6ec74c0ddb758cd84908f6c54c4db1766ddb1a9d6cc5b753ebd06ceee63212e7"
+    },
+    {
+      "path": "lifecycle-platform-stop-green.xml",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-platform-stop-green.xml",
+      "bytes": 2864,
+      "sha256": "5c1720098bd09969369e79525985814295d98c5c6dfcf5884454e0da920da9f2"
+    },
+    {
+      "path": "lifecycle-platform-stop-green.commands.json",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/lifecycle-platform-stop-green.commands.json",
+      "bytes": 3632,
+      "sha256": "f4648e679422c836b96c171099ba57a0a6d407e24857b8bac52df5b990920ea3"
+    },
+    {
+      "path": "native-platform-policy-green.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/native-platform-policy-green.log",
+      "bytes": 593,
+      "sha256": "c712109738615bdcb60470f7bc7ed9908e6b6389bc888ff22e0e06b1bda527eb"
+    },
+    {
+      "path": "native-platform-policy-green.xml",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/native-platform-policy-green.xml",
+      "bytes": 771,
+      "sha256": "1bfa1d7a7756da7fef17ed6e3dab2ffd3f68e528f1d191a0267b5ad3c3db6f3a"
+    },
+    {
+      "path": "google-runner-symlink-red.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/google-runner-symlink-red.log",
+      "bytes": 716,
+      "sha256": "88b9ff46233dfe1f372edce7d8cde6d6b00b2c6e8937bbbd03c8402cac8b4163"
+    },
+    {
+      "path": "google-runner-final-green.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/google-runner-final-green.log",
+      "bytes": 102,
+      "sha256": "17f645135d066ec5e64550739c05fcf05de7518494e2a226a8d620895c2b7b13"
+    },
+    {
+      "path": "commit-gate-red.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/commit-gate-red.log",
+      "bytes": 1028,
+      "sha256": "42c9627993af4e2d50b239e6547c4d946ff3267e080ea67168badd4c96515f23"
+    },
+    {
+      "path": "commit-gate-symlink-red.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/commit-gate-symlink-red.log",
+      "bytes": 3215,
+      "sha256": "e12932bdd7218cc71a421a6b5e577df088f48ba750fbf0209f356d48850eabd9"
+    },
+    {
+      "path": "commit-gate-final-green.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/commit-gate-final-green.log",
+      "bytes": 2199,
+      "sha256": "49547431a8a905d407dc8d6793ac8dfa6c1a8d2aa51ec01e819c1aaf451cd279"
+    },
+    {
+      "path": "native-google-discovery.log",
+      "original_path": "build/os-owner-development/tests/google-execution/discovery.log",
+      "bytes": 678,
+      "sha256": "2c48b7bddda88b7de8dffc6998c94f5ba5b108f6cdf2e1f4303081a8a871b976"
+    },
+    {
+      "path": "native-google-execution.log",
+      "original_path": "build/os-owner-development/tests/google-execution/execution.log",
+      "bytes": 2221,
+      "sha256": "32e9715831125d3e90a4a8c39462b7c2c97a388e12d3caaf61eb9c95e4aaa132"
+    },
+    {
+      "path": "native-google-commands.json",
+      "original_path": "build/os-owner-development/tests/google-execution/commands.json",
+      "bytes": 428,
+      "sha256": "1314916362c400db1a92efebf3dd74fe973c78980adcda55204fde136b343689"
+    },
+    {
+      "path": "native-google-execution.json",
+      "original_path": "build/os-owner-development/tests/google-execution/execution.json",
+      "bytes": 2494,
+      "sha256": "779af6f18d7cdb63f63a673a2b9b81c9bd3e0323a179c7f6eac4814986ccf8f9"
+    },
+    {
+      "path": "native-google-google-results.xml",
+      "original_path": "build/os-owner-development/tests/google-execution/google-results.xml",
+      "bytes": 3271,
+      "sha256": "c8784f90748890c718112aa4fe0827c1830c2fcfb13f5ec6ec08fb11362772a4"
+    },
+    {
+      "path": "commit-gate-review-red.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/commit-gate-review-red.log",
+      "bytes": 3882,
+      "sha256": "912fbc28ae2769a63628368d8e07a1a3d74e0dfdb3dc9bf51839c7302a4efde0"
+    },
+    {
+      "path": "commit-gate-unfiltered-red.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/commit-gate-unfiltered-red.log",
+      "bytes": 3374,
+      "sha256": "e262690ef21c1cd2c1c820be863c8348a7e89c45f834a316a97ad16e9dfafc56"
+    },
+    {
+      "path": "commit-gate-review-final-green.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/commit-gate-review-final-green.log",
+      "bytes": 2720,
+      "sha256": "746fd2faf13b3bccde1284c4a7b2524f4d0034af3d588e4b59307935e9dffff0"
+    },
+    {
+      "path": "google-runner-repeat-red.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/google-runner-repeat-red.log",
+      "bytes": 1549,
+      "sha256": "a1a8b4fc06763ac15ffa789c9cc92ede047941074b17dd548b2b5c9c2dd0a2b3"
+    },
+    {
+      "path": "google-runner-review-final-green.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/google-runner-review-final-green.log",
+      "bytes": 938,
+      "sha256": "e4c264d698f96d18d6812693e8224f603a5056bfd3a795ec9d61f6d790a73a5b"
+    },
+    {
+      "path": "all-tool-review-development-green.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/all-tool-review-development-green.log",
+      "bytes": 10156,
+      "sha256": "f31638bf0b1810dd3001a20038c579006252b7e8d6c2d52e9c7e02e08716bdbc"
+    },
+    {
+      "path": "hook-isolated-python-missing-dependency.log",
+      "original_path": "/workspace/nexus-os-implementation-evidence/examples-normal-commit.log",
+      "bytes": 614,
+      "sha256": "2e08df589aa7e3a566dd3a0cdf849ec3bf530861c168220280acee31b92f0a3e"
+    },
+    {
+      "path": "hook-isolated-python-tools.log",
+      "original_path": "/workspace/nexus-examples/build/native-debug/tdd/tools.log",
+      "bytes": 10858,
+      "sha256": "45f3e9663328bcea37abe5d0da6eb1b876abd5000505c66be62ca3edc5cf9418"
+    },
+    {
+      "path": "hook-dependency-red.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/hook-dependency-red.log",
+      "bytes": 1134,
+      "sha256": "ce3c54bb4321cfbea496d1b3efafde339a7576a1616643178361877705798344"
+    },
+    {
+      "path": "hook-dependency-green.log",
+      "original_path": "/workspace/nexus-os-iteration-evidence/examples/hook-dependency-final-green.log",
+      "bytes": 10309,
+      "sha256": "da6f0a5a91a8f8f2c3d5dbe8f7294b46fa218390b773d38a7fb7f939bcbacc59"
+    }
+  ]
+}

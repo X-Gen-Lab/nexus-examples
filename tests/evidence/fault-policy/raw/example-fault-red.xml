@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="7" failures="7" disabled="0" errors="0" time="0." timestamp="2026-10-11T19:40:28.723" name="AllTests">
+  <testsuite name="ProductFault" tests="7" failures="7" disabled="0" skipped="0" errors="0" time="0." timestamp="2026-10-11T19:40:28.723">
+    <testcase name="UnboundOutputsRemainUnprovenAndNeverReclaimRequest" file="/workspace/nexus-examples/tests/fault_policy_test.cpp" line="34" status="run" result="completed" time="0." timestamp="2026-10-11T19:40:28.723" classname="ProductFault">
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:35&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_initialize(&amp;policy, {})&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:35
+Expected equality of these values:
+  example_fault_policy_initialize(&policy, {})
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+    </testcase>
+    <testcase name="DiagnosticsPublishBeforeTheExplicitProductAction" file="/workspace/nexus-examples/tests/fault_policy_test.cpp" line="45" status="run" result="completed" time="0." timestamp="2026-10-11T19:40:28.723" classname="ProductFault">
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:46&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_initialize(&amp;policy, {&amp;output, apply})&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:46
+Expected equality of these values:
+  example_fault_policy_initialize(&policy, {&output, apply})
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+    </testcase>
+    <testcase name="FailedOutputActionRetainsFaultAndBorrow" file="/workspace/nexus-examples/tests/fault_policy_test.cpp" line="68" status="run" result="completed" time="0." timestamp="2026-10-11T19:40:28.723" classname="ProductFault">
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:69&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_initialize(&amp;policy, {&amp;output, apply})&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:69
+Expected equality of these values:
+  example_fault_policy_initialize(&policy, {&output, apply})
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+    </testcase>
+    <testcase name="DuplicateFaultDoesNotRepeatOutputsOrReplaceFirstReason" file="/workspace/nexus-examples/tests/fault_policy_test.cpp" line="81" status="run" result="completed" time="0." timestamp="2026-10-11T19:40:28.723" classname="ProductFault">
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:82&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_initialize(&amp;policy, {&amp;output, apply})&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:82
+Expected equality of these values:
+  example_fault_policy_initialize(&policy, {&output, apply})
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+    </testcase>
+    <testcase name="NestedFaultCannotReenterProductOutputAction" file="/workspace/nexus-examples/tests/fault_policy_test.cpp" line="97" status="run" result="completed" time="0." timestamp="2026-10-11T19:40:28.723" classname="ProductFault">
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:98&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_initialize(&amp;policy, {&amp;output, apply})&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:98
+Expected equality of these values:
+  example_fault_policy_initialize(&policy, {&output, apply})
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+    </testcase>
+    <testcase name="NullOrAliasedSnapshotCannotDestroyImmutablePolicy" file="/workspace/nexus-examples/tests/fault_policy_test.cpp" line="110" status="run" result="completed" time="0." timestamp="2026-10-11T19:40:28.723" classname="ProductFault">
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:112&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_sample(nullptr, &amp;snapshot)&#x0A;    Which is: 7&#x0A;  NX_ERROR_INVALID&#x0A;    Which is: 1&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:112
+Expected equality of these values:
+  example_fault_policy_sample(nullptr, &snapshot)
+    Which is: 7
+  NX_ERROR_INVALID
+    Which is: 1
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:114&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_sample(&amp;policy, &amp;snapshot)&#x0A;    Which is: 7&#x0A;  NX_ERROR_EMPTY&#x0A;    Which is: 9&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:114
+Expected equality of these values:
+  example_fault_policy_sample(&policy, &snapshot)
+    Which is: 7
+  NX_ERROR_EMPTY
+    Which is: 9
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:115&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_observe(nullptr, NX_FAULT_PLATFORM, NX_ERROR_IO, 2U)&#x0A;    Which is: 7&#x0A;  NX_ERROR_INVALID&#x0A;    Which is: 1&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:115
+Expected equality of these values:
+  example_fault_policy_observe(nullptr, NX_FAULT_PLATFORM, NX_ERROR_IO, 2U)
+    Which is: 7
+  NX_ERROR_INVALID
+    Which is: 1
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:117&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_initialize(nullptr, {})&#x0A;    Which is: 7&#x0A;  NX_ERROR_INVALID&#x0A;    Which is: 1&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:117
+Expected equality of these values:
+  example_fault_policy_initialize(nullptr, {})
+    Which is: 7
+  NX_ERROR_INVALID
+    Which is: 1
+]]></failure>
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:118&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_sample( &amp;policy, reinterpret_cast&lt;example_fault_snapshot_t*&gt;(&amp;policy))&#x0A;    Which is: 7&#x0A;  NX_ERROR_INVALID&#x0A;    Which is: 1&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:118
+Expected equality of these values:
+  example_fault_policy_sample( &policy, reinterpret_cast<example_fault_snapshot_t*>(&policy))
+    Which is: 7
+  NX_ERROR_INVALID
+    Which is: 1
+]]></failure>
+    </testcase>
+    <testcase name="ActualStrongObserverForwardsWithoutReadingUnknownFile" file="/workspace/nexus-examples/tests/fault_policy_test.cpp" line="122" status="run" result="completed" time="0." timestamp="2026-10-11T19:40:28.723" classname="ProductFault">
+      <failure message="/workspace/nexus-examples/tests/fault_policy_test.cpp:123&#x0A;Expected equality of these values:&#x0A;  example_fault_policy_initialize(&amp;policy, {&amp;output, apply})&#x0A;    Which is: 7&#x0A;  NX_SUCCESS&#x0A;    Which is: 0&#x0A;" type=""><![CDATA[/workspace/nexus-examples/tests/fault_policy_test.cpp:123
+Expected equality of these values:
+  example_fault_policy_initialize(&policy, {&output, apply})
+    Which is: 7
+  NX_SUCCESS
+    Which is: 0
+]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

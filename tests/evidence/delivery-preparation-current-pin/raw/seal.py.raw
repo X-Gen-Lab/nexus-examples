@@ -1,0 +1,150 @@
+"""Seal honest partial current-pin preparation without changing repository pins."""
+
+import hashlib
+import json
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import xml.etree.ElementTree as ET
+
+import capture
+
+ROOT, OUT = capture.ROOT, capture.OUT
+
+
+def data(name):
+    return json.loads((OUT / name).read_text())
+
+
+before = data('source-before.json')
+after = data('source-after-applicable.json')
+if before != after or before != data('source-after-full-build.json'):
+    raise ValueError('Execution source closure changed')
+google = data('owner-google-execution.json')
+if google['passed'] != 28 or any(google[key] for key in
+                               ('failures', 'errors', 'skipped')):
+    raise ValueError('Applicable full Google execution incomplete')
+cases = ET.parse(OUT / 'applicable-ctest.xml').getroot().findall('testcase')
+if len(cases) != 5 or any(case.find('failure') is not None or
+                         case.find('skipped') is not None for case in cases):
+    raise ValueError('Applicable CTest execution incomplete')
+catalogue = data('native-unfiltered-catalogue.log')
+names = [row['name'] for row in catalogue['tests']]
+if len(names) != 7 or 'product_fault_policy_google' not in names:
+    raise ValueError('Full current catalogue unexpected')
+if data('native-current-pin-full-build.command.json')['exit_code'] == 0:
+    raise ValueError('Do not replace failed complete build with partial PASS')
+if 'nexus/core/fault.h: No such file' not in (
+        OUT / 'native-current-pin-full-build.log').read_text():
+    raise ValueError('SDK API gap was not the actual build rejection')
+old_freeze = Path('/workspace/nexus-io-implementation-evidence/lifecycle-tdd/'
+                  'example-io30-freeze.json')
+old = json.loads(old_freeze.read_text())
+history = {name: digest for name, digest in old['files'].items()
+           if name.startswith('tests/evidence/')}
+for name, digest in history.items():
+    if capture.identity(ROOT / name)['sha256'] != digest:
+        raise ValueError('Historical fault evidence changed: ' + name)
+
+pin = json.loads((ROOT / 'dependencies/nexus.lock.json').read_text())
+checks = []
+checks.append(capture.execute('sdk-current-pin-final', [capture.PYTHON,
+                      'scripts/test_repository.py']))
+checks.append(capture.execute('owned-diff-check', ['git', 'diff', '--check']))
+owned = ['.pre-commit-config.yaml', 'CMakeLists.txt',
+         'apps/uart_owner_runtime/main.c',
+         'apps/uart_owner_runtime/fault_observer.c',
+         'apps/uart_owner_runtime/fault_policy.c',
+         'apps/uart_owner_runtime/fault_policy.h', 'tests/CMakeLists.txt',
+         'tests/fault_policy_test.cpp', 'scripts/test_workflow.py', 'README.md',
+         'docs/delivery.md', 'docs/refactor-validation.md',
+         'docs/examples-roadmap.md', 'docs/os-owner-example.md',
+         'docs/delivery-preparation.md']
+checks.append(capture.execute('final-owned-style', [capture.PYTHON,
+        'scripts/check_style.py', '--report', str(OUT / 'final-owned-style.json'),
+        *owned]))
+if any(check['exit_code'] for check in checks):
+    raise ValueError('Final small checks failed')
+
+links = []
+for name in owned:
+    path = ROOT / name
+    if path.suffix != '.md':
+        continue
+    for target in re.findall(r'\]\(([^)]+)\)', path.read_text()):
+        if '://' in target or target.startswith('#'):
+            continue
+        resolved = (path.parent / target.split('#', 1)[0]).resolve()
+        if not resolved.exists():
+            raise ValueError('Broken changed documentation link: ' + target)
+        links.append({'source': name, 'target': target,
+                      'resolved': str(resolved)})
+capture.write('documentation-links.json', links)
+final_sources = {name: capture.identity(ROOT / name) for name in owned}
+capture.write('final-owned-sources.json', final_sources)
+bundle = ROOT / 'tests/evidence/delivery-preparation-current-pin'
+if bundle.exists():
+    raise ValueError('New archive must not overwrite history')
+(bundle / 'raw').mkdir(parents=True)
+raw = []
+for path in sorted(OUT.iterdir()):
+    if path.is_file() and path.suffix != '.py':
+        destination = bundle / 'raw' / path.name
+        shutil.copyfile(path, destination)
+        original = capture.identity(path)
+        if capture.identity(destination)['sha256'] != original['sha256']:
+            raise ValueError('Raw archive changed')
+        raw.append({**original, 'stored_path': str(destination.relative_to(bundle))})
+for path in (Path(capture.__file__), Path(__file__)):
+    destination = bundle / 'raw' / (path.name + '.raw')
+    shutil.copyfile(path, destination)
+    raw.append({**capture.identity(path),
+                'stored_path': str(destination.relative_to(bundle))})
+manifest = {
+    'schema_version': 1, 'kind': 'example_current_pin_preparation',
+    'status': 'partial_passed_complete_build_blocked',
+    'qualifies_candidate': False, 'qualifies_final_sdk': False,
+    'physical': 'not_executed', 'sdk_pin': pin,
+    'sdk_pin_modified': False, 'git_mutation_performed': False,
+    'source_before': before, 'source_after_execution': after,
+    'final_owned_sources': final_sources,
+    'source_changes_after_execution': [name for name, value in
+        final_sources.items() if name not in before or before[name] != value],
+    'changes_after_execution_scope': 'Documentation only; runtime/tool sources unchanged',
+    'incoming_freeze': capture.identity(old_freeze),
+    'incoming_hash_verified_files': len(old['files']),
+    'historical_evidence_unchanged_files': len(history),
+    'full_catalogue': names,
+    'complete_native': {'status': 'blocked', 'exit_code': 1,
+        'reason': 'Current formal SDK does not contain nexus/core/fault.h',
+        'not_qualified': ['uart_owner_shutdown', 'product_fault_policy_google']},
+    'applicable_native': {'status': 'passed', 'ctest_names':
+        [case.get('name') for case in cases], 'ctest_count': 5,
+        'google_discovered': 28, 'google_passed': 28, 'google_skipped': 0,
+        'scope': 'Four unaffected finite apps and complete lifecycle Google',
+        'instrumentation': 'Actual selected ASan/UBSan compilation'},
+    'tooling': {'passed': 39, 'historical_hook_replay_failed': 1,
+        'historical_edit_order_claimed': False},
+    'arm': {'status': 'not_executed_this_preparation',
+        'required_after_final_pin': 'Six presets, two independently budgeted ELF each'},
+    'limitations': [
+        'Partial CTest used an explicit applicability filter; it does not qualify the unfiltered seven-test catalogue.',
+        'Changed fault-policy seven-case development evidence remains separate and is not old-pin qualification.',
+        'Examples source is not a clean committed candidate; no GitHub CI or HIL result is inferred.',
+        'No borrowed resources are reclaimed by fault observation or elapsed time.',
+        'No station, waveform, electrical safety, clock step or reset was measured.'
+    ], 'raw': raw,
+}
+(bundle / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+(bundle / 'README.md').write_text(
+    '# Current-pin delivery preparation\n\n'
+    'The manifest retains the actual complete Native build rejection against '
+    'SDK `6fc1ed75`, five applicable CTest successes (28 complete lifecycle '
+    'Google cases), 39 tooling tests and a historical hook-argument RED replay.\n\n'
+    'It is partial development evidence, not final SDK or physical '
+    'qualification. The source lock and Gitlink remain unchanged. '
+    'Original fault-policy development evidence is retained separately; '
+    'no copied API or skipped-complete-run claim hides the old-pin API gap.\n')
+capture.write('archive-entry.json', capture.identity(bundle / 'manifest.json'))
+print(json.dumps(capture.identity(bundle / 'manifest.json')), flush=True)

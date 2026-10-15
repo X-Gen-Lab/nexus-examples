@@ -1,3 +1,7 @@
+> Historical previous-architecture record. This plan/result does not qualify
+> the current static-port architecture. See [current validation](refactor-validation.md)
+> and the pinned SDK `docs/design/next-generation-execution.csv` for current scope.
+
 # 历史首批示例的软件验证记录
 
 记录日期：2026-10-09（Asia/Shanghai）。本页冻结 Nexus `069dcf14` 的首批历史软件

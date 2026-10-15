@@ -1,0 +1,71 @@
+{
+  "kind": "development-targeted-source-bound",
+  "source_before": {
+    "apps/uart_owner_runtime/fault_policy.h": "2eaf6864777ed255309c181a22dcb1ae920a9bb0545f26df292e9e8758c2f01e",
+    "apps/uart_owner_runtime/fault_policy.c": "3a99c3dd998d03c49412c5050d7fc391241531b8f5847fd120e69a8c4cfb1416",
+    "apps/uart_owner_runtime/fault_observer.c": "a9ce3b169e7980fa1ce8c2d5f3c27011703ab3413848dca2b8fc325fd9b3e034",
+    "apps/uart_owner_runtime/main.c": "ef1dee0cc1e6c501b5c9c9edc81b382355e1ec10b1eb487ba22fed253a57d9e8",
+    "tests/fault_policy_test.cpp": "a49b8acbc491f71441a1440566fb8c07527436b69a81809a7268f662341c93bb",
+    "tests/CMakeLists.txt": "67a294a94989360ec6a1f4ce20687b5264aa84d4ca3faec4b77ac5aeefd66fc7",
+    "CMakeLists.txt": "aa2b66ddc022d9ffb569a3b3b65cfd508bdf19970a9b1cb5b3113cfbdbb183eb",
+    "docs/os-owner-example.md": "b46d3eb046a469e6fb69ed43eca23d54e9cfb2d179034e815f3815cb3f4eb452"
+  },
+  "source_after": {
+    "apps/uart_owner_runtime/fault_policy.h": "2eaf6864777ed255309c181a22dcb1ae920a9bb0545f26df292e9e8758c2f01e",
+    "apps/uart_owner_runtime/fault_policy.c": "3a99c3dd998d03c49412c5050d7fc391241531b8f5847fd120e69a8c4cfb1416",
+    "apps/uart_owner_runtime/fault_observer.c": "a9ce3b169e7980fa1ce8c2d5f3c27011703ab3413848dca2b8fc325fd9b3e034",
+    "apps/uart_owner_runtime/main.c": "ef1dee0cc1e6c501b5c9c9edc81b382355e1ec10b1eb487ba22fed253a57d9e8",
+    "tests/fault_policy_test.cpp": "a49b8acbc491f71441a1440566fb8c07527436b69a81809a7268f662341c93bb",
+    "tests/CMakeLists.txt": "67a294a94989360ec6a1f4ce20687b5264aa84d4ca3faec4b77ac5aeefd66fc7",
+    "CMakeLists.txt": "aa2b66ddc022d9ffb569a3b3b65cfd508bdf19970a9b1cb5b3113cfbdbb183eb",
+    "docs/os-owner-example.md": "b46d3eb046a469e6fb69ed43eca23d54e9cfb2d179034e815f3815cb3f4eb452"
+  },
+  "result": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 7,
+    "cases": [
+      {
+        "name": "UnboundOutputsRemainUnprovenAndNeverReclaimRequest",
+        "classname": "ProductFault",
+        "status": "passed"
+      },
+      {
+        "name": "DiagnosticsPublishBeforeTheExplicitProductAction",
+        "classname": "ProductFault",
+        "status": "passed"
+      },
+      {
+        "name": "FailedOutputActionRetainsFaultAndBorrow",
+        "classname": "ProductFault",
+        "status": "passed"
+      },
+      {
+        "name": "DuplicateFaultDoesNotRepeatOutputsOrReplaceFirstReason",
+        "classname": "ProductFault",
+        "status": "passed"
+      },
+      {
+        "name": "NestedFaultCannotReenterProductOutputAction",
+        "classname": "ProductFault",
+        "status": "passed"
+      },
+      {
+        "name": "NullOrAliasedSnapshotCannotDestroyImmutablePolicy",
+        "classname": "ProductFault",
+        "status": "passed"
+      },
+      {
+        "name": "ActualStrongObserverForwardsWithoutReadingUnknownFile",
+        "classname": "ProductFault",
+        "status": "passed"
+      }
+    ],
+    "report_sha256": "b0ed934b0d1a1541316d90dd440490b5664d741288bc0477e6aee368bd6eeae4"
+  },
+  "application_exit_code": 0,
+  "hardware": "not_executed",
+  "scope": "current dirty source CMake; pinned SDK/final CTest/ARM pending"
+}

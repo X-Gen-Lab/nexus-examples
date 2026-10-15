@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "kind": "example_style_check",
+  "status": "passed",
+  "formatter": "clang-format version 14.0.6 (https://github.com/ssciwr/clang-format-wheel e79d44a98fc6eeb3e9751220e441da03812564c1)",
+  "style_sha256": "7e23d2556f603596a54f8e568ab9eb6ead21d60e8ff4fcb4da22a25c6fc5c1a2",
+  "files": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "0b3c6228f623ad13fac3a7440f01fedeb35aad69a202d9dd949ccb43fbdfcb2a"
+    },
+    {
+      "path": "apps/uart_owner_runtime/bootstrap.h",
+      "sha256": "37ecb0807b0692eb39e5ab942c58d7382115f4f0a7e9601f881efbfb47f07e35"
+    },
+    {
+      "path": "apps/uart_owner_runtime/main.c",
+      "sha256": "06daa91329754f285aa0d77820c3cc660de3d092717ca0b93563434738116e5b"
+    },
+    {
+      "path": "apps/uart_owner_runtime/scheduler_return.c",
+      "sha256": "a3721ecaa562b7a6a1e7f8deac625f17fbe145f6beb0e966f6087016759261c7"
+    },
+    {
+      "path": "apps/uart_owner_runtime/scheduler_return.h",
+      "sha256": "371026ea639fa67d62cc5a4ef5219ae692fc93ff6ba1b418eeed7c016bf78585"
+    },
+    {
+      "path": "docs/os-owner-example.md",
+      "sha256": "eb0a8525f8221f5cd8d5bdfeefe2f81897d20ce26b774cad607d142e4fce8121"
+    },
+    {
+      "path": "tests/CMakeLists.txt",
+      "sha256": "5416829292c2014e86243e94258e6fe74aa6429d6e227604b3c0bbb2fc24501b"
+    },
+    {
+      "path": "tests/scheduler_return_test.cpp",
+      "sha256": "320177da30d05de88dc3293b03a72eb5800735522da57f15204358e2cc0b9a2e"
+    }
+  ],
+  "issues": [],
+  "source_identity_verified": false,
+  "hardware_verified": false
+}

@@ -1,0 +1,10 @@
+{
+  "command": [
+    "/workspace/nexus-examples/build/fault-iteration/tests/product_fault_policy_test",
+    "--gtest_filter=*",
+    "--gtest_repeat=1",
+    "--gtest_also_run_disabled_tests",
+    "--gtest_output=xml:/workspace/nexus-io-implementation-evidence/lifecycle-tdd/example-fault-green.xml"
+  ],
+  "exit_code": 0
+}

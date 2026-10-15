@@ -1,0 +1,18 @@
+[0/1] Re-running CMake...
+-- Nexus: NATIVE_MODEL/native, Os
+-- Sole resolved configuration: /workspace/nexus-examples/build/fault-iteration/nexus/generated/resolved.json
+-- Found Python3: /workspace/nexus/.venv/bin/python3.12 (found version "3.12.14") found components: Interpreter
+-- Found Python3: /workspace/nexus/.venv/bin/python3.12 (found suitable version "3.12.14", minimum required is "3.11") found components: Interpreter
+-- Configuring done (0.9s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/nexus-examples/build/fault-iteration
+[1/11] Building C object nexus/CMakeFiles/nexus_platform.dir/generated/bindings.c.o
+[2/11] Building C object CMakeFiles/uart_owner_runtime.dir/apps/uart_owner_runtime/fault_policy.c.o
+[3/11] Building C object CMakeFiles/uart_owner_runtime.dir/apps/uart_owner_runtime/fault_observer.c.o
+[4/11] Building C object CMakeFiles/uart_owner_runtime.dir/apps/uart_owner_runtime/main.c.o
+[5/11] Linking C static library nexus/lib/libnexus_platform.a
+[6/11] Building C object tests/CMakeFiles/product_fault_policy_test.dir/__/apps/uart_owner_runtime/fault_policy.c.o
+[7/11] Building C object tests/CMakeFiles/product_fault_policy_test.dir/__/apps/uart_owner_runtime/fault_observer.c.o
+[8/11] Linking C executable bin/uart_owner_runtime
+[9/11] Building CXX object tests/CMakeFiles/product_fault_policy_test.dir/fault_policy_test.cpp.o
+[10/11] Linking CXX executable tests/product_fault_policy_test

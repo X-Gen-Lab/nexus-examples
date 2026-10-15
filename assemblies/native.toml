@@ -1,0 +1,36 @@
+schema = 2
+board = "native_reference"
+backend = "native"
+clock = "model"
+optimization = "Os"
+components = ["uart-owner", "bmp280", "bmp280-spi", "log", "storage", "modbus-rtu"]
+
+[memory]
+main_stack_bytes = 2048
+flash_load_limit_bytes = 65536
+static_ram_limit_bytes = 262144
+libc_heap_bytes = 0
+
+[gpio.led0]
+binding = "led0"
+mode = "output"
+
+[uart.uart0]
+binding = "uart0"
+mode = "irq"
+baud = 115200
+
+[uart.uart0.rx]
+format = "events"
+capacity = 32
+
+[uart.uart0.irq]
+priority = 5
+
+[spi.spi0]
+binding = "spi0"
+mode = "short-poll"
+max_hz = 1000000
+
+[spi_device.sensor0]
+controller = "spi0"

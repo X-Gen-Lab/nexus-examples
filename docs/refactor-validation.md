@@ -1,21 +1,88 @@
-# 当前平台统一交付验证
+# Current validation scope
 
-当前结论仅绑定 Nexus `a4d5ac6989c741242f6ecd3810e0f9acbdb3bbe2`（tree `1a5d811afe5b6978d6902c56272763110437905f`）与 examples `85c1e2678e238d30a383a98d975bcf68d1055c3a`（tree `0e55a577751cdd01bfbd0a66dc7a91131c64294c`）。examples Gitlink/SDK lock 均选择该 Nexus 版本。随后证据提交与被测实现提交分开，最终证据提交身份由外部交付清单记录。历史结果保留各自源版本，不能累加或继承。
+This page preserves the 2026-10-12 software qualification and its original
+evidence identities. The current Nexus 0.1.0 pin and required fresh integration
+are described in [release integration](release-0.1.0.md). The historical counts,
+archives and GitHub runs below do not qualify that new SDK source.
 
-| 实际执行范围 | 结果 |
-|---|---|
-| Native Release 完整 CTest | 1897/1897，零失败/错误/跳过，枚举与实际 JUnit 一致 |
-| Native sanitizer 完整 CTest | 1897/1897，零失败/错误/跳过，枚举与实际 JUnit 一致 |
-| 平台 ARM 软件矩阵 | 8 配置、8 contract ELF 实际链接与静态检查 |
-| 外部示例 | Native 7 个实际检查；ARM 8 配置、38 ELF；76 个 BIN/HEX 比较 |
-| 严格可重定位源码 SDK | 3 Native C/C++/parent 程序实际运行、2 ARM ELF 检查、6 个身份/篡改拒绝 |
-| 当前双仓 Python suites | Nexus 396 + examples helper 9 = 405 个实际枚举用例，零失败/跳过 |
-| HIL 只读准备 | 3 板固件准入与 3 空站点真实拒绝；设备操作为空 |
-| 公共 API 文档 | 真实 Doxygen XML、Sphinx EN/zh_CN -W 重建，零抑制/零诊断 |
-| GitHub Actions | 实际 checkout tree、完成 job 与结果见权威记录 |
+The current architecture replaces the previous HAL/OSAL/Runtime and eight-app
+matrix. Old counts, CI runs and `evidence/platform-refactor-validation.json`
+remain historical; they do not qualify this implementation.
 
-Native sanitizer 实际生成的 74/74 个二进制均链接 ASan/UBSan 运行时；使用默认泄漏检测，无抑制或环境覆盖，实际执行无 sanitizer 诊断。
+The [2026-10-12 result record](soc-refinement-results.json) binds clean software
+execution to examples code commit `3de8523811b00da8bd887abf53e61eedbaf5161e`
+and pinned Nexus SDK `98270512ea2ff7eefe8ff79720018e582be3a949`. Both exact
+trees and before/after source hashes are recorded there. All eight Native CTests,
+43 GoogleTest cases across three programs, 44 Python tooling tests and twenty
+ARM ELF budget checks passed without failures or skips. The twenty images cover
+five boards, two backends and both MCU application targets.
 
-完整命令、exit、枚举、JUnit、源码/依赖/配置/工具链、Board/layout、ELF/BIN/HEX 与日志身份见 [当前机器可读记录](../evidence/platform-refactor-validation.json) 和其 immutable reports 引用。
+Native/Google/tool execution comes from the successful normal commit hook for
+the exact qualified tree. The formal runner checked and attached that raw
+evidence, then executed the ARM and HIL preparation matrix. Its 46 commands
+returned zero; source and SDK identities remained unchanged. Documentation
+updates record this code snapshot and do not qualify a subsequent documentation
+HEAD or imply a separate GitHub Actions result.
+The earlier `8cbc6e49` / SDK `646a331c`, `f02b9186` / SDK
+`3728b334` and `1f4116ae` / SDK
+`23cde7e5` reports remain historical. Their passes and invocation failures do
+not qualify this SDK update. The current matrix was executed again after the
+new pin passed its normal commit hook.
 
-这些结果完成软件与 HIL 工装范围。实板尚未连接；探针、刷写/读回、串口、电气/IRQ/DMA、掉电和长期负载没有执行。Native UART/Flash 是有界主机模型，不证明物理串口、MCU Flash 或掉电恢复。MCU typed I2C、UART DMA、非零 image offset/bootloader、MPU/cache、MCU trust/security 链及企业/LTS/发布资格仍按平台支持矩阵明确约束。原 38 RF 项和 19 批次计划保持完整，软件通过不替代其全部实板/人员/发布退出条件。
+Original JSON reports beneath the exact historical roots
+`evidence/reports/a4d5ac6/` and `evidence/reports/5498b2b/` are preserved
+byte-for-byte, including their original whitespace and newline conventions.
+They are raw records excluded from source formatting, not a style-debt baseline
+or acceptance of the new platform. Current evidence, nested lookalike paths and
+C sources remain subject to the normal checks.
+
+Current required software checks are:
+
+1. Exact formal SDK commit/tree, example Gitlink, recursive maintained source
+   dependencies and reviewed GD32 import; a clean checkout is mandatory.
+2. SDK-locked format/comment/text tools and Conventional Commit hooks; complete
+   CI checks plus real formatter/boundary regression tests.
+3. Five actual finite Native applications under ASan/UBSan and three complete
+   lifecycle/fault-policy/reference-RX Google targets: eight CTests with fresh nonempty JUnit
+   and unfiltered discovery/identity comparison; no skipped cases.
+4. Twenty real ARM linked images: `platform_reference.elf` and
+   `uart_owner_runtime.elf` for five boards by two OS backends. Each checks reset
+   vector, resolved configuration digest, loaded
+   Flash, address footprint, distinct RAM domains, MSP and zero libc heap against
+   assembly budgets. Static reserved bytes are not measured dynamic high-water.
+
+The build helper records commands and exits. CI is configured to retain raw logs, JUnit, source
+identity, compile commands, effective configuration, ELF/BIN/MAP and resource
+reports. This execution retains its raw evidence outside the Git repository at
+`/dev/shm/nexus-soc-final-98270512/verification/examples/`.
+The report SHA-256 is
+`84c884b6b14283b53f9b4cba440ac4be8c3f26ad95332c0172ac88c622b9e787`.
+Its artifact index includes eleven executed archives (Native plus ten ARM) and
+ten preserved prior ARM archives; prior archives are not new qualification.
+The archives include ELF/BIN/MAP, configuration, compile metadata and original
+execution logs with per-file hashes. This local archive location is not a
+published GitHub artifact URL. A verified durable copy is retained at
+`/workspace/nexus-soc-delivery-98270512/examples-evidence.tar.gz`
+(SHA-256 `c7f6f4824c85142b86ff43a428d88fb680f8725fae9e8b7f0fd57d1bdf70db9c`).
+Resolve the original execution directory beneath its `examples/` prefix;
+original reports retain their recorded paths and bytes. Reports bind actual
+inputs and outputs; an older successful report cannot qualify changed behavior.
+
+Joint development in `build/nextgen-development/` is deliberately uncommitted
+and `publishable=false`. It is useful implementation feedback, not a sealed
+release result. The formal dependency checker has no dirty-source bypass.
+
+Historical preparation against `6fc1ed75` failed at its missing public
+`nexus/core/fault.h`; that raw failure and its partial applicable execution stay
+retained. It no longer describes the formal lock, whose exact identity is in
+`dependencies/nexus.lock.json`. See [delivery preparation](delivery-preparation.md)
+for the historical scope. H743/U575 integration and the new receive policy were
+qualified by the fresh named code snapshot and complete matrix above; neither
+inherits qualification from that earlier preparation.
+
+All physical timing, interrupt-load, oscillator/reset, connector/electrical,
+Flash power-cut and watchdog behavior remains **not executed**. A Native model
+or ARM image cannot establish those qualifications. The SDK HIL tools prepare
+stations and cases for a later physically connected validation run.
+All ten newly generated HIL plans remain `prepared_unbound`, and the software
+report retains `publishable=false` and `cycles_status=not_measured`.

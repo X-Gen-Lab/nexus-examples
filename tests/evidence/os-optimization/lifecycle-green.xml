@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="6" failures="0" disabled="0" errors="0" time="0." timestamp="2026-10-11T03:35:44.202" name="AllTests">
+  <testsuite name="Lifecycle" tests="6" failures="0" disabled="0" skipped="0" errors="0" time="0." timestamp="2026-10-11T03:35:44.202">
+    <testcase name="ClosesAdmissionBeforeProducerJoinThenReclaimsAfterAllJoins" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="76" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:44.202" classname="Lifecycle" />
+    <testcase name="ProducerTimeoutRetainsNotificationsAndOwnerProgress" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="98" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:44.202" classname="Lifecycle" />
+    <testcase name="OwnerJoinFailureDoesNotDetachHardwareOrReclaimStorage" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="111" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:44.202" classname="Lifecycle" />
+    <testcase name="IdleCheckRejectsPrematureOwnerJoinBeforePublicationExits" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="123" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:44.202" classname="Lifecycle" />
+    <testcase name="QuiescenceFailureRetainsStorageAndRetriesOnlyThatMilestone" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="140" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:44.202" classname="Lifecycle" />
+    <testcase name="InvalidInputHasNoSchedulingOrHardwareEffects" file="/workspace/nexus-examples/tests/owner_lifecycle_test.cpp" line="152" status="run" result="completed" time="0." timestamp="2026-10-11T03:35:44.202" classname="Lifecycle" />
+  </testsuite>
+</testsuites>

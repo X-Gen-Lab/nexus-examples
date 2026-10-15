@@ -1,0 +1,29 @@
+schema = 2
+board = "stm32h743_nucleo_zi2"
+backend = "baremetal"
+clock = "hsi64-fixed-cache-off"
+optimization = "Os"
+components = ["uart-owner"]
+
+[memory]
+main_stack_bytes = 2048
+flash_load_limit_bytes = 65536
+static_ram_limit_bytes = 32768
+libc_heap_bytes = 0
+
+[gpio.led0]
+binding = "led0"
+mode = "output"
+
+[uart.uart1]
+binding = "uart3"
+mode = "irq-bytes"
+baud = 115200
+
+[uart.uart1.rx]
+format = "bytes"
+capacity = 32
+
+[uart.uart1.irq]
+priority = 5
+calls_os = false

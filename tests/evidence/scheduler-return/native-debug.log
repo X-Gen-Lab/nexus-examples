@@ -1,0 +1,57 @@
++ cmake --preset native-debug -DNEXUS_SOURCE:PATH=/workspace/nexus-examples/external/nexus
+Preset CMake variables:
+
+  CMAKE_BUILD_TYPE="Debug"
+  NEXUS_ASSEMBLY_FILE="/workspace/nexus-examples/assemblies/native.toml"
+  NEXUS_BUILD_TESTS="OFF"
+  NEXUS_BUILD_WORKLOAD="OFF"
+  NEXUS_ENABLE_SANITIZERS="ON"
+
+-- Nexus: NATIVE_MODEL/native, Os
+-- Sole resolved configuration: /workspace/nexus-examples/build/native-debug/nexus/generated/resolved.json
+-- Found Python3: /workspace/nexus-examples/.venv/bin/python3.12 (found version "3.12.14") found components: Interpreter
+-- Found Python3: /workspace/nexus-examples/.venv/bin/python3.12 (found suitable version "3.12.14", minimum required is "3.11") found components: Interpreter
+-- Configuring done (0.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/nexus-examples/build/native-debug
+Exit 0; elapsed 0.958s
++ cmake --build --preset native-debug --parallel 1
+[1/11] Building C object nexus/CMakeFiles/nexus_platform.dir/generated/bindings.c.o
+[2/11] Building C object CMakeFiles/platform_reference.dir/apps/platform_reference/main.c.o
+[3/11] Building C object CMakeFiles/uart_owner_runtime.dir/apps/uart_owner_runtime/main.c.o
+[4/11] Building C object CMakeFiles/sensor_spi.dir/apps/sensor_spi/main.c.o
+[5/11] Building C object CMakeFiles/modbus_registers.dir/apps/modbus_registers/main.c.o
+[6/11] Linking C static library nexus/lib/libnexus_platform.a
+[7/11] Linking C executable bin/platform_reference
+[8/11] Linking C executable bin/uart_owner_runtime
+[9/11] Linking C executable bin/sensor_spi
+[10/11] Linking C executable bin/journal
+[11/11] Linking C executable bin/modbus_registers
+Exit 0; elapsed 0.891s
++ ctest --preset native-debug --output-on-failure --no-tests=error --parallel 1 --output-junit /workspace/nexus-examples/build/native-debug/ctest-results.xml
+Test project /workspace/nexus-examples/build/native-debug
+    Start 1: uart_owner_shutdown
+1/6 Test #1: uart_owner_shutdown ..............   Passed    0.01 sec
+    Start 2: platform_static_ports
+2/6 Test #2: platform_static_ports ............   Passed    0.01 sec
+    Start 3: sensor_explicit_spi
+3/6 Test #3: sensor_explicit_spi ..............   Passed    0.01 sec
+    Start 4: persistent_journal
+4/6 Test #4: persistent_journal ...............   Passed    0.01 sec
+    Start 5: protocol_authorized_registers
+5/6 Test #5: protocol_authorized_registers ....   Passed    0.01 sec
+    Start 6: owner_lifecycle_google
+6/6 Test #6: owner_lifecycle_google ...........   Passed    0.07 sec
+
+100% tests passed, 0 tests failed out of 6
+
+Label Time Summary:
+GoogleTest    =   0.07 sec*proc (1 test)
+example       =   0.11 sec*proc (6 tests)
+native        =   0.11 sec*proc (6 tests)
+
+Total Test time (real) =   0.11 sec
+Exit 0; elapsed 0.207s
++ /workspace/nexus-examples/.venv/bin/python /workspace/nexus-examples/external/nexus/scripts/validation/junit.py --report /workspace/nexus-examples/build/native-debug/ctest-results.xml --not-before-ns 1791736878958178907
+{"cases": [{"classname": "uart_owner_shutdown", "name": "uart_owner_shutdown", "status": "passed"}, {"classname": "platform_static_ports", "name": "platform_static_ports", "status": "passed"}, {"classname": "sensor_explicit_spi", "name": "sensor_explicit_spi", "status": "passed"}, {"classname": "persistent_journal", "name": "persistent_journal", "status": "passed"}, {"classname": "protocol_authorized_registers", "name": "protocol_authorized_registers", "status": "passed"}, {"classname": "owner_lifecycle_google", "name": "owner_lifecycle_google", "status": "passed"}], "errors": 0, "failures": 0, "passed": 6, "report_sha256": "3ea4e249bfe9cf6e5506cfdc9d1a979f5cb8646d5dc39e937445c22987b0190a", "skipped": 0, "tests": 6}
+Exit 0; elapsed 0.035s

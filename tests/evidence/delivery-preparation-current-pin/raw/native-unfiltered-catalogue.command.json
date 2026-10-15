@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "/workspace/nexus-examples/build/native-debug",
+    "--show-only=json-v1"
+  ],
+  "cwd": "/workspace/nexus-examples",
+  "exit_code": 0,
+  "started_ns": 1791752730710637777,
+  "ended_ns": 1791752730797976327,
+  "log": {
+    "path": "/workspace/nexus-examples-delivery-preparation/native-unfiltered-catalogue.log",
+    "sha256": "7adf774bc3d624b035235c1321eca9c457cd7939831bb1943a38cdddcaabce50",
+    "bytes": 6096
+  },
+  "driver": {
+    "path": "/workspace/nexus-examples-delivery-preparation/capture.py",
+    "sha256": "33c76e803ef0c380351aee8a6cf70402d7defac0a4c93694efa823dc215c8380",
+    "bytes": 6617
+  }
+}

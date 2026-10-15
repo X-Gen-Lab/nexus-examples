@@ -50,12 +50,14 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - name: Prepare host build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build gcc g++ libssl-dev
-          python3 -m pip install kconfiglib==14.1.0
+          sudo apt-get install -y gcc g++
+          python3 scripts/setup_dev_tools.py --skip-hooks
+          .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
+          echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
       - name: Verify source dependency identity
         env:
           CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
@@ -65,6 +67,8 @@ jobs:
             candidate_arguments+=(--candidate-nexus-commit "$CANDIDATE_NEXUS_REF")
           fi
           python3 scripts/test_repository.py "${candidate_arguments[@]}" --report build/native-debug/dependency-identity.json
+      - name: Check all owned formatting, comments and text
+        run: python3 scripts/check_style.py --all --report build/quality/style.json
       - name: Verify runner rejects empty and skipped execution
         run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Build and run Native examples
@@ -80,8 +84,12 @@ jobs:
             build/native-debug/dependency-identity.json
             build/native-debug/CMakeCache.txt
             build/native-debug/compile_commands.json
+            build/native-debug/tests/google-execution/
+            build/native-debug/tests/fault-google-execution/
+            build/native-debug/tests/reference-google-execution/
             build/native-debug/nexus/generated/*
-            build/native-debug/nexus/bin/*
+            build/native-debug/bin/*
+            build/quality/style.json
           retention-days: 14
 
   arm:
@@ -93,14 +101,16 @@ jobs:
       fail-fast: false
       matrix:
         preset:
-          - stm32-discovery-baremetal-release
-          - stm32-discovery-freertos-release
-          - stm32-qiming-baremetal-release
-          - stm32-qiming-freertos-release
-          - stm32-sky-baremetal-release
-          - stm32-sky-freertos-release
-          - gd32-liangshan-baremetal-release
-          - gd32-liangshan-freertos-release
+          - stm32-qiming-baremetal
+          - stm32-qiming-freertos
+          - stm32-sky-baremetal
+          - stm32-sky-freertos
+          - gd32-liangshan-baremetal
+          - gd32-liangshan-freertos
+          - stm32-h743-nucleo-baremetal
+          - stm32-h743-nucleo-freertos
+          - stm32-u575-nucleo-baremetal
+          - stm32-u575-nucleo-freertos
     steps:
       - name: Checkout pinned SDK and recursive dependencies
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -128,12 +138,14 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - name: Prepare host build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build gcc g++
-          python3 -m pip install kconfiglib==14.1.0
+          sudo apt-get install -y gcc g++
+          python3 scripts/setup_dev_tools.py --skip-hooks
+          .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
+          echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
       - name: Verify source dependency identity
         env:
           CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
@@ -149,11 +161,36 @@ jobs:
           echo "$RUNNER_TEMP/nexus-arm-toolchain/bin" >> "$GITHUB_PATH"
       - name: Build real ARM firmware
         run: python3 scripts/build.py --preset ${{ matrix.preset }} --parallel 4
-      - name: Verify linked firmware static contract
+      - name: Verify physical ELF identity and each RAM/Flash budget
         run: >-
-          python3 external/nexus/scripts/ci/validate_firmware_elf.py
-          --build-dir build/${{ matrix.preset }}/nexus
-          --report build/${{ matrix.preset }}/firmware-static-contract.json
+          python3 external/nexus/tools/measurement/resources.py
+          --elf build/${{ matrix.preset }}/bin/platform_reference.elf
+          --resolved build/${{ matrix.preset }}/nexus/generated/resolved.json
+          --budget build/${{ matrix.preset }}/nexus/generated/resource-budget.json
+          --report build/${{ matrix.preset }}/firmware-resource-budget.json
+      - name: Verify UART owner firmware resources
+        run: >-
+          python3 external/nexus/tools/measurement/resources.py
+          --elf build/${{ matrix.preset }}/bin/uart_owner_runtime.elf
+          --resolved build/${{ matrix.preset }}/nexus/generated/resolved.json
+          --budget build/${{ matrix.preset }}/nexus/generated/resource-budget.json
+          --report build/${{ matrix.preset }}/uart-owner-resource-budget.json
+      - name: Prepare the unbound physical station work plan
+        env:
+          PRESET: ${{ matrix.preset }}
+        run: |
+          case "$PRESET" in
+            stm32-qiming-*) fixture=stm32f407_qiming_v31 ;;
+            stm32-sky-*) fixture=stm32f407ve_sky_qingchun ;;
+            gd32-liangshan-*) fixture=gd32f470_liangshan ;;
+            stm32-h743-nucleo-*) fixture=stm32h743_nucleo_zi2 ;;
+            stm32-u575-nucleo-*) fixture=stm32u575_nucleo_zi_q ;;
+            *) exit 1 ;;
+          esac
+          python3 -B external/nexus/tools/hil/prepare.py \
+            --fixture "external/nexus/tools/hil/fixtures/$fixture.json" \
+            --resolved "build/$PRESET/nexus/generated/resolved.json" \
+            --report "build/$PRESET/hil-preparation.json"
       - name: Retain firmware and static validation evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -162,9 +199,11 @@ jobs:
           path: |
             build/${{ matrix.preset }}/build.log
             build/${{ matrix.preset }}/dependency-identity.json
-            build/${{ matrix.preset }}/firmware-static-contract.json
+            build/${{ matrix.preset }}/firmware-resource-budget.json
+            build/${{ matrix.preset }}/uart-owner-resource-budget.json
+            build/${{ matrix.preset }}/hil-preparation.json
             build/${{ matrix.preset }}/CMakeCache.txt
             build/${{ matrix.preset }}/compile_commands.json
             build/${{ matrix.preset }}/nexus/generated/*
-            build/${{ matrix.preset }}/nexus/bin/*
+            build/${{ matrix.preset }}/bin/*
           retention-days: 14

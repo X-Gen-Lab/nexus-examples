@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "git",
+    "status",
+    "--porcelain"
+  ],
+  "cwd": "/workspace/nexus-examples",
+  "exit_code": 0,
+  "started_ns": 1791752729502331263,
+  "ended_ns": 1791752729539521172,
+  "log": {
+    "path": "/workspace/nexus-examples-delivery-preparation/examples-current-status.log",
+    "sha256": "a323ab0adf974787bf715af46538a3307afd5ba79b3b4fdab0eb9ca0a70332e6",
+    "bytes": 350
+  },
+  "driver": {
+    "path": "/workspace/nexus-examples-delivery-preparation/capture.py",
+    "sha256": "33c76e803ef0c380351aee8a6cf70402d7defac0a4c93694efa823dc215c8380",
+    "bytes": 6617
+  }
+}

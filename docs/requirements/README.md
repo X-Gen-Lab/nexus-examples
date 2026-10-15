@@ -13,5 +13,5 @@ Original evidence paths refer to that historical Nexus snapshot; they are not
 new evidence files supplied or revalidated by this repository.
 
 Current generic Nexus acceptance requirements are maintained separately in
-`docs/requirements/platform.json` in the pinned platform source. This historical
+`docs/design/next-generation-execution.csv` and public integration contracts in the pinned platform source. This historical
 file does not define the platform's present traceability gate or source SDK API.
