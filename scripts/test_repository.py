@@ -23,6 +23,7 @@ DEPENDENCIES = (
     "vendors/st/cmsis_device_g4",
     "vendors/st/cmsis_device_h7",
     "vendors/st/cmsis_device_u5",
+    "vendors/st/stm32f4_hal",
 )
 REFERENCE_PRESETS = frozenset({
     "native-debug",

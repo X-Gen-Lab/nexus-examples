@@ -6,12 +6,16 @@ OS backend and optional component targets. Its `nexus_add_firmware()` helper
 adds MCU startup, selected providers, linker configuration and real ELF budget
 checks. Application sources remain in this repository.
 
-The current integration pins the Nexus 0.1.0 Source SDK developer preview at
-`58297516d707fdee117bd27b5df6af09d72edd2e`, with the exact tree in
-`dependencies/nexus.lock.json`. This repository's independent application project
-version remains `1.0.0`. The SDK compatibility JSON owns its `0.1.0` version;
-source interface epoch `1` and authored TOML schema `2` remain separate contracts.
-See [release integration](release-0.1.0.md) for source, tools and evidence boundaries.
+The current integration pins the post-release Nexus 0.2 development iteration at
+`16e372e873c673fb50c5c9d572bcb1a3a514c9b4`, with the exact tree in
+`dependencies/nexus.lock.json`. This source includes the official STM32F4 LL
+adaptation and optional caller-owned cold diagnostics. Its SDK metadata is
+`0.2.0`; this does not move the published `v0.1.0` tag or qualify this changed
+implementation with historical release evidence. This repository's independent
+application project version remains `1.0.0`. Source interface epoch `1` and
+authored TOML schema `2` remain separate contracts. See [release
+integration](release-0.1.0.md) for the original published snapshot and its evidence
+boundaries.
 
 The maintained matrix has one Native configuration and five boards with two
 backends each. H743 and U575 software references use `stm32-h743-nucleo-*` and
@@ -38,6 +42,40 @@ Calling `nx_platform_start()` reports primary failure, cleanup failure and any
 remaining effects. Only after success may the application start its static
 FreeRTOS tasks or enter its bare-metal loop. It owns all startup/error policy.
 
+The reference application opts into caller-owned cold diagnostics:
+
+```c
+nx_platform_diagnostic_t diagnostic;
+nx_platform_start_result_t startup =
+    nx_platform_start_diagnosed(&diagnostic);
+```
+
+The ordinary `startup.primary`, `startup.cleanup` and
+`startup.remaining_effects` retain their authority. The additional `phase` and
+`controller_index` identify the failed startup stage; `cleanup_phase` and
+`cleanup_controller_index` independently identify failed rollback. Indices are
+zero-based positions in this exact assembly's `resolved.json` `controllers`
+array, not typed factory IDs, physical peripheral numbers or stable identities
+across configurations. `SIZE_MAX` means that no controller applies. Successful
+calls clear the diagnostic. The pointer is never retained, and a caller can keep
+a copied failure snapshot while a later cleanup attempt writes another output.
+
+`nx_platform_stop_diagnosed(&diagnostic)` returns the normal stop result. Its
+metadata does not invent a remaining-effect count or prove a pending request
+was released. BUSY, IO and QUARANTINED still require preserving the actual
+request, buffers, notification targets and provider ownership; the execution
+owner must continue the permitted service or explicit recovery. A rejected
+second start does not revoke the first owner's leases even when that rejected
+call has no additional remaining effects.
+
+Native failure reporting prints these actual fields to stderr. MCU composition
+does not acquire a logger, worker, HAL handle or recovery policy to provide the
+diagnostics. The product decides how to record and recover from a cold failure.
+`reference_lifecycle_google` executes the real generated Native platform: it
+checks success reset, masked-context rejection, repeated-start ownership and an
+accepted UART request whose held drain keeps stop BUSY until service can settle
+the cancellation. This is a host ownership test, not physical DMA qualification.
+
 Native uses the same public contracts with explicit host models. Generated
 instances use `nx_native_uart_model_receive(port, ...)` and the corresponding
 instance-specific fixture helpers. Legacy default-fixture helpers do not target
@@ -56,7 +94,12 @@ verifies the formal commit/tree, example Gitlink, clean dependencies and GD32
 import. Explicit candidate validation requires a full SHA and matching origin;
 it does not rewrite or promote the formal lock. Dirty joint-development builds
 require temporary external Board paths and cannot serve as release evidence.
-The dependency identity includes all seven maintained top-level SDK submodules
-and their recursive children, including both reviewed H7 and U5 device closures.
+The dependency identity includes all eight maintained top-level SDK submodules
+and their recursive children, including both reviewed H7 and U5 device closures
+and the selected official STM32F4 HAL/LL package. Vendor types remain private to
+the SDK provider; applications continue to use the same public typed faces.
 Fresh Native Google execution includes the public event/byte receive policy;
 CI retains its discovery and XML separately from lifecycle and fault policy.
+The separate `tests/lifecycle-google-execution/` retains cold Platform discovery,
+XML and execution commands; it is required by the commit gate and complete
+Native CTest catalogue.

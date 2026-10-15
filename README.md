@@ -8,10 +8,12 @@
 任务、组件、资源预算和恢复策略。依赖通过 `external/nexus` Gitlink 和
 [源码锁](dependencies/nexus.lock.json) 固定，最终验收必须与该身份一致。
 
-当前集成固定 Nexus **0.1.0 Source SDK 开发者预览版**的最终 main 源码
-`58297516d707fdee117bd27b5df6af09d72edd2e`。本仓库独立的应用工程版本仍为
-`1.0.0`；它不替代 SDK 版本或依赖身份。精确范围、工具和本次执行证据的定位见
-[0.1.0 集成说明](docs/release-0.1.0.md)。MCU 实板 HIL 保持 `not_executed`。
+当前集成固定面向 Nexus 0.2 开发周期的发布后平台迭代源码
+`16e372e873c673fb50c5c9d572bcb1a3a514c9b4`，包括官方 STM32F4 LL 复用和可选冷态
+生命周期诊断。该源码的 SDK 元数据版本为 `0.2.0`，不移动已发布的 `v0.1.0` 标签，
+也不冒充该标签的原始产物。本仓库独立的应用工程版本仍为 `1.0.0`；精确依赖以
+Gitlink 和源码锁为准。[0.1.0 集成说明](docs/release-0.1.0.md) 保留原始发布快照及
+证据边界；该历史证据不自动证明当前迭代。MCU 实板 HIL 保持 `not_executed`。
 
 ## 五个应用
 
@@ -23,7 +25,8 @@
 | `modbus_registers` | 实际 UART 模型、CRC、写权限、异常回复、有限日志 | 暂无 RS485 收发器接线和方向时序验收 |
 | `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 五板两后端，显式静态任务或裸机 pump |
 
-Native 注册五个有限应用 CTest，以及 lifecycle、故障策略和接收策略三组 GoogleTest 执行。
+Native 注册五个有限应用 CTest，以及 owner lifecycle、故障策略、接收策略和平台冷态
+生命周期四组 GoogleTest 执行。
 UART 由应用显式注入接收事实，服务推进发送并等待真正
 TC 完成。模型没有自动串口设备或后台 RX 生产者。Flash 文件示例验证宿主恢复流程，
 不证明 MCU 掉电安全。三板为启明欣欣 F407ZG V3.1、天空星 F407VE 青春版和梁山派
@@ -72,6 +75,16 @@ U575 是 MSIS4、TZEN0、PC7 LED 与 USART1 PA9/PA10 IRQ byte RX。两个软件�
 启用 DMA、Cache 或 TrustZone。`platform_reference` 优先读取公共 event 接口，只有
 UNSUPPORTED 才转到公共 byte 接口；事件损坏或 byte overflow 会停止回显，不制造
 字符、时间戳或丢失恢复结果。产品协议与恢复策略仍由产品仓库决定。
+
+`platform_reference` 使用 `nx_platform_start_diagnosed()` 和
+`nx_platform_stop_diagnosed()`，把可选阶段诊断写入调用者自己的存储。Native 失败时
+打印实际 primary、cleanup、remaining effects 及阶段；MCU 不因此引入 logger、堆或
+额外 worker。`controller_index` 是同一次装配 `resolved.json` 中 `controllers` 的零基
+下标，**不是 factory ID**；`SIZE_MAX` 表示该阶段没有控制器。错误返回仍是行为依据，
+诊断不会授权释放 buffer、复位或重试。真实生成平台的 GoogleTest 覆盖成功清空、
+非法上下文拒绝、重复启动不接管原 owner，以及 UART 借用未结清时 stop 返回 BUSY、
+继续 service 后才能释放。启动失败且 cleanup 未完成时，产品必须继续保留实际责任；
+本示例不虚构自动恢复。
 
 提交钩子检查暂存文件的格式、机械注释、文本和 Conventional Commit，并对行为变更
 验证正式干净 SDK，执行全部工具测试、Native CTest 和 GoogleTest；不改写或暂存源文件。

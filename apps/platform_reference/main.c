@@ -15,9 +15,28 @@
 #endif
 #if defined(NEXUS_BACKEND_NATIVE)
 #include "nexus/io/native/model.h"
+#include <stdio.h>
 #endif
 
 static nx_uart_tx_request_t s_transmit;
+
+#if defined(NEXUS_BACKEND_NATIVE)
+/** \brief Print host diagnostics without turning metadata into release rights.
+ */
+static void report_lifecycle(nx_result_t primary, nx_result_t cleanup,
+                             uint32_t remaining_effects,
+                             const nx_platform_diagnostic_t* diagnostic) {
+    (void)fprintf(stderr,
+                  "platform primary=%u cleanup=%u remaining_effects=%lu "
+                  "phase=%u controller_index=%zu cleanup_phase=%u "
+                  "cleanup_controller_index=%zu\n",
+                  (unsigned)primary, (unsigned)cleanup,
+                  (unsigned long)remaining_effects, (unsigned)diagnostic->phase,
+                  diagnostic->controller_index,
+                  (unsigned)diagnostic->cleanup_phase,
+                  diagnostic->cleanup_controller_index);
+}
+#endif
 
 /** \brief Map an application console role to one generated physical port. */
 static const nx_uart_port_t* console(void) {
@@ -97,9 +116,18 @@ static void application(void* context) {
 
 /** \brief Start the selected platform without an implicit product scheduler. */
 int main(void) {
-    nx_platform_start_result_t startup = nx_platform_start();
+    nx_platform_diagnostic_t diagnostic;
+    nx_platform_start_result_t startup =
+        nx_platform_start_diagnosed(&diagnostic);
     if (startup.primary != NX_SUCCESS || startup.cleanup != NX_SUCCESS ||
         startup.remaining_effects != 0U) {
+#if defined(NEXUS_BACKEND_NATIVE)
+        report_lifecycle(startup.primary, startup.cleanup,
+                         startup.remaining_effects, &diagnostic);
+#endif
+        /* Metadata never authorizes a reset, retry or borrowed-storage reuse.
+         * The external product owns recovery when effects remain outstanding.
+         */
         return 1;
     }
     nx_request_initialize(&s_transmit.base);
@@ -112,18 +140,28 @@ int main(void) {
     return 3;
 #elif defined(NEXUS_BACKEND_NATIVE)
     static const uint8_t ping[] = {'p', 'i', 'n', 'g'};
+    int exit_code = 0;
     for (size_t i = 0U; i < sizeof(ping); ++i) {
         if (nx_native_uart_model_receive(console(), ping[i], 0U) !=
             NX_SUCCESS) {
-            return 4;
+            exit_code = 4;
+            break;
         }
     }
-    if (iteration() != NX_SUCCESS ||
-        nx_native_gpio_model_output(nx_factory_gpio(NX_GPIO_ID_LED0)) !=
-            NEXUS_LED0_MASK) {
-        return 5;
+    if (exit_code == 0 && (iteration() != NX_SUCCESS ||
+                           nx_native_gpio_model_output(nx_factory_gpio(
+                               NX_GPIO_ID_LED0)) != NEXUS_LED0_MASK)) {
+        exit_code = 5;
     }
-    return nx_platform_stop() == NX_SUCCESS ? 0 : 6;
+    nx_result_t stopped = nx_platform_stop_diagnosed(&diagnostic);
+    if (stopped != NX_SUCCESS) {
+        (void)fprintf(stderr,
+                      "platform stop=%u phase=%u controller_index=%zu\n",
+                      (unsigned)stopped, (unsigned)diagnostic.phase,
+                      diagnostic.controller_index);
+        return 6;
+    }
+    return exit_code;
 #else
     static const uint8_t greeting[] = "Nexus static factory\r\n";
     if (send_bytes(greeting, sizeof(greeting) - 1U) != NX_SUCCESS) {

@@ -87,6 +87,7 @@ jobs:
             build/native-debug/tests/google-execution/
             build/native-debug/tests/fault-google-execution/
             build/native-debug/tests/reference-google-execution/
+            build/native-debug/tests/lifecycle-google-execution/
             build/native-debug/nexus/generated/*
             build/native-debug/bin/*
             build/quality/style.json
