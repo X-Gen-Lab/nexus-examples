@@ -5,6 +5,8 @@ import unittest
 
 import yaml
 
+from sdk_tools import sdk_root
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -25,7 +27,7 @@ class ExampleWorkflow(unittest.TestCase):
 
     def test_python_tdd_hook_declares_the_pinned_workflow_parser(self):
         pins = [line for line in
-                (ROOT / 'external/nexus/requirements.txt').read_text().splitlines()
+                (sdk_root() / 'requirements.txt').read_text().splitlines()
                 if line.startswith('PyYAML==')]
         self.assertEqual(len(pins), 1)
         document = yaml.load((ROOT / '.pre-commit-config.yaml').read_text(),

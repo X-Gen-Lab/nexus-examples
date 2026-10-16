@@ -63,7 +63,7 @@ ARM 构建还需 SDK 固定的 GNU Arm 工具链，可用
 `external/nexus/scripts/ci/install_arm_toolchain.py --install-dir <目录>` 安装。
 Windows 使用 `.venv/Scripts/python.exe` 并将工具路径加入 PATH。
 
-每个配置使用自己的 `build/<preset>`，唯一手写配置输入是 `assemblies/*.toml`。
+每个配置使用自己的 `build/<preset>`，唯一手写配置输入是 `reproduction/assemblies/*.toml`。
 配置器生成定型实例、只读接口、factory ID、链接脚本和预算。
 `nx_factory_uart(NX_UART_ID_UART0)` 仅返回静态实例，不分配内存或启动硬件；
 SPI 设备使用 `nx_factory_spi_device`，控制器与外部设备身份分开。

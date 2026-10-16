@@ -76,9 +76,9 @@ set_tests_properties(product_fault_policy_google PROPERTIES TIMEOUT 30
     LABELS "native;example;GoogleTest")
 
 add_executable(reference_rx_policy_test reference_rx_policy_test.cpp
-    "${PROJECT_SOURCE_DIR}/apps/platform_reference/rx_policy.c")
+    "${PROJECT_SOURCE_DIR}/reproduction/rx_policy.c")
 target_include_directories(reference_rx_policy_test PRIVATE
-    "${PROJECT_SOURCE_DIR}/apps/platform_reference")
+    "${PROJECT_SOURCE_DIR}/reproduction")
 target_compile_features(reference_rx_policy_test PRIVATE cxx_std_17)
 set_target_properties(reference_rx_policy_test PROPERTIES CXX_EXTENSIONS OFF)
 target_link_libraries(reference_rx_policy_test PRIVATE Nexus::IO

@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -22,8 +23,18 @@ class ApplicationBuildContracts(unittest.TestCase):
                 cwd=ROOT, env=environment, capture_output=True, text=True, timeout=60)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             commands = json.loads((directory / 'compile_commands.json').read_text())
-            applications = {Path(item['file']).parent.name: item['command']
-                            for item in commands if 'apps' in Path(item['file']).parts}
+            applications = {}
+            for item in commands:
+                path = Path(item['file'])
+                if not path.is_relative_to(ROOT):
+                    continue
+                relative = path.relative_to(ROOT)
+                if (relative.parts[0] not in {'apps', 'reproduction'} or
+                        path.name != 'main.c'):
+                    continue
+                target = re.search(r'CMakeFiles/([^/]+)\.dir/', item['command'])
+                self.assertIsNotNone(target, item['command'])
+                applications[target.group(1)] = item['command']
             self.assertEqual(set(applications), {
                 'platform_reference', 'sensor_spi', 'journal', 'modbus_registers',
                 'uart_owner_runtime'})

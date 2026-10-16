@@ -24,7 +24,7 @@ Both applications consume generated public faces. The logical `uart1` instance
 maps to H743 USART3 or U575 USART1 through the authored Board binding, without
 exposing vendor types or deriving hardware indices in application code.
 
-`assemblies/*.toml` selects one Board package, clock profile, OS backend,
+`reproduction/assemblies/*.toml` selects one Board package, clock profile, OS backend,
 controllers, endpoints, IRQ policy and memory budget. Unsupported routes,
 conflicting resources, contradictory configuration and malformed inputs fail
 configuration. The emitted `nexus/generated/resolved.json` is the only effective

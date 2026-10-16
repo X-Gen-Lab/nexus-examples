@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "16e372e873c673fb50c5c9d572bcb1a3a514c9b4",
-  "tree": "7d587fdf1007ccc6996f973589a068a4fcb840f5",
+  "commit": "d0ba324d84207003086f195ffb5700de1e6c2db0",
+  "tree": "61a60c727fdf1f3edf78b7a602c635a2fe7e8cc1",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Nexus 0.2.0 development source; official STM32 LL and diagnosed lifecycle iteration; five-board baremetal/FreeRTOS examples retain their selected reference modes; physical HIL not executed",
+  "baseline_status": "Nexus 0.2.0 development source; private official LL locks, strict external SDK reproduction inputs and pre-RAM H743 older-cut AXI guard; software reference configurations; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

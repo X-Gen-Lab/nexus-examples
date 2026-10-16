@@ -112,6 +112,12 @@ jobs:
           - stm32-h743-nucleo-freertos
           - stm32-u575-nucleo-baremetal
           - stm32-u575-nucleo-freertos
+          - stm32-f103-reference-baremetal
+          - stm32-f103-reference-freertos
+          - gd32-f303-reference-baremetal
+          - gd32-f303-reference-freertos
+          - stm32-g474-reference-baremetal
+          - stm32-g474-reference-freertos
     steps:
       - name: Checkout pinned SDK and recursive dependencies
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
