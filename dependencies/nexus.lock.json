@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "d0ba324d84207003086f195ffb5700de1e6c2db0",
-  "tree": "61a60c727fdf1f3edf78b7a602c635a2fe7e8cc1",
+  "commit": "042be4c8fbb642feb7f7aea7ba1c2ec71ae2c99b",
+  "tree": "6a4acf6f64c6c30f9e364f20340173b90e4e7456",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Nexus 0.2.0 development source; private official LL locks, strict external SDK reproduction inputs and pre-RAM H743 older-cut AXI guard; software reference configurations; physical HIL not executed",
+  "baseline_status": "Nexus 0.2.0 development source; static mainstream peripheral providers, official private LL reuse and exact external Source SDK boundaries; software reference configurations; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }
