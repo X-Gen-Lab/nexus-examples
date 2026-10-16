@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "8b80f8f856f9d144c7455230936625ad75513831",
-  "tree": "7c7bce24159d0b95b73091794b240e50ae48a9ed",
+  "commit": "c4249e98cc76dabfd5f4b292ed718ac3e0ee1836",
+  "tree": "66c15f900b33a6e94d52cfd059c851b2730286ac",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
   "baseline_status": "Nexus 0.2.0 development source; static mainstream peripheral providers, official private LL reuse and exact external Source SDK boundaries; software reference configurations; physical HIL not executed",
