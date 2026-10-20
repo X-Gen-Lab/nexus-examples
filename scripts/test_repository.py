@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEPENDENCIES = (
     "ext/freertos",
     "ext/threadx",
+    "ext/googletest",
     "vendors/arm/CMSIS_5",
     "vendors/st/cmsis_device_f1",
     "vendors/st/cmsis_device_f4",

@@ -2,6 +2,7 @@ name: Example source SDK integration
 
 on:
   push:
+    branches: [ main, develop ]
   pull_request:
   workflow_dispatch:
     inputs:
@@ -131,6 +132,7 @@ jobs:
             build/native-debug/tests/fault-google-execution/
             build/native-debug/tests/reference-google-execution/
             build/native-debug/tests/lifecycle-google-execution/
+            build/native-debug/tests/fifo-acquisition-execution/
             build/native-debug/nexus/generated/*
             build/native-debug/bin/*
             build/installed-native/source-sdk-manifest.json
@@ -222,6 +224,27 @@ jobs:
           echo "$RUNNER_TEMP/nexus-arm-toolchain/bin" >> "$GITHUB_PATH"
       - name: Build real ARM firmware
         run: python3 scripts/build.py --preset ${{ matrix.preset }} --parallel 4
+      - name: Build the standalone UART FIFO software reference
+        if: matrix.preset == 'stm32-h743-nucleo-baremetal' || matrix.preset == 'stm32-u575-nucleo-baremetal'
+        env:
+          PRESET: ${{ matrix.preset }}
+        run: |
+          set -euo pipefail
+          case "$PRESET" in
+            stm32-h743-nucleo-baremetal) reference=h743 ;;
+            stm32-u575-nucleo-baremetal) reference=u575 ;;
+            *) exit 1 ;;
+          esac
+          fifo_build="$GITHUB_WORKSPACE/build/$PRESET/uart-fifo"
+          mkdir -p "$fifo_build"
+          cmake -S apps/uart_fifo_acquisition -B "$fifo_build" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/external/nexus/cmake/toolchains/arm-gcc.cmake" \
+            -DNEXUS_SOURCE="$GITHUB_WORKSPACE/external/nexus" \
+            -DNEXUS_ASSEMBLY_FILE="$GITHUB_WORKSPACE/external/nexus/cmake/package/verification/io_evolution/${reference}-uart-fifo.toml" \
+            2>&1 | tee "$fifo_build/configure.log"
+          cmake --build "$fifo_build" --target uart_fifo_acquisition --parallel 4 \
+            2>&1 | tee "$fifo_build/build.log"
       - name: Verify physical ELF identity and each RAM/Flash budget
         run: >-
           python3 external/nexus/tools/measurement/resources.py
@@ -269,4 +292,10 @@ jobs:
             build/${{ matrix.preset }}/compile_commands.json
             build/${{ matrix.preset }}/nexus/generated/*
             build/${{ matrix.preset }}/bin/*
+            build/${{ matrix.preset }}/uart-fifo/configure.log
+            build/${{ matrix.preset }}/uart-fifo/build.log
+            build/${{ matrix.preset }}/uart-fifo/CMakeCache.txt
+            build/${{ matrix.preset }}/uart-fifo/compile_commands.json
+            build/${{ matrix.preset }}/uart-fifo/nexus/generated/*
+            build/${{ matrix.preset }}/uart-fifo/bin/*
           retention-days: 14

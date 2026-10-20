@@ -1,27 +1,7 @@
-# Host-only product lifecycle tests use the source SDK's pinned offline framework.
-enable_language(CXX)
-find_package(Python3 3.11 REQUIRED COMPONENTS Interpreter)
-file(READ "${NEXUS_SOURCE}/dependencies/googletest.lock.json" google_lock)
-string(JSON google_archive GET "${google_lock}" archive)
-string(JSON google_commit GET "${google_lock}" commit)
-string(JSON google_sha256 GET "${google_lock}" sha256)
-set(google_archive "${NEXUS_SOURCE}/${google_archive}")
-if(NOT EXISTS "${google_archive}")
-    message(FATAL_ERROR "Missing pinned GoogleTest archive; no network fallback")
-endif()
-file(SHA256 "${google_archive}" google_actual)
-if(NOT google_actual STREQUAL google_sha256)
-    message(FATAL_ERROR "GoogleTest archive differs from pinned source lock")
-endif()
-set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
-    "${NEXUS_SOURCE}/dependencies/googletest.lock.json" "${google_archive}")
-set(google_root "${CMAKE_CURRENT_BINARY_DIR}/_deps/googletest-${google_commit}")
-file(REMOVE_RECURSE "${google_root}")
-file(ARCHIVE_EXTRACT INPUT "${google_archive}"
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/_deps")
-set(INSTALL_GTEST OFF CACHE BOOL "Host test-only framework" FORCE)
-set(BUILD_GMOCK ON CACHE BOOL "Host product lifecycle tests" FORCE)
-add_subdirectory("${google_root}" google-build EXCLUDE_FROM_ALL)
+# The pinned Nexus source checkout verifies its locked Gitlink and clean source
+# before enabling host C++. Firmware never acquires the test runtime.
+include("${NEXUS_SOURCE}/cmake/testing/GoogleTest.cmake")
+nexus_host_google_test()
 add_executable(owner_lifecycle_test owner_lifecycle_test.cpp
     owner_bootstrap_test.cpp
     scheduler_return_test.cpp
@@ -103,3 +83,4 @@ add_test(NAME reference_lifecycle_google COMMAND "${Python3_EXECUTABLE}" -B
     --output "${CMAKE_CURRENT_BINARY_DIR}/lifecycle-google-execution")
 set_tests_properties(reference_lifecycle_google PROPERTIES TIMEOUT 30
     LABELS "native;example;GoogleTest")
+include("${CMAKE_CURRENT_LIST_DIR}/uart_fifo_acquisition.cmake")

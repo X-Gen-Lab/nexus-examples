@@ -11,18 +11,19 @@ import sys
 import time
 import xml.etree.ElementTree as ET
 
+from build import positive_integer
 from run_google import identities
 from sdk_tools import ROOT, load
 
 
-RELEVANT_PREFIXES = ("apps/", "reproduction/", "assemblies/", "tests/", "scripts/", "dependencies/")
+RELEVANT_PREFIXES = (".github/", "apps/", "reproduction/", "assemblies/", "tests/", "scripts/", "dependencies/")
 RELEVANT_FILES = {"CMakeLists.txt", "CMakePresets.json", ".pre-commit-config.yaml",
                   ".gitmodules", "external/nexus", "AGENTS.md"}
 EXPECTED_CTEST_NAMES = (
     "uart_owner_shutdown", "platform_static_ports", "sensor_explicit_spi",
     "persistent_journal", "protocol_authorized_registers", "owner_lifecycle_google",
     "product_fault_policy_google", "reference_rx_policy_google",
-    "reference_lifecycle_google",
+    "reference_lifecycle_google", "fifo_acquisition_google",
 )
 
 
@@ -105,8 +106,74 @@ def safe_outputs(root, output):
             raise ValueError("TDD output must not traverse a symlink: " + str(path))
 
 
+
+def collect_google_programs(root, build, catalogue, validator, started):
+    """Summarize every actual wrapper execution without running binaries again."""
+    programs = []
+    binaries, outputs = set(), set()
+    wrapper = str(root / "scripts/run_google.py")
+    for entry in catalogue["tests"]:
+        properties = {item["name"]: item["value"]
+                      for item in entry.get("properties", [])}
+        command = entry.get("command", [])
+        labelled = "GoogleTest" in properties.get("LABELS", [])
+        wrapped = wrapper in command
+        if labelled != wrapped:
+            raise ValueError("GoogleTest label and execution wrapper differ: " +
+                             entry["name"])
+        if not labelled:
+            continue
+        working = Path(properties.get("WORKING_DIRECTORY", build))
+        if not working.is_absolute():
+            working = build / working
+        arguments = {}
+        for option in ("--binary", "--output"):
+            if command.count(option) != 1:
+                raise ValueError("GoogleTest wrapper requires one " + option)
+            index = command.index(option) + 1
+            if index == len(command):
+                raise ValueError("GoogleTest wrapper argument is missing: " + option)
+            path = Path(command[index])
+            arguments[option] = path if path.is_absolute() else working / path
+        binary = validator.checked_binary(arguments["--binary"], build).resolve()
+        output = arguments["--output"]
+        discovery, report = output / "discovery.log", output / "google-results.xml"
+        for path in (output, discovery, report):
+            if any(part.is_symlink() for part in (path, *path.parents)):
+                raise ValueError("GoogleTest evidence must not traverse a symlink")
+            if not path.resolve().is_relative_to(build):
+                raise ValueError("GoogleTest evidence must remain in the selected build")
+        output = output.resolve()
+        if binary in binaries or output in outputs:
+            raise ValueError("GoogleTest binary or output is repeated in CTest")
+        binaries.add(binary)
+        outputs.add(output)
+        if not discovery.is_file() or discovery.stat().st_mtime_ns < started:
+            raise ValueError("GoogleTest discovery is missing or stale: " + entry["name"])
+        listing = discovery.read_text(encoding="utf-8")
+        count = validator.discovered_count(listing)
+        google = validator.validate_google_report(report, not_before_ns=started,
+                                                  expected_cases=count)
+        actual = {(case.get("classname"), case.get("name"))
+                  for case in ET.parse(report).getroot().iter("testcase")}
+        if actual != identities(listing):
+            raise ValueError("GoogleTest identities differ from complete discovery: " +
+                             entry["name"])
+        programs.append({"ctest_name": entry["name"], "binary": str(binary),
+                         "output": str(output), "google": google})
+    if not programs:
+        raise ValueError("CTest catalogue contains no GoogleTest programs")
+    return programs
+
+
 def run_gate(root, *, paths=(), staged=False, force=False, environ=None):
     """Require complete fresh execution for the exact index and formal SDK."""
+    settings = os.environ if environ is None else environ
+    try:
+        jobs = positive_integer(settings.get(
+            "NEXUS_BUILD_JOBS", settings.get("CMAKE_BUILD_PARALLEL_LEVEL", "2")))
+    except (argparse.ArgumentTypeError, TypeError, ValueError) as error:
+        raise ValueError("TDD parallel jobs must be a positive integer") from error
     root = Path(root).resolve()
     names = set(paths)
     names.update(git(root, "diff", "--cached", "--name-only", "-z").split("\0"))
@@ -115,7 +182,7 @@ def run_gate(root, *, paths=(), staged=False, force=False, environ=None):
         return None
     initial = staged_tree(root)
     check_snapshot(root)
-    env = child_environment(root, os.environ if environ is None else environ)
+    env = child_environment(root, settings)
     source = root / "external/nexus"
     build = root / "build/native-debug"
     output = build / "tdd"
@@ -147,7 +214,7 @@ def run_gate(root, *, paths=(), staged=False, force=False, environ=None):
     google_report.unlink(missing_ok=True)
     started = time.time_ns()
     execute(root, [python, "scripts/build.py", "--preset", "native-debug",
-                   "--test", "--parallel", "2"], env, output / "build.log")
+                   "--test", "--parallel", str(jobs)], env, output / "build.log")
     catalogue = json.loads(execute(root, ["ctest", "--test-dir", str(build),
                                         "--show-only=json-v1"], env,
                                    output / "catalogue.log"))
@@ -159,18 +226,15 @@ def run_gate(root, *, paths=(), staged=False, force=False, environ=None):
     actual = {case["name"] for case in ctest["cases"]}
     if ctest["skipped"] or actual != set(discovered):
         raise ValueError("Native CTest report does not execute every discovered test")
-    discovery = google_output / "discovery.log"
-    if (not discovery.is_file() or discovery.is_symlink() or
-            discovery.stat().st_mtime_ns < started):
-        raise ValueError("GoogleTest discovery is missing or stale")
-    listing = discovery.read_text(encoding="utf-8")
-    count = validator.discovered_count(listing)
-    google = validator.validate_google_report(google_report, not_before_ns=started,
-                                              expected_cases=count)
-    actual_google = {(case.get("classname"), case.get("name"))
-                     for case in ET.parse(google_report).getroot().iter("testcase")}
-    if actual_google != identities(listing):
-        raise ValueError("GoogleTest identities differ from complete discovery")
+    programs = collect_google_programs(root, build, catalogue, validator, started)
+    # Preserve the original single-program field for existing report consumers.
+    google = next((program["google"] for program in programs
+                   if program["ctest_name"] == "owner_lifecycle_google"), None)
+    if google is None:
+        raise ValueError("Maintained owner_lifecycle_google wrapper is missing")
+    aggregate = {field: sum(program["google"][field] for program in programs)
+                 for field in ("tests", "passed", "failures", "errors", "skipped")}
+    aggregate["programs"] = len(programs)
     final_source = output / "source-after.json"
     final_source.unlink(missing_ok=True)
     execute(root, [python, "scripts/test_repository.py", "--report",
@@ -184,7 +248,10 @@ def run_gate(root, *, paths=(), staged=False, force=False, environ=None):
     report = {
         "schema_version": 1, "kind": "example-development-contract-execution",
         "index_tree": initial, "preset": "native-debug", "source": identity,
-        "ctest": ctest, "google": google, "hardware_verified": False,
+        "ctest": ctest, "google": google,
+        "google_scope": "owner_lifecycle_google (legacy single-program summary)",
+        "google_programs": programs, "google_aggregate": aggregate,
+        "hardware_verified": False,
         "scope": "Fresh exact-index host execution; historical TDD order and "
                  "physical hardware qualification require separate evidence",
     }
@@ -202,7 +269,8 @@ def main(argv=None):
         report = run_gate(ROOT, paths=args.paths, staged=args.staged, force=args.all)
         if report:
             print("Executed complete Native CTest and " +
-                  str(report["google"]["passed"]) + " GoogleTest cases")
+                  str(report["google_aggregate"]["passed"]) + " GoogleTest cases in " +
+                  str(report["google_aggregate"]["programs"]) + " programs")
         return 0
     except (OSError, ValueError, KeyError, TypeError, ET.ParseError,
             subprocess.SubprocessError) as error:

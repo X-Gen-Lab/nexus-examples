@@ -67,7 +67,7 @@ Windows 使用 `.venv/Scripts/python.exe` 并将工具路径加入 PATH。
 配置器生成定型实例、只读接口、factory ID、链接脚本和预算。
 `nx_factory_uart(NX_UART_ID_UART0)` 仅返回静态实例，不分配内存或启动硬件；
 SPI 设备使用 `nx_factory_spi_device`，控制器与外部设备身份分开。
-本仓库有 Native 加五板两后端共十一个 preset；ARM 每组分别产生平台参考和共享 UARTOwner
+本仓库有 Native 加八个精确参考配置、两后端共十七个 preset；ARM 每组分别产生平台参考和共享 UARTOwner
 两个实际链接的 ELF，并独立检查各自预算。
 
 H743 初始范围是 HSI64、Cache off、PB0 LED 与 USART3 PD8/PD9 IRQ byte RX；
@@ -106,4 +106,11 @@ Gitlink、tree、干净源码和供应商身份一致。未提交的联合开发
 
 [多生产者 UARTOwner 示例](docs/os-owner-example.md) 说明唯一 execution owner、IRQ wake、
 active cancel/drain 和 producer/owner join 后才能回收通知的顺序。GoogleTest／GoogleMock
-只使用固定 SDK 的离线 archive 并仅进入 Native host 测试；MCU 示例保持 C11。
+通过固定 Nexus 源码检出中的 `cmake/testing/GoogleTest.cmake` 校验并使用固定
+`ext/googletest` 子模块，配置时不联网，只进入 Native host 测试。已安装的固件
+Source SDK 不包含该 helper 和宿主测试框架；MCU 示例保持 C11。
+
+[UART FIFO 采集 / UART FIFO acquisition](apps/uart_fifo_acquisition/README.md)
+提供 H743/U575 两个软件参考的独立有界流量应用；不新增 preset，也不建立实板资格。
+Opt-in bounded UART traffic for the H743/U575 software references; the seventeen
+presets stay unchanged and physical HIL remains unexecuted.

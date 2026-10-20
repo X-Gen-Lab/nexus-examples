@@ -48,6 +48,19 @@ class ExampleTddGateTests(unittest.TestCase):
         self.commands = []
         self.mode = "pass"
         self.mutate = None
+        self.google_specs = {}
+        for index, name in enumerate(
+                name for name in gate.EXPECTED_CTEST_NAMES
+                if name.endswith("_google")):
+            output = ("google-execution" if name == "owner_lifecycle_google"
+                      else name + "-execution")
+            self.google_specs[name] = {
+                "binary": self.root / "build/native-debug/tests" / (name + "_test"),
+                "output": self.root / "build/native-debug/tests" / output,
+                "cases": index + 1,
+            }
+        self.secondary = next(name for name in self.google_specs
+                              if name != "owner_lifecycle_google")
 
     def git(self, *arguments):
         return subprocess.run(["git", *arguments], cwd=self.root, check=True,
@@ -59,7 +72,7 @@ class ExampleTddGateTests(unittest.TestCase):
         path.write_text(text)
 
     def execute(self, root, arguments, environment, log):
-        """Mock only external commands; real validators parse produced files."""
+        """Mock commands only; real SDK validators parse each produced XML."""
         self.commands.append((arguments, environment))
         log.write_text("Synthetic subprocess-boundary fixture.\n")
         if "test_repository.py" in str(arguments[1]):
@@ -76,20 +89,48 @@ class ExampleTddGateTests(unittest.TestCase):
         elif "build.py" in str(arguments[1]):
             if self.mode != "missing":
                 skipped = '<skipped/>' if self.mode == "skip" else ""
-                names = gate.EXPECTED_CTEST_NAMES
+                names = list(gate.EXPECTED_CTEST_NAMES)
+                names.extend(name for name in self.google_specs
+                             if name not in names)
                 if self.mode == "partial":
                     names = names[:-1]
                 cases = "".join('<testcase name="' + name + '">' + skipped +
                                 "</testcase>" for name in names)
                 self.write("build/native-debug/ctest-results.xml",
                            "<testsuite>" + cases + "</testsuite>")
-            self.write("build/native-debug/tests/google-execution/discovery.log",
-                       "Fixture.\n  CompleteCase\n")
-            self.write("build/native-debug/tests/google-execution/google-results.xml",
-                       '<testsuites name="AllTests"><testsuite name="Fixture">'
-                       '<testcase classname="Fixture" name="CompleteCase" '
-                       'status="run" result="completed"/>'
-                       '</testsuite></testsuites>')
+            for name, spec in self.google_specs.items():
+                binary, output = spec["binary"], spec["output"]
+                self.write(str(binary.relative_to(self.root)), "fixture binary\n")
+                case_names = ["CompleteCase" + (str(i) if i else "")
+                              for i in range(spec["cases"])]
+                listing = "Fixture.\n" + "".join("  " + case + "\n"
+                                                for case in case_names)
+                self.write(str((output / "discovery.log").relative_to(self.root)),
+                           listing)
+                testcases = "".join(
+                    '<testcase classname="Fixture" name="' + case +
+                    '" status="run" result="completed"/>' for case in case_names)
+                report = output / "google-results.xml"
+                self.write(str(report.relative_to(self.root)),
+                           '<testsuites name="AllTests"><testsuite name="Fixture">'
+                           + testcases + '</testsuite></testsuites>')
+                if name == self.secondary:
+                    if self.mode == "secondary_missing":
+                        report.unlink()
+                    elif self.mode == "secondary_stale":
+                        os.utime(output / "discovery.log", ns=(1, 1))
+                    elif self.mode == "secondary_wrong_identity":
+                        (output / "discovery.log").write_text(
+                            listing.replace("CompleteCase", "OtherCase"))
+                    elif self.mode == "secondary_skipped":
+                        report.write_text(report.read_text().replace(
+                            'status="run" result="completed"',
+                            'status="notrun" result="suppressed"'))
+                    elif self.mode == "secondary_symlink":
+                        retained = self.root / "retained.xml"
+                        retained.write_text(report.read_text())
+                        report.unlink()
+                        report.symlink_to(retained)
             if self.mode == "stale":
                 os.utime(self.root / "build/native-debug/ctest-results.xml",
                          ns=(1, 1))
@@ -100,16 +141,93 @@ class ExampleTddGateTests(unittest.TestCase):
                 self.mutate()
         elif arguments[0] == "ctest":
             names = list(gate.EXPECTED_CTEST_NAMES)
+            names.extend(name for name in self.google_specs if name not in names)
             if self.mode == "filtered" and "--preset" not in arguments:
                 names.append("additional_actual_test")
-            return json.dumps({"tests": [{"name": name} for name in names]})
+            entries = []
+            for name in names:
+                entry = {"name": name, "properties": []}
+                if name in self.google_specs:
+                    spec = self.google_specs[name]
+                    entry["properties"] = [
+                        {"name": "LABELS", "value": ["native", "GoogleTest"]}]
+                    entry["command"] = [
+                        "/python", "-B", str(self.root / "scripts/run_google.py"),
+                        "--nexus-source", str(self.root / "external/nexus"),
+                        "--binary", str(spec["binary"]),
+                        "--output", str(spec["output"])]
+                    if name == self.secondary:
+                        if self.mode == "duplicate_output":
+                            entry["command"][-1] = str(
+                                self.google_specs["owner_lifecycle_google"]["output"])
+                        elif self.mode == "duplicate_binary":
+                            entry["command"][-3] = str(
+                                self.google_specs["owner_lifecycle_google"]["binary"])
+                        elif self.mode == "missing_label":
+                            entry["properties"] = []
+                        elif self.mode == "repeated_output_argument":
+                            entry["command"].extend(["--output", str(spec["output"])])
+                entries.append(entry)
+            return json.dumps({"tests": entries})
         return ""
 
-    def run_gate(self, paths=("apps/example.c",), force=False):
+    def run_gate(self, paths=("apps/example.c",), force=False, environ=None):
         with mock.patch.object(gate, "execute", side_effect=self.execute), \
                 mock.patch.object(gate, "load", return_value=self.sdk_gate):
             return gate.run_gate(self.root, paths=paths, staged=True, force=force,
-                                 environ={"PATH": os.environ["PATH"]})
+                                 environ={"PATH": os.environ["PATH"],
+                                          **(environ or {})})
+
+    def test_parallel_jobs_precedence_reaches_the_actual_build_command(self):
+        for environ, expected in (
+                ({"NEXUS_BUILD_JOBS": "1", "CMAKE_BUILD_PARALLEL_LEVEL": "3"}, "1"),
+                ({"CMAKE_BUILD_PARALLEL_LEVEL": "3"}, "3"),
+                ({}, "2")):
+            with self.subTest(environ=environ):
+                index = self.git("write-tree")
+                self.commands.clear()
+                self.run_gate(environ=environ)
+                builds = [command for command, _ in self.commands
+                          if "build.py" in str(command[1])]
+                self.assertEqual(len(builds), 1)
+                command = builds[0]
+                self.assertEqual(command[command.index("--parallel") + 1], expected)
+                self.assertEqual(self.git("write-tree"), index)
+
+    def test_invalid_parallel_jobs_reject_before_external_commands_or_index_change(self):
+        for name in ("NEXUS_BUILD_JOBS", "CMAKE_BUILD_PARALLEL_LEVEL"):
+            for value in ("0", "-1", "many"):
+                with self.subTest(name=name, value=value):
+                    index = self.git("write-tree")
+                    self.commands.clear()
+                    with mock.patch.object(gate, "git", side_effect=AssertionError(
+                            "invalid jobs invoked an external Git command")):
+                        with self.assertRaisesRegex(ValueError,
+                                                    "parallel jobs.*positive integer"):
+                            self.run_gate(environ={name: value})
+                    self.assertFalse(self.commands)
+                    self.assertEqual(self.git("write-tree"), index)
+
+    def test_workflow_changes_select_the_gate_and_reject_snapshot_drift(self):
+        workflow = ".github/workflows/ci.yml"
+        self.write(workflow, "name: staged workflow\n")
+        self.git("add", workflow)
+        index = self.git("write-tree")
+        self.assertIsNotNone(self.run_gate(paths=(workflow,)))
+        self.assertEqual(len(self.commands), 5)
+        self.assertEqual(self.git("write-tree"), index)
+        for name in (workflow, ".github/workflows/untracked.yml"):
+            with self.subTest(path=name):
+                self.commands.clear()
+                self.write(name, "name: changed workflow\n")
+                with self.assertRaisesRegex(ValueError, "Unstaged"):
+                    self.run_gate(paths=(workflow,))
+                self.assertFalse(self.commands)
+                self.assertEqual(self.git("write-tree"), index)
+                if name == workflow:
+                    self.git("restore", workflow)
+                else:
+                    (self.root / name).unlink()
 
     def test_staged_complete_execution_binds_index_and_source_identity(self):
         self.write("apps/example.c", "int changed;\n")
@@ -124,6 +242,64 @@ class ExampleTddGateTests(unittest.TestCase):
         build = self.commands[2][0]
         self.assertIn("--test", build)
         self.assertNotIn("--candidate-nexus-commit", self.commands[0][0])
+
+    def test_all_labelled_google_programs_are_reported_without_extra_execution(self):
+        report = self.run_gate()
+        programs = report.get("google_programs", [])
+        self.assertEqual(len(programs), len(self.google_specs))
+        self.assertEqual({program["ctest_name"] for program in programs},
+                         set(self.google_specs))
+        aggregate = report.get("google_aggregate", {})
+        self.assertEqual(aggregate.get("programs"), len(self.google_specs))
+        self.assertEqual(aggregate.get("passed"),
+                         sum(spec["cases"] for spec in self.google_specs.values()))
+        self.assertEqual(report["google"]["passed"], 1)
+        self.assertEqual(len(self.commands), 5)
+
+    def test_an_added_actual_google_label_is_aggregated_without_a_name_list(self):
+        self.google_specs["new_actual_contract"] = {
+            "binary": self.root / "build/native-debug/tests/new-contract",
+            "output": self.root / "build/native-debug/tests/new-execution",
+            "cases": 2,
+        }
+        report = self.run_gate()
+        self.assertIn("new_actual_contract",
+                      {p["ctest_name"] for p in report.get("google_programs", [])})
+        self.assertEqual(report.get("google_aggregate", {}).get("programs"),
+                         len(self.google_specs))
+
+    def test_secondary_google_missing_stale_skipped_or_wrong_identity_rejects(self):
+        for mode in ("secondary_missing", "secondary_stale",
+                     "secondary_skipped", "secondary_wrong_identity"):
+            with self.subTest(mode=mode):
+                self.mode = mode
+                with self.assertRaises((ValueError, OSError)):
+                    self.run_gate()
+                self.assertFalse((self.root / "build/native-debug/tdd/execution.json")
+                                 .exists())
+
+    def test_secondary_google_symlink_is_not_followed_as_execution_evidence(self):
+        self.mode = "secondary_symlink"
+        with self.assertRaisesRegex(ValueError, "symlink"):
+            self.run_gate()
+        self.assertIn("AllTests", (self.root / "retained.xml").read_text())
+
+    def test_ambiguous_catalogue_google_identity_or_output_is_rejected(self):
+        for mode in ("duplicate_output", "duplicate_binary", "missing_label",
+                     "repeated_output_argument"):
+            with self.subTest(mode=mode):
+                self.mode = mode
+                with self.assertRaises(ValueError):
+                    self.run_gate()
+
+    def test_cli_prints_the_aggregate_instead_of_only_the_legacy_program(self):
+        report = {"google": {"passed": 1},
+                  "google_aggregate": {"passed": 15, "programs": 5}}
+        with mock.patch.object(gate, "run_gate", return_value=report), \
+                mock.patch("builtins.print") as output:
+            self.assertEqual(gate.main([]), 0)
+        self.assertIn("15 GoogleTest cases", output.call_args.args[0])
+        self.assertIn("5 programs", output.call_args.args[0])
 
     def test_unstaged_and_untracked_behavior_rejected_before_execution(self):
         for name in ("apps/example.c", "tests/new_case.cpp"):

@@ -40,10 +40,30 @@ class ApplicationBuildContracts(unittest.TestCase):
                 'uart_owner_runtime'})
             for name, command in applications.items():
                 with self.subTest(application=name):
+                    self.assertIn('-std=c11', command.split())
                     self.assertTrue(any('-fsanitize=' in flag and 'address' in flag
                                         for flag in command.split()))
                     self.assertTrue(any('-fsanitize=' in flag and 'undefined' in flag
                                         for flag in command.split()))
+                    self.assertNotIn('ext/googletest', command)
+            framework = {
+                Path(item['file']).name for item in commands
+                if Path(item['file']).is_relative_to(
+                    sdk_root() / 'ext/googletest')}
+            self.assertEqual(framework, {
+                'gtest-all.cc', 'gtest_main.cc', 'gmock-all.cc', 'gmock_main.cc'})
+            catalogue = subprocess.run(
+                ['ctest', '--test-dir', str(directory), '--show-only=json-v1'],
+                cwd=ROOT, env=environment, capture_output=True, text=True,
+                timeout=30)
+            self.assertEqual(catalogue.returncode, 0, catalogue.stderr)
+            self.assertEqual({test['name'] for test in
+                              json.loads(catalogue.stdout)['tests']}, {
+                'uart_owner_shutdown', 'platform_static_ports',
+                'sensor_explicit_spi', 'persistent_journal',
+                'protocol_authorized_registers', 'owner_lifecycle_google',
+                'product_fault_policy_google', 'reference_rx_policy_google',
+                'reference_lifecycle_google', 'fifo_acquisition_google'})
 
 
 if __name__ == '__main__':
