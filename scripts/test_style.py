@@ -15,7 +15,7 @@ class StyleIntegrationTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
             source = root / "main.c"
-            source.write_bytes((ROOT / "apps/platform_reference/main.c").read_bytes())
+            source.write_bytes((ROOT / "reproduction/main.c").read_bytes())
             with patch.object(check_style, "ROOT", root):
                 self.assertEqual(check_style.check(sdk_root(), [source])["status"], "passed")
                 source.write_bytes(source.read_bytes().replace(

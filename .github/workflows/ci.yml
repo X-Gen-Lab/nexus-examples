@@ -73,6 +73,49 @@ jobs:
         run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Build and run Native examples
         run: python3 scripts/build.py --preset native-debug --test --parallel 4
+      - name: Prepare a complete publishable Source SDK
+        run: |
+          set -euo pipefail
+          mkdir -p build/installed-native
+          python3 external/nexus/cmake/package/package_source_sdk.py \
+            --source "$GITHUB_WORKSPACE/external/nexus" \
+            --output "$RUNNER_TEMP/nexus-source-sdk" \
+            | tee build/installed-native/sdk-preparation.json
+          cp "$RUNNER_TEMP/nexus-source-sdk/share/nexus/src/.nexus-source-sdk.json" \
+            build/installed-native/source-sdk-manifest.json
+      - name: Configure the installed Native consumer
+        env:
+          CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
+        run: |
+          set -euo pipefail
+          SDK_COMMIT="$(python3 -c 'import json; print(json.load(open("dependencies/nexus.lock.json"))["commit"])')"
+          if [[ -n "$CANDIDATE_NEXUS_REF" ]]; then
+            SDK_COMMIT="$CANDIDATE_NEXUS_REF"
+          fi
+          cmake -S reproduction -B build/installed-native -G Ninja \
+            -DNexus_DIR="$RUNNER_TEMP/nexus-source-sdk/lib/cmake/Nexus" \
+            -DNEXUS_EXPECTED_SOURCE_REVISION="$SDK_COMMIT" \
+            -DNEXUS_ASSEMBLY_FILE="$GITHUB_WORKSPACE/reproduction/assemblies/native.toml" \
+            -DNEXUS_BUILD_TESTS=OFF -DNEXUS_BUILD_WORKLOAD=OFF \
+            -DNEXUS_ENABLE_SANITIZERS=ON -DCMAKE_BUILD_TYPE=Debug \
+            2>&1 | tee build/installed-native/configure.log
+      - name: Build the installed Native consumer
+        run: |
+          set -euo pipefail
+          cmake --build build/installed-native --parallel 4 \
+            2>&1 | tee build/installed-native/build.log
+      - name: Execute and validate the installed Native consumer
+        run: |
+          set -euo pipefail
+          report="$GITHUB_WORKSPACE/build/installed-native/ctest-results.xml"
+          rm -f "$report"
+          started_ns="$(python3 -c 'import time; print(time.time_ns())')"
+          ctest --test-dir build/installed-native --output-on-failure \
+            --no-tests=error --output-junit "$report" \
+            2>&1 | tee build/installed-native/ctest.log
+          python3 external/nexus/scripts/validation/junit.py \
+            --report "$report" --not-before-ns "$started_ns" \
+            | tee build/installed-native/junit-validation.log
       - name: Retain Native artifacts and execution evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -90,6 +133,17 @@ jobs:
             build/native-debug/tests/lifecycle-google-execution/
             build/native-debug/nexus/generated/*
             build/native-debug/bin/*
+            build/installed-native/source-sdk-manifest.json
+            build/installed-native/sdk-preparation.json
+            build/installed-native/configure.log
+            build/installed-native/build.log
+            build/installed-native/ctest.log
+            build/installed-native/junit-validation.log
+            build/installed-native/ctest-results.xml
+            build/installed-native/CMakeCache.txt
+            build/installed-native/compile_commands.json
+            build/installed-native/nexus-sdk/generated/*
+            build/installed-native/bin/*
             build/quality/style.json
           retention-days: 14
 
@@ -112,6 +166,12 @@ jobs:
           - stm32-h743-nucleo-freertos
           - stm32-u575-nucleo-baremetal
           - stm32-u575-nucleo-freertos
+          - stm32-f103-reference-baremetal
+          - stm32-f103-reference-freertos
+          - gd32-f303-reference-baremetal
+          - gd32-f303-reference-freertos
+          - stm32-g474-reference-baremetal
+          - stm32-g474-reference-freertos
     steps:
       - name: Checkout pinned SDK and recursive dependencies
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -177,6 +237,7 @@ jobs:
           --budget build/${{ matrix.preset }}/nexus/generated/resource-budget.json
           --report build/${{ matrix.preset }}/uart-owner-resource-budget.json
       - name: Prepare the unbound physical station work plan
+        if: ${{ !startsWith(matrix.preset, 'stm32-f103-reference-') && !startsWith(matrix.preset, 'gd32-f303-reference-') }}
         env:
           PRESET: ${{ matrix.preset }}
         run: |
@@ -186,6 +247,7 @@ jobs:
             gd32-liangshan-*) fixture=gd32f470_liangshan ;;
             stm32-h743-nucleo-*) fixture=stm32h743_nucleo_zi2 ;;
             stm32-u575-nucleo-*) fixture=stm32u575_nucleo_zi_q ;;
+            stm32-g474-reference-*) fixture=stm32g474re_hse24_reference ;;
             *) exit 1 ;;
           esac
           python3 -B external/nexus/tools/hil/prepare.py \

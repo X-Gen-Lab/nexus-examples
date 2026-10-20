@@ -19,17 +19,24 @@ DEPENDENCIES = (
     "ext/freertos",
     "ext/threadx",
     "vendors/arm/CMSIS_5",
+    "vendors/st/cmsis_device_f1",
     "vendors/st/cmsis_device_f4",
     "vendors/st/cmsis_device_g4",
     "vendors/st/cmsis_device_h7",
     "vendors/st/cmsis_device_u5",
+    "vendors/st/stm32f1_hal",
     "vendors/st/stm32f4_hal",
+    "vendors/st/stm32g4_hal",
+    "vendors/st/stm32h7_hal",
+    "vendors/st/stm32u5_hal",
 )
 REFERENCE_PRESETS = frozenset({
     "native-debug",
     *(f"{board}-{backend}" for board in (
         "stm32-qiming", "stm32-sky", "gd32-liangshan",
         "stm32-h743-nucleo", "stm32-u575-nucleo",
+        "stm32-f103-reference", "gd32-f303-reference",
+        "stm32-g474-reference",
     ) for backend in ("baremetal", "freertos")),
 })
 
@@ -83,7 +90,7 @@ def verify_presets():
     configured = sections["configurePresets"]
     visible = {name for name, entry in configured.items() if not entry.get("hidden", False)}
     if visible != REFERENCE_PRESETS:
-        raise ValueError("The reference matrix requires Native and the ten maintained ARM presets")
+        raise ValueError("The reference matrix requires Native and the sixteen maintained ARM presets")
     for name, entry in configured.items():
         inherited = entry.get("inherits", [])
         if isinstance(inherited, str):
