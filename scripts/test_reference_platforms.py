@@ -23,7 +23,8 @@ REFERENCE_BOARDS = {
 class ReferencePlatformTests(unittest.TestCase):
     def test_commit_gate_requires_every_actual_google_program(self):
         for name in ("owner_lifecycle_google", "product_fault_policy_google",
-                     "reference_rx_policy_google", "reference_lifecycle_google"):
+                     "reference_rx_policy_google", "reference_lifecycle_google",
+                     "fifo_acquisition_google"):
             with self.subTest(program=name):
                 self.assertIn(name, tdd_gate.EXPECTED_CTEST_NAMES)
 
@@ -33,6 +34,9 @@ class ReferencePlatformTests(unittest.TestCase):
 
     def test_source_identity_requires_the_selected_official_f4_driver(self):
         self.assertIn("vendors/st/stm32f4_hal", repository.DEPENDENCIES)
+
+    def test_source_identity_requires_the_actual_host_test_submodule(self):
+        self.assertIn("ext/googletest", repository.DEPENDENCIES)
 
     def test_reference_identity_rejects_a_same_count_unmaintained_preset(self):
         document = json.loads((ROOT / "CMakePresets.json").read_text())
@@ -98,6 +102,7 @@ class ReferencePlatformTests(unittest.TestCase):
                      if step.get("name") == "Retain Native artifacts and execution evidence")
         self.assertIn("build/native-debug/tests/reference-google-execution/", paths)
         self.assertIn("build/native-debug/tests/lifecycle-google-execution/", paths)
+        self.assertIn("build/native-debug/tests/fifo-acquisition-execution/", paths)
 
 
 if __name__ == "__main__":
