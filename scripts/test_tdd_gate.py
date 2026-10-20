@@ -208,6 +208,27 @@ class ExampleTddGateTests(unittest.TestCase):
                     self.assertFalse(self.commands)
                     self.assertEqual(self.git("write-tree"), index)
 
+    def test_workflow_changes_select_the_gate_and_reject_snapshot_drift(self):
+        workflow = ".github/workflows/ci.yml"
+        self.write(workflow, "name: staged workflow\n")
+        self.git("add", workflow)
+        index = self.git("write-tree")
+        self.assertIsNotNone(self.run_gate(paths=(workflow,)))
+        self.assertEqual(len(self.commands), 5)
+        self.assertEqual(self.git("write-tree"), index)
+        for name in (workflow, ".github/workflows/untracked.yml"):
+            with self.subTest(path=name):
+                self.commands.clear()
+                self.write(name, "name: changed workflow\n")
+                with self.assertRaisesRegex(ValueError, "Unstaged"):
+                    self.run_gate(paths=(workflow,))
+                self.assertFalse(self.commands)
+                self.assertEqual(self.git("write-tree"), index)
+                if name == workflow:
+                    self.git("restore", workflow)
+                else:
+                    (self.root / name).unlink()
+
     def test_staged_complete_execution_binds_index_and_source_identity(self):
         self.write("apps/example.c", "int changed;\n")
         self.git("add", "apps/example.c")
