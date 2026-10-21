@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "4d2b931d928ee097e34e374e66487506eb9cf858",
-  "tree": "eadd918e57c2f486e3c044bbf32d2bdfd6090f31",
+  "commit": "cc8735225508c6652927d334d8dcdb4c5b6b9e38",
+  "tree": "c8dfa1839dfa73559bbba97e5484a7a1f98987d0",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Reviewed Nexus development source: explicit USB endpoint activation, raw-reset admission protection, bounded I2S TX and canonical H743 configuration; seventeen exact reference builds retain selected modes; physical HIL not executed",
+  "baseline_status": "Reviewed Nexus development source with strict canonical U575 component-owner SDK retention and consumer policy v11; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }
