@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "e434303488f9d3551d22219e072615b0071be76b",
-  "tree": "355f21e6ef207fd1af5bbe8940a75e4a9db69bbb",
+  "commit": "4d2b931d928ee097e34e374e66487506eb9cf858",
+  "tree": "eadd918e57c2f486e3c044bbf32d2bdfd6090f31",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Nexus 0.2.0 development source: bounded ACM control, H743 RAM return checks and UART FIFO acquisition tools; seventeen exact reference builds retain their selected modes; physical HIL not executed",
+  "baseline_status": "Reviewed Nexus development source: explicit USB endpoint activation, raw-reset admission protection, bounded I2S TX and canonical H743 configuration; seventeen exact reference builds retain selected modes; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

@@ -8,9 +8,10 @@
 任务、组件、资源预算和恢复策略。依赖通过 `external/nexus` Gitlink 和
 [源码锁](dependencies/nexus.lock.json) 固定，最终验收必须与该身份一致。
 
-当前集成固定面向 Nexus 0.2 开发周期的发布后平台迭代源码
-`16e372e873c673fb50c5c9d572bcb1a3a514c9b4`，包括官方 STM32F4 LL 复用和可选冷态
-生命周期诊断。该源码的 SDK 元数据版本为 `0.2.0`，不移动已发布的 `v0.1.0` 标签，
+当前集成面向 Nexus 0.2 开发周期，精确源码提交与 tree 以
+[源码锁](dependencies/nexus.lock.json) 和 `external/nexus` Gitlink 为准。平台提供
+官方 STM32F4 LL 复用和可选冷态生命周期诊断。SDK 元数据版本为 `0.2.0`，
+不移动已发布的 `v0.1.0` 标签，
 也不冒充该标签的原始产物。本仓库独立的应用工程版本仍为 `1.0.0`；精确依赖以
 Gitlink 和源码锁为准。[0.1.0 集成说明](docs/release-0.1.0.md) 保留原始发布快照及
 证据边界；该历史证据不自动证明当前迭代。MCU 实板 HIL 保持 `not_executed`。
@@ -19,18 +20,19 @@ Gitlink 和源码锁为准。[0.1.0 集成说明](docs/release-0.1.0.md) 保留�
 
 | Target | Native 有限执行 | MCU 裸机 / FreeRTOS |
 | --- | --- | --- |
-| `platform_reference` | GPIO、显式 RX 注入、IRQ TX 完成和停止 | 五板软件配置的 LED 与 UART；FreeRTOS 静态任务 |
+| `platform_reference` | GPIO、显式 RX 注入、IRQ TX 完成和停止 | 八套软件参考配置的 GPIO 与 UART；FreeRTOS 静态任务 |
 | `sensor_spi` | BMP280 SPI 端口、芯片身份与 Bosch 参考结果 | 暂无审定传感器板级接线 |
 | `journal` | 文件 NOR 模型、关闭重开后恢复记录 | 暂无指定产品 Flash 分区与电源测试 |
 | `modbus_registers` | 实际 UART 模型、CRC、写权限、异常回复、有限日志 | 暂无 RS485 收发器接线和方向时序验收 |
-| `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 五板两后端，显式静态任务或裸机 pump |
+| `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 八套参考配置、两后端，显式静态任务或裸机 pump |
 
-Native 注册五个有限应用 CTest，以及 owner lifecycle、故障策略、接收策略和平台冷态
-生命周期四组 GoogleTest 执行。
+Native 注册五个有限应用 CTest，以及 owner lifecycle、故障策略、接收策略、平台冷态
+生命周期和 UART FIFO 采集五组 GoogleTest 执行。
 UART 由应用显式注入接收事实，服务推进发送并等待真正
 TC 完成。模型没有自动串口设备或后台 RX 生产者。Flash 文件示例验证宿主恢复流程，
 不证明 MCU 掉电安全。三板为启明欣欣 F407ZG V3.1、天空星 F407VE 青春版和梁山派
-GD32F470ZG。新增 NUCLEO-H743ZI2 和 NUCLEO-U575ZI-Q 软件参考配置；当前实板
+GD32F470ZG。其余五套为 NUCLEO-H743ZI2、NUCLEO-U575ZI-Q、F103RB、
+GD32F303RC 和 G474RE 软件参考；GD32F303RC 不指定实物 PCB 或 LED。当前实板
 未接入，所有物理资格均未验证。
 
 故障策略使用 Core `nx_fault_observe`。正式 SDK 身份以源码锁和 Gitlink 为准。
@@ -94,7 +96,7 @@ C 格式和注释规则复用固定 SDK，避免复制一套规则。手动完�
 
 变更行为先用失败测试定义合同，通过后再重构。Nexus 通用固件合同使用
 GoogleTest／GoogleMock 宿主测试；示例固件保持 C11，目标映像没有测试框架。
-Python 边界测试执行真实配置器，并检查十一组 TOML、生成 factory 和报告拒绝逻辑。
+Python 边界测试执行真实配置器，并检查十七组 TOML、生成 factory 和报告拒绝逻辑。
 
 本地 `--nexus-source /absolute/path` 只改变 SDK 位置；正式依赖检查仍要求锁、
 Gitlink、tree、干净源码和供应商身份一致。未提交的联合开发可以显式使用临时装配，

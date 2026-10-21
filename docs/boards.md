@@ -7,6 +7,9 @@
 | 梁山派 | GD32F470ZGT6 | 25 MHz | PD7, high active | USART0 PA9/PA10 |
 | NUCLEO-H743ZI2 software reference | STM32H743ZIT6 | internal HSI 64 MHz | PB0, high active | USART3 PD8/PD9 AF7 |
 | NUCLEO-U575ZI-Q software reference | STM32U575ZIT6Q | internal MSIS 4 MHz | PC7, high active | USART1 PA9/PA10 AF7 |
+| NUCLEO-F103RB source reference | STM32F103RBT6 | internal HSI 8 MHz | PA5 LD2 source reference | USART2 PA2/PA3 |
+| GD32F303RC silicon fixture | GD32F303RCT6 | internal IRC 8 MHz | PA5 software output; no PCB/LED asserted | USART0 PA9/PA10 |
+| G474RE HSE24 source reference | STM32G474RET6 | 24 MHz source reference | PA5 LD2 source reference | LPUART1 PA2/PA3 AF12 |
 
 These facts come from reviewed SDK Board packages and their source references.
 They have not been compared with connected physical PCB revisions or fitted
@@ -31,11 +34,18 @@ TrustZone, deep STOP and running-state handoff are outside their current scope.
 The shared reference RX policy calls the public event operation first. Only an
 UNSUPPORTED result selects the public byte operation. A damaged event or byte
 overflow returns failure with zero bytes authorized for echo. The UART owner
-application uses the same public TX, IRQ hint and settlement contracts on all
-five boards. FreeRTOS assemblies explicitly permit the configured priority-5
+application uses the same public TX, IRQ hint and settlement contracts across
+all eight software references. FreeRTOS assemblies explicitly permit the
+configured priority-5
 UART hint to call the kernel; bare-metal hints do not call it.
 
-Only these LED/console routes are exercised by the MCU reference application.
+Only these declared GPIO/console routes are exercised by the MCU reference
+application. F103RB, GD32F303RC and G474RE fittings, loads, supply and serial
+connections remain unobserved; their compiled routes do not establish PCB wiring
+or physical LEDs. GD32F303RC is a silicon fixture with no selected development
+board.
+
+Only selected routes are composed by each application.
 The Liangshan package also describes SPI4 PF6 CS and PF7/PF8/PF9, but the fitted
 NOR part is unknown; the sensor example is not declared supported there.
 Unknown I2C/PWM/ADC/EXTI external wiring is not automatically exposed by examples.

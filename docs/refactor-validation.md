@@ -1,8 +1,10 @@
 # Current validation scope
 
 This page preserves the 2026-10-12 software qualification and its original
-evidence identities. The current Nexus 0.1.0 pin and required fresh integration
-are described in [release integration](release-0.1.0.md). The historical counts,
+evidence identities. The current SDK pin is selected by
+`dependencies/nexus.lock.json` and the matching Gitlink. Required fresh integration
+is described below; [release integration](release-0.1.0.md) preserves the original
+0.1.0 snapshot. The historical counts,
 archives and GitHub runs below do not qualify that new SDK source.
 
 The current architecture replaces the previous HAL/OSAL/Runtime and eight-app
@@ -42,11 +44,13 @@ Current required software checks are:
    dependencies and reviewed GD32 import; a clean checkout is mandatory.
 2. SDK-locked format/comment/text tools and Conventional Commit hooks; complete
    CI checks plus real formatter/boundary regression tests.
-3. Five actual finite Native applications under ASan/UBSan and three complete
-   lifecycle/fault-policy/reference-RX Google targets: eight CTests with fresh nonempty JUnit
-   and unfiltered discovery/identity comparison; no skipped cases.
-4. Twenty real ARM linked images: `platform_reference.elf` and
-   `uart_owner_runtime.elf` for five boards by two OS backends. Each checks reset
+3. Five actual finite Native applications under ASan/UBSan and all five complete
+   Google targets: owner lifecycle, fault policy, reference RX, cold platform
+   lifecycle and UART FIFO acquisition. All ten CTests require fresh nonempty
+   JUnit and unfiltered discovery/identity comparison, with no skipped cases.
+4. Thirty-two real ARM linked images: `platform_reference.elf` and
+   `uart_owner_runtime.elf` for eight exact references by two OS backends. Each
+   checks reset
    vector, resolved configuration digest, loaded
    Flash, address footprint, distinct RAM domains, MSP and zero libc heap against
    assembly budgets. Static reserved bytes are not measured dynamic high-water.
@@ -84,5 +88,5 @@ All physical timing, interrupt-load, oscillator/reset, connector/electrical,
 Flash power-cut and watchdog behavior remains **not executed**. A Native model
 or ARM image cannot establish those qualifications. The SDK HIL tools prepare
 stations and cases for a later physically connected validation run.
-All ten newly generated HIL plans remain `prepared_unbound`, and the software
+All ten HIL plans from that historical run remain `prepared_unbound`; its software
 report retains `publishable=false` and `cycles_status=not_measured`.

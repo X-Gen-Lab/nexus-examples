@@ -28,8 +28,8 @@ provider and actual pthread notification/task adapters execute in the example.
 The owner pumps periodically even if a hint is coalesced or publishing fails.
 The example's 1 ms wake interval is an explicit product choice, not a platform
 latency guarantee. IRQ wakes use the actual generated board console priority and
-selected kernel ceiling. Only Native model injections are synthetic; the ten ARM
-configurations retain their selected reviewed Board console routes. The H743 and
+selected kernel ceiling. Only Native model injections are synthetic; the sixteen authored ARM
+configurations retain their declared reference GPIO and console routes. The H743 and
 U575 software references use byte reception and the same public TX/settlement
 contract. No provider or vendor declaration enters the application.
 
@@ -73,12 +73,13 @@ applies. The bounded fault sink records stage/status and wakes the coordinator;
 product-specific safe outputs and recovery decisions remain external.
 
 `tests/quarantine_policy_test.cpp` exercises the production policy and actual
-BusOwner with GoogleMock external hardware/fault ports. Six new cases had a true
-stub RED before implementation and cover BUSY, retained step/deadline exhaustion,
-clock reversal, deadline-add overflow and later successful drain. The shared
-lifecycle Google binary now runs 28 cases. This development iteration preserves
-the existing clean SDK pin; it does not claim physical timing or a new release
-qualification until the complete clean-source integration runs.
+BusOwner with GoogleMock external hardware/fault ports. In the recorded
+quarantine-policy development iteration, six new cases had a true stub RED
+before implementation and covered BUSY, retained step/deadline exhaustion, clock
+reversal, deadline-add overflow and later successful drain. Its shared lifecycle
+Google binary ran 28 cases. These are historical development counts; each SDK
+pin requires fresh complete discovery and execution, and no such host run
+establishes physical timing or a release qualification.
 
 `bootstrap.c` implements a separate partial-startup protocol. The application
 records only successful notification, owner and worker creations, along with
@@ -162,12 +163,14 @@ clock, stack, kernel or transport is healthy. An unbound output action stays
 UNPROVEN, and external recovery must first establish the retained publishers
 and loans rather than treating a diagnostic or timeout as ownership return.
 
-The current committed SDK pin predates this Core observer API. Its complete
-Native build is expected to reject the new source until the coordinated pin
-update; this is an integration boundary, not a skipped contract. Existing
-development RED/GREEN evidence is retained unchanged. Current-pin checks and the
-required final matrix are separated in
-[delivery preparation](delivery-preparation.md).
+The historical formal SDK `6fc1ed75ba4e13d53c5b93c15ebaa73baaae9a21`
+predated this Core observer API; its actual complete Native build rejected the
+missing header, as recorded in [delivery preparation](delivery-preparation.md).
+The later SDK snapshot `e434303488f9d3551d22219e072615b0071be76b` already
+declared the observer API. Neither that declaration nor historical development
+RED/GREEN evidence qualifies another SDK pin. The matching source lock and
+Gitlink select the formal dependency; fresh complete integration and its actual
+results must be assessed separately. Original failure receipts remain unchanged.
 
 Successful rollback milestones are not repeated. A failed join, drain, IRQ
 detachment, notification destruction or platform stop retains its effects and
