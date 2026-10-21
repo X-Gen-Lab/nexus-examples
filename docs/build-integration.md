@@ -6,9 +6,9 @@ OS backend and optional component targets. Its `nexus_add_firmware()` helper
 adds MCU startup, selected providers, linker configuration and real ELF budget
 checks. Application sources remain in this repository.
 
-The current integration pins the post-release Nexus 0.2 development iteration at
-`16e372e873c673fb50c5c9d572bcb1a3a514c9b4`, with the exact tree in
-`dependencies/nexus.lock.json`. This source includes the official STM32F4 LL
+The current integration consumes the Nexus 0.2 development iteration selected
+by `dependencies/nexus.lock.json` and the matching `external/nexus` Gitlink.
+The lock owns the exact commit and tree. The SDK includes the official STM32F4 LL
 adaptation and optional caller-owned cold diagnostics. Its SDK metadata is
 `0.2.0`; this does not move the published `v0.1.0` tag or qualify this changed
 implementation with historical release evidence. This repository's independent
@@ -17,8 +17,9 @@ authored TOML schema `2` remain separate contracts. See [release
 integration](release-0.1.0.md) for the original published snapshot and its evidence
 boundaries.
 
-The maintained matrix has one Native configuration and five boards with two
-backends each. H743 and U575 software references use `stm32-h743-nucleo-*` and
+The maintained matrix has one Native configuration and eight exact software
+reference configurations with two backends each: seventeen presets in total.
+H743 and U575 software references use `stm32-h743-nucleo-*` and
 `stm32-u575-nucleo-*`; each links `platform_reference` and `uart_owner_runtime`.
 Both applications consume generated public faces. The logical `uart1` instance
 maps to H743 USART3 or U575 USART1 through the authored Board binding, without
@@ -94,7 +95,7 @@ verifies the formal commit/tree, example Gitlink, clean dependencies and GD32
 import. Explicit candidate validation requires a full SHA and matching origin;
 it does not rewrite or promote the formal lock. Dirty joint-development builds
 require temporary external Board paths and cannot serve as release evidence.
-The dependency identity includes all eight maintained top-level SDK submodules
+The dependency identity requires fourteen maintained top-level SDK submodules
 and their recursive children, including both reviewed H7 and U5 device closures
 and the selected official STM32F4 HAL/LL package. Vendor types remain private to
 the SDK provider; applications continue to use the same public typed faces.

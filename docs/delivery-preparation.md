@@ -8,11 +8,12 @@ snapshot, not the current formal SDK pin. Current identity comes from the actual
 source lock and Gitlink; the source/dependency checker verifies both. Historical
 raw evidence remains unchanged and cannot qualify the new software references.
 
-The new product fault policy depends on public `nexus/core/fault.h` and
-`nx_fault_observe`, which that pin does not provide. A real full `native-debug`
-build rejects the missing header. No replacement declaration, copied Core
-implementation or filtered complete-run claim is supplied. The applicable
-current-pin execution rebuilt four unaffected finite applications and the full
+That historical fault-policy development depended on public
+`nexus/core/fault.h` and `nx_fault_observe`, which the recorded `6fc1ed75` pin
+did not provide. Its real full `native-debug` build rejected the missing header.
+No replacement declaration, copied Core implementation or filtered complete-run
+claim was supplied. The applicable execution at that historical pin rebuilt
+four unaffected finite applications and the full
 lifecycle Google binary: five CTests passed, with all 28 discovered Google
 cases executed under the selected ASan/UBSan build. This partial result does not
 qualify the changed UART application or new fault-policy target.
@@ -61,18 +62,20 @@ pin. Their original source snapshots, commands and reports stay immutable.
 
 ## Core capabilities and example selection
 
-The seven authored presets select Native or the three maintained F407/F470
-reference Boards with baremetal/FreeRTOS. The MCU examples select the reviewed
-LED and console routes. Native sensor, journal and protocol examples do not
+The seventeen authored presets select Native or eight exact software references
+with baremetal/FreeRTOS: the three maintained F407/F470 Boards, H743/U575,
+F103RB, GD32F303RC and G474RE. The MCU examples select only the declared
+GPIO and console routes. GD32F303RC is a silicon software reference with no
+asserted PCB or LED. Native sensor, journal and protocol examples do not
 create sensor wiring, a MCU Flash region or RS485 direction timing on those
 Boards. New Core support remains subject to the selected SDK's support and
 qualification documents; a common interface alone does not expose hardware.
 
-Upcoming Core integration includes the selected Linux/three-board M4 ThreadX
+The SDK includes the selected Linux/three-board M4 ThreadX
 backend, opt-in shallow timebase sleep, USB PIO, raw Ethernet, timer mechanisms
 and a narrow GPIO broker. These mechanisms do not add ThreadX/USB/Ethernet
 application presets here. G474's HSE24 software reference is a separate
-GPIO/LPUART vertical, not a fourth physically qualified example Board. A GPIO
+GPIO/LPUART vertical and does not establish an additional qualified physical Board. A GPIO
 broker is not a complete SVC/MPU/TrustZone user I/O transport. No unreviewed PCB
 binding or physical support follows from these software mechanisms.
 
@@ -96,18 +99,22 @@ station procedure; it is never an automatic example startup action.
 
 ## Final software integration
 
-The current coordinated final step updates the Gitlink and source lock to the
-same reviewed clean Core commit. It verifies all eleven authored presets,
-including H743/NUCLEO-H743ZI2 and U575/NUCLEO-U575ZI-Q under both MCU backends:
+Each coordinated SDK update changes the Gitlink and source lock together to
+the same reviewed clean Core commit. Fresh integration must cover all seventeen
+authored presets, including the eight exact MCU references under both MCU
+backends:
 
-1. Complete unfiltered Native catalogue: five finite apps and all three Google
+1. Complete unfiltered Native catalogue: five finite apps and all five Google
    targets, with fresh case identities, raw exits and no skipped cases.
-2. Ten board/backend builds, each producing the two real ARM ELF targets,
+2. Sixteen reference/backend builds, each producing the two real ARM ELF targets,
    with independent memory budgets, vectors, selected configuration and source
-   identities; twenty images in total.
+   identities; thirty-two images in total. The existing CI separately links the
+   H743/U575 UART FIFO reference, without adding presets.
 3. Exact SDK dependencies, source closure, format/comment/text checks and
    normal commit hooks. New clean execution cannot inherit an older run.
 
-The preparation manifest records its partial execution and blocked full build.
-It is explicitly not final SDK qualification, GitHub CI completion or physical
-HIL. Final release evidence must bind the new clean examples commit and SDK pin.
+The historical preparation manifest records only its partial execution and
+blocked full build. It is not qualification of a later SDK pin, GitHub CI
+completion or physical HIL. New integration evidence must bind the actual clean
+examples commit and matching SDK pin; historical passes and failures do not
+qualify that tuple.

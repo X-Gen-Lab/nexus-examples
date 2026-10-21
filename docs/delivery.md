@@ -1,6 +1,6 @@
 # Delivery boundaries
 
-Software deliverables are five explicit application examples, eleven immutable
+Software deliverables are five explicit application examples, seventeen explicit
 configuration presets, direct generated bindings, SDK-locked development hooks,
 source/dependency verification, finite Native execution and real MCU ELF budgets.
 Platform providers remain in Nexus; product policies remain external.
@@ -38,7 +38,9 @@ No connected-board acceptance or advanced DMA/cache/TrustZone support follows
 from these configurations. The reference RX policy rejects damaged reception
 before authorizing any echo and is exercised with the pinned GoogleMock framework.
 
-The Gitlink and source lock agree with that SDK identity. The implementation is
+The Gitlink and source lock agreed with that SDK identity in the historical
+execution above; the current pin is maintained in `dependencies/nexus.lock.json`.
+The historical implementation is
 available in [the SoC reference integration PR](https://github.com/X-Gen-Lab/nexus-examples/pull/2).
 The retained execution remains `publishable=false`: it records software
 qualification and does not publish a release or establish remote CI completion.
