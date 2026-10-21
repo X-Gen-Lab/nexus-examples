@@ -16,10 +16,10 @@ They have not been compared with connected physical PCB revisions or fitted
 options. STM32 SWD PA13/PA14 remains reserved. The GD32 monotonic clock reserves
 TIMER1. Board defaults set reviewed inactive LED levels before application use.
 
-Each board has bare-metal and FreeRTOS assemblies. They select a 115200 baud
+Each reference has bare-metal and FreeRTOS assemblies. They select a 115200 baud
 console with an exact 32-event RX budget on the original three boards, or a
-32-byte RX budget on H743/U575. IRQ priorities and static
-memory budgets are explicit in each assembly. UART typed providers use IRQ TX,
+32-byte RX budget on the other five software references. IRQ priorities and
+static memory budgets are explicit in each assembly. UART typed providers use IRQ TX,
 not DMA. RX loss/status-only events must never be interpreted as fabricated bytes.
 
 The H743 reference requires the reviewed MB1364 LED1 PB0 path (SB39 ON/SB47

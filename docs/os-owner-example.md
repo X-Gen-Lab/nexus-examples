@@ -232,7 +232,8 @@ python scripts/build.py --preset native-debug --test
 python scripts/build.py --preset stm32-qiming-freertos
 ```
 
-Use the same six board/backend presets for `uart_owner_runtime`. Final integration
-qualification requires the examples Gitlink and `nexus.lock.json` to name the same
+Use the same sixteen authored ARM reference/backend presets for
+`uart_owner_runtime`. Final integration qualification requires the examples
+Gitlink and `nexus.lock.json` to name the same
 clean, verified core commit. A development build against uncommitted core source
 is explicitly nonpublishable and cannot replace that final source identity.
