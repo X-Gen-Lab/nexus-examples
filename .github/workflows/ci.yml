@@ -53,9 +53,17 @@ jobs:
         with:
           python-version: '3.12'
       - name: Prepare host build dependencies
+        timeout-minutes: 10
+        shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc g++
+          set -euo pipefail
+          apt_options=(
+            -o Acquire::http::Timeout=30
+            -o Acquire::https::Timeout=30
+            -o Acquire::Retries=3
+          )
+          sudo apt-get "${apt_options[@]}" -o APT::Update::Error-Mode=any update
+          sudo apt-get "${apt_options[@]}" install -y gcc g++
           python3 scripts/setup_dev_tools.py --skip-hooks
           .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
           echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
@@ -203,9 +211,17 @@ jobs:
         with:
           python-version: '3.12'
       - name: Prepare host build dependencies
+        timeout-minutes: 10
+        shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc g++
+          set -euo pipefail
+          apt_options=(
+            -o Acquire::http::Timeout=30
+            -o Acquire::https::Timeout=30
+            -o Acquire::Retries=3
+          )
+          sudo apt-get "${apt_options[@]}" -o APT::Update::Error-Mode=any update
+          sudo apt-get "${apt_options[@]}" install -y gcc g++
           python3 scripts/setup_dev_tools.py --skip-hooks
           .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
           echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
