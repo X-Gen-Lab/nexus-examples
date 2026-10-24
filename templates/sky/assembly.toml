@@ -1,0 +1,25 @@
+schema = 2
+board = "stm32f407ve_sky_qingchun"
+backend = "baremetal"
+clock = "hse8-pll168"
+optimization = "Os"
+
+[memory]
+main_stack_bytes = 2048
+libc_heap_bytes = 0
+
+[gpio.status]
+binding = "led0"
+mode = "output"
+
+[uart.console]
+binding = "uart1"
+mode = "irq"
+baud = 115200
+
+[uart.console.rx]
+format = "events"
+capacity = 32
+
+[uart.console.irq]
+priority = 5

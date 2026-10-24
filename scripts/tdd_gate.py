@@ -16,7 +16,7 @@ from run_google import identities
 from sdk_tools import ROOT, load
 
 
-RELEVANT_PREFIXES = (".github/", "apps/", "reproduction/", "assemblies/", "tests/", "scripts/", "dependencies/")
+RELEVANT_PREFIXES = (".github/", "apps/", "reproduction/", "assemblies/", "templates/", "tests/", "scripts/", "dependencies/")
 RELEVANT_FILES = {"CMakeLists.txt", "CMakePresets.json", ".pre-commit-config.yaml",
                   ".gitmodules", "external/nexus", "AGENTS.md"}
 EXPECTED_CTEST_NAMES = (
@@ -24,6 +24,8 @@ EXPECTED_CTEST_NAMES = (
     "persistent_journal", "protocol_authorized_registers", "owner_lifecycle_google",
     "product_fault_policy_google", "reference_rx_policy_google",
     "reference_lifecycle_google", "fifo_acquisition_google",
+    "shared_spi_two_devices", "stream_slow_consumer", "developer_recipes_google",
+    "shared_spi_real_freertos", "contract_os_freertos",
 )
 
 
@@ -69,7 +71,10 @@ def child_environment(root, environ):
     # never redirect its identity check into the examples commit index.
     result = {key: value for key, value in environ.items()
               if not key.startswith(("GIT_", "GTEST_"))}
-    result["NEXUS_SOURCE"] = str(root / "external/nexus")
+    # Location is explicit, while test_repository still verifies the same
+    # formal lock, staged Gitlink, tree, clean source and vendor dependencies.
+    source = Path(result.get("NEXUS_SOURCE") or root / "external/nexus")
+    result["NEXUS_SOURCE"] = str(source.expanduser().resolve())
     return result
 
 
@@ -183,7 +188,7 @@ def run_gate(root, *, paths=(), staged=False, force=False, environ=None):
     initial = staged_tree(root)
     check_snapshot(root)
     env = child_environment(root, settings)
-    source = root / "external/nexus"
+    source = Path(env["NEXUS_SOURCE"])
     build = root / "build/native-debug"
     output = build / "tdd"
     safe_outputs(root, output)
@@ -193,7 +198,7 @@ def run_gate(root, *, paths=(), staged=False, force=False, environ=None):
     source_report = output / "source.json"
     source_report.unlink(missing_ok=True)
     python = sys.executable
-    execute(root, [python, "scripts/test_repository.py", "--report",
+    execute(root, [python, "scripts/test_repository.py", "--nexus-source", str(source), "--report",
                    str(source_report)], env, output / "source.log")
     identity = json.loads(source_report.read_text(encoding="utf-8"))
     if (identity.get("kind") != "example-source-dependency-identity" or
@@ -214,7 +219,7 @@ def run_gate(root, *, paths=(), staged=False, force=False, environ=None):
     google_report.unlink(missing_ok=True)
     started = time.time_ns()
     execute(root, [python, "scripts/build.py", "--preset", "native-debug",
-                   "--test", "--parallel", str(jobs)], env, output / "build.log")
+                   "--nexus-source", str(source), "--test", "--parallel", str(jobs)], env, output / "build.log")
     catalogue = json.loads(execute(root, ["ctest", "--test-dir", str(build),
                                         "--show-only=json-v1"], env,
                                    output / "catalogue.log"))
@@ -237,7 +242,7 @@ def run_gate(root, *, paths=(), staged=False, force=False, environ=None):
     aggregate["programs"] = len(programs)
     final_source = output / "source-after.json"
     final_source.unlink(missing_ok=True)
-    execute(root, [python, "scripts/test_repository.py", "--report",
+    execute(root, [python, "scripts/test_repository.py", "--nexus-source", str(source), "--report",
                    str(final_source)], env, output / "source-after.log")
     if json.loads(final_source.read_text(encoding="utf-8")) != identity:
         raise ValueError("Formal SDK identity changed during example execution")

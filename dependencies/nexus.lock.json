@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "d0b8637453330070a052ededbd39bb1f597c76a9",
-  "tree": "f3a54d3847d104ca5504b455fb70c51bcc695982",
+  "commit": "c8df1c49d4f771a55490b3a8be32a9d1f24faa1e",
+  "tree": "d662c46e31e180a348d61ba1567a6487c28cc74d",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Reviewed Nexus 0.2.0 development source with U575 component-owner retention and the H743 stack-prefix-map audit fix; physical HIL not executed",
+  "baseline_status": "Reviewed Nexus 0.2.0 developer-platform iteration with typed provider admission, explicit I/O diagnostics and verified tooling; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

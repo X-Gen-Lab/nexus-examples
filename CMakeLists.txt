@@ -37,12 +37,20 @@ if(soc_family STREQUAL "native")
         LIBRARIES Nexus::Storage Nexus::FileFlash)
     nexus_add_firmware(modbus_registers SOURCES apps/modbus_registers/main.c
         LIBRARIES Nexus::ModbusRTU Nexus::Log)
+    nexus_add_firmware(shared_spi_runtime SOURCES
+        apps/shared_spi_runtime/main.c apps/shared_spi_runtime/shared_spi_application.c
+        LIBRARIES Nexus::SpiOwner Nexus::OSNative Nexus::Arch)
+    nexus_add_firmware(stream_recovery SOURCES
+        apps/stream_recovery/main.c apps/stream_recovery/stream_application.c)
     add_subdirectory(tests)
+    add_test(NAME shared_spi_two_devices COMMAND shared_spi_runtime)
+    add_test(NAME stream_slow_consumer COMMAND stream_recovery)
     add_test(NAME uart_owner_shutdown COMMAND uart_owner_runtime)
     add_test(NAME platform_static_ports COMMAND platform_reference)
     add_test(NAME sensor_explicit_spi COMMAND sensor_spi)
     add_test(NAME persistent_journal COMMAND journal "${CMAKE_CURRENT_BINARY_DIR}/journal.dat")
     add_test(NAME protocol_authorized_registers COMMAND modbus_registers)
     set_tests_properties(platform_static_ports sensor_explicit_spi persistent_journal
-        protocol_authorized_registers uart_owner_shutdown PROPERTIES TIMEOUT 10 LABELS "native;example")
+        protocol_authorized_registers uart_owner_shutdown shared_spi_two_devices
+        stream_slow_consumer PROPERTIES TIMEOUT 10 LABELS "native;example")
 endif()
