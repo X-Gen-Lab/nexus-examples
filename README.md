@@ -16,7 +16,7 @@
 Gitlink 和源码锁为准。[0.1.0 集成说明](docs/release-0.1.0.md) 保留原始发布快照及
 证据边界；该历史证据不自动证明当前迭代。MCU 实板 HIL 保持 `not_executed`。
 
-当前锁定平台主分支合并提交 `83b21c05722e207090a8a64b167aca5b65299ad9`。
+当前锁定平台主分支合并提交 `5a42237ce6efcc0a3f81fcd711225e3b9946fff2`。
 本轮使用仓库内本地 CI 入口验收该精确依赖；新项目创建与旧项目 SDK 升级都显式选择
 同一版本，保留各自实际执行记录。历史项目来源记录不因 SDK 升级而改写。
 The pinned platform is the merged main commit above. Local CI and installed-SDK

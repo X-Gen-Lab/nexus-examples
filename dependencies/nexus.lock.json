@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "83b21c05722e207090a8a64b167aca5b65299ad9",
-  "tree": "e424d8d4c7a97d690fa89310bc6cf2604002c453",
+  "commit": "5a42237ce6efcc0a3f81fcd711225e3b9946fff2",
+  "tree": "25ff0518ca781bf1822b5d6da933197350a5815b",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
   "baseline_status": "Nexus 0.2.0 platform-delivery completion baseline with provider admission diagnostics, explicit I/O ownership and installed-SDK integrity contracts; physical HIL not executed",
