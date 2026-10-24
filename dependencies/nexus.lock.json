@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "c8df1c49d4f771a55490b3a8be32a9d1f24faa1e",
-  "tree": "d662c46e31e180a348d61ba1567a6487c28cc74d",
+  "commit": "83b21c05722e207090a8a64b167aca5b65299ad9",
+  "tree": "e424d8d4c7a97d690fa89310bc6cf2604002c453",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Reviewed Nexus 0.2.0 developer-platform iteration with typed provider admission, explicit I/O diagnostics and verified tooling; physical HIL not executed",
+  "baseline_status": "Nexus 0.2.0 platform-delivery completion baseline with provider admission diagnostics, explicit I/O ownership and installed-SDK integrity contracts; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

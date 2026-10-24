@@ -104,8 +104,9 @@ the same reviewed clean Core commit. Fresh integration must cover all seventeen
 authored presets, including the eight exact MCU references under both MCU
 backends:
 
-1. Complete unfiltered Native catalogue: five finite apps and all five Google
-   targets, with fresh case identities, raw exits and no skipped cases.
+1. Complete unfiltered Native catalogue: seven finite apps, all six Google
+   targets and two real FreeRTOS registrations, with fresh case identities, raw
+   exits and no skipped cases.
 2. Sixteen reference/backend builds, each producing the two real ARM ELF targets,
    with independent memory budgets, vectors, selected configuration and source
    identities; thirty-two images in total. The existing CI separately links the
