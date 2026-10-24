@@ -178,6 +178,31 @@ class ExampleTddGateTests(unittest.TestCase):
                                  environ={"PATH": os.environ["PATH"],
                                           **(environ or {})})
 
+    def test_relocated_sdk_reaches_both_identity_checks_and_the_build(self):
+        with tempfile.TemporaryDirectory(prefix="relocated formal SDK ") as value:
+            source = Path(value) / "sdk"
+            shutil.copytree(self.root / "external/nexus", source)
+            index = self.git("write-tree")
+            self.run_gate(environ={"NEXUS_SOURCE": str(source)})
+            selected_commands = [command for command, _ in self.commands
+                                 if str(command[1]).endswith((
+                                     "test_repository.py", "build.py"))]
+            self.assertEqual(len(selected_commands), 3)
+            for command in selected_commands:
+                self.assertIn("--nexus-source", command)
+                self.assertEqual(command[command.index("--nexus-source") + 1],
+                                 str(source))
+                self.assertNotIn("--candidate-nexus-commit", command)
+            self.assertTrue(all(environment["NEXUS_SOURCE"] == str(source)
+                                for _, environment in self.commands))
+            self.assertEqual(self.git("write-tree"), index)
+            self.commands.clear()
+            self.mode = "wrong_lock"
+            with self.assertRaisesRegex(ValueError, "formal SDK"):
+                self.run_gate(environ={"NEXUS_SOURCE": str(source)})
+            self.assertEqual(len(self.commands), 1)
+            self.assertEqual(self.git("write-tree"), index)
+
     def test_parallel_jobs_precedence_reaches_the_actual_build_command(self):
         for environ, expected in (
                 ({"NEXUS_BUILD_JOBS": "1", "CMAKE_BUILD_PARALLEL_LEVEL": "3"}, "1"),
@@ -379,8 +404,7 @@ class ExampleTddGateTests(unittest.TestCase):
         self.assertNotIn("GIT_DIR", environment)
         self.assertNotIn("GIT_INDEX_FILE", environment)
         self.assertNotIn("GTEST_FILTER", environment)
-        self.assertEqual(environment["NEXUS_SOURCE"],
-                         str(self.root / "external/nexus"))
+        self.assertEqual(environment["NEXUS_SOURCE"], "/wrong/sdk")
         self.assertEqual(environment["OTHER"], "retained")
 
     def test_hook_bypass_is_rejected(self):

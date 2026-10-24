@@ -1,0 +1,25 @@
+schema = 2
+board = "gd32f470_liangshan"
+backend = "baremetal"
+clock = "hxtal25-pll200"
+optimization = "Os"
+
+[memory]
+main_stack_bytes = 2048
+libc_heap_bytes = 0
+
+[gpio.status]
+binding = "status_led"
+mode = "output"
+
+[uart.console]
+binding = "console"
+mode = "irq"
+baud = 115200
+
+[uart.console.rx]
+format = "events"
+capacity = 32
+
+[uart.console.irq]
+priority = 5

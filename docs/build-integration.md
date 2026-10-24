@@ -1,5 +1,9 @@
 # Source SDK integration
 
+Run the complete local software matrix through [local CI](local-ci.md). It reuses
+this integration and the hosted workflow checkers; partial runs remain explicit.
+完整本地软件门禁见[本地 CI](local-ci.md)，复用本节构建链路，部分运行明确标记。
+
 Examples consume the pinned SDK with `add_subdirectory(NEXUS_SOURCE nexus)`.
 The SDK exports `Nexus::Core`, `Nexus::IO`, `Nexus::Arch`, `Nexus::Platform`,
 OS backend and optional component targets. Its `nexus_add_firmware()` helper

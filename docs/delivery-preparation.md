@@ -104,8 +104,9 @@ the same reviewed clean Core commit. Fresh integration must cover all seventeen
 authored presets, including the eight exact MCU references under both MCU
 backends:
 
-1. Complete unfiltered Native catalogue: five finite apps and all five Google
-   targets, with fresh case identities, raw exits and no skipped cases.
+1. Complete unfiltered Native catalogue: seven finite apps, all six Google
+   targets and two real FreeRTOS registrations, with fresh case identities, raw
+   exits and no skipped cases.
 2. Sixteen reference/backend builds, each producing the two real ARM ELF targets,
    with independent memory budgets, vectors, selected configuration and source
    identities; thirty-two images in total. The existing CI separately links the
@@ -118,3 +119,49 @@ blocked full build. It is not qualification of a later SDK pin, GitHub CI
 completion or physical HIL. New integration evidence must bind the actual clean
 examples commit and matching SDK pin; historical passes and failures do not
 qualify that tuple.
+
+
+## Versioned developer recipes / 版本化开发入口
+
+The current iteration adds manifest-bound Native/Qiming/Sky/Liangshan starters,
+two-endpoint SPI with real Native/FreeRTOS host tasks, and slow-consumer stream
+recovery. Standalone MCU recipes deliberately distinguish an F407ZG silicon
+fixture from a physical Board and select only the supported H743 continuous RX
+mode. [The bilingual guide](developer-recipes.md) is the caller contract.
+本次入口包含四个摘要绑定模板、两端点真实任务共享 SPI 和慢消费者流恢复；MCU
+软件 fixture 与实板严格区分，仅选择实际支持的 H743 连续模式。
+
+Final identity ordering is platform commit P, examples lock/Gitlink update to P,
+ordinary complete gates, then examples commit E. The delivery record binds P/E
+and actual artifact identities. Development runs against an explicit uncommitted
+SDK remain nonpublishable; this paragraph does not certify a pending pin or
+reclassify `not_executed` physical work.
+最终先完成平台 P，再同步 examples 锁与 Gitlink，普通完整 gate 通过后得到 E，
+交付记录绑定两者和实际产物。开发源码运行不能作为正式资格，本段不证明待定 pin，
+也不改变实板 `not_executed` 状态。
+
+## 2026-10-24 source migration / 本轮源码迁移
+
+This iteration is based on examples PR #10,
+`fix/ci-host-deps-budget-20261022`, head
+`7b7fea3e0bb0465a8a4e93ab8132a458c0373f31`. Its bounded host dependency
+preparation (HTTP/HTTPS timeout, retries, apt update error mode and actual shell
+failure regression) remains intact. The examples worktree was preserved while
+fast-forwarding to that base; the new recipes do not discard the pending CI fix.
+本轮以示例库 PR #10 的上述精确提交为基础，保留 host 依赖下载超时、重试、apt 索引
+错误模式及实际 shell 失败回归；安全快进时保留了本轮全部应用和模板变更。
+
+The dependency migrates from
+`d0b8637453330070a052ededbd39bb1f597c76a9` to platform commit
+`c8df1c49d4f771a55490b3a8be32a9d1f24faa1e`, tree
+`d662c46e31e180a348d61ba1567a6487c28cc74d`. The lock and Gitlink must agree.
+The platform completed its ordinary full commit gate before this pin update;
+examples have their own ordinary commit gate and independently recorded results.
+依赖从上述旧提交迁移到已完成平台普通完整提交门禁的 P；源码锁与 Gitlink 必须一致。
+示例库仍独立执行自己的普通门禁并记录结果，不能借用平台测试数量作为应用验收。
+
+The final delivery index records examples commit E and its own CI/artifact
+identity after the ordinary commit. This document does not predeclare E or
+turn development evidence into physical qualification. HIL: `not_executed`.
+示例库普通提交完成后由交付索引关联 E 与实际 CI/产物，本页不预先编造 E，也不把
+开发执行记录变成实板资格。HIL：`not_executed`。

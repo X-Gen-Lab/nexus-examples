@@ -1,10 +1,15 @@
 # Next application iterations
 
-The immediate baseline is five finite Native examples, complete lifecycle and
-fault-policy Google execution, plus three-board/two-backend platform and UART
-owner firmware. First reconcile the new public fault API with the coordinated
-clean SDK pin and execute the complete matrix. Preserve that source identity
-before adding more capabilities.
+The authored baseline now has seven finite Native applications, six host Google
+programs, a real FreeRTOS POSIX SPI composition, seventeen main presets, four
+versioned starter templates, and standalone F407 SPI/H743 continuous receive
+software fixtures. See [developer recipes](developer-recipes.md) for exact
+lifecycle and evidence boundaries. Qualification requires the coordinated clean
+SDK pin and actual ordinary gates; authored targets alone are not execution.
+
+当前工程包含七个有限 Native 应用、六组 Google 程序、真实 FreeRTOS POSIX SPI
+组合、十七个主 preset、四个版本化最小工程及独立 F407 SPI/H743 连续接收软件
+fixture。已编写的目标不等于已执行验收；最终证据必须对应同一干净 SDK pin。
 
 | Next step | Required inputs | Acceptance |
 | --- | --- | --- |
@@ -12,7 +17,7 @@ before adding more capabilities.
 | Physical SPI sensor | Reviewed CS/signals, sensor voltage and datasheet | Register identity, known calibration, worst-load bound |
 | Industrial RS485 | Transceiver DE/RE, bus topology, termination and protocol budget | TC-before-DE release, silence gaps, loss/recovery |
 | MCU journal | Product-owned Flash areas and maintenance windows | Power-cut recovery, erase/program interference budget |
-| Multi-controller owner use | Explicit queue budget, producers and cancel identity | Full queue, stale epoch, absolute deadline, final borrow return |
+| More physical owner integrations | Reviewed controller/CS wiring and product traffic | Reuse the two-endpoint software recipe; validate actual arbitration, cancellation and final borrow return |
 | Explicit fault recovery | First-fault record, retained loans, reviewed output/reset port | Failed actions retain storage; actual output/reset observations are independently qualified |
 | Device fleet integration | Product identity, threat model, transport and update contract | Verified recovery and authenticated update evidence |
 

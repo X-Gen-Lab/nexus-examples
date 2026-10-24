@@ -16,7 +16,14 @@
 Gitlink 和源码锁为准。[0.1.0 集成说明](docs/release-0.1.0.md) 保留原始发布快照及
 证据边界；该历史证据不自动证明当前迭代。MCU 实板 HIL 保持 `not_executed`。
 
-## 五个应用
+当前锁定平台主分支合并提交 `83b21c05722e207090a8a64b167aca5b65299ad9`。
+本轮使用仓库内本地 CI 入口验收该精确依赖；新项目创建与旧项目 SDK 升级都显式选择
+同一版本，保留各自实际执行记录。历史项目来源记录不因 SDK 升级而改写。
+The pinned platform is the merged main commit above. Local CI and installed-SDK
+consumers validate that exact dependency; an explicit SDK upgrade preserves the
+original project's source and provenance instead of rewriting historical results.
+
+## 应用与最小工程
 
 | Target | Native 有限执行 | MCU 裸机 / FreeRTOS |
 | --- | --- | --- |
@@ -24,10 +31,13 @@ Gitlink 和源码锁为准。[0.1.0 集成说明](docs/release-0.1.0.md) 保留�
 | `sensor_spi` | BMP280 SPI 端口、芯片身份与 Bosch 参考结果 | 暂无审定传感器板级接线 |
 | `journal` | 文件 NOR 模型、关闭重开后恢复记录 | 暂无指定产品 Flash 分区与电源测试 |
 | `modbus_registers` | 实际 UART 模型、CRC、写权限、异常回复、有限日志 | 暂无 RS485 收发器接线和方向时序验收 |
+| `shared_spi_runtime` | 两个真实任务、两端点、满队列拒绝、取消、join/stop | 独立 F407ZG FreeRTOS 硅片软件 fixture；不声明实板双 CS 接线 |
+| `stream_recovery` | 慢消费者、loss、BUSY stop、恢复及只读诊断 | 独立 H743 continuous DMA 软件参考，Cache off |
 | `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 八套参考配置、两后端，显式静态任务或裸机 pump |
 
-Native 注册五个有限应用 CTest，以及 owner lifecycle、故障策略、接收策略、平台冷态
-生命周期和 UART FIFO 采集五组 GoogleTest 执行。
+Native 注册七个有限应用 CTest、六组 GoogleTest 执行，以及真实 FreeRTOS POSIX 内核
+合同和共享 SPI 应用。新增模板、创建练习、三条生命周期路径及迁移步骤见
+[双语工程指南](docs/developer-recipes.md)。四个版本化模板保存在 `templates/`。
 UART 由应用显式注入接收事实，服务推进发送并等待真正
 TC 完成。模型没有自动串口设备或后台 RX 生产者。Flash 文件示例验证宿主恢复流程，
 不证明 MCU 掉电安全。三板为启明欣欣 F407ZG V3.1、天空星 F407VE 青春版和梁山派
@@ -44,6 +54,12 @@ GD32F303RC 和 G474RE 软件参考；GD32F303RC 不指定实物 PCB 或 LED。�
 [交付准备](docs/delivery-preparation.md) 区分开发证据和最终软件资格。
 
 ## 开发与构建
+
+完整本地 CI 入口：`python scripts/local_ci.py --help`。单 job 的全矩阵、独立 installed SDK
+验证与工作流步骤映射见[双语本地 CI 指南](docs/local-ci.md)。GitHub Actions 额度不足时，
+保留实际本地报告；不把本地结果标成托管 CI 或实板验证通过。
+The [local CI guide](docs/local-ci.md) replays the complete software workflow with
+one job by default and retains actual evidence without GitHub Actions minutes.
 
 ```sh
 git submodule update --init --recursive
@@ -65,7 +81,7 @@ ARM 构建还需 SDK 固定的 GNU Arm 工具链，可用
 `external/nexus/scripts/ci/install_arm_toolchain.py --install-dir <目录>` 安装。
 Windows 使用 `.venv/Scripts/python.exe` 并将工具路径加入 PATH。
 
-每个配置使用自己的 `build/<preset>`，唯一手写配置输入是 `reproduction/assemblies/*.toml`。
+每个配置使用自己的 `build/<preset>`，主示例配置输入是 `reproduction/assemblies/*.toml`；独立应用和模板各有唯一 `assembly.toml`。
 配置器生成定型实例、只读接口、factory ID、链接脚本和预算。
 `nx_factory_uart(NX_UART_ID_UART0)` 仅返回静态实例，不分配内存或启动硬件；
 SPI 设备使用 `nx_factory_spi_device`，控制器与外部设备身份分开。

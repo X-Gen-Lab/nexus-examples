@@ -1,5 +1,9 @@
 # Maintained reference boards
 
+For product-owned manifests and exact provider checks, follow the
+[external Board guide](external-board.md). 产品自有板包、精确 provider 校验、
+配置差异与 SDK 消费见[外部 Board 指南](external-board.md)。
+
 | Board | Exact MCU | Selected clock source | Example LED | Console |
 | --- | --- | --- | --- | --- |
 | 启明欣欣 V3.1 | STM32F407ZGT6 | 8 MHz | PE3, low active | USART1 PA9/PA10 |
