@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "5a42237ce6efcc0a3f81fcd711225e3b9946fff2",
-  "tree": "25ff0518ca781bf1822b5d6da933197350a5815b",
+  "commit": "890a6026384bdfa7840962f59f6cc1a57a9aeaee",
+  "tree": "aaf41e50f7467627fd54663529f6e70175bf2eb8",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Nexus 0.2.0 platform-delivery completion baseline with provider admission diagnostics, explicit I/O ownership and installed-SDK integrity contracts; physical HIL not executed",
+  "baseline_status": "Nexus 0.2.0 merged-main baseline with locked official CMSIS-Core v6.4.0, separately pinned Device/startup and HAL/LL sources, provider admission diagnostics, explicit I/O ownership and installed-SDK integrity contracts; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

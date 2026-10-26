@@ -19,7 +19,7 @@ DEPENDENCIES = (
     "ext/freertos",
     "ext/threadx",
     "ext/googletest",
-    "vendors/arm/CMSIS_5",
+    "vendors/arm/CMSIS_6",
     "vendors/st/cmsis_device_f1",
     "vendors/st/cmsis_device_f4",
     "vendors/st/cmsis_device_g4",
