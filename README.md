@@ -16,13 +16,13 @@
 Gitlink 和源码锁为准。[0.1.0 集成说明](docs/release-0.1.0.md) 保留原始发布快照及
 证据边界；该历史证据不自动证明当前迭代。MCU 实板 HIL 保持 `not_executed`。
 
-当前锁定平台主分支合并提交 `890a6026384bdfa7840962f59f6cc1a57a9aeaee`。
+当前锁定平台 SoC/IP 目录重构提交 `92e669233957a2e450a528394e8f4dd0794c7049`。
 公共 CMSIS-Core 锁定官方 v6.4.0；Device/startup 与 HAL/LL 仍分别锁定。
 此更新不自动启用 CMSIS-RTOS、CMSIS-Driver、DSP 或 NN，也不扩展芯片或实板支持。
 本轮须使用仓库内本地 CI 入口验收该精确依赖；新项目创建与旧项目 SDK 升级都显式选择
 同一版本，保留各自实际执行记录。历史项目来源记录不因 SDK 升级而改写。
-The pinned platform is the merged main commit above. Shared CMSIS-Core uses
-official v6.4.0; Device/startup and HAL/LL remain separately pinned. This update
+The pinned platform is the SoC/IP layout refactor commit above. Shared CMSIS-Core
+uses official v6.4.0; Device/startup and HAL/LL remain separately pinned. This update
 does not enable CMSIS-RTOS, CMSIS-Driver, DSP or NN, or expand chip/board support.
 Local CI and installed-SDK consumers must validate that exact dependency. An
 explicit SDK upgrade preserves the original project's source and provenance
