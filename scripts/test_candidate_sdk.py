@@ -42,7 +42,11 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         vendor.parent.mkdir(parents=True)
         vendor.write_text('print(\'{"kind":"tooling-import-fixture"}\')\n')
         gitmodules = []
-        for name in repository.DEPENDENCIES:
+        # Model the new source SDK closure independently of its verifier.
+        dependencies = [name for name in repository.DEPENDENCIES
+                        if not name.startswith("vendors/arm/")]
+        dependencies.append("vendors/arm/CMSIS_6")
+        for name in dependencies:
             dependency = self.source / name
             dependency.mkdir(parents=True)
             git(dependency, "init", "--quiet")
@@ -88,6 +92,8 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         self.assertEqual(report["nexus_tree"], git(self.source, "rev-parse", "HEAD^{tree}"))
         self.assertFalse(report["source_revision_matches_lock"])
         self.assertEqual(len(report["submodules"]), len(repository.DEPENDENCIES))
+        self.assertIn("vendors/arm/CMSIS_6",
+                      {entry["path"] for entry in report["submodules"]})
         self.assertEqual(lock_before, (self.root / "dependencies/nexus.lock.json").read_bytes())
         self.assertEqual(gitlink_before, git(self.root, "ls-files", "--stage", "--", "external/nexus"))
         self.assertFalse(report["hardware_verified"])
@@ -112,6 +118,11 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         dependency.write_text("identity only\n")
         git(self.source, "remote", "set-url", "origin", "https://example.invalid/other.git")
         with self.assertRaisesRegex(ValueError, "origin does not match"):
+            repository.verify(self.source, False, self.candidate)
+
+    def test_candidate_rejects_missing_central_cmsis_core(self):
+        shutil.rmtree(self.source / "vendors/arm/CMSIS_6")
+        with self.assertRaisesRegex(ValueError, "uncommitted changes"):
             repository.verify(self.source, False, self.candidate)
 
     def test_candidate_rejects_branch_short_sha_or_argument_text(self):
