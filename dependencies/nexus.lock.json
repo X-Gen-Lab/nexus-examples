@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "92e669233957a2e450a528394e8f4dd0794c7049",
-  "tree": "6e38d4c43d59330a0a9a9b7cac21f591d9c2719f",
+  "commit": "fc01d863c3374643c276195ae19a24e6f8b8c8ee",
+  "tree": "e6f3d6310fd46265be49d47ef3fd7a4d944a8386",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Nexus 0.2.0 SoC/IP layout refactor with locked official CMSIS-Core v6.4.0, separately pinned Device/startup and HAL/LL sources, provider admission diagnostics, explicit I/O ownership and installed-SDK integrity contracts; physical HIL not executed",
+  "baseline_status": "Nexus 0.2.0 typed configuration IR epoch 2 with JSON projection schema 1, explicit static construction calls and selected C cold lifecycle implementations; source factory interface epoch 1 and authored TOML schema 2; software execution requires evidence for this exact pin; physical HIL not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

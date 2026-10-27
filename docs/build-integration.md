@@ -21,6 +21,23 @@ authored TOML schema `2` remain separate contracts. See [release
 integration](release-0.1.0.md) for the original published snapshot and its evidence
 boundaries.
 
+The selected platform uses typed configuration IR epoch `2` and resolved JSON
+projection schema `1`. Its Python resolver returns immutable typed objects;
+these examples consume the TOML CLI and generated public C interfaces. The
+starter manifest therefore retains interface epoch `1` and assembly schema `2`,
+with the existing template file hashes. Selected provider cold initialization
+and cleanup now execute in C through static direct calls. Factory lookup remains
+free of hardware effects, and failed cleanup retains its recovery responsibility.
+The source pin records implementation identity; complete local software execution
+requires fresh evidence for this pin, and physical HIL remains `not_executed`.
+
+当前平台采用类型化配置 IR 版本 `2`，对外生成的 resolved JSON 投影仍为版本 `1`。
+Python resolver 返回不可变的类型化对象；本示例通过 TOML 命令行入口和生成的公共
+C 接口接入。因此，starter manifest 保持接口版本 `1`、装配版本 `2` 和现有模板
+文件哈希。选定 provider 的冷态初始化与清理已通过静态直接调用交由 C 实现；
+factory 查找不产生硬件效果，清理失败仍保留恢复责任。源码 pin 记录实现身份，
+完整本地软件验证需要对应此 pin 的新执行证据；实板 HIL 保持 `not_executed`。
+
 The maintained matrix has one Native configuration and eight exact software
 reference configurations with two backends each: seventeen presets in total.
 H743 and U575 software references use `stm32-h743-nucleo-*` and
