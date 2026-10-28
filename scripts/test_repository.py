@@ -167,6 +167,12 @@ def verify(source, override, candidate_revision=None):
     missing = set(DEPENDENCIES) - {entry["path"] for entry in modules}
     if missing:
         raise ValueError("Required pinned submodules are missing: " + ", ".join(sorted(missing)))
+    preparation = checked_output([
+        sys.executable, "-B", str(source / "tools/dev/dependencies.py"),
+        "prepare", "--root", str(source), "--scope", "native",
+    ], ROOT).strip()
+    if preparation != "verified":
+        raise ValueError("SDK dependency preparation did not verify")
     vendor = checked_output([
         sys.executable, str(source / "scripts/ci/verify_vendor_source.py"),
         "--root", str(source / "vendors/gigadevice/gd32f4xx"),
@@ -187,6 +193,9 @@ def verify(source, override, candidate_revision=None):
         "example_gitlink_verified": True,
         "reference_presets": presets,
         "submodules": modules,
+        "dependency_preparation": {"scope": "native",
+                                   "network_authorized": False,
+                                   "status": preparation},
         "reviewed_vendor_import": json.loads(vendor),
         "hardware_verified": False,
     }

@@ -16,17 +16,31 @@
 Gitlink 和源码锁为准。[0.1.0 集成说明](docs/release-0.1.0.md) 保留原始发布快照及
 证据边界；该历史证据不自动证明当前迭代。MCU 实板 HIL 保持 `not_executed`。
 
-当前锁定平台 SoC/IP 目录重构提交 `92e669233957a2e450a528394e8f4dd0794c7049`。
-公共 CMSIS-Core 锁定官方 v6.4.0；Device/startup 与 HAL/LL 仍分别锁定。
-此更新不自动启用 CMSIS-RTOS、CMSIS-Driver、DSP 或 NN，也不扩展芯片或实板支持。
-本轮须使用仓库内本地 CI 入口验收该精确依赖；新项目创建与旧项目 SDK 升级都显式选择
-同一版本，保留各自实际执行记录。历史项目来源记录不因 SDK 升级而改写。
-The pinned platform is the SoC/IP layout refactor commit above. Shared CMSIS-Core
-uses official v6.4.0; Device/startup and HAL/LL remain separately pinned. This update
-does not enable CMSIS-RTOS, CMSIS-Driver, DSP or NN, or expand chip/board support.
-Local CI and installed-SDK consumers must validate that exact dependency. An
-explicit SDK upgrade preserves the original project's source and provenance
-instead of rewriting historical results.
+当前平台版本由上述源码锁和 Gitlink 唯一选择。外部 Git 依赖通过 X-Gen-Lab
+托管的 forks 获取，官方 upstream 地址继续记录来源与升级线索。每个依赖仍固定到
+精确提交；FreeRTOS 的组织提交只调整两个嵌套子模块地址，保留内核代码与子模块
+版本。公共 CMSIS-Core 保持官方 v6.4.0，Device/startup 与 HAL/LL 分别锁定。
+此迁移不启用额外 CMSIS 组件，也不扩大芯片或实板支持。
+
+The source lock and Gitlink select one exact platform revision. External Git
+sources are fetched from X-Gen-Lab forks; official upstream identities remain
+available for provenance and upgrade review. Every dependency stays pinned.
+The FreeRTOS integration changes only two nested fetch URLs, preserving kernel
+code and nested source revisions. CMSIS-Core remains official v6.4.0, with
+separate Device/startup and HAL/LL locks. This migration does not enable extra
+CMSIS components or extend chip or physical-board qualification.
+
+本地 CI 和 installed SDK 消费者必须验证新的精确 pin。项目来源与历史验收记录保持
+原始身份。GoogleTest／GoogleMock 仅用于宿主测试；固件 Source SDK 排除该依赖。
+SDK 内部清单校验用于检查内容一致性，消费前还须确认组织批准的归档哈希或发行身份；
+没有 Git 历史的 SDK 不重新证明 FreeRTOS 提交的父链与完整树差异。
+
+Local CI and installed-SDK consumers validate the new exact pin. Project origins
+and historical evidence keep their original identities. GoogleTest/GoogleMock
+remain host-only and are excluded from the firmware Source SDK. Verify an
+approved archive hash or release identity before executing SDK tools; the
+internal manifest checks consistency. An SDK without Git history does not
+re-prove the FreeRTOS commit's parent relationship or full tree diff.
 
 ## 应用与最小工程
 
@@ -67,7 +81,9 @@ The [local CI guide](docs/local-ci.md) replays the complete software workflow wi
 one job by default and retains actual evidence without GitHub Actions minutes.
 
 ```sh
-git submodule update --init --recursive
+git submodule sync -- external/nexus
+git submodule update --init -- external/nexus
+python3 external/nexus/tools/dev/dev.py prepare --scope native --allow-network
 python3 scripts/setup_dev_tools.py
 .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
 . .venv/bin/activate

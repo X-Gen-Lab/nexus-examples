@@ -38,6 +38,35 @@ C 接口接入。因此，starter manifest 保持接口版本 `1`、装配版本
 factory 查找不产生硬件效果，清理失败仍保留恢复责任。源码 pin 记录实现身份，
 完整本地软件验证需要对应此 pin 的新执行证据；实板 HIL 保持 `not_executed`。
 
+External Git dependencies use the exact fetch locations reviewed by the pinned
+platform catalogue. X-Gen-Lab forks own transport; official upstream addresses
+remain provenance and upgrade sources. Gitlinks select revisions, and vendor
+source locks retain official pairing and file identities. FreeRTOS carries a
+reviewed metadata-only commit changing its two nested URLs; its kernel code and
+nested Gitlinks are unchanged. Builds and verification do not fetch dependencies.
+
+外部 Git 依赖的获取地址由固定版本的平台 catalogue 审核。X-Gen-Lab forks 负责
+托管，官方 upstream 地址保留为来源与升级依据。Gitlink 选择版本，厂商源码锁继续
+保留官方配对与文件身份。FreeRTOS 的审核提交只修改两个嵌套地址，内核代码和
+嵌套 Gitlink 保持不变。构建和验证过程不自动获取依赖。
+
+The example source verifier invokes the SDK's offline `prepare --scope native`
+contract. A rejected or unverified result fails ordinary hooks and local CI;
+this repository does not copy the platform URL catalogue. A source checkout
+includes the host test framework. The firmware Source SDK contains thirteen
+runtime top-level dependencies and their two required recursive children, and
+excludes GoogleTest/GoogleMock. Before running installed SDK Python or CMake,
+verify its externally approved archive hash or release identity. Exported
+FreeRTOS review materials bind the selected commit and exact URL transformation;
+without Git objects they do not independently establish the parent/tree proof.
+
+示例源码检查复用 SDK 的离线 `prepare --scope native` 合同。拒绝或未验证结果会使
+普通提交门禁和本地 CI 失败；示例库不复制平台的 URL catalogue。源码检出包含
+宿主测试框架；固件 Source SDK 只包含十三个运行时顶层依赖及其两个必需嵌套依赖，
+排除 GoogleTest／GoogleMock。执行安装 SDK 的 Python 或 CMake 前，先核对外部
+批准的归档哈希或发行身份。导出的 FreeRTOS 审查材料绑定选定提交与准确的 URL
+变换；没有 Git 对象时，不独立重建父提交和完整树差异的证明。
+
 The maintained matrix has one Native configuration and eight exact software
 reference configurations with two backends each: seventeen presets in total.
 H743 and U575 software references use `stm32-h743-nucleo-*` and
@@ -49,9 +78,10 @@ exposing vendor types or deriving hardware indices in application code.
 `reproduction/assemblies/*.toml` selects one Board package, clock profile, OS backend,
 controllers, endpoints, IRQ policy and memory budget. Unsupported routes,
 conflicting resources, contradictory configuration and malformed inputs fail
-configuration. The emitted `nexus/generated/resolved.json` is the only effective
-configuration. `bindings.c` exports static readonly faces and pure typed factory
-getters. Every selected instance has its own mutable context and shares its
+configuration. The resolver's immutable typed IR owns the validated decisions;
+`nexus/generated/resolved.json` is its one-way audit projection, not a second
+configuration input. `bindings.c` exports static readonly faces and pure typed
+factory getters. Every selected instance has its own mutable context and shares its
 provider's readonly operation table.
 
 An application includes generated `nexus_bindings.h`, `nexus_factory.h` and
@@ -116,7 +146,7 @@ verifies the formal commit/tree, example Gitlink, clean dependencies and GD32
 import. Explicit candidate validation requires a full SHA and matching origin;
 it does not rewrite or promote the formal lock. Dirty joint-development builds
 require temporary external Board paths and cannot serve as release evidence.
-The dependency identity requires fourteen maintained top-level SDK submodules
+The source-checkout identity requires fourteen maintained top-level submodules
 and their recursive children, including both reviewed H7 and U5 device closures
 and the selected official STM32F4 HAL/LL package. Vendor types remain private to
 the SDK provider; applications continue to use the same public typed faces.

@@ -5,11 +5,13 @@ The temporary SDK/import helper is a tooling fixture, not an official SDK build.
 import argparse
 import importlib.util
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
 HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("repository_identity", HERE / "test_repository.py")
@@ -41,6 +43,18 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         vendor = self.source / "scripts/ci/verify_vendor_source.py"
         vendor.parent.mkdir(parents=True)
         vendor.write_text('print(\'{"kind":"tooling-import-fixture"}\')\n')
+        admission = self.source / "tools/dev/dependencies.py"
+        admission.parent.mkdir(parents=True)
+        admission.write_text(
+            'import os, sys\nfrom pathlib import Path\n'
+            'expected = ["prepare", "--root", '
+            'str(Path(__file__).resolve().parents[2]), "--scope", "native"]\n'
+            'if sys.argv[1:] != expected:\n'
+            '    sys.exit("fixture requires exact offline admission")\n'
+            'mode = os.environ.get("NEXUS_FIXTURE_DEPENDENCY_ADMISSION", "verified")\n'
+            'if mode == "rejected":\n'
+            '    sys.exit("fixture dependency admission rejected")\n'
+            'print(mode)\n')
         gitmodules = []
         # Model the new source SDK closure independently of its verifier.
         dependencies = [name for name in repository.DEPENDENCIES
@@ -57,7 +71,7 @@ class CandidateSDKIdentityTests(unittest.TestCase):
             git(self.source, "update-index", "--add", "--cacheinfo", f"160000,{revision},{name}")
             gitmodules.append(f'[submodule "{name}"]\n\tpath = {name}\n\turl = https://example.invalid/{name}.git\n')
         (self.source / ".gitmodules").write_text("".join(gitmodules))
-        git(self.source, "add", "CMakeLists.txt", ".gitmodules", "scripts")
+        git(self.source, "add", "CMakeLists.txt", ".gitmodules", "scripts", "tools")
         git(self.source, "commit", "--quiet", "-m", "formal SDK fixture")
         git(self.source, "submodule", "init")
         self.pinned = git(self.source, "rev-parse", "HEAD")
@@ -105,6 +119,19 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         report = repository.verify(self.source, False)
         self.assertFalse(report["candidate_validation"])
         self.assertTrue(report["source_revision_matches_lock"])
+
+    def test_success_requires_the_sdk_offline_dependency_contract(self):
+        report = repository.verify(self.source, False, self.candidate)
+        self.assertEqual(report["dependency_preparation"], {
+            "scope": "native", "network_authorized": False,
+            "status": "verified"})
+
+    def test_dependency_rejection_or_unverified_result_cannot_be_ignored(self):
+        for mode in ("rejected", "not_assessed"):
+            with self.subTest(mode=mode), patch.dict(os.environ, {
+                    "NEXUS_FIXTURE_DEPENDENCY_ADMISSION": mode}):
+                with self.assertRaisesRegex(ValueError, "dependency"):
+                    repository.verify(self.source, False, self.candidate)
 
     def test_candidate_cannot_accept_a_different_checked_out_commit(self):
         with self.assertRaisesRegex(ValueError, "revision mismatch"):
