@@ -23,7 +23,9 @@ checkout is supported with exactly the same lock, clean tree and Gitlink checks.
 编译器实际版本保存在日志。平台依赖必须完整，显式源码路径不放宽正式身份验证。
 
 ```sh
-git submodule update --init --recursive
+git submodule sync -- external/nexus
+git submodule update --init -- external/nexus
+python3 external/nexus/tools/dev/dev.py prepare --scope native --allow-network
 python3 scripts/setup_dev_tools.py
 .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
 . .venv/bin/activate
@@ -35,6 +37,18 @@ python scripts/local_ci.py --parallel 1 \
   --toolchain-cache "$PWD/.tools/arm-archives" \
   --output "$PWD/build/local-ci-001"
 ```
+
+Update the outer Nexus checkout before preparing its recursive dependencies.
+The explicit network-enabled preparation checks existing work and origins before
+synchronizing reviewed fetch locations; it preserves unknown local changes.
+Ordinary hooks and local CI reuse the same preparation contract offline. They
+reject missing objects, wrong origins or unverified results without fetching
+from an upstream fallback or moving selected Gitlinks.
+
+先更新外层 Nexus 检出，再准备其递归依赖。显式允许联网的准备命令会先检查
+现有工作区和来源，再同步审核过的获取地址；不会覆盖未知本地修改。普通提交门禁
+和本地 CI 离线复用同一合同，缺少对象、来源错误或未验证结果均失败，不自动回退
+官方地址，也不移动选定 Gitlink。
 
 The explicit `--arm-toolchain` invokes the SDK's SHA-256 locked GNU installer.
 It may download its reviewed archive. Every reuse verifies the archive and the
