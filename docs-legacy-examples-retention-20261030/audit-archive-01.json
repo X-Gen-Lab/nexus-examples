@@ -1,0 +1,329 @@
+{
+  "kind": "private_legacy_archive_contents",
+  "classification": "private/internal; do not publish",
+  "archive": {
+    "path": "/workspace/nexus/build/c-cold-20261028/p6-external-retention/worktree/docs-release-0.1.0-58297516d707-qualification/examples-main-ci-evidence.tar.gz",
+    "sha256": "3a6e286f3ccfd2dbbfb18ecf63871ebf3d71ae046db7b06f64925ef2f6156d3e",
+    "bytes": 2163380
+  },
+  "maintained_archive_verification": {
+    "members": 51,
+    "files": 51,
+    "bytes": 3504395,
+    "member_inventory_sha256": "b4ab063a65223611f7cd28552a935c3ef61a81d746cceb54043271943be68201"
+  },
+  "entries": [
+    {
+      "path": "examples-main-ci/actual-main-git-commit.json",
+      "size": 2765,
+      "kind": "file",
+      "sha256": "616d531bb3f46e5fa776eb50c5a247d3fecc2e20d28b09f408b8bfd3e090d264"
+    },
+    {
+      "path": "examples-main-ci/artifact-verification-command.json",
+      "size": 680,
+      "kind": "file",
+      "sha256": "80d06d9131aca14cdc1aae810a2be41528c6e7c2c96abe8603b156943bbf4cc3"
+    },
+    {
+      "path": "examples-main-ci/checkout-identity.json",
+      "size": 1252,
+      "kind": "file",
+      "sha256": "7d94058ed69d8968516b8ca9e3e79cf079bb2f3ef071961f00e5004f9b2f80da"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/artifact-registry.json",
+      "size": 9222,
+      "kind": "file",
+      "sha256": "9e70301e21b807a4de954d29d33d7dcdb1fb21cf4e5669841439ecaa616fa94d"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-gd32-liangshan-baremetal-pinned.zip",
+      "size": 100674,
+      "kind": "file",
+      "sha256": "19c43de71e652fa2d98f692e3685a657f4c6067a877dcd09019361e176270a7e"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-gd32-liangshan-freertos-pinned.zip",
+      "size": 134542,
+      "kind": "file",
+      "sha256": "465bfbf58de7c48d5e602b4b26f377dc815cd095b313d7febe7577dbbbec2195"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-native-debug-pinned.zip",
+      "size": 964013,
+      "kind": "file",
+      "sha256": "dd393f10c8ab89dbe6dc17b4ea8f2e1fcb6d6b87e8ddc31a0ccda1ff132fa0f6"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-stm32-h743-nucleo-baremetal-pinned.zip",
+      "size": 89794,
+      "kind": "file",
+      "sha256": "9d5b2cf6107158bdc53f2199e07c2ad0d81e5d92fc7e486e4ca43221ac200ccf"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-stm32-h743-nucleo-freertos-pinned.zip",
+      "size": 122099,
+      "kind": "file",
+      "sha256": "5aa849a130b99780de9d5719d55987bcb68bfc040a8982541ce8f26aba6e4cb0"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-stm32-qiming-baremetal-pinned.zip",
+      "size": 85965,
+      "kind": "file",
+      "sha256": "44198df410254ce89df839a4cccefc9cb6a9da3fb7e55144feffd17698378ede"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-stm32-qiming-freertos-pinned.zip",
+      "size": 120227,
+      "kind": "file",
+      "sha256": "f1911529c96f8cc68fab5d615d9a9079a493671da166ab8aa482c41bfb485769"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-stm32-sky-baremetal-pinned.zip",
+      "size": 85790,
+      "kind": "file",
+      "sha256": "1a92db88726e278273ffc407dac635713fdd2d6dd98a41c2713c9b6e5149d05e"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-stm32-sky-freertos-pinned.zip",
+      "size": 120061,
+      "kind": "file",
+      "sha256": "0a548f4185680b92501e36ff7cdcd1215ecd30414feb3b26c4262a97d956aa07"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-stm32-u575-nucleo-baremetal-pinned.zip",
+      "size": 86878,
+      "kind": "file",
+      "sha256": "8859755307383cdc825ad917aacc91ddb444ae5929269ffb02a04a9f39a903f8"
+    },
+    {
+      "path": "examples-main-ci/ci-artifacts/examples-stm32-u575-nucleo-freertos-pinned.zip",
+      "size": 120132,
+      "kind": "file",
+      "sha256": "935157a77008c9730f130629e174fea59c095f5fb5ab8b76dcd78363743b21c0"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T045931Z-selected-main-jobs.json",
+      "size": 2629,
+      "kind": "file",
+      "sha256": "cb5a9f3a21d971221068a17391d94c8464b01a022a110c4b6575fe8474e6acff"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T045931Z-selected-main-run.json",
+      "size": 12604,
+      "kind": "file",
+      "sha256": "61de921f3c1bff0118e3baf6c13a69db9bdef9ea1771fc840f24e2b7ebc1e7cc"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050016Z-selected-main-jobs.json",
+      "size": 3046,
+      "kind": "file",
+      "sha256": "ea279cc63ba33f833125b0415febee9c8adf597272060dc6d9e67345b4927272"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050016Z-selected-main-run.json",
+      "size": 12604,
+      "kind": "file",
+      "sha256": "61de921f3c1bff0118e3baf6c13a69db9bdef9ea1771fc840f24e2b7ebc1e7cc"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050102Z-selected-main-jobs.json",
+      "size": 3089,
+      "kind": "file",
+      "sha256": "145efca9b2f73ff6db29711b10cfea1b74fb1f5780ded58845d35d080d5560c2"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050102Z-selected-main-run.json",
+      "size": 12604,
+      "kind": "file",
+      "sha256": "61de921f3c1bff0118e3baf6c13a69db9bdef9ea1771fc840f24e2b7ebc1e7cc"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050147Z-selected-main-jobs.json",
+      "size": 32318,
+      "kind": "file",
+      "sha256": "b2a4b43a6535374b6974128bc613c3d397d74d64b1d838f28c32b5442ed1963d"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050147Z-selected-main-run.json",
+      "size": 12604,
+      "kind": "file",
+      "sha256": "209ed68c3a98bc7d0222cfa1819c15c634113fbd605e0dbb1440b293e45754d4"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050233Z-selected-main-jobs.json",
+      "size": 35426,
+      "kind": "file",
+      "sha256": "2712e475ec84d09e110c7e51c47833dcf4ef980bdf4e6587a180b04a3c63524f"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050233Z-selected-main-run.json",
+      "size": 12604,
+      "kind": "file",
+      "sha256": "209ed68c3a98bc7d0222cfa1819c15c634113fbd605e0dbb1440b293e45754d4"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050318Z-selected-main-jobs.json",
+      "size": 40531,
+      "kind": "file",
+      "sha256": "d44ea198dcfaf880d809fcec2ab361dd2f6ed338e38c1ab0949707a86024570e"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050318Z-selected-main-run.json",
+      "size": 12604,
+      "kind": "file",
+      "sha256": "209ed68c3a98bc7d0222cfa1819c15c634113fbd605e0dbb1440b293e45754d4"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050404Z-selected-main-jobs.json",
+      "size": 41028,
+      "kind": "file",
+      "sha256": "eabd2f33e638b16c7c59a813a9f44bfa8420f1280fd0f6983257340c06ddd72b"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050404Z-selected-main-run.json",
+      "size": 12607,
+      "kind": "file",
+      "sha256": "11ce04cd953b5b2dd091f797b35cf48a3899e85e6b86c5fa636e87b72b9c2fbc"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050442Z-admission-jobs.json",
+      "size": 41028,
+      "kind": "file",
+      "sha256": "eabd2f33e638b16c7c59a813a9f44bfa8420f1280fd0f6983257340c06ddd72b"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050442Z-admission-main.json",
+      "size": 346,
+      "kind": "file",
+      "sha256": "7919bfd91b120089dfd8892504b25809b36b9da480f0f5fbce465c9d140a37c2"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/20261015T050442Z-admission-run.json",
+      "size": 12607,
+      "kind": "file",
+      "sha256": "11ce04cd953b5b2dd091f797b35cf48a3899e85e6b86c5fa636e87b72b9c2fbc"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-116256247791.log",
+      "size": 95410,
+      "kind": "file",
+      "sha256": "2777c900b0ebeb449f12b9af0137879eb2e9c3f65ac298be05676892e30ab42c"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-116256247808.log",
+      "size": 96037,
+      "kind": "file",
+      "sha256": "33c2ecd09ab99e9578ef2021a433ce1434eeea8ba7f2f789ed20b92e892cb553"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-116256247809.log",
+      "size": 95925,
+      "kind": "file",
+      "sha256": "29ba0b0c3b8559753d70243dc14654881027cb1620d0a48db2e90dfdfca5f4ad"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-116256247817.log",
+      "size": 97738,
+      "kind": "file",
+      "sha256": "0a8d148e60b5f3a7c551712a711126591086e562ad1ced62c0b978bdebfd6a66"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-116256247840.log",
+      "size": 96397,
+      "kind": "file",
+      "sha256": "bf4233406094dd31b01f78439de2dcc20d10ac6ed859dd7f4f71f5229e6f6611"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-116256247850.log",
+      "size": 94402,
+      "kind": "file",
+      "sha256": "5760c2bfc1cdb502d8d5e429492424031e7836bda32def4cc160e3b0110ddcd7"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-116256247854.log",
+      "size": 95887,
+      "kind": "file",
+      "sha256": "4060269f74b94733729c67770dcf01baf4eda84b51b1925aba4a80d478ed6008"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-116256247886.log",
+      "size": 94722,
+      "kind": "file",
+      "sha256": "b3ad75ddbce4a80c6d709d36f9bfddd14a7e632200567242c0e68d54e1e74c32"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-116256247903.log",
+      "size": 94522,
+      "kind": "file",
+      "sha256": "3c379ab39d8deaccb15ae887b0263d68047501bde41e5797e378009a7345e7b0"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-116256247956.log",
+      "size": 96730,
+      "kind": "file",
+      "sha256": "ffa9aa67292c86da1f556fa081d966b17b63e79cb5cde9160c7081259d69ec26"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/arm-job-log-retrieval.json",
+      "size": 1857,
+      "kind": "file",
+      "sha256": "e24a8e74050bf7531bfb5cd154159bc8f96f133bb9bc36e90aea9271ad78f310"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/native-job-116255575276.log",
+      "size": 115889,
+      "kind": "file",
+      "sha256": "d7f4a75977baaceacfe4aa5105bdc3c7982405ec866fe0ee6521ea0b3b59819f"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/native-job-log-retrieval.json",
+      "size": 259,
+      "kind": "file",
+      "sha256": "833f33160e50dd5b9d3443d9aff23cdd2d3d71c6e3417c22e95eed566340db95"
+    },
+    {
+      "path": "examples-main-ci/ci-observations/selected-main-completion.json",
+      "size": 2146,
+      "kind": "file",
+      "sha256": "451a7500f83e9aae15e7922f5ec7dbfebd52b671c9bf275c156e736a7117cd2a"
+    },
+    {
+      "path": "examples-main-ci/main-ci-artifact-verification.json",
+      "size": 64955,
+      "kind": "file",
+      "sha256": "f2e69ee73e0dec80df57d6edcf54fb2243d781ba35eda13922433068136c22ea"
+    },
+    {
+      "path": "examples-main-ci/main-qualification-admission.json",
+      "size": 5241,
+      "kind": "file",
+      "sha256": "1abb79ab6dce4bf5f699512bddc798effea495bdb522f651a8129bdaed363a51"
+    },
+    {
+      "path": "examples-main-ci/monitor_main_ci.py",
+      "size": 2786,
+      "kind": "file",
+      "sha256": "fd1f4a2a6e9105b9671c09bbaae7676bfc6f3234ee34910e6ece3a13df61c7c0"
+    },
+    {
+      "path": "examples-main-ci/original-checkout-preservation.json",
+      "size": 1645,
+      "kind": "file",
+      "sha256": "7ad5f06205eb6e502b99691e052d1ed22807cd37a43df91202a7543c6025d11a"
+    },
+    {
+      "path": "examples-main-ci/verify_ci_artifacts.py",
+      "size": 7474,
+      "kind": "file",
+      "sha256": "5a2e34e1845acc59f5d561c2d43046d986e2904682809fd6a5d45fbe77457940"
+    }
+  ],
+  "tracked_private_repository_byte_matches": [],
+  "limitations": [
+    "Byte matches identify tracked repository files, not proprietary status.",
+    "Absence of a match does not prove absence of private content.",
+    "Compiled code, embedded strings and credentials are not classified by this inventory."
+  ]
+}

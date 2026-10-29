@@ -1,0 +1,401 @@
+{
+  "kind": "private_internal_legacy_example_routing_inventory",
+  "classification": "private/internal build metadata; do not publish to public repository",
+  "created_utc": "2026-10-29T13:43:23.902563+00:00",
+  "current_visibility_fact": "Root freshly observed X-Gen-Lab/nexus-examples visibility=private; this task did not repeat a visibility lookup.",
+  "current_E6_routing": "Root blocked four E6 packages from the current public batch; private owner handles authenticated private-repository publication.",
+  "notice_zh": "历史公开归档尚未撤回，不代表私有代码已全面隔离；没有执行历史改写。",
+  "original_snapshot": {
+    "repository": "X-Gen-Lab/nexus",
+    "fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+    "members": 175,
+    "current_registry_equals_fixed_snapshot_JSON": true,
+    "registry_path": "/dev/shm/nexus-assets-final/assets.json",
+    "registry_sha256": "5d5493a2d7fc6917727a295c1c1cff648410f50edd4576846127737623490c44",
+    "documentation_commit_header_is_not_newer_payload_identity": "3835e13cd7da34bd75307746859d4514745ae2ff"
+  },
+  "metadata_inputs": [
+    {
+      "path": "/dev/shm/nexus-assets-final/docs-platform-delivery-20261029-g5d60b56e/delivery-index.json",
+      "sha256": "44c5011142a45593cf34a79ec554483fabecd62d5bc59068f4d39c0406adfb38",
+      "bytes": 6036,
+      "read_scope": "small original JSON metadata only"
+    },
+    {
+      "path": "/dev/shm/nexus-assets-final/docs-platform-delivery-20261029-gd742cdb5/delivery-index.json",
+      "sha256": "3ce7ecfd8a7448b6420b46e2616318b1993d9af7f3a08135a523450f38104e4c",
+      "bytes": 10798,
+      "read_scope": "small original JSON metadata only"
+    }
+  ],
+  "name_filter": "case-insensitive example|onboard in original registry member path",
+  "matched_member_count": 17,
+  "classification_counts": {
+    "metadata": 10,
+    "archive": 3,
+    "part": 4
+  },
+  "matched_bytes": 136776245,
+  "members": [
+    {
+      "path": "docs-release-0.1.0-58297516d707-postintegration/examples-local-validation-manifest.json",
+      "bytes": 44238,
+      "sha256": "a6858f504ebcad57ae244a1923d08abb9610334bf53029a2f5600153b45c41c1",
+      "classification": "metadata",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-release-0.1.0-58297516d707-postintegration/examples-local-validation-manifest.json",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_package_role": "legacy examples validation/CI metadata or archive, classified from member name only",
+      "declared_platform_commit": null,
+      "declared_examples_commit": null,
+      "source_declaration": "outside requested P4/P5 delivery-index namespaces; exact source commit not inferred from shortened path"
+    },
+    {
+      "path": "docs-release-0.1.0-58297516d707-postintegration/examples-local-validation-receipt.json",
+      "bytes": 3712,
+      "sha256": "cccd3e28c0fac78355878b0207dfd2b23b87bab76f92f75121aa8f9c1eaa6ffc",
+      "classification": "metadata",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-release-0.1.0-58297516d707-postintegration/examples-local-validation-receipt.json",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_package_role": "legacy examples validation/CI metadata or archive, classified from member name only",
+      "declared_platform_commit": null,
+      "declared_examples_commit": null,
+      "source_declaration": "outside requested P4/P5 delivery-index namespaces; exact source commit not inferred from shortened path"
+    },
+    {
+      "path": "docs-release-0.1.0-58297516d707-postintegration/examples-local-validation.tar.gz",
+      "bytes": 18242646,
+      "sha256": "dcc4e906020a7b240e221795d65dcd925f576f049594d7042e1338b2252b904e",
+      "classification": "archive",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-release-0.1.0-58297516d707-postintegration/examples-local-validation.tar.gz",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_package_role": "legacy examples validation/CI metadata or archive, classified from member name only",
+      "declared_platform_commit": null,
+      "declared_examples_commit": null,
+      "source_declaration": "outside requested P4/P5 delivery-index namespaces; exact source commit not inferred from shortened path"
+    },
+    {
+      "path": "docs-release-0.1.0-58297516d707-qualification/examples-delivery-final.json",
+      "bytes": 8674,
+      "sha256": "37daa9d328ef6d386eff5b61ad58dfe4f4c10fc8d4879be4309c0490a5f68ebb",
+      "classification": "metadata",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-release-0.1.0-58297516d707-qualification/examples-delivery-final.json",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_package_role": "legacy examples validation/CI metadata or archive, classified from member name only",
+      "declared_platform_commit": null,
+      "declared_examples_commit": null,
+      "source_declaration": "outside requested P4/P5 delivery-index namespaces; exact source commit not inferred from shortened path"
+    },
+    {
+      "path": "docs-release-0.1.0-58297516d707-qualification/examples-main-ci-evidence-manifest.json",
+      "bytes": 11132,
+      "sha256": "d530b9ce8484428f88dc7d1e13293913d979dec161afebed85992080f82b707a",
+      "classification": "metadata",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-release-0.1.0-58297516d707-qualification/examples-main-ci-evidence-manifest.json",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_package_role": "legacy examples validation/CI metadata or archive, classified from member name only",
+      "declared_platform_commit": null,
+      "declared_examples_commit": null,
+      "source_declaration": "outside requested P4/P5 delivery-index namespaces; exact source commit not inferred from shortened path"
+    },
+    {
+      "path": "docs-release-0.1.0-58297516d707-qualification/examples-main-ci-evidence.tar.gz",
+      "bytes": 2163380,
+      "sha256": "3a6e286f3ccfd2dbbfb18ecf63871ebf3d71ae046db7b06f64925ef2f6156d3e",
+      "classification": "archive",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-release-0.1.0-58297516d707-qualification/examples-main-ci-evidence.tar.gz",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_package_role": "legacy examples validation/CI metadata or archive, classified from member name only",
+      "declared_platform_commit": null,
+      "declared_examples_commit": null,
+      "source_declaration": "outside requested P4/P5 delivery-index namespaces; exact source commit not inferred from shortened path"
+    },
+    {
+      "path": "docs-release-0.1.0-58297516d707-qualification/examples-pr3-ci-evidence-manifest.json",
+      "bytes": 11288,
+      "sha256": "b31a1500f6e135682ce7bdee668b9cdcd62bdea209ae03a649e0e23420f2a786",
+      "classification": "metadata",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-release-0.1.0-58297516d707-qualification/examples-pr3-ci-evidence-manifest.json",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_package_role": "legacy examples validation/CI metadata or archive, classified from member name only",
+      "declared_platform_commit": null,
+      "declared_examples_commit": null,
+      "source_declaration": "outside requested P4/P5 delivery-index namespaces; exact source commit not inferred from shortened path"
+    },
+    {
+      "path": "docs-release-0.1.0-58297516d707-qualification/examples-pr3-ci-evidence.tar.gz",
+      "bytes": 2172960,
+      "sha256": "370afb8a8766101623201506a064e0ad792d38123c1b9b6c8d46bc521f5494e3",
+      "classification": "archive",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-release-0.1.0-58297516d707-qualification/examples-pr3-ci-evidence.tar.gz",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_package_role": "legacy examples validation/CI metadata or archive, classified from member name only",
+      "declared_platform_commit": null,
+      "declared_examples_commit": null,
+      "source_declaration": "outside requested P4/P5 delivery-index namespaces; exact source commit not inferred from shortened path"
+    },
+    {
+      "path": "docs-platform-delivery-20261029-g5d60b56e/examples-build-package.json",
+      "bytes": 513,
+      "sha256": "ae1ef1d17e68ec0cb64f428cfdf653829115195c204b089e63c494b5a69c5c84",
+      "classification": "metadata",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-platform-delivery-20261029-g5d60b56e/examples-build-package.json",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_platform_commit": "5d60b56e09686776c72ce95dfa9384357e57d2bf",
+      "declared_examples_commit": "9d7d4d3430b8555766aba5bc7c76d5b49f8fd67d",
+      "source_declaration": "docs-platform-delivery-20261029-g5d60b56e/delivery-index.json",
+      "original_storage_parent": "e7d32687a598db753747f4905cb03afec3163b1d",
+      "declared_package_role": "complete_examples_scope_all_and_actual_execution",
+      "parent_archive": {
+        "path": "examples-build.tar.gz",
+        "bytes": 60108472,
+        "sha256": "d0bce642ecbdf56b7930c2a15adaa9e0ac8ec95cbd7e61367f9aedc31a137606"
+      },
+      "original_envelope_name": "examples-build-package.json"
+    },
+    {
+      "path": "docs-platform-delivery-20261029-g5d60b56e/examples-build.tar.gz.part0000",
+      "bytes": 33554432,
+      "sha256": "f3f9619a68f8de4126a234d59378cf68278a4f202e04df59fe147a938449210a",
+      "classification": "part",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-platform-delivery-20261029-g5d60b56e/examples-build.tar.gz.part0000",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_platform_commit": "5d60b56e09686776c72ce95dfa9384357e57d2bf",
+      "declared_examples_commit": "9d7d4d3430b8555766aba5bc7c76d5b49f8fd67d",
+      "source_declaration": "docs-platform-delivery-20261029-g5d60b56e/delivery-index.json",
+      "original_storage_parent": "e7d32687a598db753747f4905cb03afec3163b1d",
+      "declared_package_role": "complete_examples_scope_all_and_actual_execution",
+      "parent_archive": {
+        "path": "examples-build.tar.gz",
+        "bytes": 60108472,
+        "sha256": "d0bce642ecbdf56b7930c2a15adaa9e0ac8ec95cbd7e61367f9aedc31a137606"
+      },
+      "original_envelope_name": "examples-build-package.json"
+    },
+    {
+      "path": "docs-platform-delivery-20261029-g5d60b56e/examples-build.tar.gz.part0001",
+      "bytes": 26554040,
+      "sha256": "49bfa501b3486625483b0432fc60da38b621a90157ec71f3745ca77a2336e72c",
+      "classification": "part",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-platform-delivery-20261029-g5d60b56e/examples-build.tar.gz.part0001",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_platform_commit": "5d60b56e09686776c72ce95dfa9384357e57d2bf",
+      "declared_examples_commit": "9d7d4d3430b8555766aba5bc7c76d5b49f8fd67d",
+      "source_declaration": "docs-platform-delivery-20261029-g5d60b56e/delivery-index.json",
+      "original_storage_parent": "e7d32687a598db753747f4905cb03afec3163b1d",
+      "declared_package_role": "complete_examples_scope_all_and_actual_execution",
+      "parent_archive": {
+        "path": "examples-build.tar.gz",
+        "bytes": 60108472,
+        "sha256": "d0bce642ecbdf56b7930c2a15adaa9e0ac8ec95cbd7e61367f9aedc31a137606"
+      },
+      "original_envelope_name": "examples-build-package.json"
+    },
+    {
+      "path": "docs-platform-delivery-20261029-gd742cdb5/examples-handoff.json",
+      "bytes": 1740,
+      "sha256": "f6ef8d265dccd57fa667d2ceb936176731d65c02738e6c298013f892a02a638c",
+      "classification": "metadata",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-platform-delivery-20261029-gd742cdb5/examples-handoff.json",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_platform_commit": "d742cdb5a0606bd4be22e14eff0738df3ba07549",
+      "declared_examples_commit": "6f09ae5539d58161acdab944767e8067895ad9bb",
+      "source_declaration": "docs-platform-delivery-20261029-gd742cdb5/delivery-index.json",
+      "original_storage_parent": "5fd10744da5416169c879147f47c7902916ef8ca",
+      "declared_package_role": "examples_scope_or_handoff_metadata; associated complete_examples archive role declared by namespace index"
+    },
+    {
+      "path": "docs-platform-delivery-20261029-gd742cdb5/examples-index.json",
+      "bytes": 3525,
+      "sha256": "c6bec4679ac01ae75622dd23c11303424c3412457314c28821ed852485be39bc",
+      "classification": "metadata",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-platform-delivery-20261029-gd742cdb5/examples-index.json",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_platform_commit": "d742cdb5a0606bd4be22e14eff0738df3ba07549",
+      "declared_examples_commit": "6f09ae5539d58161acdab944767e8067895ad9bb",
+      "source_declaration": "docs-platform-delivery-20261029-gd742cdb5/delivery-index.json",
+      "original_storage_parent": "5fd10744da5416169c879147f47c7902916ef8ca",
+      "declared_package_role": "examples_scope_or_handoff_metadata; associated complete_examples archive role declared by namespace index"
+    },
+    {
+      "path": "docs-platform-delivery-20261029-gd742cdb5/examples-summary.json",
+      "bytes": 5047,
+      "sha256": "19776741d50194c2bb6a87e5ba5b079a5b3e25bb60dfe74330784c4dcb4e441c",
+      "classification": "metadata",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-platform-delivery-20261029-gd742cdb5/examples-summary.json",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_platform_commit": "d742cdb5a0606bd4be22e14eff0738df3ba07549",
+      "declared_examples_commit": "6f09ae5539d58161acdab944767e8067895ad9bb",
+      "source_declaration": "docs-platform-delivery-20261029-gd742cdb5/delivery-index.json",
+      "original_storage_parent": "5fd10744da5416169c879147f47c7902916ef8ca",
+      "declared_package_role": "examples_scope_or_handoff_metadata; associated complete_examples archive role declared by namespace index"
+    },
+    {
+      "path": "docs-platform-delivery-20261029-gd742cdb5/examples.tar.gz.package.json",
+      "bytes": 510,
+      "sha256": "cba3078047f0a84038d560133caae8b08dda991062865ab8f8c0db3647bad6fb",
+      "classification": "metadata",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-platform-delivery-20261029-gd742cdb5/examples.tar.gz.package.json",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_platform_commit": "d742cdb5a0606bd4be22e14eff0738df3ba07549",
+      "declared_examples_commit": "6f09ae5539d58161acdab944767e8067895ad9bb",
+      "source_declaration": "docs-platform-delivery-20261029-gd742cdb5/delivery-index.json",
+      "original_storage_parent": "5fd10744da5416169c879147f47c7902916ef8ca",
+      "declared_package_role": "complete_examples_scope_all_starters_and_onboarding",
+      "parent_archive": {
+        "path": "examples.tar.gz",
+        "bytes": 53998408,
+        "sha256": "5600a925eb7b76047039f58b3294f6b18415a0b36379494181c12a6540699c76"
+      },
+      "original_envelope_name": "examples.tar.gz.package.json"
+    },
+    {
+      "path": "docs-platform-delivery-20261029-gd742cdb5/examples.tar.gz.part0000",
+      "bytes": 33554432,
+      "sha256": "8661384e80772da26e61a22b67ee742a12b1efe300469af5a3a6bdb922ff0ec2",
+      "classification": "part",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-platform-delivery-20261029-gd742cdb5/examples.tar.gz.part0000",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_platform_commit": "d742cdb5a0606bd4be22e14eff0738df3ba07549",
+      "declared_examples_commit": "6f09ae5539d58161acdab944767e8067895ad9bb",
+      "source_declaration": "docs-platform-delivery-20261029-gd742cdb5/delivery-index.json",
+      "original_storage_parent": "5fd10744da5416169c879147f47c7902916ef8ca",
+      "declared_package_role": "complete_examples_scope_all_starters_and_onboarding",
+      "parent_archive": {
+        "path": "examples.tar.gz",
+        "bytes": 53998408,
+        "sha256": "5600a925eb7b76047039f58b3294f6b18415a0b36379494181c12a6540699c76"
+      },
+      "original_envelope_name": "examples.tar.gz.package.json"
+    },
+    {
+      "path": "docs-platform-delivery-20261029-gd742cdb5/examples.tar.gz.part0001",
+      "bytes": 20443976,
+      "sha256": "13ead53bcf103066117d67d39a47fe455fe339c0852c4b077ecca3254459e322",
+      "classification": "part",
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "fixed_reference_kind": "original175_member_public_recovery_snapshot_not_first_publication_commit",
+      "fixed_public_url": "https://raw.githubusercontent.com/X-Gen-Lab/nexus/1c373a4988112a5a62d692fe8d165371380dadb7/docs-platform-delivery-20261029-gd742cdb5/examples.tar.gz.part0001",
+      "first_publication_commit": null,
+      "payload_contents_inspected": false,
+      "declared_platform_commit": "d742cdb5a0606bd4be22e14eff0738df3ba07549",
+      "declared_examples_commit": "6f09ae5539d58161acdab944767e8067895ad9bb",
+      "source_declaration": "docs-platform-delivery-20261029-gd742cdb5/delivery-index.json",
+      "original_storage_parent": "5fd10744da5416169c879147f47c7902916ef8ca",
+      "declared_package_role": "complete_examples_scope_all_starters_and_onboarding",
+      "parent_archive": {
+        "path": "examples.tar.gz",
+        "bytes": 53998408,
+        "sha256": "5600a925eb7b76047039f58b3294f6b18415a0b36379494181c12a6540699c76"
+      },
+      "original_envelope_name": "examples.tar.gz.package.json"
+    }
+  ],
+  "related_onboarding_roles_declared_by_requested_indexes": [
+    {
+      "scope": "metadata-only related onboarding role, outside17 name-matched member set; not an expanded cleanup authorization",
+      "namespace": "docs-platform-delivery-20261029-g5d60b56e",
+      "declared_package_role": "actual_external_created_product_and_installed_sdk_execution",
+      "declared_platform_commit": "5d60b56e09686776c72ce95dfa9384357e57d2bf",
+      "declared_examples_commit": "9d7d4d3430b8555766aba5bc7c76d5b49f8fd67d",
+      "original_envelope": "docs-platform-delivery-20261029-g5d60b56e/user-product-package.json",
+      "archive": {
+        "path": "user-product.tar.gz",
+        "bytes": 3605719,
+        "sha256": "6d1b0e0790ce6aaf2bc7b9fb6130f91bdd919b96112fb6ece4c4912986a0ce1e"
+      },
+      "parts": [
+        {
+          "path": "user-product.tar.gz",
+          "bytes": 3605719,
+          "sha256": "6d1b0e0790ce6aaf2bc7b9fb6130f91bdd919b96112fb6ece4c4912986a0ce1e"
+        }
+      ],
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "payload_contents_inspected": false
+    },
+    {
+      "scope": "metadata-only related onboarding role, outside17 name-matched member set; not an expanded cleanup authorization",
+      "namespace": "docs-platform-delivery-20261029-gd742cdb5",
+      "declared_package_role": "actual_external_created_product",
+      "declared_platform_commit": "d742cdb5a0606bd4be22e14eff0738df3ba07549",
+      "declared_examples_commit": "6f09ae5539d58161acdab944767e8067895ad9bb",
+      "original_envelope": "docs-platform-delivery-20261029-gd742cdb5/created-product.tar.gz.package.json",
+      "archive": {
+        "path": "created-product.tar.gz",
+        "bytes": 3603912,
+        "sha256": "69cc8f22bbae15d8b0107ac06a550172f0ef9cdb537715deea08b43df9508cf7"
+      },
+      "parts": [
+        {
+          "path": "created-product.tar.gz",
+          "bytes": 3603912,
+          "sha256": "69cc8f22bbae15d8b0107ac06a550172f0ef9cdb537715deea08b43df9508cf7"
+        }
+      ],
+      "original_fixed_commit": "1c373a4988112a5a62d692fe8d165371380dadb7",
+      "payload_contents_inspected": false
+    }
+  ],
+  "limitations": [
+    "This is an identity/routing inventory from original small JSON metadata, not a content inspection or a finding that every listed archive contains private code.",
+    "Current private visibility does not establish the repository visibility at each historical publication.",
+    "Original fixed commit is a verified immutable175-member recovery snapshot; first-publication commits were not researched.",
+    "Name filtering is not a full isolation audit; the related created-product roles are included only because the two requested indexes explicitly declare them."
+  ],
+  "actions": {
+    "large_tar_read_or_scan": false,
+    "source_or_archive_delete_move": false,
+    "historical_rewrite": false,
+    "public_inventory_publication": false,
+    "historical_public_archives_withdrawn": false,
+    "private_code_full_isolation_established": false
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "command": [
+    "python",
+    "-B",
+    "/workspace/nexus/build/current-completion-20261030/publication/audit_legacy.py"
+  ],
+  "cwd": "/workspace/nexus",
+  "stage": "private_legacy_archive_inspection",
+  "started_ns": 1793296719958044065,
+  "finished_ns": 1793296732414347540,
+  "duration_seconds": 12.456304074992659,
+  "timeout_seconds": 240.0,
+  "outcome": "completed",
+  "exit_code": 0,
+  "child_returncode": 0,
+  "withdrawn_processes": [],
+  "withdrawal_stable": true,
+  "withdrawal_complete": true,
+  "build_parallelism": 2,
+  "resource_usage": {
+    "method": "linux_wait4",
+    "scope": "waited_process_and_reaped_descendants",
+    "user_cpu_seconds": 11.710263,
+    "system_cpu_seconds": 0.665959,
+    "maximum_process_rss_bytes": 45899776
+  },
+  "stdout": {
+    "path": "/workspace/nexus/build/current-completion-20261030/publication/audit-legacy.attempts/1793296719957911446-27339747ac7e48fe8795200aed057933/stdout.txt",
+    "bytes": 1835,
+    "sha256": "bb876231609295c85698859081e5d17b2a6f55bd580d4cd83bd478a0bf61d255"
+  },
+  "stderr": {
+    "path": "/workspace/nexus/build/current-completion-20261030/publication/audit-legacy.attempts/1793296719957911446-27339747ac7e48fe8795200aed057933/stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "attempt_receipt": "/workspace/nexus/build/current-completion-20261030/publication/audit-legacy.attempts/1793296719957911446-27339747ac7e48fe8795200aed057933/receipt.json"
+}
