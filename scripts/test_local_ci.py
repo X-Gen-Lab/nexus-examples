@@ -162,13 +162,16 @@ class LocalCiContracts(unittest.TestCase):
             cache.write_text(f"CMAKE_C_COMPILER:STRING={toolchain}/bin/arm-none-eabi-gcc\n")
             local_ci.verify_arm_cache(build, toolchain)
 
-    def test_standalone_targets_keep_software_fixture_scope_and_all_seven_consumers(self):
+    def test_standalone_targets_keep_software_scope_and_all_nine_consumers(self):
         rows = [row for preset in local_ci.arm_presets(ROOT)
                 for row in local_ci.standalones(preset)]
-        self.assertEqual(len(rows), 7)
+        self.assertEqual(len(rows), 9)
         self.assertEqual(sum(row[1] == "nexus_starter" for row in rows), 3)
         self.assertEqual(sum(row[1] == "uart_fifo_acquisition" for row in rows), 2)
         self.assertIn(("apps/shared_spi_runtime", "shared_spi_runtime", None), rows)
+        self.assertIn(("apps/stream_recovery/h743_cache_on",
+                       "continuous_rx_cache_on", None), rows)
+        self.assertIn(("apps/runtime_pause/h743", "runtime_pause", None), rows)
 
 
 if __name__ == "__main__":

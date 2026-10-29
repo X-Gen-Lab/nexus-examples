@@ -201,6 +201,63 @@ else:
             self.assertIn('build/installed-native/' + path,
                           artifact['with']['path'])
 
+    def test_advanced_h743_recipes_run_each_real_build_and_stop_on_failure(self):
+        document = yaml.load((ROOT / '.github/workflows/ci.yml').read_text(),
+                             Loader=yaml.BaseLoader)
+        steps = document['jobs']['arm']['steps']
+        advanced = next(step for step in steps if step.get('name') ==
+                        'Build Cache-on receive and fixed-run pause recipes')
+        self.assertEqual(advanced['if'],
+                         "matrix.preset == 'stm32-h743-nucleo-baremetal'")
+        stub = f'#!{sys.executable}\n' + r'''import json, os, sys
+from pathlib import Path
+command = Path(sys.argv[0]).name
+arguments = sys.argv[1:]
+with open(os.environ['ADVANCED_LOG'], 'a') as stream:
+    stream.write(json.dumps([command, *arguments]) + '\n')
+if command == 'cmake' and arguments[:1] == ['--build']:
+    target = arguments[arguments.index('--target') + 1]
+    if os.environ.get('ADVANCED_FAIL') == target:
+        raise SystemExit(17)
+'''
+        expected = ['continuous_rx_cache_on', 'runtime_pause']
+        for failure in ('', expected[0]):
+            with self.subTest(failure=failure), \
+                    tempfile.TemporaryDirectory(prefix='advanced recipe ') as value:
+                root = Path(value)
+                tools = root / 'tools'
+                tools.mkdir()
+                for name in ('cmake', 'python3'):
+                    tool = tools / name
+                    tool.write_text(stub)
+                    tool.chmod(0o755)
+                log = root / 'commands.jsonl'
+                environment = dict(os.environ, GITHUB_WORKSPACE=str(root),
+                                   PRESET="stm32-h743-nucleo-baremetal",
+                                   ADVANCED_LOG=str(log), ADVANCED_FAIL=failure)
+                environment['PATH'] = str(tools) + os.pathsep + environment['PATH']
+                result = subprocess.run(
+                    ['bash', '--noprofile', '--norc', '-e', '-o', 'pipefail',
+                     '-c', advanced['run']], cwd=root, env=environment,
+                    text=True, capture_output=True, timeout=10)
+                calls = [json.loads(line) for line in log.read_text().splitlines()]
+                self.assertEqual(result.returncode, 17 if failure else 0,
+                                 result.stdout + result.stderr)
+                builds = [call for call in calls if call[:2] == ['cmake', '--build']]
+                self.assertEqual([call[call.index('--target') + 1] for call in builds],
+                                 expected[:1] if failure else expected)
+                resources = [call for call in calls if call[0] == 'python3']
+                self.assertEqual(len(resources), 0 if failure else 2)
+                for call, target in zip(resources, expected):
+                    self.assertIn('/advanced/' + target + '/bin/' + target + '.elf',
+                                  call[call.index('--elf') + 1])
+                    self.assertIn('/advanced/' + target + '/resource-budget.json',
+                                  call[call.index('--report') + 1])
+        artifact = next(step for step in steps if step.get('name') ==
+                        'Retain firmware and static validation evidence')
+        self.assertIn('build/${{ matrix.preset }}/advanced/',
+                      artifact['with']['path'])
+
     def test_arm_hil_preparation_never_substitutes_an_unreviewed_reference_fixture(self):
         document = yaml.load((ROOT / '.github/workflows/ci.yml').read_text(),
                              Loader=yaml.BaseLoader)

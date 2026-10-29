@@ -122,3 +122,5 @@ add_dependencies(shared_spi_freertos_host contract_os_freertos)
 add_test(NAME shared_spi_real_freertos COMMAND shared_spi_freertos_host)
 set_tests_properties(shared_spi_real_freertos PROPERTIES TIMEOUT 30
     LABELS "native;example;FreeRTOS")
+
+include("${CMAKE_CURRENT_LIST_DIR}/continuous_rx.cmake")

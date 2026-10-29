@@ -12,5 +12,5 @@ set(NEXUS_ASSEMBLY_FILE "${CMAKE_CURRENT_SOURCE_DIR}/assembly.toml" CACHE FILEPA
 set(NEXUS_BUILD_TESTS OFF CACHE BOOL "Host tests are separate" FORCE)
 set(NEXUS_BUILD_WORKLOAD OFF CACHE BOOL "Application owns entry" FORCE)
 add_subdirectory("${NEXUS_SOURCE}" nexus EXCLUDE_FROM_ALL)
-nexus_add_firmware(continuous_rx SOURCES main.c)
+nexus_add_firmware(continuous_rx SOURCES main.c receive_application.c)
 nexus_target_warnings(continuous_rx STRICT)

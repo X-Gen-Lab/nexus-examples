@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.31)
+project(nexus_continuous_rx_cache_on LANGUAGES C ASM)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+set(NEXUS_SOURCE "" CACHE PATH "Explicit pinned source SDK")
+if(NOT EXISTS "${NEXUS_SOURCE}/CMakeLists.txt" OR NOT CMAKE_CROSSCOMPILING)
+    message(FATAL_ERROR "Set NEXUS_SOURCE and its ARM toolchain")
+endif()
+set(NEXUS_ASSEMBLY_FILE "${CMAKE_CURRENT_SOURCE_DIR}/assembly.toml" CACHE FILEPATH
+    "Exact supported H743 continuous RX assembly")
+set(NEXUS_BUILD_TESTS OFF CACHE BOOL "Host tests are separate" FORCE)
+set(NEXUS_BUILD_WORKLOAD OFF CACHE BOOL "Application owns entry" FORCE)
+add_subdirectory("${NEXUS_SOURCE}" nexus EXCLUDE_FROM_ALL)
+nexus_add_firmware(continuous_rx_cache_on SOURCES ../h743/main.c
+    ../h743/receive_application.c)
+nexus_target_warnings(continuous_rx_cache_on STRICT)

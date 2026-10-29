@@ -153,3 +153,8 @@ Source SDK 不包含该 helper 和宿主测试框架；MCU 示例保持 C11。
 提供 H743/U575 两个软件参考的独立有界流量应用；不新增 preset，也不建立实板资格。
 Opt-in bounded UART traffic for the H743/U575 software references; the seventeen
 presets stay unchanged and physical HIL remains unexecuted.
+
+[Cache 与运行时维护边界 / Cache and runtime maintenance](docs/developer-recipes.md)
+增加两个独立 H743 软件参考：Cache-on 连续接收及 SPI4 fixed-run pause/resume。
+Two independent H743 software recipes cover Cache-on continuous receive and
+SPI4 fixed-run pause/resume; exact loan retention and failure policy stay explicit.

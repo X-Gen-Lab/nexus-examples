@@ -66,6 +66,10 @@ def standalones(preset):
     }
     if preset in recipes:
         rows.append((*recipes[preset], None))
+    if preset == "stm32-h743-nucleo-baremetal":
+        rows.extend((("apps/stream_recovery/h743_cache_on",
+                      "continuous_rx_cache_on", None),
+                     ("apps/runtime_pause/h743", "runtime_pause", None)))
     return rows
 
 
