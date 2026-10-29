@@ -1,0 +1,17 @@
+schema = 2
+board = "stm32h743zi_hsi_reference"
+backend = "baremetal"
+clock = "hsi64-fixed-cache-off"
+
+[factory]
+capabilities = true
+
+[memory]
+main_stack_bytes = 4096
+libc_heap_bytes = 0
+static_ram_limit_bytes = 32768
+flash_load_limit_bytes = 65536
+
+[flash.storage]
+binding = "flash0"
+mode = "poll-word"

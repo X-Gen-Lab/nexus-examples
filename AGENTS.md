@@ -1,8 +1,10 @@
 # Nexus examples maintenance
 
-This repository owns public application examples and composition. Nexus owns
-common platform code. Proprietary products, credentials and PCB data belong to
-separate product repositories.
+This repository owns application examples and composition. Nexus owns common
+platform code. Repository visibility is private; do not publish its source or
+execution artifacts into the public platform repository. Recheck authenticated
+repository visibility before publication. Proprietary products, credentials and
+PCB data belong to separate product repositories.
 
 - Use the source SDK at `external/nexus`; update its Gitlink and
   `dependencies/nexus.lock.json` together only with actual integration evidence.

@@ -1,7 +1,11 @@
 # Nexus Examples
 
-本仓库维护公开应用示例、装配配置和集成验证。Nexus 维护通用平台；客户协议、
+本仓库维护应用示例、装配配置和集成验证，当前 GitHub 仓库为私有仓库。Nexus 维护通用平台；客户协议、
 私有产品、密钥、PCB 数据和部署策略由对应产品仓库维护。
+
+This repository currently has private GitHub visibility. Examples, their source
+archives and provenance stay within that access boundary; platform publication
+does not authorize publishing these application sources.
 
 当前代码消费静态 factory 与共享多态接口：`nexus/core`、`nexus/io`、`nexus/os` 和
 `nexus/components`。`nx_platform_start()` 只建立已选择的基础设施，应用自己决定
@@ -54,7 +58,7 @@ re-prove the FreeRTOS commit's parent relationship or full tree diff.
 | `stream_recovery` | 慢消费者、loss、BUSY stop、恢复及只读诊断 | 独立 H743 continuous DMA 软件参考，Cache off |
 | `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 八套参考配置、两后端，显式静态任务或裸机 pump |
 
-Native 注册七个有限应用 CTest、六组 GoogleTest 执行，以及真实 FreeRTOS POSIX 内核
+Native 注册有限应用 CTest、GoogleTest 执行，以及真实 FreeRTOS POSIX 内核
 合同和共享 SPI 应用。新增模板、创建练习、三条生命周期路径及迁移步骤见
 [双语工程指南](docs/developer-recipes.md)。四个版本化模板保存在 `templates/`。
 UART 由应用显式注入接收事实，服务推进发送并等待真正
@@ -158,3 +162,12 @@ presets stay unchanged and physical HIL remains unexecuted.
 增加两个独立 H743 软件参考：Cache-on 连续接收及 SPI4 fixed-run pause/resume。
 Two independent H743 software recipes cover Cache-on continuous receive and
 SPI4 fixed-run pause/resume; exact loan retention and failure policy stay explicit.
+
+[H743 Flash/RAM](apps/flash_maintenance/h743/README.md) 与
+[U575 保留时间／Stop2](apps/retained_stop2/u575/README.md) 提供独立显式启用工程、
+同一 C11 应用策略的 GoogleTest／GoogleMock 失败路径测试及现有本地 CI 集成。
+默认不开启擦写或低功耗；产品 boot、物理前提及恢复决策仍外置，全部实板未执行。
+Independent opt-in H743 Flash/RAM and U575 retained-time/Stop2 recipes share
+their C11 policy with host failure tests and the existing local CI. Default
+execution performs neither maintenance nor sleep; boot, physical premises and
+recovery remain product obligations, with all hardware acceptance unexecuted.

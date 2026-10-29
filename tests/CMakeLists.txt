@@ -124,3 +124,4 @@ set_tests_properties(shared_spi_real_freertos PROPERTIES TIMEOUT 30
     LABELS "native;example;FreeRTOS")
 
 include("${CMAKE_CURRENT_LIST_DIR}/continuous_rx.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/advanced_recipes.cmake")

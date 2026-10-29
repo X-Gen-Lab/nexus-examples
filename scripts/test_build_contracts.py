@@ -39,6 +39,19 @@ class ApplicationBuildContracts(unittest.TestCase):
                 'platform_reference', 'sensor_spi', 'journal', 'modbus_registers',
                 'uart_owner_runtime', 'shared_spi_runtime', 'stream_recovery',
                 'shared_spi_freertos_host'})
+            application_targets = set(applications)
+            for relative, target in (
+                    ('apps/flash_maintenance/flash_application.c',
+                     'flash_maintenance_test'),
+                    ('apps/retained_stop2/stop2_application.c',
+                     'retained_stop2_test')):
+                selected = [item['command'] for item in commands
+                            if Path(item['file']) == ROOT / relative]
+                self.assertEqual(len(selected), 1, relative)
+                self.assertIn('CMakeFiles/' + target + '.dir/', selected[0])
+                # The exact production C policy is instrumented independently
+                # from its host-only C++ GoogleTest/GoogleMock harness.
+                applications[target] = selected[0]
             for name, command in applications.items():
                 with self.subTest(application=name):
                     self.assertIn('-std=c11', command.split())
@@ -46,7 +59,8 @@ class ApplicationBuildContracts(unittest.TestCase):
                                         for flag in command.split()))
                     self.assertTrue(any('-fsanitize=' in flag and 'undefined' in flag
                                         for flag in command.split()))
-                    self.assertNotIn('ext/googletest', command)
+                    if name in application_targets:
+                        self.assertNotIn('ext/googletest', command)
             framework = {
                 Path(item['file']).name for item in commands
                 if Path(item['file']).is_relative_to(
@@ -67,7 +81,8 @@ class ApplicationBuildContracts(unittest.TestCase):
                 'reference_lifecycle_google', 'fifo_acquisition_google',
                 'shared_spi_two_devices', 'stream_slow_consumer',
                 'developer_recipes_google', 'shared_spi_real_freertos',
-                'contract_os_freertos', 'continuous_rx_google'})
+                'contract_os_freertos', 'continuous_rx_google',
+                'flash_maintenance_google', 'retained_stop2_google'})
 
 
 if __name__ == '__main__':

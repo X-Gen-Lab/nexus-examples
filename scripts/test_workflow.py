@@ -201,58 +201,111 @@ else:
             self.assertIn('build/installed-native/' + path,
                           artifact['with']['path'])
 
-    def test_advanced_h743_recipes_run_each_real_build_and_stop_on_failure(self):
+    def test_advanced_recipes_run_each_real_build_and_stop_on_failure(self):
         document = yaml.load((ROOT / '.github/workflows/ci.yml').read_text(),
                              Loader=yaml.BaseLoader)
         steps = document['jobs']['arm']['steps']
         advanced = next(step for step in steps if step.get('name') ==
-                        'Build Cache-on receive and fixed-run pause recipes')
+                        'Build advanced runtime recipes')
         self.assertEqual(advanced['if'],
-                         "matrix.preset == 'stm32-h743-nucleo-baremetal'")
+                         "matrix.preset == 'stm32-h743-nucleo-baremetal' || "
+                         "matrix.preset == 'stm32-u575-nucleo-baremetal'")
         stub = f'#!{sys.executable}\n' + r'''import json, os, sys
 from pathlib import Path
 command = Path(sys.argv[0]).name
 arguments = sys.argv[1:]
 with open(os.environ['ADVANCED_LOG'], 'a') as stream:
     stream.write(json.dumps([command, *arguments]) + '\n')
-if command == 'cmake' and arguments[:1] == ['--build']:
+if command == 'cmake' and arguments[:1] == ['-S']:
+    phase = 'configure'
+    target = Path(arguments[arguments.index('-B') + 1]).name
+elif command == 'cmake' and arguments[:1] == ['--build']:
+    phase = 'build'
     target = arguments[arguments.index('--target') + 1]
-    if os.environ.get('ADVANCED_FAIL') == target:
-        raise SystemExit(17)
+elif command == 'python3' and '--elf' in arguments:
+    phase = 'resources'
+    target = Path(arguments[arguments.index('--elf') + 1]).stem
+else:
+    raise SystemExit(127)
+if (os.environ.get('ADVANCED_FAIL_PHASE') == phase and
+        os.environ.get('ADVANCED_FAIL_TARGET') == target):
+    raise SystemExit(17)
 '''
-        expected = ['continuous_rx_cache_on', 'runtime_pause']
-        for failure in ('', expected[0]):
-            with self.subTest(failure=failure), \
+        selections = {
+            'stm32-h743-nucleo-baremetal': [
+                ('apps/stream_recovery/h743_cache_on', 'continuous_rx_cache_on'),
+                ('apps/runtime_pause/h743', 'runtime_pause'),
+                ('apps/flash_maintenance/h743', 'flash_maintenance')],
+            'stm32-u575-nucleo-baremetal': [
+                ('apps/retained_stop2/u575', 'retained_stop2')],
+            'unreviewed-preset': [],
+        }
+        for preset, selected in selections.items():
+            failures = [('', '')] + [
+                (phase, target) for _, target in selected
+                for phase in ('configure', 'build', 'resources')]
+            for failed_phase, failed_target in failures:
+                with self.subTest(preset=preset, phase=failed_phase,
+                                  target=failed_target), \
                     tempfile.TemporaryDirectory(prefix='advanced recipe ') as value:
-                root = Path(value)
-                tools = root / 'tools'
-                tools.mkdir()
-                for name in ('cmake', 'python3'):
-                    tool = tools / name
-                    tool.write_text(stub)
-                    tool.chmod(0o755)
-                log = root / 'commands.jsonl'
-                environment = dict(os.environ, GITHUB_WORKSPACE=str(root),
-                                   PRESET="stm32-h743-nucleo-baremetal",
-                                   ADVANCED_LOG=str(log), ADVANCED_FAIL=failure)
-                environment['PATH'] = str(tools) + os.pathsep + environment['PATH']
-                result = subprocess.run(
-                    ['bash', '--noprofile', '--norc', '-e', '-o', 'pipefail',
-                     '-c', advanced['run']], cwd=root, env=environment,
-                    text=True, capture_output=True, timeout=10)
-                calls = [json.loads(line) for line in log.read_text().splitlines()]
-                self.assertEqual(result.returncode, 17 if failure else 0,
-                                 result.stdout + result.stderr)
-                builds = [call for call in calls if call[:2] == ['cmake', '--build']]
-                self.assertEqual([call[call.index('--target') + 1] for call in builds],
-                                 expected[:1] if failure else expected)
-                resources = [call for call in calls if call[0] == 'python3']
-                self.assertEqual(len(resources), 0 if failure else 2)
-                for call, target in zip(resources, expected):
-                    self.assertIn('/advanced/' + target + '/bin/' + target + '.elf',
-                                  call[call.index('--elf') + 1])
-                    self.assertIn('/advanced/' + target + '/resource-budget.json',
-                                  call[call.index('--report') + 1])
+                    root = Path(value)
+                    tools = root / 'tools'
+                    tools.mkdir()
+                    for name in ('cmake', 'python3'):
+                        tool = tools / name
+                        tool.write_text(stub)
+                        tool.chmod(0o755)
+                    log = root / 'commands.jsonl'
+                    environment = dict(os.environ, GITHUB_WORKSPACE=str(root),
+                                       PRESET=preset, ADVANCED_LOG=str(log),
+                                       ADVANCED_FAIL_PHASE=failed_phase,
+                                       ADVANCED_FAIL_TARGET=failed_target)
+                    environment['PATH'] = str(tools) + os.pathsep + environment['PATH']
+                    result = subprocess.run(
+                        ['bash', '--noprofile', '--norc', '-e', '-o', 'pipefail',
+                         '-c', advanced['run']], cwd=root, env=environment,
+                        text=True, capture_output=True, timeout=10)
+                    calls = ([json.loads(line) for line in log.read_text().splitlines()]
+                             if log.exists() else [])
+                    expected_exit = (1 if not selected else
+                                     17 if failed_phase else 0)
+                    self.assertEqual(result.returncode, expected_exit,
+                                     result.stdout + result.stderr + repr(calls))
+                    expected = []
+                    for recipe, target in selected:
+                        for phase in ('configure', 'build', 'resources'):
+                            expected.append((phase, recipe, target))
+                            if (phase, target) == (failed_phase, failed_target):
+                                break
+                        if failed_phase and target == failed_target:
+                            break
+                    # Exact call order also rejects a later target or budget
+                    # running after a configure/build/resource checker fails.
+                    self.assertEqual(len(calls), len(expected))
+                    for call, (phase, recipe, target) in zip(calls, expected):
+                        build = root / 'build' / preset / 'advanced' / target
+                        if phase == 'configure':
+                            self.assertEqual(call[:3], ['cmake', '-S', recipe])
+                            self.assertEqual(call[call.index('-B') + 1], str(build))
+                            self.assertIn('-DCMAKE_BUILD_TYPE=Release', call)
+                            self.assertIn('-DNEXUS_SOURCE=' +
+                                          str(root / 'external/nexus'), call)
+                            self.assertIn('-DCMAKE_TOOLCHAIN_FILE=' + str(
+                                root / 'external/nexus/cmake/toolchains/arm-gcc.cmake'),
+                                call)
+                        elif phase == 'build':
+                            self.assertEqual(call[:3], ['cmake', '--build', str(build)])
+                            self.assertEqual(call[call.index('--target') + 1], target)
+                        else:
+                            self.assertEqual(call[0], 'python3')
+                            self.assertEqual((root / call[1]).resolve(), (
+                                root / 'external/nexus/tools/measurement/resources.py').resolve())
+                            for option, path in (
+                                    ('--elf', build / 'bin' / (target + '.elf')),
+                                    ('--resolved', build / 'nexus/generated/resolved.json'),
+                                    ('--budget', build / 'nexus/generated/resource-budget.json'),
+                                    ('--report', build / 'resource-budget.json')):
+                                self.assertEqual(call[call.index(option) + 1], str(path))
         artifact = next(step for step in steps if step.get('name') ==
                         'Retain firmware and static validation evidence')
         self.assertIn('build/${{ matrix.preset }}/advanced/',

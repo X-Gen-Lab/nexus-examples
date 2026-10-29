@@ -296,15 +296,22 @@ jobs:
             --resolved "$recipe_build/nexus/generated/resolved.json" \
             --budget "$recipe_build/nexus/generated/resource-budget.json" \
             --report "$recipe_build/resource-budget.json"
-      - name: Build Cache-on receive and fixed-run pause recipes
-        if: matrix.preset == 'stm32-h743-nucleo-baremetal'
+      - name: Build advanced runtime recipes
+        if: matrix.preset == 'stm32-h743-nucleo-baremetal' || matrix.preset == 'stm32-u575-nucleo-baremetal'
         env:
           PRESET: ${{ matrix.preset }}
         run: |
           set -euo pipefail
-          for specification in \
-              apps/stream_recovery/h743_cache_on:continuous_rx_cache_on \
-              apps/runtime_pause/h743:runtime_pause; do
+          case "$PRESET" in
+            stm32-h743-nucleo-baremetal)
+              recipes=(apps/stream_recovery/h743_cache_on:continuous_rx_cache_on
+                       apps/runtime_pause/h743:runtime_pause
+                       apps/flash_maintenance/h743:flash_maintenance) ;;
+            stm32-u575-nucleo-baremetal)
+              recipes=(apps/retained_stop2/u575:retained_stop2) ;;
+            *) exit 1 ;;
+          esac
+          for specification in "${recipes[@]}"; do
             recipe="${specification%:*}"
             target="${specification#*:}"
             recipe_build="$GITHUB_WORKSPACE/build/$PRESET/advanced/$target"

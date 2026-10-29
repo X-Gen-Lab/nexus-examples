@@ -243,23 +243,50 @@ cmake -S apps/runtime_pause/h743 -B build/pause-recipe -G Ninja \
 cmake --build build/pause-recipe --parallel 1
 ```
 
-更高级的 Flash/RAM 和保留时间不要直接并入通用模板：先阅读同一固定 SDK 的
-`docs/design/h743-flash-ram.md`、`docs/design/u575-retained-time.md` 和
-`docs/design/u575-stop2-copy.md`。
-H743 Flash 维护需要精确 revision、RAM 执行/VTOR/中断依赖闭包、排空和维护恢复
-证明；U575 RTC/LPTIM/Stop2 需要独立保留时钟、显式 WUT owner、安全域及电源条件。
-选中参考配置或通过 Native 模型不证明真实设备符合进入条件，通用项目不会自动擦写
-Flash 或进入低功耗。运行时关闭与恢复策略必须由产品显式选择；所有 HIL 仍为
-`not_executed`。
-Keep Flash/RAM maintenance and retained time outside the generic starter. Read
-`docs/design/h743-flash-ram.md` and `docs/design/u575-retained-time.md` in the same
-pinned SDK, following that index for retained-copy extensions. H743 maintenance
-requires exact revision admission, RAM execution/VTOR/IRQ dependency closure,
-drain and recovery proof. U575 RTC/LPTIM/Stop2 requires an independent retained
-clock, explicit WUT owner, security and power conditions. A reference selection
-or Native model does not prove physical entry conditions; this repository does
-not automatically erase Flash or enter a low-power state. Products explicitly
-own maintenance/recovery policy. Every physical HIL remains `not_executed`.
+## 高级路径：显式 Flash 与 Stop2 / Explicit Flash and Stop2
+
+[`flash_maintenance/h743`](../apps/flash_maintenance/h743/README.md) 是独立
+HSI64／Cache off／V 修订工程。应用拥有最后一个 128 KiB 扇区；显式启用后按
+erase → 一个 32 字节 ECC program → readback 顺序执行。每次都先成功擦除，不重试
+失败的编程单元。SDK 在实际 ELF 上审核 RAM 执行／VTOR／MPU 返回闭包。默认调试
+开关为零，Platform start 前就返回；审查电压、镜像、其他 master 和产品数据后才可
+启用。公共 provider 的镜像保护不能发现其他产品数据。
+
+The independent H743 project selects HSI64, Cache off and revision V. The
+application owns the last 128 KiB sector. Explicit opt-in performs erase → one
+32-byte ECC program → readback, without retrying a failed word. The SDK audits
+the actual ELF's RAM/VTOR/MPU return closure. The debugger switch defaults to
+zero and returns before Platform start. Enabling it requires review of voltage,
+image, other masters and product data; provider image guards cannot discover
+unrelated data.
+
+[`retained_stop2/u575`](../apps/retained_stop2/u575/README.md) 是独立 TZEN0／
+MSIS4 裸机工程，不选 factory RTC／AlarmA。应用显式构造保留时钟、注册 RUN lease，
+关闭 admission 后真正 stop／release／quiesce，再保存 mask、进入一次 WFI。
+仍有 effects 时保留 mask 和静态存储，只调用 recover；排空成功后重开 RUN、获取
+新 lease、启动新 Core epoch，最后再次 stop／release 并 join 保留时钟。外部 boot
+仍须提供准备好的 LSE／RTC／日历、电源及 quiet-master 条件。默认开关也为零，
+不会自动配置 RTC 或进入低功耗。
+
+The independent U575 TZEN0/MSIS4 project selects no factory RTC/AlarmA. It
+constructs retained time, enrolls a RUN lease, closes admission and actually
+stops/releases/quiesces before saving the mask and executing one WFI. Remaining
+effects retain the mask and static storage, permitting only recovery. Successful
+drain reopens RUN, acquires a new lease and starts a fresh Core epoch before
+final stop/release and retained-clock join. External boot still supplies the
+prepared LSE/RTC/calendar, power and quiet-master premises. Its default switch
+is also zero; the example does not automatically configure RTC or sleep.
+
+两者都有共享同一 C11 应用策略的 GoogleTest／GoogleMock 失败路径测试，并接入
+现有本地 CI 的 H743／U575 裸机行，不新增 preset 或配置权威。64 次清理／推进上限
+不能取消物理 Flash 脉冲或保证 WFI、硬件排空有界；未结清就保留对象。实板 HIL、
+功耗、时序及掉电仍全部 `not_executed`。
+
+Both share their C11 application policy with GoogleTest/GoogleMock failure-path
+tests and join the existing H743/U575 baremetal CI rows without new presets.
+The 64-attempt software bound cannot cancel a Flash pulse or bound physical
+WFI/drain. Unfinished responsibility retains storage. All physical HIL, power,
+timing and power-cut checks remain `not_executed`.
 
 ## 新用户练习及迁移 / Newcomer exercise and migration
 
