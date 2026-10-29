@@ -121,13 +121,13 @@ The recipe deliberately uses small short-poll transactions and one executor.
 It does not establish DMA performance or implement a physical sensor protocol.
 
 producer 等待、owner drain 和 FreeRTOS `join(NEVER)` 不保证应用级有限退出。
-H743 仅接收窗口有 200 ms 边界，`stop_rx` 可以持续 BUSY；保留静态借用存储是
-内存安全措施，不等于有界停机。实际产品必须声明 watchdog、恢复或维护策略，
+H743 接收窗口为 200 ms，关闭最多尝试 64 次 service/drain；若仍 BUSY 或释放失败，
+应用停止推进并保留静态借用。有限尝试不等于硬件保证有界停机。实际产品必须声明 watchdog、恢复或维护策略，
 不能为满足截止时间而释放仍被硬件、任务或 observer 访问的数据。
 Producer waits, owner drain and FreeRTOS `join(NEVER)` do not promise bounded
-application exit. H743 bounds only its 200 ms receive window; `stop_rx` may stay
-BUSY indefinitely. Static retention establishes memory lifetime, not bounded
-shutdown. A real product must declare its watchdog, recovery or maintenance
+application exit. H743 bounds its receive window to 200 ms and shutdown to 64
+service/drain attempts. BUSY or a failed release parks with all static loans
+retained; finite attempts do not prove bounded hardware shutdown. A real product must declare its watchdog, recovery or maintenance
 policy and cannot release live hardware/task/observer storage to meet a deadline.
 
 
@@ -152,15 +152,19 @@ execution establishes ownership behavior, not DMA.
 H743 `rx-dma-continuous`、HSI64、Cache off、USART3。四个 128 字节、32 字节对齐
 静态 reservation 位于该精确链接配置的 DMA 可达 AXI SRAM。第一窗口故意延迟释放
 首块，随后 stop/drain/release；第二窗口重启。是否收到数据及是否出现 loss 依赖真实
-外部流量，不能从有限运行或 ELF 推断。错误返回也会保留所有静态借用存储，并不
-表示已正常停机，产品恢复责任仍在。调试器可读取 `example_received_blocks`、
+外部流量，不能从有限运行或 ELF 推断。每个错误路径均尝试关闭生产、释放消费者借用
+和停止平台；清理未完成则原地保留静态存储，不返回。失败的 release 保留精确 token，
+下一次 acquire 前先重试归还。产品恢复责任仍在。结束或保留时调试器可读取 `example_received_blocks`、
 `example_loss_reports`、`example_restarts`、`example_result`。
 The separate H743 project selects the supported `rx-dma-continuous` mode, HSI64,
 Cache off and USART3. Four independent 128-byte, 32-byte-aligned reservations
 live in the exact linker's DMA-visible AXI SRAM. The first receive window delays
 release, then stops/drains/releases; the second restarts. Actual traffic and
-loss depend on equipment. Error returns retain static loan storage and do not
-certify normal shutdown; product recovery remains required. Debugger-visible counters report the run; a linked
+loss depend on equipment. Every failure attempts producer drain, consumer
+release and Platform stop; unfinished cleanup parks without returning or
+discarding static storage. A failed release keeps its exact token and prevents
+a new acquire until retry succeeds. Product recovery remains required. Counters
+are copied for debugger observation on completion or retained shutdown; a linked
 ELF does not prove reception, loss, timing, Cache safety or physical qualification.
 
 ```sh
@@ -178,6 +182,84 @@ No probe/serial station is connected: all physical acceptance remains
 **`not_executed`**. Receive windows are bounded; hardware drain may retain
 ownership, and time expiry never destroys static storage. Cache, RAM, SoC,
 external wiring and product protocols require their own review and evidence.
+
+## 高级路径：Cache 与运行时边界 / Advanced Cache and runtime boundaries
+
+[`h743_cache_on`](../apps/stream_recovery/h743_cache_on/) 与 Cache-off 工程共用
+相同 C11 接收应用和借用策略，唯一 TOML 显式选择 `hsi64-fixed-cache-on`。四个
+128 字节 reservation 均按 32 字节对齐且占完整 cache line，metadata/token 独立。
+精确 linker 把 `.bss` 放入 DMA 可达 AXI SRAM；由选定 provider 维护 cache，应用
+只在 acquire 与成功 release 之间读 payload。不能把这组规则直接套用到 DTCM、
+其他 DMA 控制器或其他芯片。该工程通过链接不代表 Cache 一致性已实板验证。
+The Cache-on recipe shares the same C11 application and loan policy with
+Cache-off; its sole TOML explicitly selects `hsi64-fixed-cache-on`. Each aligned
+128-byte reservation owns whole 32-byte cache lines, separate from metadata and
+tokens. The exact linker places `.bss` in DMA-visible AXI SRAM. The selected
+provider performs cache maintenance; application access lies between acquire
+and successful release. This contract does not generalize to DTCM, another DMA
+controller or another SoC. Linkage does not establish physical Cache coherence.
+
+[`runtime_pause/h743`](../apps/runtime_pause/h743/) 选择独立 SPI4 DMA 软件参考，
+HSI64/Cache off、裸机、`fixed-run` 和唯一 `bus4` 控制器。应用用两个静态 request
+依次提交、取消并 service；每次只在 acquire-observed SETTLED 后读取结果。随后
+pause → clock-domain close/barrier → quiescent → resume，再执行第二次提交。
+这是时钟不变的维护边界，不进入 Stop/Standby，不允许任意改 PLL。外部 SPI 设备
+和引脚属于软件 fixture，未证明真实开发板有接线、从设备或有效返回数据。
+The independent SPI4 DMA recipe selects baremetal HSI64/Cache off, `fixed-run`
+and only controller `bus4`. Two static requests submit/cancel/service in turn;
+results are read only after acquire-observed SETTLED. Between submissions it
+performs pause → domain close/barrier → quiescent → resume. This is a fixed-clock
+maintenance boundary, not Stop/Standby or arbitrary PLL reconfiguration. SPI
+wiring and the slave are software-fixture facts, without physical Board claims.
+
+```mermaid
+flowchart LR
+  A[Static accepted request] --> B[Cancel and service]
+  B --> C[Acquire-observed SETTLED]
+  C --> D[Pause and close admission]
+  D --> E[Clock barrier quiescent]
+  E --> F[Resume with exact configuration]
+  F --> G[Next static request]
+  B --> H[Failed drain retains storage]
+  D --> H
+  F --> H
+```
+
+两条路径使用现有独立 CMake 入口，正式本地 CI 在 H743 裸机行自动执行；没有新增
+第二份 preset 或硬件配置。手动构建分别选定工程和独立输出目录：
+The existing local CI's H743 baremetal row runs both standalone consumers.
+They introduce no second preset matrix or duplicate configuration authority.
+
+```sh
+cmake -S apps/stream_recovery/h743_cache_on -B build/cache-on-recipe -G Ninja \
+  -DNEXUS_SOURCE="$NEXUS_SOURCE" \
+  -DCMAKE_TOOLCHAIN_FILE="$NEXUS_SOURCE/cmake/toolchains/arm-gcc.cmake" \
+  -DCMAKE_BUILD_TYPE=Release
+cmake --build build/cache-on-recipe --parallel 1
+cmake -S apps/runtime_pause/h743 -B build/pause-recipe -G Ninja \
+  -DNEXUS_SOURCE="$NEXUS_SOURCE" \
+  -DCMAKE_TOOLCHAIN_FILE="$NEXUS_SOURCE/cmake/toolchains/arm-gcc.cmake" \
+  -DCMAKE_BUILD_TYPE=Release
+cmake --build build/pause-recipe --parallel 1
+```
+
+更高级的 Flash/RAM 和保留时间不要直接并入通用模板：先阅读同一固定 SDK 的
+`docs/design/h743-flash-ram.md`、`docs/design/u575-retained-time.md` 和
+`docs/design/u575-stop2-copy.md`。
+H743 Flash 维护需要精确 revision、RAM 执行/VTOR/中断依赖闭包、排空和维护恢复
+证明；U575 RTC/LPTIM/Stop2 需要独立保留时钟、显式 WUT owner、安全域及电源条件。
+选中参考配置或通过 Native 模型不证明真实设备符合进入条件，通用项目不会自动擦写
+Flash 或进入低功耗。运行时关闭与恢复策略必须由产品显式选择；所有 HIL 仍为
+`not_executed`。
+Keep Flash/RAM maintenance and retained time outside the generic starter. Read
+`docs/design/h743-flash-ram.md` and `docs/design/u575-retained-time.md` in the same
+pinned SDK, following that index for retained-copy extensions. H743 maintenance
+requires exact revision admission, RAM execution/VTOR/IRQ dependency closure,
+drain and recovery proof. U575 RTC/LPTIM/Stop2 requires an independent retained
+clock, explicit WUT owner, security and power conditions. A reference selection
+or Native model does not prove physical entry conditions; this repository does
+not automatically erase Flash or enter a low-power state. Products explicitly
+own maintenance/recovery policy. Every physical HIL remains `not_executed`.
 
 ## 新用户练习及迁移 / Newcomer exercise and migration
 

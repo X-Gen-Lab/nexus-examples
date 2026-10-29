@@ -142,6 +142,7 @@ jobs:
             build/native-debug/tests/lifecycle-google-execution/
             build/native-debug/tests/fifo-acquisition-execution/
             build/native-debug/tests/recipes-google-execution/
+            build/native-debug/tests/continuous-rx-execution/
             build/native-debug/nexus/generated/*
             build/native-debug/bin/*
             build/installed-native/source-sdk-manifest.json
@@ -295,6 +296,32 @@ jobs:
             --resolved "$recipe_build/nexus/generated/resolved.json" \
             --budget "$recipe_build/nexus/generated/resource-budget.json" \
             --report "$recipe_build/resource-budget.json"
+      - name: Build Cache-on receive and fixed-run pause recipes
+        if: matrix.preset == 'stm32-h743-nucleo-baremetal'
+        env:
+          PRESET: ${{ matrix.preset }}
+        run: |
+          set -euo pipefail
+          for specification in \
+              apps/stream_recovery/h743_cache_on:continuous_rx_cache_on \
+              apps/runtime_pause/h743:runtime_pause; do
+            recipe="${specification%:*}"
+            target="${specification#*:}"
+            recipe_build="$GITHUB_WORKSPACE/build/$PRESET/advanced/$target"
+            mkdir -p "$recipe_build"
+            cmake -S "$recipe" -B "$recipe_build" -G Ninja \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/external/nexus/cmake/toolchains/arm-gcc.cmake" \
+              -DNEXUS_SOURCE="$GITHUB_WORKSPACE/external/nexus" \
+              2>&1 | tee "$recipe_build/configure.log"
+            cmake --build "$recipe_build" --target "$target" --parallel 2 \
+              2>&1 | tee "$recipe_build/build.log"
+            python3 external/nexus/tools/measurement/resources.py \
+              --elf "$recipe_build/bin/$target.elf" \
+              --resolved "$recipe_build/nexus/generated/resolved.json" \
+              --budget "$recipe_build/nexus/generated/resource-budget.json" \
+              --report "$recipe_build/resource-budget.json"
+          done
       - name: Verify physical ELF identity and each RAM/Flash budget
         run: >-
           python3 external/nexus/tools/measurement/resources.py
@@ -353,4 +380,5 @@ jobs:
             build/${{ matrix.preset }}/recipe/resource-budget.json
             build/${{ matrix.preset }}/recipe/nexus/generated/*
             build/${{ matrix.preset }}/recipe/bin/*
+            build/${{ matrix.preset }}/advanced/
           retention-days: 14

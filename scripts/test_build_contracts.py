@@ -67,7 +67,7 @@ class ApplicationBuildContracts(unittest.TestCase):
                 'reference_lifecycle_google', 'fifo_acquisition_google',
                 'shared_spi_two_devices', 'stream_slow_consumer',
                 'developer_recipes_google', 'shared_spi_real_freertos',
-                'contract_os_freertos'})
+                'contract_os_freertos', 'continuous_rx_google'})
 
 
 if __name__ == '__main__':

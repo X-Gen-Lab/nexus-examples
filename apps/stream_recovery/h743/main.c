@@ -7,21 +7,21 @@
  * \copyright       Copyright (c) 2026 Nexus Team
  */
 #include "nexus/core/time.h"
-#include "nexus/io/stream.h"
 #include "nexus/io/uart.h"
 #include "nexus_bindings.h"
 #include "nexus_factory_strong.h"
+#include "receive_application.h"
 #include <stdbool.h>
 
-/* The exact H743 Cache-off linker places .bss in DMA-visible AXI SRAM. Four
- * independent 128-byte reservations are aligned to whole 32-byte cache lines.
- * This does not authorize enabling Cache or substituting another memory bank.
+/* Both reviewed H743 recipes place .bss in DMA-visible AXI SRAM. Each
+ * 128-byte reservation owns complete 32-byte cache lines; slot/control storage
+ * is separate. The selected provider owns DMA cache maintenance. Applications
+ * access payload only after acquire and before release, in either cache mode.
  */
 static _Alignas(32) uint8_t s_payload[4][128];
 static nx_stream_slot_t s_slots[4];
 static nx_stream_t s_stream;
-static nx_stream_block_t s_held;
-static bool s_has_held;
+static example_receive_consumer_t s_consumer;
 
 /** \brief Debugger-visible outcomes, never a physical qualification record. */
 volatile uint32_t example_received_blocks;
@@ -29,39 +29,29 @@ volatile uint32_t example_loss_reports;
 volatile uint32_t example_restarts;
 volatile int example_result;
 
-/** \brief Consume one ready block, retaining the first for a declared delay. */
-static void consume(bool retain) {
-    nx_stream_block_t block;
-    if (nx_stream_acquire(&s_stream, &block) != NX_SUCCESS) {
-        return;
-    }
-    ++example_received_blocks;
-    if ((block.flags & NX_STREAM_BOUNDARY_LOSS) != 0U) {
-        ++example_loss_reports;
-    }
-    if (retain && !s_has_held) {
-        s_held = block;
-        s_has_held = true;
-    } else {
-        (void)nx_stream_release(&s_stream, &block);
+/** \brief Keep every static loan live when cleanup cannot prove quiescence. */
+static _Noreturn void retain(int result) {
+    example_result = result;
+    for (;;) {
     }
 }
 
-/** \brief Stop new production, release held data, and drain before reuse. */
-static nx_result_t stop_rx(const nx_uart_port_t* uart) {
-    nx_result_t result = nx_uart_port_rx_stop(uart);
-    if (s_has_held) {
-        if (nx_stream_release(&s_stream, &s_held) != NX_SUCCESS) {
-            return NX_ERROR_STATE;
+/** \brief Attempt bounded drain, then stop Platform without further time reads.
+ */
+static int close_platform(const nx_uart_port_t* uart, int result) {
+    example_received_blocks = s_consumer.received;
+    example_loss_reports = s_consumer.losses;
+    if (uart != NULL &&
+        example_receive_stop(uart, &s_stream, &s_consumer) != NX_SUCCESS) {
+        retain(result == 0 ? 5 : result);
+    }
+    for (unsigned attempt = 0U; attempt < 64U; ++attempt) {
+        if (nx_platform_stop() == NX_SUCCESS) {
+            example_result = result;
+            return result;
         }
-        s_has_held = false;
     }
-    while (result == NX_ERROR_BUSY) {
-        (void)nx_uart_port_service(uart);
-        consume(false);
-        result = nx_uart_port_rx_stop(uart);
-    }
-    return result;
+    retain(result == 0 ? 6 : result);
 }
 
 /** \brief Run two finite receive windows; hardware drain may retain storage. */
@@ -69,22 +59,19 @@ int main(void) {
     nx_platform_start_result_t started = nx_platform_start();
     if (started.primary != NX_SUCCESS || started.cleanup != NX_SUCCESS ||
         started.remaining_effects != 0U) {
-        example_result = 1;
-        return example_result;
+        return close_platform(NULL, 1);
     }
     for (size_t index = 0U; index < 4U; ++index) {
         s_slots[index].data = s_payload[index];
         s_slots[index].capacity = sizeof(s_payload[index]);
     }
     if (nx_stream_initialize(&s_stream, s_slots, 4U) != NX_SUCCESS) {
-        example_result = 2;
-        return example_result;
+        return close_platform(NULL, 2);
     }
     const nx_uart_port_t* uart = nx_factory_uart_ref(NX_UART_REF_CONSOLE);
     for (unsigned window = 0U; window < 2U; ++window) {
         if (nx_uart_port_rx_start(uart, &s_stream) != NX_SUCCESS) {
-            example_result = 3;
-            return example_result;
+            return close_platform(uart, 3);
         }
         if (window != 0U) {
             ++example_restarts;
@@ -93,20 +80,19 @@ int main(void) {
         nx_time_us_t release = nx_deadline_after(nx_time_now_us(), 50000U);
         while (nx_time_now_us() < finish) {
             (void)nx_uart_port_service(uart);
-            if (s_has_held && nx_time_now_us() >= release) {
-                if (nx_stream_release(&s_stream, &s_held) != NX_SUCCESS) {
-                    example_result = 4;
-                    return example_result;
-                }
-                s_has_held = false;
+            if (s_consumer.has_held && nx_time_now_us() >= release &&
+                example_receive_release(&s_stream, &s_consumer) != NX_SUCCESS) {
+                return close_platform(uart, 4);
             }
-            consume(window == 0U && nx_time_now_us() < release);
+            if (example_receive_consume(
+                    &s_stream, &s_consumer,
+                    window == 0U && nx_time_now_us() < release) != NX_SUCCESS) {
+                return close_platform(uart, 4);
+            }
         }
-        if (stop_rx(uart) != NX_SUCCESS) {
-            example_result = 5;
-            return example_result;
+        if (example_receive_stop(uart, &s_stream, &s_consumer) != NX_SUCCESS) {
+            return close_platform(uart, 5);
         }
     }
-    example_result = nx_platform_stop() == NX_SUCCESS ? 0 : 6;
-    return example_result;
+    return close_platform(uart, 0);
 }
