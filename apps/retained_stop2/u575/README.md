@@ -142,3 +142,14 @@ C11 策略。覆盖失败 stop／release 的 lease 保留、注册 consumer 阻�
 仍有 effects 时只恢复且不还原 mask、原始屏蔽状态保留、新 lease 重启及部分启动
 失败清理。本地 CI 的 U575 裸机行包含该独立 ARM consumer。真实 RTC、唤醒、
 保留、电流和时序验收仍全部为 `not_executed`。
+
+The other maintained finite Stop2 selections are the independent
+[SRAM4 copy](../u575_copy/README.md) and
+[LPTIM1 tuple](../u575_lptim1/README.md) projects. Their compile-time compound
+hooks add an accepted-request and receiver JOIN before restoring the mask.
+The WUT-only build keeps its direct SDK entry without those hooks or a receiver.
+
+其余当前维护的有限 Stop2 模式见独立 [SRAM4 copy](../u575_copy/README.md) 和
+[LPTIM1 tuple](../u575_lptim1/README.md) 工程。两者用编译时 compound hook，
+在恢复 mask 前增加 accepted request 与 receiver JOIN。WUT-only 构建仍直接调用
+SDK entry，不连接这些 hook，也不拥有 receiver。

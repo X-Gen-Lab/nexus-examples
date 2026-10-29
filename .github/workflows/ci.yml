@@ -308,7 +308,9 @@ jobs:
                        apps/runtime_pause/h743:runtime_pause
                        apps/flash_maintenance/h743:flash_maintenance) ;;
             stm32-u575-nucleo-baremetal)
-              recipes=(apps/retained_stop2/u575:retained_stop2) ;;
+              recipes=(apps/retained_stop2/u575:retained_stop2
+                       apps/retained_stop2/u575_copy:retained_stop2_copy
+                       apps/retained_stop2/u575_lptim1:retained_stop2_lptim1) ;;
             *) exit 1 ;;
           esac
           for specification in "${recipes[@]}"; do

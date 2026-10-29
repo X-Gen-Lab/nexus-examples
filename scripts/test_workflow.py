@@ -237,7 +237,9 @@ if (os.environ.get('ADVANCED_FAIL_PHASE') == phase and
                 ('apps/runtime_pause/h743', 'runtime_pause'),
                 ('apps/flash_maintenance/h743', 'flash_maintenance')],
             'stm32-u575-nucleo-baremetal': [
-                ('apps/retained_stop2/u575', 'retained_stop2')],
+                ('apps/retained_stop2/u575', 'retained_stop2'),
+                ('apps/retained_stop2/u575_copy', 'retained_stop2_copy'),
+                ('apps/retained_stop2/u575_lptim1', 'retained_stop2_lptim1')],
             'unreviewed-preset': [],
         }
         for preset, selected in selections.items():

@@ -19,6 +19,7 @@ typedef enum {
     EXAMPLE_STOP2_QUIESCENT,
     EXAMPLE_STOP2_ENTER,
     EXAMPLE_STOP2_RECOVER,
+    EXAMPLE_STOP2_JOIN,
     EXAMPLE_STOP2_REOPEN,
     EXAMPLE_STOP2_ACQUIRE,
     EXAMPLE_STOP2_RESTART,
@@ -45,6 +46,38 @@ typedef struct {
     bool mask_retained;
     bool restarted;
 } example_stop2_application_t;
+#ifdef EXAMPLE_STOP2_COMPOUND
+/**
+ * \brief Separate component cleanup from its final application result.
+ * \note cleanup SUCCESS proves every component loan and access effect joined.
+ *       Any other value retains the same masked JOIN phase and static storage.
+ *       operation is consumed only after successful cleanup, including a
+ *       rejected entry or a final request error. No status revokes a borrow.
+ */
+typedef struct {
+    nx_result_t cleanup;
+    nx_result_t operation;
+} example_stop2_join_result_t;
+/**
+ * \brief Direct compile-time-selected finite operation in the closed boundary.
+ * \param[in] owners: Exact closed and drained RUN-domain barrier.
+ * \return Transition observations; application retains accepted request facts.
+ * \note Serialized privileged MSP Thread with PRIMASK1; executed at most once.
+ *       Definition belongs to the selected external application. No runtime
+ *       function pointer table or alternate physical Stop2 owner is created.
+ */
+nx_stm32u575_stop2_result_t
+example_stop2_application_enter(nx_clock_barrier_t owners);
+/**
+ * \brief Acquire accepted results and join component access before unmask.
+ * \return Separate final operation and observed cleanup outcomes.
+ * \note Same retained mask and closed barrier, after actual transition drain.
+ *       Also called when initial startup failed and entry was skipped: reject
+ *       no unaccepted READY request, but join any partial component startup.
+ *       Never dereference payload before acquire-observed request settlement.
+ */
+example_stop2_join_result_t example_stop2_application_join(void);
+#endif
 /**
  * \brief           Advance exactly one application lifecycle operation.
  * \param[in,out]   app: Static serialized state, with an acquired RUN lease.

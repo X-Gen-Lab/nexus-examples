@@ -38,20 +38,31 @@ class ApplicationBuildContracts(unittest.TestCase):
             self.assertEqual(set(applications), {
                 'platform_reference', 'sensor_spi', 'journal', 'modbus_registers',
                 'uart_owner_runtime', 'shared_spi_runtime', 'stream_recovery',
-                'shared_spi_freertos_host'})
+                'shared_spi_freertos_host', 'stop2_copy_hook_source',
+                'stop2_lptim1_hook_source'})
             application_targets = set(applications)
-            for relative, target in (
+            for relative, targets in (
                     ('apps/flash_maintenance/flash_application.c',
-                     'flash_maintenance_test'),
+                     {'flash_maintenance_test'}),
                     ('apps/retained_stop2/stop2_application.c',
-                     'retained_stop2_test')):
+                     {'retained_stop2_test', 'compound_stop2_test'})):
                 selected = [item['command'] for item in commands
                             if Path(item['file']) == ROOT / relative]
-                self.assertEqual(len(selected), 1, relative)
-                self.assertIn('CMakeFiles/' + target + '.dir/', selected[0])
+                self.assertEqual(len(selected), len(targets), relative)
+                actual = {}
+                for command in selected:
+                    target = re.search(r'CMakeFiles/([^/]+)\.dir/', command)
+                    self.assertIsNotNone(target, command)
+                    actual[target.group(1)] = command
+                self.assertEqual(set(actual), targets)
                 # The exact production C policy is instrumented independently
                 # from its host-only C++ GoogleTest/GoogleMock harness.
-                applications[target] = selected[0]
+                applications.update(actual)
+            for mode in ('copy', 'lptim1'):
+                command = applications['stop2_' + mode + '_hook_source']
+                self.assertIn('-Dmain=example_stop2_' + mode + '_firmware_main',
+                              command.split())
+                self.assertIn('-DEXAMPLE_STOP2_COMPOUND=1', command.split())
             for name, command in applications.items():
                 with self.subTest(application=name):
                     self.assertIn('-std=c11', command.split())
@@ -82,7 +93,9 @@ class ApplicationBuildContracts(unittest.TestCase):
                 'shared_spi_two_devices', 'stream_slow_consumer',
                 'developer_recipes_google', 'shared_spi_real_freertos',
                 'contract_os_freertos', 'continuous_rx_google',
-                'flash_maintenance_google', 'retained_stop2_google'})
+                'flash_maintenance_google', 'retained_stop2_google',
+                'compound_stop2_google', 'stop2_copy_hooks_google',
+                'stop2_lptim1_hooks_google'})
 
 
 if __name__ == '__main__':

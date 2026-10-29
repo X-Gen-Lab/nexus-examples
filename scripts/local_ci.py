@@ -72,7 +72,9 @@ def standalones(preset):
                      ("apps/runtime_pause/h743", "runtime_pause", None),
                      ("apps/flash_maintenance/h743", "flash_maintenance", None)))
     if preset == "stm32-u575-nucleo-baremetal":
-        rows.append(("apps/retained_stop2/u575", "retained_stop2", None))
+        rows.extend((("apps/retained_stop2/u575", "retained_stop2", None),
+                     ("apps/retained_stop2/u575_copy", "retained_stop2_copy", None),
+                     ("apps/retained_stop2/u575_lptim1", "retained_stop2_lptim1", None)))
     return rows
 
 

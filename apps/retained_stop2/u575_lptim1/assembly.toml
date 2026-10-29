@@ -1,0 +1,16 @@
+schema = 2
+board = "stm32u575_nucleo_zi_q"
+backend = "baremetal"
+clock = "msis4"
+
+[factory]
+capabilities = true
+
+[memory]
+main_stack_bytes = 4096
+libc_heap_bytes = 0
+static_ram_limit_bytes = 16384
+flash_load_limit_bytes = 65536
+
+[memory.regions.sram4]
+limit_bytes = 512

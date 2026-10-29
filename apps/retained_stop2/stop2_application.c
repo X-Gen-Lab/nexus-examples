@@ -27,8 +27,15 @@ static void transition_observed(example_stop2_application_t* app) {
                                ? app->transition.primary
                                : app->transition.cleanup;
     }
-    app->phase = app->transition.remaining_effects != 0U ? EXAMPLE_STOP2_RECOVER
-                                                         : EXAMPLE_STOP2_REOPEN;
+    if (app->transition.remaining_effects != 0U) {
+        app->phase = EXAMPLE_STOP2_RECOVER;
+    } else {
+#ifdef EXAMPLE_STOP2_COMPOUND
+        app->phase = EXAMPLE_STOP2_JOIN;
+#else
+        app->phase = EXAMPLE_STOP2_REOPEN;
+#endif
+    }
 }
 
 /** \brief One lifecycle step; caller retains storage through unfinished work.
@@ -78,19 +85,48 @@ nx_result_t example_stop2_progress(example_stop2_application_t* app) {
             break;
         case EXAMPLE_STOP2_ENTER:
             if (app->first_error != NX_SUCCESS) {
+#ifdef EXAMPLE_STOP2_COMPOUND
+                /* A skipped entry can still own partial receiver startup. */
+                app->saved_mask = nx_arch_irq_save();
+                app->mask_retained = true;
+                app->phase = EXAMPLE_STOP2_JOIN;
+                break;
+#else
                 app->phase = EXAMPLE_STOP2_DONE;
                 return app->first_error;
+#endif
             }
             app->saved_mask = nx_arch_irq_save();
             app->mask_retained = true;
+#ifdef EXAMPLE_STOP2_COMPOUND
+            app->transition = example_stop2_application_enter(app->barrier);
+#else
             app->transition =
                 nx_stm32u575_stop2_enter(app->barrier, 2048U, 10000U);
+#endif
             transition_observed(app);
             break;
         case EXAMPLE_STOP2_RECOVER:
             app->transition = nx_stm32u575_stop2_recover(app->barrier, 10000U);
             transition_observed(app);
             break;
+        case EXAMPLE_STOP2_JOIN: {
+#ifdef EXAMPLE_STOP2_COMPOUND
+            example_stop2_join_result_t joined =
+                example_stop2_application_join();
+            if (joined.cleanup != NX_SUCCESS) {
+                return observed(app, joined.cleanup);
+            }
+            /* A final BUSY operation is a failure, not cleanup progress. */
+            if (app->first_error == NX_SUCCESS) {
+                app->first_error = joined.operation;
+            }
+            app->phase = EXAMPLE_STOP2_REOPEN;
+            break;
+#else
+            return NX_ERROR_STATE;
+#endif
+        }
         case EXAMPLE_STOP2_REOPEN:
             if (app->mask_retained) {
                 nx_arch_irq_restore(app->saved_mask);

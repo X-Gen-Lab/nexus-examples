@@ -288,6 +288,57 @@ The 64-attempt software bound cannot cancel a Flash pulse or bound physical
 WFI/drain. Unfinished responsibility retains storage. All physical HIL, power,
 timing and power-cut checks remain `not_executed`.
 
+### 完整有限低功耗路径 / All maintained finite low-power paths
+
+U575 的三个独立 Stop2 工程覆盖当前维护的有限模式；每个镜像只链接一个具体
+Stop2 owner。它们共用应用侧 RUN 关闭／join／重启机制，通用平台和 typed factory
+无需变化。新增模式通过 `EXAMPLE_STOP2_COMPOUND=1` 在编译时连接两个直接 C
+hook，不引入运行时 registry、操作表、worker 或动态分配。
+
+The three independent U575 projects cover the maintained finite Stop2 modes.
+Each image links exactly one concrete Stop2 owner. They share application RUN
+closure/join/restart without changing the common platform or typed factory.
+`EXAMPLE_STOP2_COMPOUND=1` connects two direct C hooks at compile time; there is
+no runtime registry, operations table, worker or allocation.
+
+| 独立工程 / Project | 有限操作与责任 / Finite operation and ownership |
+| --- | --- |
+| [WUT-only](../apps/retained_stop2/u575/README.md) | 独立 retained RTC、显式 WUT、无 factory AlarmA；不包含 DMA receiver / Independent retained RTC and WUT, without a factory AlarmA or DMA receiver |
+| [SRAM4 copy](../apps/retained_stop2/u575_copy/README.md) | 显式 AlarmA-copy delegation、17 字节 SRAM4 复制、生成 workspace 与 WUT escape；只链接 `Nexus::U575Stop2Copy` / Explicit AlarmA-copy delegation, 17-byte SRAM4 copy, generated workspace and WUT escape; only `Nexus::U575Stop2Copy` |
+| [LPTIM1 tuple](../apps/retained_stop2/u575_lptim1/README.md) | SRAM4 的单组 12 字节 CCR1／RCR／ARR，经 LPDMA1 channel0 写入独占 LPTIM1；公共 start／stop 管理 access，只有 `Nexus::U575Stop2Lptim1` / One 12-byte SRAM4 CCR1/RCR/ARR tuple through LPDMA1 channel0 to exclusive LPTIM1; public start/stop owns access, with only `Nexus::U575Stop2Lptim1` |
+
+两个 compound 工程只在 accepted 后 acquire-observe request result；拒绝的 READY
+request 没有借用，也不能要求 SETTLED。只有 request 已结清、最终结果／长度正确，
+copy 数据或原始 wake／clock 观察通过检查，且 receiver 的公共 stop 真正释放全部
+access effects，JOIN 才允许恢复 mask 并重开 RUN。cleanup 与 operation 结果分开：
+cleanup BUSY 保留 mask 和同一个 phase；终态 operation BUSY 是失败，不能伪装成
+成功进度。初始部分启动失败跳过 WFI，但仍须完成 receiver JOIN。静态 request、
+数据及 workspace 不因 64 次尝试耗尽或 deadline 到期而归还。
+
+The compound projects acquire a request result only after acceptance; a rejected
+READY request has no loan and must not be required to settle. JOIN permits mask
+restoration and RUN reopen only after the request settles, final result/count,
+copy bytes or original wake/clock observations are valid, and public receiver
+stop actually joins all access effects. Cleanup and operation results remain
+separate: cleanup BUSY retains the mask and phase, while terminal operation BUSY
+is a failure. Partial initial startup skips WFI but still joins the receiver.
+Neither the 64-attempt limit nor a deadline revokes static request, data or
+workspace ownership.
+
+所有工程仍要求外部 boot／Board 提供精确 RTC、供电、静止 master 与保留条件。
+选入 SRAM4 时，reset startup 会在 `main` 前准备 SRAM4／LPDMA 并初始化 DATA／
+BSS；运行时 opt-in 为零不能取消这些已选择的启动动作。NOINIT workspace 不读取
+旧内容。两个新工程均接入 U575 裸机 CI 行，主项目仍维持原有 17 个 preset。
+有限 copy／tuple 不等于通用 LPBAM、重复波形或 GPIO／实物输出资格。
+
+External boot/Board owners still supply exact RTC, supply, quiet-master and
+retention premises. Selected SRAM4 reset startup prepares SRAM4/LPDMA and
+initializes DATA/BSS before `main`; a zero runtime opt-in does not cancel that
+selected startup. NOINIT workspace is not read before initialization. Both new
+projects join the U575 baremetal CI row; the main matrix retains 17 presets.
+Finite copy/tuple execution is not general LPBAM, repeated waveform or physical
+GPIO/output qualification.
+
 ## 新用户练习及迁移 / Newcomer exercise and migration
 
 1. 固定 examples 完整提交及同提交 SDK 锁，创建 Native 模板到含空格的新目录。

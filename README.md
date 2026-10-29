@@ -171,3 +171,15 @@ Independent opt-in H743 Flash/RAM and U575 retained-time/Stop2 recipes share
 their C11 policy with host failure tests and the existing local CI. Default
 execution performs neither maintenance nor sleep; boot, physical premises and
 recovery remain product obligations, with all hardware acceptance unexecuted.
+
+U575 的全部当前有限 Stop2 路径分别由 [WUT-only](apps/retained_stop2/u575/README.md)、
+[SRAM4 copy](apps/retained_stop2/u575_copy/README.md) 和
+[LPTIM1 单元组 LPBAM](apps/retained_stop2/u575_lptim1/README.md) 独立工程维护。
+三者按编译时选择互斥 owner；compound 路径在实际排空后 acquire 请求结果并 join
+receiver，才恢复 mask／重开 RUN。全部主机失败路径与独立 ARM 入口接入同一 CI，
+不扩大通用 LPBAM 或实板承诺。
+All maintained finite U575 Stop2 modes have separate WUT-only, SRAM4-copy and
+single-tuple LPTIM1 LPBAM projects. Each selects one mutually exclusive owner;
+compound paths acquire results and join the receiver after actual drain, before
+restoring masks or reopening RUN. Host failure tests and independent ARM entries
+join the same CI without general-LPBAM or physical qualification claims.
