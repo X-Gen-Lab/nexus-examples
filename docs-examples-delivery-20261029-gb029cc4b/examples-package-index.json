@@ -1,0 +1,81 @@
+{
+  "kind": "external_examples_portable_evidence_index",
+  "platform_revision": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+  "platform_tree": "17c18aea10066d5d7418f3a7fd3b42e619ee3414",
+  "examples_revision": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+  "examples_tree": "cf01babc4901604f02f14d2e205b53f5a231ddad",
+  "status": "verified",
+  "packages": {
+    "created-product": {
+      "package": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/created-product-package.json",
+      "archive": {
+        "path": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/store/d889151d8527d73484ea76387267dd4e9b0179dd3ea643998cf65d9cff488fed.tar.gz",
+        "sha256": "d889151d8527d73484ea76387267dd4e9b0179dd3ea643998cf65d9cff488fed",
+        "size": 3603894
+      },
+      "bytes": 20137556,
+      "files": 154,
+      "kind": "portable_evidence",
+      "manifest_sha256": "336643176745fc667dff1469b0a8191cde9ee1567cf7788ff3688162e58c8977",
+      "product_promotion": false,
+      "schema_version": 1,
+      "signature_status": "unsigned",
+      "original_and_independent_restore_match": true
+    },
+    "upgraded-product": {
+      "package": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/upgraded-product-package.json",
+      "archive": {
+        "path": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/store/35671445b29ec6318c6495e445047ba7330e52509da3ce8db0ba6eb52968629d.tar.gz",
+        "sha256": "35671445b29ec6318c6495e445047ba7330e52509da3ce8db0ba6eb52968629d",
+        "size": 4019786
+      },
+      "bytes": 22654784,
+      "files": 158,
+      "kind": "portable_evidence",
+      "manifest_sha256": "6a7f9d7bd75a798ba2bb93b3ae9e66952c4a2591dbd603caf55e323bb2f4bacf",
+      "product_promotion": false,
+      "schema_version": 1,
+      "signature_status": "unsigned",
+      "original_and_independent_restore_match": true
+    },
+    "execution-and-sdk": {
+      "package": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/execution-and-sdk-package.json",
+      "archive": {
+        "path": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/store/73f153638f19212132d69b5a4e72586aa0bf60c913c28f4f4d3c5a1ca7e092bd.tar.gz",
+        "sha256": "73f153638f19212132d69b5a4e72586aa0bf60c913c28f4f4d3c5a1ca7e092bd",
+        "size": 17452861
+      },
+      "bytes": 112950124,
+      "files": 4877,
+      "kind": "portable_evidence",
+      "manifest_sha256": "2522288aca69c84f2f81205fc84c8881740aeeee6822974001f82e733f663bef",
+      "product_promotion": false,
+      "schema_version": 1,
+      "signature_status": "unsigned",
+      "original_and_independent_restore_match": true
+    },
+    "actual-shared-artifacts": {
+      "package": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/actual-shared-artifacts-package.json",
+      "archive": {
+        "path": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/store/e32d804463b8356bc5d24eeb461262cda2d94e9b3de5585d7748a545fa028ecd.tar.gz",
+        "sha256": "e32d804463b8356bc5d24eeb461262cda2d94e9b3de5585d7748a545fa028ecd",
+        "size": 19422498
+      },
+      "bytes": 93600553,
+      "files": 370,
+      "kind": "portable_evidence",
+      "manifest_sha256": "8afd1243b130e5b58ee5685105bc02a63737fa348c0d6ef0214986922afc7acf",
+      "product_promotion": false,
+      "schema_version": 1,
+      "signature_status": "unsigned",
+      "original_and_independent_restore_match": true
+    }
+  },
+  "physical_hil": "not_executed",
+  "qualification_scope": "executed external example software; no product promotion",
+  "complete_raw_and_actual_artifacts": true,
+  "sdk_readonly_lease": "/dev/shm/nexus-examples-final/build/p6-7590b2d4/local-ci/source-sdk",
+  "historical_old_sdk_package": "/dev/shm/nexus-examples-final-evidence-9d7d4d34/examples-build-package.json",
+  "historical_old_product_package": "/dev/shm/nexus-examples-final-evidence-9d7d4d34/user-product-package.json",
+  "writer_status": "all own archive and consumer writers stopped after final metadata"
+}

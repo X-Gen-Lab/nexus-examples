@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "kind": "immutable_private_examples_git_assets",
+  "examples_commit": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+  "platform_commit": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+  "physical_hil": "not_executed",
+  "transport_boundary": "Private repository; authenticated GitHub contents API at exact commit, no public raw domain.",
+  "members": [
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/README.md",
+      "bytes": 1020,
+      "sha256": "82f92d023433770d363c9b12ccc87a08bc1e8afc6529c9d7cfc63ab00802a48d"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/actual-shared-artifacts-package.json",
+      "bytes": 508,
+      "sha256": "61a474969415ce39b344e003f1bcd961516e4c2e5cf29293270880a75586f71e"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/actual-shared-artifacts.tar.gz",
+      "bytes": 19422498,
+      "sha256": "e32d804463b8356bc5d24eeb461262cda2d94e9b3de5585d7748a545fa028ecd"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/created-product-package.json",
+      "bytes": 507,
+      "sha256": "beff988b34bff0160af9e96cfa1554b15c7a009aa257e4e54ab4b7b686a5f7ce"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/created-product.tar.gz",
+      "bytes": 3603894,
+      "sha256": "d889151d8527d73484ea76387267dd4e9b0179dd3ea643998cf65d9cff488fed"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/examples-handoff.json",
+      "bytes": 5880,
+      "sha256": "19e37d912f49dae98b11849560ccd832be6851e86b65f843e112669881213380"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/examples-package-index.json",
+      "bytes": 3883,
+      "sha256": "a8aa9871e8a74b7cc6ac3f327834f8c4b434dfc5f1e16eabae4cc71ce2c4e00c"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/examples-summary.json",
+      "bytes": 6064,
+      "sha256": "e5917f62fc9e73f3a6c938f8b4222e65c9db8a64947e82dc20e3d5d183872eff"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/execution-and-sdk-package.json",
+      "bytes": 510,
+      "sha256": "43d6165231b022a3af513f4aa06495c2955bf96d4bdb0ca3e6bb834b95bab772"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/execution-and-sdk.tar.gz",
+      "bytes": 17452861,
+      "sha256": "73f153638f19212132d69b5a4e72586aa0bf60c913c28f4f4d3c5a1ca7e092bd"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/final-index.json",
+      "bytes": 6550,
+      "sha256": "d071359423f46d65bca4162ad90d0d0787612d3f0b0cf7670bca329a9fa9578f"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/source-bound-status.json",
+      "bytes": 27380,
+      "sha256": "72a04e0c5b2f0be610e99fbc87fdba6128e4cbce3cfaaca7f0aff3f50f9404ee"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/upgraded-product-package.json",
+      "bytes": 507,
+      "sha256": "873c213f36e8c116be614895674a4844041d4a83b4d858f6ac4ff7ea9880b48a"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/upgraded-product.tar.gz",
+      "bytes": 4019786,
+      "sha256": "35671445b29ec6318c6495e445047ba7330e52509da3ce8db0ba6eb52968629d"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/verification-tools.tar.gz",
+      "bytes": 9086,
+      "sha256": "51b5aa5e2bfb5000502d43e86138dfdcd14d56f9af47ebc98e51b08c1c53e2d4"
+    }
+  ]
+}

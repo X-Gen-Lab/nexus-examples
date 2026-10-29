@@ -1,0 +1,130 @@
+{
+  "kind": "private_examples_source_bound_delivery_index",
+  "repository": "X-Gen-Lab/nexus-examples",
+  "repository_visibility": "private",
+  "branch": "delivery-assets",
+  "namespace": "docs-examples-delivery-20261029-gb029cc4b",
+  "platform_commit": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+  "platform_tree": "17c18aea10066d5d7418f3a7fd3b42e619ee3414",
+  "examples_commit": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+  "examples_tree": "cf01babc4901604f02f14d2e205b53f5a231ddad",
+  "packages": [
+    {
+      "name": "created-product",
+      "original_package": "created-product-package.json",
+      "original_archive": "created-product.tar.gz",
+      "archive_sha256": "d889151d8527d73484ea76387267dd4e9b0179dd3ea643998cf65d9cff488fed",
+      "archive_bytes": 3603894,
+      "manifest_sha256": "336643176745fc667dff1469b0a8191cde9ee1567cf7788ff3688162e58c8977",
+      "files": 154,
+      "expanded_bytes": 20137556,
+      "original_archive_source": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/store/d889151d8527d73484ea76387267dd4e9b0179dd3ea643998cf65d9cff488fed.tar.gz",
+      "archive_override_required": true
+    },
+    {
+      "name": "upgraded-product",
+      "original_package": "upgraded-product-package.json",
+      "original_archive": "upgraded-product.tar.gz",
+      "archive_sha256": "35671445b29ec6318c6495e445047ba7330e52509da3ce8db0ba6eb52968629d",
+      "archive_bytes": 4019786,
+      "manifest_sha256": "6a7f9d7bd75a798ba2bb93b3ae9e66952c4a2591dbd603caf55e323bb2f4bacf",
+      "files": 158,
+      "expanded_bytes": 22654784,
+      "original_archive_source": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/store/35671445b29ec6318c6495e445047ba7330e52509da3ce8db0ba6eb52968629d.tar.gz",
+      "archive_override_required": true
+    },
+    {
+      "name": "execution-and-sdk",
+      "original_package": "execution-and-sdk-package.json",
+      "original_archive": "execution-and-sdk.tar.gz",
+      "archive_sha256": "73f153638f19212132d69b5a4e72586aa0bf60c913c28f4f4d3c5a1ca7e092bd",
+      "archive_bytes": 17452861,
+      "manifest_sha256": "2522288aca69c84f2f81205fc84c8881740aeeee6822974001f82e733f663bef",
+      "files": 4877,
+      "expanded_bytes": 112950124,
+      "original_archive_source": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/store/73f153638f19212132d69b5a4e72586aa0bf60c913c28f4f4d3c5a1ca7e092bd.tar.gz",
+      "archive_override_required": true
+    },
+    {
+      "name": "actual-shared-artifacts",
+      "original_package": "actual-shared-artifacts-package.json",
+      "original_archive": "actual-shared-artifacts.tar.gz",
+      "archive_sha256": "e32d804463b8356bc5d24eeb461262cda2d94e9b3de5585d7748a545fa028ecd",
+      "archive_bytes": 19422498,
+      "manifest_sha256": "8afd1243b130e5b58ee5685105bc02a63737fa348c0d6ef0214986922afc7acf",
+      "files": 370,
+      "expanded_bytes": 93600553,
+      "original_archive_source": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/store/e32d804463b8356bc5d24eeb461262cda2d94e9b3de5585d7748a545fa028ecd.tar.gz",
+      "archive_override_required": true
+    }
+  ],
+  "original_metadata": [
+    {
+      "source": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/final-handoff.json",
+      "path": "examples-handoff.json",
+      "bytes": 5880,
+      "sha256": "19e37d912f49dae98b11849560ccd832be6851e86b65f843e112669881213380",
+      "original_bytes_unchanged": true
+    },
+    {
+      "source": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/final-package-index.json",
+      "path": "examples-package-index.json",
+      "bytes": 3883,
+      "sha256": "a8aa9871e8a74b7cc6ac3f327834f8c4b434dfc5f1e16eabae4cc71ce2c4e00c",
+      "original_bytes_unchanged": true
+    },
+    {
+      "source": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/final-delivery-summary.json",
+      "path": "examples-summary.json",
+      "bytes": 6064,
+      "sha256": "e5917f62fc9e73f3a6c938f8b4222e65c9db8a64947e82dc20e3d5d183872eff",
+      "original_bytes_unchanged": true
+    },
+    {
+      "source": "/workspace/nexus/build/c-cold-20261028/final-delivery-closeout-p6/source-bound-status.pre-final.json",
+      "path": "source-bound-status.json",
+      "bytes": 27380,
+      "sha256": "72a04e0c5b2f0be610e99fbc87fdba6128e4cbce3cfaaca7f0aff3f50f9404ee",
+      "original_bytes_unchanged": true
+    }
+  ],
+  "verifiers": {
+    "source": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+    "files": [
+      {
+        "path": "tools/evidence/store.py",
+        "bytes": 20496,
+        "sha256": "e3a9bde01dae28c3524daf9203a1512a66f317a99a62a7a0acf22e43a3013d7d"
+      },
+      {
+        "path": "tools/evidence/common.py",
+        "bytes": 11352,
+        "sha256": "6a59439c062078561e9b2110625ecec3e845b37e6bcce2a4261d318f1ce7b1ff"
+      },
+      {
+        "path": "LICENSE",
+        "bytes": 1085,
+        "sha256": "b7152bd37691794b676615577f8c2b292288fa0691159c1e04f129e07f322913"
+      }
+    ],
+    "asset_validator_sha256": "2e7512a914a033d76f7762c215ca829aa4d7d50bdc7f697c3959879fc4cd68a1"
+  },
+  "recovery": {
+    "transport": "Authenticated GitHub contents API at exact storage commit; require every asset member size/SHA equality.",
+    "commands": [
+      "python3 -B RESTORED_VERIFIERS/tools/evidence/store.py verify --package PACKAGE --archive ORIGINAL_ARCHIVE --report REPORT",
+      "python3 -B RESTORED_VERIFIERS/tools/evidence/store.py restore --package PACKAGE --archive ORIGINAL_ARCHIVE --destination FRESH_DEST --report REPORT",
+      "For execution-and-sdk: python3 -B FRESH_DEST/local-ci/source-sdk/share/nexus/src/cmake/package/package_source_sdk.py --verify FRESH_DEST/local-ci/source-sdk/share/nexus/src"
+    ],
+    "complete_member_boundary": "Existing store verifier and restore require exact file/directory inventory, member SHA/size/mode, and original manifest. No builds or application execution are repeated for retention."
+  },
+  "physical_hil": "not_executed",
+  "product_promotion": false,
+  "recipe_reproducible": false,
+  "hosted_Pages": "not_performed",
+  "formal_Release": "not_performed",
+  "original_outer_candidate_receipt": "running/null preserved; actual24 owned child CLI completed/zero establish8candidate scope in original platform handoff",
+  "public_private_boundary": "These source-bound examples archives and detailed metadata remain on the private repository. Public platform assets may reference this authenticated private entry but do not copy these bytes.",
+  "retention_status": "Payload creation; actual exact-commit download and independent-restoration proof is appended only after completion.",
+  "no_future_public_proof_commit_dependency": true
+}

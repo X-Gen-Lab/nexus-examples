@@ -1,0 +1,194 @@
+{
+  "kind": "external_examples_final_delivery_summary",
+  "status": "software_scope_passed",
+  "platform_commit": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+  "platform_tree": "17c18aea10066d5d7418f3a7fd3b42e619ee3414",
+  "examples_commit": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+  "examples_tree": "cf01babc4901604f02f14d2e205b53f5a231ddad",
+  "parent_examples": "6f09ae5539d58161acdab944767e8067895ad9bb",
+  "ordinary_commit": {
+    "argv": [
+      "git",
+      "commit",
+      "-m",
+      "chore(sdk): pin qualified platform cold lifecycle fix"
+    ],
+    "exit_code": 0,
+    "started_ns": 1793266191306764204,
+    "ended_ns": 1793266215983942220,
+    "removed_environment_names": [
+      "GIT_PAGER"
+    ],
+    "bypass": false,
+    "commit": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+    "tree": "cf01babc4901604f02f14d2e205b53f5a231ddad",
+    "parent": "6f09ae5539d58161acdab944767e8067895ad9bb",
+    "subject": "chore(sdk): pin qualified platform cold lifecycle fix"
+  },
+  "github_sync": {
+    "expected_old": "6f09ae5539d58161acdab944767e8067895ad9bb",
+    "new_commit": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+    "branch": "delivery/final-platform-cold-c-20261028",
+    "new_parent": "6f09ae5539d58161acdab944767e8067895ad9bb",
+    "nonforce": true,
+    "atomic_push": true,
+    "normal_commit_sha_preserved": true,
+    "remote_after_verified": true,
+    "tree": "cf01babc4901604f02f14d2e205b53f5a231ddad"
+  },
+  "full_scope_all": {
+    "status": "passed",
+    "commands": 104,
+    "presets": 17,
+    "arm_presets": [
+      "stm32-qiming-baremetal",
+      "stm32-qiming-freertos",
+      "stm32-sky-baremetal",
+      "stm32-sky-freertos",
+      "gd32-liangshan-baremetal",
+      "gd32-liangshan-freertos",
+      "stm32-h743-nucleo-baremetal",
+      "stm32-h743-nucleo-freertos",
+      "stm32-u575-nucleo-baremetal",
+      "stm32-u575-nucleo-freertos",
+      "stm32-f103-reference-baremetal",
+      "stm32-f103-reference-freertos",
+      "gd32-f303-reference-baremetal",
+      "gd32-f303-reference-freertos",
+      "stm32-g474-reference-baremetal",
+      "stm32-g474-reference-freertos"
+    ],
+    "standalone_projects": 9,
+    "arm_elf_budgets_passed": 41,
+    "parallel": 1,
+    "elapsed_seconds": 148.134686978,
+    "fresh_native_ctest": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 16,
+      "report_sha256": "5456ee30180ea5cbc26d187f8e113051d9b2c314d08dfceef3a8734a9090dc4d"
+    },
+    "fresh_google": {
+      "tests": 76,
+      "passed": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "programs": 7
+    },
+    "installed_native": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "cases": [
+        {
+          "name": "installed_platform_reference",
+          "classname": "installed_platform_reference",
+          "status": "passed"
+        }
+      ],
+      "report_sha256": "e08620a4274882461ba0a0d199f6fdac00900932cc0d55f24e01bf849aeaab6f"
+    }
+  },
+  "four_starters": {
+    "qiming": "scopeall",
+    "sky": "scopeall",
+    "liangshan": "scopeall",
+    "native": "actual installed SDK create+build+run, user-onboarding/execution.json"
+  },
+  "actual_external_user_creation": {
+    "status": "passed",
+    "examples_commit": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+    "platform_commit": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+    "commands": 7,
+    "tests": {
+      "cases": [
+        {
+          "classname": "starter_application",
+          "name": "starter_application",
+          "status": "passed"
+        }
+      ],
+      "errors": 0,
+      "failures": 0,
+      "passed": 1,
+      "report_sha256": "eb6a6375aa1e672b098879570abbab3737b3208899337c7a078881007701c708",
+      "skipped": 0,
+      "tests": 1
+    },
+    "spaces_in_source_and_build": true
+  },
+  "actual_external_user_sdk_upgrade": {
+    "status": "passed",
+    "old_platform": "5d60b56e09686776c72ce95dfa9384357e57d2bf",
+    "new_platform": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+    "commands": 14,
+    "same_product_same_build_root": true,
+    "product_authored_and_origin_bytes_unchanged": true,
+    "old_junit": {
+      "cases": [
+        {
+          "classname": "starter_application",
+          "name": "starter_application",
+          "status": "passed"
+        }
+      ],
+      "errors": 0,
+      "failures": 0,
+      "passed": 1,
+      "report_sha256": "97825e1a05b888b234be924b6fc601e4465ec5b38f0b843212370b3bd8a9c039",
+      "skipped": 0,
+      "tests": 1
+    },
+    "upgraded_junit": {
+      "cases": [
+        {
+          "classname": "starter_application",
+          "name": "starter_application",
+          "status": "passed"
+        }
+      ],
+      "errors": 0,
+      "failures": 0,
+      "passed": 1,
+      "report_sha256": "6ac673007104d4d452242a7452251644b57a273daf2fd732cf4425fe29fb125f",
+      "skipped": 0,
+      "tests": 1
+    },
+    "compiler_source_audit": {
+      "old": {
+        "compilation_units": 112,
+        "sdk_units": 110,
+        "product_units": 1,
+        "generated_units": 1,
+        "opposite_sdk_references": 0
+      },
+      "upgraded": {
+        "compilation_units": 112,
+        "sdk_units": 110,
+        "product_units": 1,
+        "generated_units": 1,
+        "opposite_sdk_references": 0
+      }
+    },
+    "before_after_sdk_integrity": "passed for both full prefixes",
+    "scope": "this Native starter source consumption; does not qualify other APIs or MCU targets",
+    "preparation_failure_retained": "user-upgrade-attempt1-failed"
+  },
+  "source_sdk": {
+    "source_revision": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+    "source_tree": "17c18aea10066d5d7418f3a7fd3b42e619ee3414",
+    "snapshot_sha256": "e1bb0cf21efc98acdaaad66706a1c7a7c4cc08109efab8a535e308d2b0f26d4b",
+    "publishable": true,
+    "source_dirty": false
+  },
+  "physical_hil": "not_executed",
+  "limitations": [
+    "P4 and P5 evidence retain original source identities",
+    "Physical HIL, platform full159, independent offline reproduction, Pages and formal Release are separate exits"
+  ]
+}

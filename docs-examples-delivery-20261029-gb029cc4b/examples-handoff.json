@@ -1,0 +1,145 @@
+{
+  "kind": "final_examples_P6_handoff",
+  "status": "complete_software_scope",
+  "platform": {
+    "commit": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+    "tree": "17c18aea10066d5d7418f3a7fd3b42e619ee3414",
+    "clean": true
+  },
+  "examples": {
+    "commit": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+    "tree": "cf01babc4901604f02f14d2e205b53f5a231ddad",
+    "clean": true
+  },
+  "source_worktrees": {
+    "/workspace/nexus": {
+      "commit": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+      "tree": "17c18aea10066d5d7418f3a7fd3b42e619ee3414",
+      "clean": true
+    },
+    "/workspace/nexus-examples": {
+      "commit": "4a9f5f75b72605acc14f0d4bc5d675454e51c740",
+      "tree": "1345fd439ee19a50d565251e32ce3ab9bd5c89a2",
+      "clean": true
+    },
+    "/dev/shm/nexus-examples-final": {
+      "commit": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+      "tree": "cf01babc4901604f02f14d2e205b53f5a231ddad",
+      "clean": true
+    }
+  },
+  "branch": "delivery/final-platform-cold-c-20261028",
+  "pull_request": "https://github.com/X-Gen-Lab/nexus-examples/pull/18",
+  "pr_state": "open draft updated to actual P6/E6 evidence",
+  "normal_commit_hooks": "passed:85Python16CTest7Googleprograms76cases",
+  "github_sync": "ordinary CLI nonforce atomic push, expectedold6f09, same actualb029 SHA preserved",
+  "fresh_scopeall": {
+    "status": "passed",
+    "commands": 104,
+    "presets": 17,
+    "arm_presets": [
+      "stm32-qiming-baremetal",
+      "stm32-qiming-freertos",
+      "stm32-sky-baremetal",
+      "stm32-sky-freertos",
+      "gd32-liangshan-baremetal",
+      "gd32-liangshan-freertos",
+      "stm32-h743-nucleo-baremetal",
+      "stm32-h743-nucleo-freertos",
+      "stm32-u575-nucleo-baremetal",
+      "stm32-u575-nucleo-freertos",
+      "stm32-f103-reference-baremetal",
+      "stm32-f103-reference-freertos",
+      "gd32-f303-reference-baremetal",
+      "gd32-f303-reference-freertos",
+      "stm32-g474-reference-baremetal",
+      "stm32-g474-reference-freertos"
+    ],
+    "standalone_projects": 9,
+    "arm_elf_budgets_passed": 41,
+    "parallel": 1,
+    "elapsed_seconds": 148.134686978,
+    "fresh_native_ctest": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 16,
+      "report_sha256": "5456ee30180ea5cbc26d187f8e113051d9b2c314d08dfceef3a8734a9090dc4d"
+    },
+    "fresh_google": {
+      "tests": 76,
+      "passed": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "programs": 7
+    },
+    "installed_native": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "cases": [
+        {
+          "name": "installed_platform_reference",
+          "classname": "installed_platform_reference",
+          "status": "passed"
+        }
+      ],
+      "report_sha256": "e08620a4274882461ba0a0d199f6fdac00900932cc0d55f24e01bf849aeaab6f"
+    }
+  },
+  "four_starters": "complete:threeMCUlinks+actualinstalledSDKNativecreate/build/run",
+  "actual_upgrade": "passed:P4originalproduct/sourceSDK\u2192P6installedSDK,sameproduct/samebuild,5sourceandoriginfilesunchanged,110SDKcompilerunitsswitchcleanly,bothfresh1/1CTest,bothSDKbefore/afterverify,independentreviewpassed",
+  "retained_preparation_failure": "execution-and-sdk archive / user-upgrade-attempt1-failed; legal0B stdio.h rejected by one-off nonemptydigest, corrected withoutsourcechanges; actualattempt2all14commands0",
+  "archive_index": "/dev/shm/nexus-examples-p6-evidence-b029cc4b/final-package-index.json",
+  "archive_status": "4completeexports/4wholepackageverifies/4independentrestores/alleverymemberhashsizemodecomparisonspassed;fullrestoredSDKcompleteverificationpassed",
+  "source_sdk": {
+    "prefix": "/dev/shm/nexus-examples-final/build/p6-7590b2d4/local-ci/source-sdk",
+    "manifest": "/dev/shm/nexus-examples-final/build/p6-7590b2d4/local-ci/source-sdk/share/nexus/src/.nexus-source-sdk.json",
+    "manifest_sha256": "72f5c3938d2d9884010d45d8947a55633fc1fbf8261d15a1b259ec2a501c510a",
+    "snapshot_sha256": "e1bb0cf21efc98acdaaad66706a1c7a7c4cc08109efab8a535e308d2b0f26d4b",
+    "lease": "readonly /root/offline_candidate and finalqualification; do not retire until explicitrelease"
+  },
+  "packages": {
+    "created-product": {
+      "sha256": "d889151d8527d73484ea76387267dd4e9b0179dd3ea643998cf65d9cff488fed",
+      "compressed_bytes": 3603894,
+      "files": 154,
+      "expanded_bytes": 20137556,
+      "manifest_sha256": "336643176745fc667dff1469b0a8191cde9ee1567cf7788ff3688162e58c8977"
+    },
+    "upgraded-product": {
+      "sha256": "35671445b29ec6318c6495e445047ba7330e52509da3ce8db0ba6eb52968629d",
+      "compressed_bytes": 4019786,
+      "files": 158,
+      "expanded_bytes": 22654784,
+      "manifest_sha256": "6a7f9d7bd75a798ba2bb93b3ae9e66952c4a2591dbd603caf55e323bb2f4bacf"
+    },
+    "execution-and-sdk": {
+      "sha256": "73f153638f19212132d69b5a4e72586aa0bf60c913c28f4f4d3c5a1ca7e092bd",
+      "compressed_bytes": 17452861,
+      "files": 4877,
+      "expanded_bytes": 112950124,
+      "manifest_sha256": "2522288aca69c84f2f81205fc84c8881740aeeee6822974001f82e733f663bef"
+    },
+    "actual-shared-artifacts": {
+      "sha256": "e32d804463b8356bc5d24eeb461262cda2d94e9b3de5585d7748a545fa028ecd",
+      "compressed_bytes": 19422498,
+      "files": 370,
+      "expanded_bytes": 93600553,
+      "manifest_sha256": "8afd1243b130e5b58ee5685105bc02a63737fa348c0d6ef0214986922afc7acf"
+    }
+  },
+  "retirement": "onlyownedoldSDKrestoredfromverifiedP4original,temporaryproducts,independentrestoresandartifactcopypayloadretiredafterexactmanifestchecks;P6SDKandbothoriginalsourceworktreesuntouched",
+  "writer_status": "all own consumers/build/archive/metadata writers stopped after this handoff",
+  "physical_hil": "not_executed",
+  "separate_exits": [
+    "platformfull159",
+    "independentofflinereproduction",
+    "Pages",
+    "formalRelease"
+  ]
+}
