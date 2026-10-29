@@ -80,6 +80,26 @@
       "path": "docs-examples-delivery-20261029-gb029cc4b/verification-tools.tar.gz",
       "bytes": 9086,
       "sha256": "51b5aa5e2bfb5000502d43e86138dfdcd14d56f9af47ebc98e51b08c1c53e2d4"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/retention-operations.tar.gz",
+      "bytes": 45374,
+      "sha256": "617179aa97f14894b4a75edb2afe669d7e582f681b3170f10abacb86032da73e"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/retention-operations-package.json",
+      "bytes": 530,
+      "sha256": "d866cecee31de1950c1d40279c8cec2bcb4908563ab814d1af4143c4e5c17a27"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/recovery-index.json",
+      "bytes": 6259,
+      "sha256": "f9ff30444378323337db230e2250e0e55a87399e7b327de5ad2ff43624d6e2a0"
+    },
+    {
+      "path": "docs-examples-delivery-20261029-gb029cc4b/RETENTION.md",
+      "bytes": 551,
+      "sha256": "55966561db59982cd462e757ac5aa64c547b7a2ad9556a4c383bbcb8c783a87d"
     }
   ]
 }

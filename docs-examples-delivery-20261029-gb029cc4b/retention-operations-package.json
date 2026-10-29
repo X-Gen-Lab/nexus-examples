@@ -1,0 +1,14 @@
+{
+  "archive": {
+    "path": "/workspace/nexus/build/c-cold-20261028/private-examples-retention/proof-store/617179aa97f14894b4a75edb2afe669d7e582f681b3170f10abacb86032da73e.tar.gz",
+    "sha256": "617179aa97f14894b4a75edb2afe669d7e582f681b3170f10abacb86032da73e",
+    "size": 45374
+  },
+  "bytes": 271649,
+  "files": 285,
+  "kind": "portable_evidence",
+  "manifest_sha256": "0cdca9a4e0df1350bbc596baf2669f43554301e2bc5fcb13219c4783190a5773",
+  "product_promotion": false,
+  "schema_version": 1,
+  "signature_status": "unsigned"
+}

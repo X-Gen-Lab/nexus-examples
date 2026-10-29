@@ -1,0 +1,97 @@
+{
+  "kind": "private_examples_exact_remote_retention_and_independent_recovery",
+  "repository": "X-Gen-Lab/nexus-examples",
+  "repository_visibility": "private",
+  "platform_commit": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+  "examples_commit": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+  "payload_storage_commit": "7e1e61fdd1981c2f9b3a0410bb58cf2debb4170f",
+  "payload_index_url": "https://github.com/X-Gen-Lab/nexus-examples/blob/7e1e61fdd1981c2f9b3a0410bb58cf2debb4170f/docs-examples-delivery-20261029-gb029cc4b/final-index.json",
+  "original_payload_index_and_original_archive_envelope_metadata_unchanged": true,
+  "authenticated_exact_commit_retrieval": {
+    "registered_members": 15,
+    "root_files": 3,
+    "all18_size_and_SHA_matched": true,
+    "existing_asset_validator_actual_exit": 0,
+    "raw_media": "application/vnd.github.raw",
+    "retained_initial_failure": "application/vnd.github.raw+json yielded actualexit1/2B/transform short source buffer; original failure and successful same-endpoint standardraw retry are retained in operations proof; failed attempt is not marked successful",
+    "download_observations": "retention-operations.tar.gz:downloads.json"
+  },
+  "original_packages": [
+    {
+      "name": "created-product",
+      "original_archive_sha256": "d889151d8527d73484ea76387267dd4e9b0179dd3ea643998cf65d9cff488fed",
+      "original_manifest_sha256": "336643176745fc667dff1469b0a8191cde9ee1567cf7788ff3688162e58c8977",
+      "original_envelope_unchanged": true,
+      "actual_store_verify_receipt": "/workspace/nexus/build/c-cold-20261028/private-examples-retention/created-product-remote-store-verify.command.json",
+      "actual_independent_restore_receipt": "/workspace/nexus/build/c-cold-20261028/private-examples-retention/created-product-independent-store-restore.command.json",
+      "actual_restored_SDK_verify_receipt": null,
+      "full_member_SHA_size_mode_and_inventory": "verified_by_original_store_verify_and_restore",
+      "fresh_duplicate_cleanup_only_after_maintained_verification": true,
+      "free_overlay_before": 671936512,
+      "free_overlay_after_cleanup": 671895552
+    },
+    {
+      "name": "upgraded-product",
+      "original_archive_sha256": "35671445b29ec6318c6495e445047ba7330e52509da3ce8db0ba6eb52968629d",
+      "original_manifest_sha256": "6a7f9d7bd75a798ba2bb93b3ae9e66952c4a2591dbd603caf55e323bb2f4bacf",
+      "original_envelope_unchanged": true,
+      "actual_store_verify_receipt": "/workspace/nexus/build/c-cold-20261028/private-examples-retention/upgraded-product-remote-store-verify.command.json",
+      "actual_independent_restore_receipt": "/workspace/nexus/build/c-cold-20261028/private-examples-retention/upgraded-product-independent-store-restore.command.json",
+      "actual_restored_SDK_verify_receipt": null,
+      "full_member_SHA_size_mode_and_inventory": "verified_by_original_store_verify_and_restore",
+      "fresh_duplicate_cleanup_only_after_maintained_verification": true,
+      "free_overlay_before": 671891456,
+      "free_overlay_after_cleanup": 671850496
+    },
+    {
+      "name": "execution-and-sdk",
+      "original_archive_sha256": "73f153638f19212132d69b5a4e72586aa0bf60c913c28f4f4d3c5a1ca7e092bd",
+      "original_manifest_sha256": "2522288aca69c84f2f81205fc84c8881740aeeee6822974001f82e733f663bef",
+      "original_envelope_unchanged": true,
+      "actual_store_verify_receipt": "/workspace/nexus/build/c-cold-20261028/private-examples-retention/execution-and-sdk-remote-store-verify.command.json",
+      "actual_independent_restore_receipt": "/workspace/nexus/build/c-cold-20261028/private-examples-retention/execution-and-sdk-independent-store-restore.command.json",
+      "actual_restored_SDK_verify_receipt": "/workspace/nexus/build/c-cold-20261028/private-examples-retention/execution-and-sdk-restored-sdk-verify.command.json",
+      "full_member_SHA_size_mode_and_inventory": "verified_by_original_store_verify_and_restore",
+      "fresh_duplicate_cleanup_only_after_maintained_verification": true,
+      "free_overlay_before": 671850496,
+      "free_overlay_after_cleanup": 671784960
+    },
+    {
+      "name": "actual-shared-artifacts",
+      "original_archive_sha256": "e32d804463b8356bc5d24eeb461262cda2d94e9b3de5585d7748a545fa028ecd",
+      "original_manifest_sha256": "8afd1243b130e5b58ee5685105bc02a63737fa348c0d6ef0214986922afc7acf",
+      "original_envelope_unchanged": true,
+      "actual_store_verify_receipt": "/workspace/nexus/build/c-cold-20261028/private-examples-retention/actual-shared-artifacts-remote-store-verify.command.json",
+      "actual_independent_restore_receipt": "/workspace/nexus/build/c-cold-20261028/private-examples-retention/actual-shared-artifacts-independent-store-restore.command.json",
+      "actual_restored_SDK_verify_receipt": null,
+      "full_member_SHA_size_mode_and_inventory": "verified_by_original_store_verify_and_restore",
+      "fresh_duplicate_cleanup_only_after_maintained_verification": true,
+      "free_overlay_before": 671784960,
+      "free_overlay_after_cleanup": 671739904
+    }
+  ],
+  "actual_maintained_verifier_commands": {
+    "store_verify": 4,
+    "independent_store_restore": 4,
+    "restored_SDK_integrity": 1,
+    "all_actual_exit_codes": 0
+  },
+  "no_build_or_application_test_rerun": true,
+  "proof_package": {
+    "original_envelope": "retention-operations-package.json",
+    "archive": "retention-operations.tar.gz",
+    "archive_sha256": "617179aa97f14894b4a75edb2afe669d7e582f681b3170f10abacb86032da73e",
+    "archive_bytes": 45374,
+    "manifest_sha256": "0cdca9a4e0df1350bbc596baf2669f43554301e2bc5fcb13219c4783190a5773",
+    "files": 285,
+    "expanded_bytes": 271649
+  },
+  "physical_hil": "not_executed",
+  "recipe_reproducible": false,
+  "fresh_daemon_restore": "not_executed",
+  "Pages": "not_performed",
+  "formal_Release": "not_performed",
+  "public_private_boundary": "Original examples evidence and detailed full status remain private; the public platform index may link only to this authenticated entry.",
+  "future_public_commit_dependency": false,
+  "proof_storage_note": "This appended record describes completed payload recovery. Its own append commit is transported and verified separately; no self-referential or recursive proof success is invented."
+}
