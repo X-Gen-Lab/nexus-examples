@@ -102,7 +102,7 @@ preset 展开。只跑某一 scope/preset 时，报告明确标记为非完整�
 | Native style, tool tests, Native build/execution | `check_style.py --all`; one `tdd_gate.py --all` owns all Python, complete Native CTest and Google discovery/execution. No filtered or skipped run qualifies. |
 | SDK package, installed configure/build/execute | Original packager or complete package verification; independent sanitized CMake/CTest; SDK JUnit validator rejects missing, empty, skipped or stale XML. |
 | ARM toolchain and main firmware | Original locked installer; `build.py` for every selected preset; bounded `--parallel`, default 1. |
-| Standalone FIFO and recipes | Existing H743/U575 FIFO projects, shared SPI, continuous RX and three MCU starters: seven actual consumers. |
+| Standalone FIFO and recipes | Existing H743/U575 FIFO projects, shared SPI, continuous RX/cache-on, runtime pause, Flash maintenance, three retained Stop2 recipes and three MCU starters: thirteen actual consumers. |
 | Main/owner ELF budget checks | Existing resource checker for each actual ELF and its own generated resolution/budget. Standalone ELFs are also checked. |
 | HIL plan preparation | Original prepare tool, twelve reviewed board/backend plans; F103 and GD32F303 are not substituted with another PCB. `prepared_unbound` / `not_executed` only. |
 | Artifact upload; both jobs | Local retained logs, command receipts, existing build artifacts and run summary; no hosted upload or remote status is claimed. |
