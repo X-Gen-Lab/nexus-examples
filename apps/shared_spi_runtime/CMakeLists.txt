@@ -15,7 +15,7 @@ if(NEXUS_SOURCE)
     set(NEXUS_BUILD_WORKLOAD OFF CACHE BOOL "Application owns entry" FORCE)
     add_subdirectory("${NEXUS_SOURCE}" nexus EXCLUDE_FROM_ALL)
 else()
-    find_package(Nexus 0.2.0 EXACT CONFIG REQUIRED)
+    find_package(Nexus 0.2.1 EXACT CONFIG REQUIRED)
 endif()
 nexus_add_firmware(shared_spi_runtime SOURCES main.c shared_spi_application.c
     LIBRARIES Nexus::SpiOwner Nexus::OSFreeRTOS Nexus::Arch)

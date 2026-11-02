@@ -14,8 +14,9 @@ The current integration consumes the Nexus 0.2 development iteration selected
 by `dependencies/nexus.lock.json` and the matching `external/nexus` Gitlink.
 The lock owns the exact commit and tree. The SDK includes the official STM32F4 LL
 adaptation and optional caller-owned cold diagnostics. Its SDK metadata is
-`0.2.0`; this does not move the published `v0.1.0` tag or qualify this changed
-implementation with historical release evidence. This repository's independent
+`0.2.1`; the existing `v0.2.0` preview and published `v0.1.0` tags remain
+unchanged. Historical release evidence does not qualify this changed
+implementation. This repository's independent
 application project version remains `1.0.0`. Source interface epoch `1` and
 authored TOML schema `2` remain separate contracts. See [release
 integration](release-0.1.0.md) for the original published snapshot and its evidence
@@ -25,7 +26,7 @@ The selected platform uses typed configuration IR epoch `2` and resolved JSON
 projection schema `1`. Its Python resolver returns immutable typed objects;
 these examples consume the TOML CLI and generated public C interfaces. The
 starter manifest therefore retains interface epoch `1` and assembly schema `2`,
-with the existing template file hashes. Selected provider cold initialization
+with refreshed template file hashes. Selected provider cold initialization
 and cleanup now execute in C through static direct calls. Factory lookup remains
 free of hardware effects, and failed cleanup retains its recovery responsibility.
 The source pin records implementation identity; complete local software execution
@@ -33,8 +34,8 @@ requires fresh evidence for this pin, and physical HIL remains `not_executed`.
 
 当前平台采用类型化配置 IR 版本 `2`，对外生成的 resolved JSON 投影仍为版本 `1`。
 Python resolver 返回不可变的类型化对象；本示例通过 TOML 命令行入口和生成的公共
-C 接口接入。因此，starter manifest 保持接口版本 `1`、装配版本 `2` 和现有模板
-文件哈希。选定 provider 的冷态初始化与清理已通过静态直接调用交由 C 实现；
+C 接口接入。因此，starter manifest 保持接口版本 `1`、装配版本 `2`，并按现有清单
+更新模板文件哈希。选定 provider 的冷态初始化与清理已通过静态直接调用交由 C 实现；
 factory 查找不产生硬件效果，清理失败仍保留恢复责任。源码 pin 记录实现身份，
 完整本地软件验证需要对应此 pin 的新执行证据；实板 HIL 保持 `not_executed`。
 

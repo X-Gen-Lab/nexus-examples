@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "13996a244141bdc3994b925c858c99402193d13d",
-  "tree": "574de4cf9ca8aabea02286ec3d5f1e825c41e61e",
+  "commit": "0a051bfd49986f29e4772db38f1a812893f9523d",
+  "tree": "7947119d877dc676933c32814349f91f365c21f2",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Nexus 0.2.0 source with organization-hosted exact Git dependencies; static typed factory interface epoch 1, authored TOML schema 2, typed configuration IR epoch 2; maintained seven-family cold hardware lifecycle and fixed-run clock ownership execute in C; firmware source compilation, software execution and physical HIL remain distinct; fresh exact-pin local CI is required and physical HIL is not executed",
+  "baseline_status": "Nexus 0.2.1 source with organization-hosted exact Git dependencies; static typed factory interface epoch 1, authored TOML schema 2, typed configuration IR epoch 2; maintained seven-family cold hardware lifecycle and fixed-run clock ownership execute in C; firmware source compilation, software execution and physical HIL remain distinct; fresh exact-pin local CI is required and physical HIL is not executed",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }
