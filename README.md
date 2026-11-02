@@ -14,9 +14,9 @@ does not authorize publishing these application sources.
 
 当前集成面向 Nexus 0.2 开发周期，精确源码提交与 tree 以
 [源码锁](dependencies/nexus.lock.json) 和 `external/nexus` Gitlink 为准。平台提供
-官方 STM32F4 LL 复用和可选冷态生命周期诊断。SDK 元数据版本为 `0.2.0`，
-不移动已发布的 `v0.1.0` 标签，
-也不冒充该标签的原始产物。本仓库独立的应用工程版本仍为 `1.0.0`；精确依赖以
+官方 STM32F4 LL 复用和可选冷态生命周期诊断。SDK 元数据版本为 `0.2.1`，
+保留已有的 `v0.2.0` 预览和已发布的 `v0.1.0` 标签，
+也不冒充这些标签的原始产物。本仓库独立的应用工程版本仍为 `1.0.0`；精确依赖以
 Gitlink 和源码锁为准。[0.1.0 集成说明](docs/release-0.1.0.md) 保留原始发布快照及
 证据边界；该历史证据不自动证明当前迭代。MCU 实板 HIL 保持 `not_executed`。
 
