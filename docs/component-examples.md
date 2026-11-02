@@ -26,3 +26,16 @@ None of the components is started implicitly by the platform. Applications
 choose resource budgets, polling frequency, tasks, health policy and teardown.
 Current sensor/journal/protocol applications execute only on Native because no
 corresponding sensor/partition/RS485 physical configuration has been accepted.
+
+[`industrial_control`](../apps/industrial_control/README.md) combines these
+mechanisms in one finite Native reference. One control task owns Modbus UART,
+sensor policy, Settings and health; a real SPI owner runs separately. Persistent
+copies protect BMP280 stack buffers, and completion/timer/stop share one wait
+port. Maintenance commit follows stop/drain/join. The existing seventeen presets
+remain; physical wiring and Flash reservations are still unverified.
+
+[`industrial_control`](../apps/industrial_control/README.md) 将上述机制组合为一个
+有限 Native 参考：控制任务拥有 Modbus UART、采集策略、Settings 与健康判断，
+SPI owner 独立执行；持久复制保护 BMP280 栈，完成、timer 和 stop 共享 wait port。
+维护 commit 在 stop/drain/join 后进行。保持原十七个 preset，未验收实板接线或
+Flash 分区。

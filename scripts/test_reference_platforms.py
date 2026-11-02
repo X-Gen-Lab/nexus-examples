@@ -1,6 +1,7 @@
 """Require explicit, isolated H743/U575 software-reference compositions."""
 
 import json
+import copy
 from pathlib import Path
 import tempfile
 import tomllib
@@ -28,15 +29,47 @@ class ReferencePlatformTests(unittest.TestCase):
             with self.subTest(program=name):
                 self.assertIn(name, tdd_gate.EXPECTED_CTEST_NAMES)
 
-    def test_source_identity_requires_both_reference_device_closures(self):
-        self.assertIn("vendors/st/cmsis_device_h7", repository.DEPENDENCIES)
-        self.assertIn("vendors/st/cmsis_device_u5", repository.DEPENDENCIES)
+    def preparation(self):
+        modules = [{"path": path, "commit": "a" * 40} for path in (
+            "vendors/st/cmsis_device_h7", "vendors/st/cmsis_device_u5",
+            "vendors/st/stm32f4_hal", "ext/googletest", "ext/new-service")]
+        return {"schema_version": 1, "kind": "dependency_preparation",
+                "scope": "native", "status": "verified",
+                "network_authorized": False, "backend": "baremetal",
+                "family": None, "submodules": modules,
+                "recursive_submodules": copy.deepcopy(modules)}
 
-    def test_source_identity_requires_the_selected_official_f4_driver(self):
-        self.assertIn("vendors/st/stm32f4_hal", repository.DEPENDENCIES)
+    def test_source_identity_projects_the_sdk_native_closure(self):
+        report = self.preparation()
+        expected = [{"path": row["path"], "revision": row["commit"]}
+                    for row in report["recursive_submodules"]]
+        self.assertEqual(repository.prepared_submodules(report), expected)
 
-    def test_source_identity_requires_the_actual_host_test_submodule(self):
-        self.assertIn("ext/googletest", repository.DEPENDENCIES)
+    def test_source_identity_rejects_unverified_preparation(self):
+        for key, value in (("schema_version", True), ("scope", "arm"),
+                           ("status", "not_assessed"),
+                           ("network_authorized", True), ("kind", "other")):
+            report = self.preparation()
+            report[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                repository.prepared_submodules(report)
+
+    def test_source_identity_rejects_inconsistent_recursive_sources(self):
+        for change in ("duplicate", "traversal", "short", "missing", "mismatch"):
+            report = self.preparation()
+            if change == "duplicate":
+                report["recursive_submodules"].append(
+                    copy.deepcopy(report["recursive_submodules"][0]))
+            elif change == "traversal":
+                report["recursive_submodules"][0]["path"] = "../escape"
+            elif change == "short":
+                report["recursive_submodules"][0]["commit"] = "aaaa"
+            elif change == "missing":
+                report["recursive_submodules"].pop()
+            else:
+                report["recursive_submodules"][0]["commit"] = "b" * 40
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                repository.prepared_submodules(report)
 
     def test_reference_identity_rejects_a_same_count_unmaintained_preset(self):
         document = json.loads((ROOT / "CMakePresets.json").read_text())

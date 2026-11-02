@@ -38,6 +38,7 @@ class ApplicationBuildContracts(unittest.TestCase):
             self.assertEqual(set(applications), {
                 'platform_reference', 'sensor_spi', 'journal', 'modbus_registers',
                 'uart_owner_runtime', 'shared_spi_runtime', 'stream_recovery',
+                'industrial_control',
                 'shared_spi_freertos_host', 'stop2_copy_hook_source',
                 'stop2_lptim1_hook_source'})
             application_targets = set(applications)
@@ -87,7 +88,8 @@ class ApplicationBuildContracts(unittest.TestCase):
                               json.loads(catalogue.stdout)['tests']}, {
                 'uart_owner_shutdown', 'platform_static_ports',
                 'sensor_explicit_spi', 'persistent_journal',
-                'protocol_authorized_registers', 'owner_lifecycle_google',
+                'protocol_authorized_registers', 'industrial_control_reference',
+                'industrial_control_google', 'owner_lifecycle_google',
                 'product_fault_policy_google', 'reference_rx_policy_google',
                 'reference_lifecycle_google', 'fifo_acquisition_google',
                 'shared_spi_two_devices', 'stream_slow_consumer',

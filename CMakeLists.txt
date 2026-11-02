@@ -42,6 +42,7 @@ if(soc_family STREQUAL "native")
         LIBRARIES Nexus::SpiOwner Nexus::OSNative Nexus::Arch)
     nexus_add_firmware(stream_recovery SOURCES
         apps/stream_recovery/main.c apps/stream_recovery/stream_application.c)
+    include("${CMAKE_CURRENT_SOURCE_DIR}/apps/industrial_control/firmware.cmake")
     add_subdirectory(tests)
     add_test(NAME shared_spi_two_devices COMMAND shared_spi_runtime)
     add_test(NAME stream_slow_consumer COMMAND stream_recovery)
@@ -50,7 +51,10 @@ if(soc_family STREQUAL "native")
     add_test(NAME sensor_explicit_spi COMMAND sensor_spi)
     add_test(NAME persistent_journal COMMAND journal "${CMAKE_CURRENT_BINARY_DIR}/journal.dat")
     add_test(NAME protocol_authorized_registers COMMAND modbus_registers)
+    add_test(NAME industrial_control_reference COMMAND industrial_control
+        "${CMAKE_CURRENT_BINARY_DIR}/industrial-model.dat")
     set_tests_properties(platform_static_ports sensor_explicit_spi persistent_journal
         protocol_authorized_registers uart_owner_shutdown shared_spi_two_devices
-        stream_slow_consumer PROPERTIES TIMEOUT 10 LABELS "native;example")
+        stream_slow_consumer industrial_control_reference
+        PROPERTIES TIMEOUT 10 LABELS "native;example")
 endif()

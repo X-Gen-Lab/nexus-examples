@@ -46,20 +46,31 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         admission = self.source / "tools/dev/dependencies.py"
         admission.parent.mkdir(parents=True)
         admission.write_text(
-            'import os, sys\nfrom pathlib import Path\n'
+            'import json, os, subprocess, sys\nfrom pathlib import Path\n'
             'expected = ["prepare", "--root", '
             'str(Path(__file__).resolve().parents[2]), "--scope", "native"]\n'
-            'if sys.argv[1:] != expected:\n'
+            'if sys.argv[1:6] != expected or len(sys.argv) != 8 or '
+            'sys.argv[6] != "--report":\n'
             '    sys.exit("fixture requires exact offline admission")\n'
             'mode = os.environ.get("NEXUS_FIXTURE_DEPENDENCY_ADMISSION", "verified")\n'
             'if mode == "rejected":\n'
             '    sys.exit("fixture dependency admission rejected")\n'
+            'if mode == "verified":\n'
+            '    raw = subprocess.check_output(["git", "submodule", "status", '
+            '"--recursive"], cwd=Path(__file__).resolve().parents[2], text=True)\n'
+            '    rows = [{"path": line[1:].split()[1], '
+            '"commit": line[1:].split()[0]} for line in raw.splitlines()]\n'
+            '    Path(sys.argv[7]).write_text(json.dumps({"schema_version": 1, '
+            '"kind": "dependency_preparation", "status": "verified", '
+            '"scope": "native", "backend": "baremetal", "family": None, '
+            '"network_authorized": False, "submodules": rows, '
+            '"recursive_submodules": rows}))\n'
             'print(mode)\n')
         gitmodules = []
         # Model the new source SDK closure independently of its verifier.
-        dependencies = [name for name in repository.DEPENDENCIES
-                        if not name.startswith("vendors/arm/")]
-        dependencies.append("vendors/arm/CMSIS_6")
+        dependencies = ["ext/googletest", "vendors/arm/CMSIS_6",
+                        "ext/added-native-service"]
+        self.fixture_dependencies = tuple(dependencies)
         for name in dependencies:
             dependency = self.source / name
             dependency.mkdir(parents=True)
@@ -105,7 +116,7 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         self.assertEqual(report["formal_locked_nexus_revision"], self.pinned)
         self.assertEqual(report["nexus_tree"], git(self.source, "rev-parse", "HEAD^{tree}"))
         self.assertFalse(report["source_revision_matches_lock"])
-        self.assertEqual(len(report["submodules"]), len(repository.DEPENDENCIES))
+        self.assertEqual(len(report["submodules"]), len(self.fixture_dependencies))
         self.assertIn("vendors/arm/CMSIS_6",
                       {entry["path"] for entry in report["submodules"]})
         self.assertEqual(lock_before, (self.root / "dependencies/nexus.lock.json").read_bytes())
@@ -119,6 +130,11 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         report = repository.verify(self.source, False)
         self.assertFalse(report["candidate_validation"])
         self.assertTrue(report["source_revision_matches_lock"])
+
+    def test_identity_projects_new_sources_admitted_by_the_pinned_sdk(self):
+        report = repository.verify(self.source, False, self.candidate)
+        self.assertEqual({entry["path"] for entry in report["submodules"]},
+                         set(self.fixture_dependencies))
 
     def test_success_requires_the_sdk_offline_dependency_contract(self):
         report = repository.verify(self.source, False, self.candidate)
@@ -138,7 +154,7 @@ class CandidateSDKIdentityTests(unittest.TestCase):
             repository.verify(self.source, False, self.pinned)
 
     def test_candidate_rejects_dirty_dependency_and_wrong_repository(self):
-        dependency = self.source / repository.DEPENDENCIES[0] / "fixture.txt"
+        dependency = self.source / self.fixture_dependencies[0] / "fixture.txt"
         dependency.write_text("changed\n")
         with self.assertRaisesRegex(ValueError, "uncommitted changes"):
             repository.verify(self.source, False, self.candidate)

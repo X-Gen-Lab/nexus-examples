@@ -376,3 +376,19 @@ NEXUS_SOURCE=/absolute/clean/nexus NEXUS_BUILD_JOBS=1 \
 The same formal lock, staged Gitlink, tree, clean-source and vendor checks still
 apply. Selecting a location never changes this into candidate validation or
 bypasses dependency qualification.
+
+## 工业组合 / Industrial composition
+
+[工业控制参考](../apps/industrial_control/README.md) 将专有 Modbus UART 控制任务与
+独立 SPI owner 组合，使用 25 字节持久复制适配 BMP280 的同步 settled 合同。
+completion、绝对 timer 与 stop 使用真实 wait_select；Settings 仅在维护窗口提交，
+watchdog 根据实际最小超时与有用进展判断。使用现有 Native preset，资源、寄存器、
+关闭和故障边界以该应用说明和同一 C11 源的 Google 合同为准。
+
+The [industrial reference](../apps/industrial_control/README.md) combines a
+dedicated Modbus UART control task with a separate SPI owner. Its 25-byte
+persistent copy bridge preserves BMP280's synchronous settled contract. Real
+wait_select combines completion, absolute timer and stop. Settings commit only
+in maintenance, and watchdog policy uses observed minimum timeout and useful
+progress. It consumes the existing Native preset; see the application contract
+for budgets, registers, teardown and fault boundaries.

@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "b1b903da47eda722a6be3e98edced5cfa36221b1",
-  "tree": "56fc077ca7048d4758bdc050a98046de77824d08",
+  "commit": "7fd36f8a0b4226c5e8a8e9caa518312c20df9e21",
+  "tree": "d85c4bc524c2ee18cbecaa8718b3b3971a595ecb",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Nexus 0.2.1 source with organization-hosted exact Git dependencies; static typed factory interface epoch 1, authored TOML schema 2, typed configuration IR epoch 2; maintained seven-family cold hardware lifecycle and fixed-run clock ownership execute in C; firmware source compilation, software execution and physical HIL remain distinct; fresh exact-pin local CI is required and physical HIL is not executed",
+  "baseline_status": "Clean Nexus platform iteration with organization-pinned source closure, external providers, bounded Settings/wait-select, entropy, TLS and MQTT; ordinary platform gate passed at this exact source. Fresh examples integration and full local CI are pending; physical HIL is not executed.",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

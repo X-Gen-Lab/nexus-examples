@@ -1,9 +1,9 @@
 schema = 2
-board = "native_reference"
+board_package = "../../apps/industrial_control/software-board"
 backend = "native"
 clock = "model"
 optimization = "Os"
-components = ["uart-owner", "spi-owner", "bmp280", "bmp280-spi", "log", "storage", "modbus-rtu"]
+components = ["uart-owner", "spi-owner", "bmp280", "bmp280-spi", "log", "storage", "settings", "modbus-rtu"]
 
 [memory]
 main_stack_bytes = 2048
@@ -37,3 +37,7 @@ controller = "spi0"
 
 [spi_device.sensor1]
 controller = "spi0"
+
+[watchdog.watchdog0]
+binding = "watchdog0"
+mode = "independent"

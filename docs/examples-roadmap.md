@@ -1,15 +1,24 @@
 # Next application iterations
 
-The authored baseline now has seven finite Native applications, six host Google
-programs, a real FreeRTOS POSIX SPI composition, seventeen main presets, four
+The authored baseline now has eight finite Native applications, registered host
+Google programs, a real FreeRTOS POSIX SPI composition, seventeen main presets, four
 versioned starter templates, and standalone F407 SPI/H743 continuous receive
 software fixtures. See [developer recipes](developer-recipes.md) for exact
 lifecycle and evidence boundaries. Qualification requires the coordinated clean
 SDK pin and actual ordinary gates; authored targets alone are not execution.
 
-当前工程包含七个有限 Native 应用、六组 Google 程序、真实 FreeRTOS POSIX SPI
+当前工程包含八个有限 Native 应用、已注册 Google 程序、真实 FreeRTOS POSIX SPI
 组合、十七个主 preset、四个版本化最小工程及独立 F407 SPI/H743 连续接收软件
 fixture。已编写的目标不等于已执行验收；最终证据必须对应同一干净 SDK pin。
+
+The [industrial reference](../apps/industrial_control/README.md) now provides
+the Native sampling/protocol/persistence/health composition and a second real
+completion/timer/stop consumer. Its next hardware step requires reviewed
+sensor/RS485 wiring and product Flash regions, not additional product frameworks.
+
+[工业参考](../apps/industrial_control/README.md) 已提供 Native 采集、协议、持久化与
+健康组合，以及第二个真实 completion/timer/stop 消费者。后续硬件工作需要审定
+传感器/RS485 接线和产品 Flash 区域，不增加产品框架。
 
 | Next step | Required inputs | Acceptance |
 | --- | --- | --- |

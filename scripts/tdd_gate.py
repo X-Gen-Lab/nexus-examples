@@ -26,6 +26,7 @@ EXPECTED_CTEST_NAMES = (
     "reference_lifecycle_google", "fifo_acquisition_google",
     "shared_spi_two_devices", "stream_slow_consumer", "developer_recipes_google",
     "shared_spi_real_freertos", "contract_os_freertos", "continuous_rx_google",
+    "industrial_control_reference", "industrial_control_google",
 )
 
 

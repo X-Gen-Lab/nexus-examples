@@ -57,6 +57,7 @@ re-prove the FreeRTOS commit's parent relationship or full tree diff.
 | `shared_spi_runtime` | 两个真实任务、两端点、满队列拒绝、取消、join/stop | 独立 F407ZG FreeRTOS 硅片软件 fixture；不声明实板双 CS 接线 |
 | `stream_recovery` | 慢消费者、loss、BUSY stop、恢复及只读诊断 | 独立 H743 continuous DMA 软件参考，Cache off |
 | `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 八套参考配置、两后端，显式静态任务或裸机 pump |
+| [`industrial_control`](apps/industrial_control/README.md) | BMP280＋真实 SPI owner、Modbus 授权、Settings 维护提交、watchdog 与 completion/timer/stop/join | 先交付 Native 组合；未推断传感器、RS485 或 Flash 分区 |
 
 Native 注册有限应用 CTest、GoogleTest 执行，以及真实 FreeRTOS POSIX 内核
 合同和共享 SPI 应用。新增模板、创建练习、三条生命周期路径及迁移步骤见

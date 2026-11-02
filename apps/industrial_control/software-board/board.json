@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "native-industrial-software-reference",
+  "soc": "NATIVE_MODEL",
+  "soc_family": "native",
+  "source_revision": "native-industrial-model-v1",
+  "physical_pcb_revision": null,
+  "clocks": {
+    "hse_hz": 1000000
+  },
+  "bindings": [
+    {
+      "id": "led0",
+      "controller": "GPIOA",
+      "route": "gpio-pa0",
+      "initial": 0,
+      "mask": 1
+    },
+    {
+      "id": "uart0",
+      "controller": "UART0",
+      "route": "uart0"
+    },
+    {
+      "id": "spi0",
+      "controller": "SPI0",
+      "route": "spi0"
+    },
+    {
+      "id": "rtc0",
+      "controller": "RTC0",
+      "route": "rtc0"
+    },
+    {
+      "id": "rtc1",
+      "controller": "RTC1",
+      "route": "rtc1"
+    },
+    {
+      "id": "lptim0",
+      "controller": "LPTIM0",
+      "route": "lptim0"
+    },
+    {
+      "id": "lptim1",
+      "controller": "LPTIM1",
+      "route": "lptim1"
+    },
+    {
+      "id": "watchdog0",
+      "controller": "IWDG",
+      "route": "watchdog0"
+    }
+  ],
+  "reserved_resources": [],
+  "unknowns": [
+    "Host model does not qualify physical clock, memory or electrical behavior"
+  ],
+  "provenance": [
+    "Native host-model bindings from the pinned Nexus native_reference package; explicit product-owned watchdog selection."
+  ]
+}

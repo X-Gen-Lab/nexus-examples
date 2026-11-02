@@ -7,30 +7,15 @@ Native execution and the SDK ELF validator for linked ARM firmware.
 
 import argparse
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
+import tempfile
 from urllib.parse import urlparse
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEPENDENCIES = (
-    "ext/freertos",
-    "ext/threadx",
-    "ext/googletest",
-    "vendors/arm/CMSIS_6",
-    "vendors/st/cmsis_device_f1",
-    "vendors/st/cmsis_device_f4",
-    "vendors/st/cmsis_device_g4",
-    "vendors/st/cmsis_device_h7",
-    "vendors/st/cmsis_device_u5",
-    "vendors/st/stm32f1_hal",
-    "vendors/st/stm32f4_hal",
-    "vendors/st/stm32g4_hal",
-    "vendors/st/stm32h7_hal",
-    "vendors/st/stm32u5_hal",
-)
 REFERENCE_PRESETS = frozenset({
     "native-debug",
     *(f"{board}-{backend}" for board in (
@@ -121,6 +106,47 @@ def candidate_commit(value):
     return value
 
 
+def prepared_submodules(report):
+    """Project the pinned SDK's verified Native closure, without another list."""
+    expected = {"schema_version", "kind", "status", "scope", "backend",
+                "family", "network_authorized", "submodules",
+                "recursive_submodules"}
+    if (not isinstance(report, dict) or set(report) != expected or
+            type(report["schema_version"]) is not int or
+            report["schema_version"] != 1 or
+            report["kind"] != "dependency_preparation" or
+            report["status"] != "verified" or report["scope"] != "native" or
+            report["backend"] != "baremetal" or report["family"] is not None or
+            report["network_authorized"] is not False):
+        raise ValueError("SDK dependency preparation report is not verified")
+
+    def records(value):
+        if not isinstance(value, list) or not value:
+            raise ValueError("SDK dependency preparation contains no sources")
+        result = {}
+        for row in value:
+            if not isinstance(row, dict) or set(row) != {"path", "commit"}:
+                raise ValueError("SDK dependency source fields differ")
+            name, revision = row["path"], row["commit"]
+            if (not isinstance(name, str) or not name or "\\" in name or
+                    any(ord(char) < 32 for char in name) or
+                    PurePosixPath(name).is_absolute() or
+                    PurePosixPath(name).as_posix() != name or
+                    ".." in PurePosixPath(name).parts or name == "." or
+                    name in result or not isinstance(revision, str) or
+                    re.fullmatch(r"[0-9a-f]{40}", revision) is None):
+                raise ValueError("SDK dependency source identity is invalid")
+            result[name] = revision
+        return result
+
+    roots = records(report["submodules"])
+    recursive = records(report["recursive_submodules"])
+    if any(recursive.get(name) != revision for name, revision in roots.items()):
+        raise ValueError("SDK recursive dependency identity differs")
+    return [{"path": name, "revision": revision}
+            for name, revision in recursive.items()]
+
+
 def verify(source, override, candidate_revision=None):
     identity = load_identity()
     presets = verify_presets()
@@ -153,26 +179,21 @@ def verify(source, override, candidate_revision=None):
     ], ROOT).strip()
     if repository != identity["repository"]:
         raise ValueError("Nexus submodule repository does not match the source lock")
-    status = checked_output([
-        "git", "submodule", "status", "--recursive", "--", *DEPENDENCIES,
-    ], source)
-    modules = []
-    for line in status.splitlines():
-        if not line.startswith(" "):
-            raise ValueError(f"Missing, conflicted or changed dependency checkout: {line}")
-        fields = line[1:].split()
-        if len(fields) < 2:
-            raise ValueError("Invalid recursive submodule identity")
-        modules.append({"path": fields[1], "revision": fields[0]})
-    missing = set(DEPENDENCIES) - {entry["path"] for entry in modules}
-    if missing:
-        raise ValueError("Required pinned submodules are missing: " + ", ".join(sorted(missing)))
-    preparation = checked_output([
-        sys.executable, "-B", str(source / "tools/dev/dependencies.py"),
-        "prepare", "--root", str(source), "--scope", "native",
-    ], ROOT).strip()
-    if preparation != "verified":
-        raise ValueError("SDK dependency preparation did not verify")
+    # The selected SDK owns its dependency graph and offline admission. A fresh
+    # private report prevents the examples from silently omitting new sources.
+    with tempfile.TemporaryDirectory(prefix="nexus-dependency-identity-") as value:
+        report = Path(value) / "preparation.json"
+        preparation = checked_output([
+            sys.executable, "-B", str(source / "tools/dev/dependencies.py"),
+            "prepare", "--root", str(source), "--scope", "native",
+            "--report", str(report),
+        ], ROOT).strip()
+        if preparation != "verified":
+            raise ValueError("SDK dependency preparation did not verify")
+        try:
+            modules = prepared_submodules(json.loads(report.read_text()))
+        except (OSError, ValueError) as error:
+            raise ValueError("SDK dependency preparation report is invalid") from error
     vendor = checked_output([
         sys.executable, str(source / "scripts/ci/verify_vendor_source.py"),
         "--root", str(source / "vendors/gigadevice/gd32f4xx"),
