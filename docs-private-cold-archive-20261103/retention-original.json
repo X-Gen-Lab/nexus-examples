@@ -1,0 +1,13 @@
+{
+  "archive": "/workspace/nexus/build/recovery-20261103/cold-cache-retention/c-cold-20261028.tar.zst",
+  "archive_sha256": "f9d2ca85464384e52a424d8fc355b138d7eb9c6339cc120079b32f55c8f7cdf4",
+  "archive_bytes": 2783689352,
+  "verified_regular_members": 32848,
+  "verified_symlink_identity_members": 0,
+  "historical_alias_targets": "metadata retained only; temporary target bytes did not survive restart, no functional object-cache restoration claimed",
+  "free_before": 1438146560,
+  "free_after_deletion": 4115365888,
+  "free_after_persisting_archive": 1318367232,
+  "scope": "ended historical c-cold-20261028 build only; current source/Git/private trees/other caches untouched",
+  "qualification": "actual retention check only; not new test execution"
+}

@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "command": [
+    "tar",
+    "--use-compress-program=zstd -d -T1",
+    "-xf",
+    "/tmp/nexus-cold-cache-retention-20261103/c-cold-20261028.tar.zst",
+    "-C",
+    "/tmp/nexus-cold-cache-retention-20261103/restored"
+  ],
+  "cwd": "/workspace/nexus",
+  "stage": "restore-ended-historical-cold-cache",
+  "started_ns": 1793692562865696047,
+  "finished_ns": 1793692572098332733,
+  "duration_seconds": 9.232657296999605,
+  "timeout_seconds": 1800.0,
+  "outcome": "completed",
+  "exit_code": 0,
+  "child_returncode": 0,
+  "withdrawn_processes": [],
+  "withdrawal_stable": true,
+  "withdrawal_complete": true,
+  "build_parallelism": 2,
+  "resource_usage": {
+    "method": "linux_wait4",
+    "scope": "waited_process_and_reaped_descendants",
+    "user_cpu_seconds": 1.894351,
+    "system_cpu_seconds": 9.089985,
+    "maximum_process_rss_bytes": 72503296
+  },
+  "stdout": {
+    "path": "/workspace/nexus/build/recovery-20261103/cold-cache-retention/restore.attempts/1793692562865591019-4fcd13ea473d4ebdb919db5a679c9b4e/stdout.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "/workspace/nexus/build/recovery-20261103/cold-cache-retention/restore.attempts/1793692562865591019-4fcd13ea473d4ebdb919db5a679c9b4e/stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

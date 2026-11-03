@@ -6,3 +6,5 @@ Repository visibility remains private. Read `docs-examples-delivery-20261029-gb0
 Run `python3 -B verify_assets.py` before committing. The ordinary pre-commit hook runs the same unchanged verifier. Each namespace file is registered with its original size and SHA-256. Evidence archives are unsigned, retain original qualification boundaries and do not establish physical HIL or product release. Authentication is required for commit-specific GitHub contents downloads.
 
 Historical examples originally discoverable on the public platform asset branch are now also preserved privately under `docs-legacy-examples-retention-20261030/retention-index.json`. This retention does not erase public history.
+
+Private archive storage recovery, 2026-11-03: `docs-private-cold-archive-20261103/transport.json` records an exact historical opaque archive and authenticated recovery instructions. No new P2 qualification, fresh inner-tree restore, physical HIL or product release is asserted. Fetch source main/feature/commit explicitly; do not broad-fetch this artifact branch.
