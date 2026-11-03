@@ -27,6 +27,9 @@ EXPECTED_CTEST_NAMES = (
     "shared_spi_two_devices", "stream_slow_consumer", "developer_recipes_google",
     "shared_spi_real_freertos", "contract_os_freertos", "continuous_rx_google",
     "industrial_control_reference", "industrial_control_google",
+    "network_gateway_policy_google", "network_gateway_frames_google",
+    "network_gateway_application_google", "network_gateway_peer_google",
+    "network_gateway_main_google",
 )
 
 

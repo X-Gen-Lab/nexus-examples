@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "7fd36f8a0b4226c5e8a8e9caa518312c20df9e21",
-  "tree": "d85c4bc524c2ee18cbecaa8718b3b3971a595ecb",
+  "commit": "6c3a380a99336a5a7809b4a862449228c6365544",
+  "tree": "b3188fafc8516c6a51fbbd0c98a82ea5493ea1ad",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Clean Nexus platform iteration with organization-pinned source closure, external providers, bounded Settings/wait-select, entropy, TLS and MQTT; ordinary platform gate passed at this exact source. Fresh examples integration and full local CI are pending; physical HIL is not executed.",
+  "baseline_status": "This exact platform source has recorded ordinary-gate and clean Source SDK v14 software observations. Examples integration is qualified separately at its own source revision; physical HIL is not executed.",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

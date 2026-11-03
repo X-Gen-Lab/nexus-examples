@@ -11,6 +11,7 @@ get_target_property(soc_family Nexus::Platform NEXUS_SOC_FAMILY)
 if(soc_family STREQUAL "native")
     enable_testing()
     include("${CMAKE_CURRENT_LIST_DIR}/../apps/industrial_control/firmware.cmake")
+    include("${CMAKE_CURRENT_LIST_DIR}/../apps/network_gateway/firmware.cmake")
     add_test(NAME installed_platform_reference COMMAND nexus_firmware)
     add_test(NAME installed_industrial_control COMMAND industrial_control
         "${CMAKE_CURRENT_BINARY_DIR}/industrial-model.dat")

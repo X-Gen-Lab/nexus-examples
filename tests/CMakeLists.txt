@@ -148,3 +148,7 @@ add_test(NAME industrial_control_google COMMAND "${Python3_EXECUTABLE}" -B
     --output "${CMAKE_CURRENT_BINARY_DIR}/industrial-google-execution")
 set_tests_properties(industrial_control_google PROPERTIES TIMEOUT 30
     LABELS "native;example;GoogleTest")
+
+include("${CMAKE_CURRENT_LIST_DIR}/network_gateway.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/network_gateway_peer.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/network_gateway_main.cmake")
