@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "command": [
+    "tar",
+    "--use-compress-program=zstd -T1 -1",
+    "-cf",
+    "/tmp/nexus-cache-retention-20261103/native-debug.tar.zst",
+    "build/native-debug"
+  ],
+  "cwd": "/workspace/nexus",
+  "stage": "archive-ended-native-debug-cache",
+  "started_ns": 1793685531611452700,
+  "finished_ns": 1793685536651971866,
+  "duration_seconds": 5.040519456999846,
+  "timeout_seconds": 1800.0,
+  "outcome": "completed",
+  "exit_code": 0,
+  "child_returncode": 0,
+  "withdrawn_processes": [],
+  "withdrawal_stable": true,
+  "withdrawal_complete": true,
+  "build_parallelism": 2,
+  "resource_usage": {
+    "method": "linux_wait4",
+    "scope": "waited_process_and_reaped_descendants",
+    "user_cpu_seconds": 4.915526,
+    "system_cpu_seconds": 2.382703,
+    "maximum_process_rss_bytes": 167645184
+  },
+  "stdout": {
+    "path": "/workspace/nexus/build/recovery-20261103/cache-retention/archive.attempts/1793685531611197966-ddd34144b6074691b588236c1649833c/stdout.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "/workspace/nexus/build/recovery-20261103/cache-retention/archive.attempts/1793685531611197966-ddd34144b6074691b588236c1649833c/stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

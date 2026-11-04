@@ -1,0 +1,13 @@
+{
+  "phase": "completed",
+  "updated_ns": 1793696201387754169,
+  "files": 422,
+  "bytes": 1122576352,
+  "archive": {
+    "path": "/workspace/nexus/build/recovery-20261103/tls-ipo/ordinary/native-producer-bytes/archive/eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf.tar.gz",
+    "sha256": "eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf",
+    "size": 654022083
+  },
+  "actual_restore_verified": true,
+  "scope": "All422actualNativeproducerbinaries preserved; ordinarysource/hash/context receipts remain separatelycanonical. Othergeneratedobjects are rebuildable cache, notretainedpayload. No newexecutionqualification."
+}

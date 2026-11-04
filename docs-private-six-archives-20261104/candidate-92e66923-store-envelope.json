@@ -1,0 +1,14 @@
+{
+  "archive": {
+    "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/candidate-portable-store/7f89e8ec33a543e150e7165a3e4252aa11a96d62fe5d3187a9b0d4791aa618b4.tar.gz",
+    "sha256": "7f89e8ec33a543e150e7165a3e4252aa11a96d62fe5d3187a9b0d4791aa618b4",
+    "size": 433850915
+  },
+  "bytes": 518907237,
+  "files": 6401,
+  "kind": "portable_evidence",
+  "manifest_sha256": "c27f84f74f528c7800f14186e6cb393257a0418105375876ee8e0c39b24d453c",
+  "product_promotion": false,
+  "schema_version": 1,
+  "signature_status": "unsigned"
+}

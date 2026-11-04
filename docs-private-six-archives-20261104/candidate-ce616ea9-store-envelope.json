@@ -1,0 +1,14 @@
+{
+  "archive": {
+    "path": "/workspace/nexus-examples/build/controlled-dependencies-ce616ea9/candidate-portable-store/ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a.tar.gz",
+    "sha256": "ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a",
+    "size": 434248932
+  },
+  "bytes": 519293585,
+  "files": 6448,
+  "kind": "portable_evidence",
+  "manifest_sha256": "9c1d8e0154207c713419c7e74516f81af6d378b899ad49ed57f4481e3d9a02a7",
+  "product_promotion": false,
+  "schema_version": 1,
+  "signature_status": "unsigned"
+}

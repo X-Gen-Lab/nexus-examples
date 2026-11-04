@@ -1,0 +1,14 @@
+{
+  "archive": {
+    "path": "/workspace/nexus/build/recovery-20261103/tls-ipo/ordinary/native-producer-bytes/archive/eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf.tar.gz",
+    "sha256": "eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf",
+    "size": 654022083
+  },
+  "bytes": 1122576352,
+  "files": 422,
+  "kind": "portable_evidence",
+  "manifest_sha256": "c1ef0097cad31d0e8906ffb4895afe778ad5c5e55f9c02f48ebd083f1bc878f7",
+  "product_promotion": false,
+  "schema_version": 1,
+  "signature_status": "unsigned"
+}

@@ -1,0 +1,2683 @@
+{
+  "schema_version": 1,
+  "kind": "fixed_six_private_opaque_archives_transport",
+  "repository": "X-Gen-Lab/nexus-examples",
+  "namespace": "docs-private-six-archives-20261104",
+  "archives": [
+    {
+      "original": {
+        "id": "old-native-debug",
+        "bytes": 785709349,
+        "sha256": "1aeccae46c04a82cf1b21dc2bfd402680647b541c5a8072e0a2315ffc0d56283",
+        "mode": 384,
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/native-debug.tar.zst"
+      },
+      "opaque_stream": {
+        "bytes": 785709349,
+        "sha256": "1aeccae46c04a82cf1b21dc2bfd402680647b541c5a8072e0a2315ffc0d56283",
+        "parts": [
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0000",
+            "whole_index": 0,
+            "segment_index": 0,
+            "segment_part": 0,
+            "offset": 0,
+            "bytes": 33554432,
+            "sha256": "024612533a7c5dab903a5d6e6ad90e4c99668275ab2c9a6f4ca63d231c04d30f",
+            "git_blob_sha1": "10e9d538030da01a243242b527c364a82e2715cb",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0001",
+            "whole_index": 1,
+            "segment_index": 0,
+            "segment_part": 1,
+            "offset": 33554432,
+            "bytes": 33554432,
+            "sha256": "376a8de867cc9f38a9c4a71f57ac5677f26203ec5b09f345c88879fbe2792eef",
+            "git_blob_sha1": "5cad303361894634e938f41f4ba4a985206920fe",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0002",
+            "whole_index": 2,
+            "segment_index": 0,
+            "segment_part": 2,
+            "offset": 67108864,
+            "bytes": 33554432,
+            "sha256": "fa49039c5645c3cec2890a055c29c483cb2e0e39802c4cb632f876d024666773",
+            "git_blob_sha1": "949748e2a18f101f5144d592605092b98bdb6aa1",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0003",
+            "whole_index": 3,
+            "segment_index": 0,
+            "segment_part": 3,
+            "offset": 100663296,
+            "bytes": 33554432,
+            "sha256": "3ed7082b129dff236d8ee9996bc711735557fa464453842e11eac09bea0a0534",
+            "git_blob_sha1": "2c59a9b8b3ffd1116dc00a897648ce7d14695252",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0004",
+            "whole_index": 4,
+            "segment_index": 0,
+            "segment_part": 4,
+            "offset": 134217728,
+            "bytes": 33554432,
+            "sha256": "b7a58cb39e00e1cf6508d0c68bf06327c65bec0e1a55fc22a638967e64ed6472",
+            "git_blob_sha1": "571eefa9f832635bfcd537d02832c460e7de8f88",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0005",
+            "whole_index": 5,
+            "segment_index": 0,
+            "segment_part": 5,
+            "offset": 167772160,
+            "bytes": 33554432,
+            "sha256": "a6d45805ce5e213ea2b0ed2c72f6f6841d3a4be4d3a9305cd7412517002e7c0f",
+            "git_blob_sha1": "d082e411029e948063e2c9db811718ca83563b70",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0006",
+            "whole_index": 6,
+            "segment_index": 0,
+            "segment_part": 6,
+            "offset": 201326592,
+            "bytes": 33554432,
+            "sha256": "1d7552975844360602d6a22704fd1ba47e118288025017ad521f10e0487e7013",
+            "git_blob_sha1": "f07fbb08ca09b589bae2154a89731de17f29099d",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0007",
+            "whole_index": 7,
+            "segment_index": 0,
+            "segment_part": 7,
+            "offset": 234881024,
+            "bytes": 33554432,
+            "sha256": "7fee0c91a8bb94d18a86623b3f5c5401f7e82993d14c5abb72756c39b83ca5f7",
+            "git_blob_sha1": "657c10895a019cd49e1a39fcabce166b3763375b",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0008",
+            "whole_index": 8,
+            "segment_index": 0,
+            "segment_part": 8,
+            "offset": 268435456,
+            "bytes": 33554432,
+            "sha256": "226c467c873de6f26eaaace9cbcabe8383441d329dd733d34bacace28ff4500d",
+            "git_blob_sha1": "b12226b490511afcafb55d4334e8a464960000dd",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0009",
+            "whole_index": 9,
+            "segment_index": 0,
+            "segment_part": 9,
+            "offset": 301989888,
+            "bytes": 33554432,
+            "sha256": "7ef2011f83b7cf1627dc67ffee5ca6a0c63de1858c95f01ba2b5ce4588bcdd37",
+            "git_blob_sha1": "810eb51775d48d227988d41d210c63a351fdde15",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0010",
+            "whole_index": 10,
+            "segment_index": 0,
+            "segment_part": 10,
+            "offset": 335544320,
+            "bytes": 33554432,
+            "sha256": "e9f0e0cc0f887a561a83260b8478365ffc4c357901c6d971e42668e6c69dca53",
+            "git_blob_sha1": "bdeedcce273c4f2603b13157b6f2a1edc16e3890",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0011",
+            "whole_index": 11,
+            "segment_index": 0,
+            "segment_part": 11,
+            "offset": 369098752,
+            "bytes": 33554432,
+            "sha256": "f4e80c231c2df79e153669587ee765b828c6132f554ead52a602af3eb1494264",
+            "git_blob_sha1": "fb146d04eeb78e34f9c0bc54d57ffc151d18eaf1",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0012",
+            "whole_index": 12,
+            "segment_index": 0,
+            "segment_part": 12,
+            "offset": 402653184,
+            "bytes": 33554432,
+            "sha256": "8b0ee4e15661763df007d518fe188c00803eebd0586453683ebc7895297103ad",
+            "git_blob_sha1": "5b5938ec51c0545d368e57152258508043830020",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0013",
+            "whole_index": 13,
+            "segment_index": 0,
+            "segment_part": 13,
+            "offset": 436207616,
+            "bytes": 33554432,
+            "sha256": "8d3307b71fb2f43132941af83812041161855f02afecc60e233e9ab23d23de04",
+            "git_blob_sha1": "4ec75168396fca2b73cd0f5abcf23c0b4fb169ec",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0014",
+            "whole_index": 14,
+            "segment_index": 0,
+            "segment_part": 14,
+            "offset": 469762048,
+            "bytes": 33554432,
+            "sha256": "b08af4348cd4c9cb02b925176f3f2cf8a5f7ead3b965589f1a14dad3770136d5",
+            "git_blob_sha1": "4a1ccb977c951e8565ea32babe2e6370ce96d9c5",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0015",
+            "whole_index": 15,
+            "segment_index": 0,
+            "segment_part": 15,
+            "offset": 503316480,
+            "bytes": 33554432,
+            "sha256": "5c48250ff5a8cdbc8c4108af650e73940a4738d42ab40bfbd6a7649eae05d482",
+            "git_blob_sha1": "251b3150a129162912b987fb6a50833acee8e6d7",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0016",
+            "whole_index": 16,
+            "segment_index": 0,
+            "segment_part": 16,
+            "offset": 536870912,
+            "bytes": 33554432,
+            "sha256": "f314d20185a532acdb81536534056734f44effa4ac2bbac8e178ea726b61cd52",
+            "git_blob_sha1": "3b9cff69f03e98c82088ffd2f81b2d541cc90a64",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0017",
+            "whole_index": 17,
+            "segment_index": 0,
+            "segment_part": 17,
+            "offset": 570425344,
+            "bytes": 33554432,
+            "sha256": "6445147d45c2b211ed1ae1dedf61b4cd98c6f0ef683abccd07e828894f062c31",
+            "git_blob_sha1": "ce29b456a657c6bda2ed917205a707c1095b9dc7",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0018",
+            "whole_index": 18,
+            "segment_index": 0,
+            "segment_part": 18,
+            "offset": 603979776,
+            "bytes": 33554432,
+            "sha256": "0885b9246fbe3e8931617a8a65aac377ecd8f836c0ea6d1535739b63dc8fab08",
+            "git_blob_sha1": "9d66d649a17e3d6926e2d46b53fde47d6e359a39",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0019",
+            "whole_index": 19,
+            "segment_index": 0,
+            "segment_part": 19,
+            "offset": 637534208,
+            "bytes": 33554432,
+            "sha256": "c2da65ac5e723a3f78ad8cb8da668bc11cee44485db8044403ccc6f722ac7afa",
+            "git_blob_sha1": "37ceffa256dfc865ef0efdd44279f779b9a92512",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0020",
+            "whole_index": 20,
+            "segment_index": 0,
+            "segment_part": 20,
+            "offset": 671088640,
+            "bytes": 33554432,
+            "sha256": "63a668c5332c9e37a029c1b03dd8e1c99d51a068acac489128d40e6e2779caf7",
+            "git_blob_sha1": "1947b4e342ca699eecfa471be99149801ec324fd",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0021",
+            "whole_index": 21,
+            "segment_index": 0,
+            "segment_part": 21,
+            "offset": 704643072,
+            "bytes": 33554432,
+            "sha256": "f9e817b187df02c30acf314b35f5bede30116ed35f676e99e516e6043bb431cc",
+            "git_blob_sha1": "31d65e00fac55b7c9394379af0bfbf323c472cb8",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0022",
+            "whole_index": 22,
+            "segment_index": 0,
+            "segment_part": 22,
+            "offset": 738197504,
+            "bytes": 33554432,
+            "sha256": "bf4ae4d30326c1acea46fe9ed835dec06b9b1855598d11cc46a3d3cc861e77b2",
+            "git_blob_sha1": "2404fa654349c5a2e0ccc3bbaa78cecb45cd9513",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/old-native-debug.part0023",
+            "whole_index": 23,
+            "segment_index": 0,
+            "segment_part": 23,
+            "offset": 771751936,
+            "bytes": 13957413,
+            "sha256": "218834841fc61af9b38dd3f5336803a0da08d77a8d40387bcaab77dce9f2db54",
+            "git_blob_sha1": "317df541ae62de55973f4c375158ab4094ac1cc7",
+            "mode": "100644"
+          }
+        ],
+        "segments": [
+          {
+            "index": 0,
+            "offset": 0,
+            "bytes": 785709349,
+            "sha256": "1aeccae46c04a82cf1b21dc2bfd402680647b541c5a8072e0a2315ffc0d56283",
+            "parts": [
+              "docs-private-six-archives-20261104/old-native-debug.part0000",
+              "docs-private-six-archives-20261104/old-native-debug.part0001",
+              "docs-private-six-archives-20261104/old-native-debug.part0002",
+              "docs-private-six-archives-20261104/old-native-debug.part0003",
+              "docs-private-six-archives-20261104/old-native-debug.part0004",
+              "docs-private-six-archives-20261104/old-native-debug.part0005",
+              "docs-private-six-archives-20261104/old-native-debug.part0006",
+              "docs-private-six-archives-20261104/old-native-debug.part0007",
+              "docs-private-six-archives-20261104/old-native-debug.part0008",
+              "docs-private-six-archives-20261104/old-native-debug.part0009",
+              "docs-private-six-archives-20261104/old-native-debug.part0010",
+              "docs-private-six-archives-20261104/old-native-debug.part0011",
+              "docs-private-six-archives-20261104/old-native-debug.part0012",
+              "docs-private-six-archives-20261104/old-native-debug.part0013",
+              "docs-private-six-archives-20261104/old-native-debug.part0014",
+              "docs-private-six-archives-20261104/old-native-debug.part0015",
+              "docs-private-six-archives-20261104/old-native-debug.part0016",
+              "docs-private-six-archives-20261104/old-native-debug.part0017",
+              "docs-private-six-archives-20261104/old-native-debug.part0018",
+              "docs-private-six-archives-20261104/old-native-debug.part0019",
+              "docs-private-six-archives-20261104/old-native-debug.part0020",
+              "docs-private-six-archives-20261104/old-native-debug.part0021",
+              "docs-private-six-archives-20261104/old-native-debug.part0022",
+              "docs-private-six-archives-20261104/old-native-debug.part0023"
+            ]
+          }
+        ]
+      },
+      "historical_evidence": {
+        "original_retention": {
+          "archive": "/workspace/nexus/build/recovery-20261103/cache-retention/native-debug.tar.zst",
+          "archive_sha256": "1aeccae46c04a82cf1b21dc2bfd402680647b541c5a8072e0a2315ffc0d56283",
+          "archive_bytes": 785709349,
+          "verified_regular_members": 88308,
+          "verified_symlink_identity_members": 1682,
+          "historical_alias_targets": "metadata retained only; temporary target bytes did not survive restart, no functional object-cache restoration claimed",
+          "free_before": 149667840,
+          "free_after_deletion": 2323632128,
+          "free_after_persisting_archive": 1514209280,
+          "scope": "ended old public native-debug only; current source/Git/private trees/other caches untouched",
+          "qualification": "actual retention check only; not new test execution"
+        },
+        "historical_actual_restore_evidence": "original completed attempt receipts and original retention claim retained",
+        "historical_alias_targets": "metadata retained only; temporary target bytes did not survive restart, no functional object-cache restoration claimed",
+        "fresh_inner_tree_restore": false
+      }
+    },
+    {
+      "original": {
+        "id": "ordinary-native-producer",
+        "bytes": 654022083,
+        "sha256": "eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf",
+        "mode": 384,
+        "path": "/workspace/nexus/build/recovery-20261103/tls-ipo/ordinary/native-producer-bytes/archive/eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf.tar.gz"
+      },
+      "opaque_stream": {
+        "bytes": 654022083,
+        "sha256": "eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf",
+        "parts": [
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0000",
+            "whole_index": 0,
+            "segment_index": 0,
+            "segment_part": 0,
+            "offset": 0,
+            "bytes": 33554432,
+            "sha256": "560aa85c7b92ecb8771d773b76005bdfe2559b01b97c37bfa1ac160592370a1c",
+            "git_blob_sha1": "03d10d390f9841401796b7ba82c3eb09db3ad3ed",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0001",
+            "whole_index": 1,
+            "segment_index": 0,
+            "segment_part": 1,
+            "offset": 33554432,
+            "bytes": 33554432,
+            "sha256": "8b09a203041c65ebee21e61a36732985d5154cd20befe44a8d896287cef5f325",
+            "git_blob_sha1": "b3afe1176c13c63e2b33c8e1dd15644a50a0d853",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0002",
+            "whole_index": 2,
+            "segment_index": 0,
+            "segment_part": 2,
+            "offset": 67108864,
+            "bytes": 33554432,
+            "sha256": "74db145032ae48115aa3d088583b9c1de4ee5d3ea5db50a48711e0962b35aefa",
+            "git_blob_sha1": "f1b29f0e82a51f197495d4feed9c461fe0661e13",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0003",
+            "whole_index": 3,
+            "segment_index": 0,
+            "segment_part": 3,
+            "offset": 100663296,
+            "bytes": 33554432,
+            "sha256": "263507931cb39024caa7a5bb9057c08582215a5f5effed6ade248b0c861a76f3",
+            "git_blob_sha1": "2d9693f2647d44001ea398f2e1c57eb859454ed9",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0004",
+            "whole_index": 4,
+            "segment_index": 0,
+            "segment_part": 4,
+            "offset": 134217728,
+            "bytes": 33554432,
+            "sha256": "5ba5b2cc29d3f4a1b752a8058d35e3d426f3ba6da5c637fdb62442e2d4851874",
+            "git_blob_sha1": "88fa75861c168be8aae92147f75ddf0219d10b06",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0005",
+            "whole_index": 5,
+            "segment_index": 0,
+            "segment_part": 5,
+            "offset": 167772160,
+            "bytes": 33554432,
+            "sha256": "b267e62c347ece81da7c7f9fb2792bb1d59ce8b689e3c0e4d711c5413405565c",
+            "git_blob_sha1": "cb0436edd3f55c2fb26d119ab5571890bdf3a3c5",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0006",
+            "whole_index": 6,
+            "segment_index": 0,
+            "segment_part": 6,
+            "offset": 201326592,
+            "bytes": 33554432,
+            "sha256": "cb67eb96ca1180c374805acba10159c2a6c4e404d900eaaf4bd4872cf8201c27",
+            "git_blob_sha1": "566a61e457f6715f65cec08abd5708944091bb31",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0007",
+            "whole_index": 7,
+            "segment_index": 0,
+            "segment_part": 7,
+            "offset": 234881024,
+            "bytes": 33554432,
+            "sha256": "3c9b94c899eb72f527ad0937848f962a439f31f4918660db567de818d80be3ba",
+            "git_blob_sha1": "63e4d34ed8ac34594b3076c6f662b7b68881dff1",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0008",
+            "whole_index": 8,
+            "segment_index": 0,
+            "segment_part": 8,
+            "offset": 268435456,
+            "bytes": 33554432,
+            "sha256": "fafa7809630e15860b6788c9fd4304fefd12af9d6a96f27a652cc258da60818e",
+            "git_blob_sha1": "d57fe890635ec886ce1085951d579fd6f74de633",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0009",
+            "whole_index": 9,
+            "segment_index": 0,
+            "segment_part": 9,
+            "offset": 301989888,
+            "bytes": 33554432,
+            "sha256": "3f544025f63f099fb4dc60f8940cfa13cf236e346e22b69ca0b79db551c31c9b",
+            "git_blob_sha1": "fdc7e2f4119092dd9a7b15753b9ce82b4d48d8ba",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0010",
+            "whole_index": 10,
+            "segment_index": 0,
+            "segment_part": 10,
+            "offset": 335544320,
+            "bytes": 33554432,
+            "sha256": "f992c7a22e6f41f9b83e77c353ae02ad20aaa71c272fd77765a28ed607b57a6c",
+            "git_blob_sha1": "de376cf34a33fc97663ce1c35ae4a5dee01e3d3e",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0011",
+            "whole_index": 11,
+            "segment_index": 0,
+            "segment_part": 11,
+            "offset": 369098752,
+            "bytes": 33554432,
+            "sha256": "b8d4835d1dd0f902280c79cf596fde698e2a03eacb142e5dc20933a375846f19",
+            "git_blob_sha1": "fa371b6ec0bf7439b6c0f763dcbdf94f898e11f2",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0012",
+            "whole_index": 12,
+            "segment_index": 0,
+            "segment_part": 12,
+            "offset": 402653184,
+            "bytes": 33554432,
+            "sha256": "5a3e8499a70f044712573fcf8b77331ec375375f1659b33ec1254d127f93d013",
+            "git_blob_sha1": "974fde0c18205c1b0f5ba9cb96d05d7fcedc5cb9",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0013",
+            "whole_index": 13,
+            "segment_index": 0,
+            "segment_part": 13,
+            "offset": 436207616,
+            "bytes": 33554432,
+            "sha256": "a8eba4a0bf237b2d593724ccc16f045067906d8c45076d2e68b7b28c1eeba90d",
+            "git_blob_sha1": "9c8d06b75ea9feb5fc7b074f09f5c7fcea1cbf6c",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0014",
+            "whole_index": 14,
+            "segment_index": 0,
+            "segment_part": 14,
+            "offset": 469762048,
+            "bytes": 33554432,
+            "sha256": "28baf33a879c62dd97d3b080543515ea5dc8d8367cf116dcaf01f075598e51c7",
+            "git_blob_sha1": "7ee9c8f66bce4d294cfd37d5abfcb9b617648a7f",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0015",
+            "whole_index": 15,
+            "segment_index": 0,
+            "segment_part": 15,
+            "offset": 503316480,
+            "bytes": 33554432,
+            "sha256": "3e70a2a1d619f4e27cc099f3636702f2e0ccb6b5f0b7a9e27b68ffef170aab6b",
+            "git_blob_sha1": "a8e665aef31134ab37c92e14c90b890c5fce2f21",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0016",
+            "whole_index": 16,
+            "segment_index": 0,
+            "segment_part": 16,
+            "offset": 536870912,
+            "bytes": 33554432,
+            "sha256": "bac281684ff1f661d4c965da094e902d3c2fd652a49fdfdfc47d229e2d79f6a1",
+            "git_blob_sha1": "c461df2728e1eed56b4681b92a9360e6d39efc27",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0017",
+            "whole_index": 17,
+            "segment_index": 0,
+            "segment_part": 17,
+            "offset": 570425344,
+            "bytes": 33554432,
+            "sha256": "c8a2c9ffe2d39b5754936ccbca56c035c670c4d6f2f7bae5c233573e82aa7f14",
+            "git_blob_sha1": "2e00efd5a606f748a9f26d6c78beeb3723fc4252",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0018",
+            "whole_index": 18,
+            "segment_index": 0,
+            "segment_part": 18,
+            "offset": 603979776,
+            "bytes": 33554432,
+            "sha256": "6857f68b4b25928e945e6075a45b8645983694fc950a69edc5c3c469fab95663",
+            "git_blob_sha1": "f66bed9fcc8d01afbe64953738e527711639df59",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/ordinary-native-producer.part0019",
+            "whole_index": 19,
+            "segment_index": 0,
+            "segment_part": 19,
+            "offset": 637534208,
+            "bytes": 16487875,
+            "sha256": "73a18990840f244427910ea350ce5000cb8d4b33011411ae11b69034a96f3b29",
+            "git_blob_sha1": "63b1701c0e2eae4cb4cdd856e724a406514fd307",
+            "mode": "100644"
+          }
+        ],
+        "segments": [
+          {
+            "index": 0,
+            "offset": 0,
+            "bytes": 654022083,
+            "sha256": "eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf",
+            "parts": [
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0000",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0001",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0002",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0003",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0004",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0005",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0006",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0007",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0008",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0009",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0010",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0011",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0012",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0013",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0014",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0015",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0016",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0017",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0018",
+              "docs-private-six-archives-20261104/ordinary-native-producer.part0019"
+            ]
+          }
+        ]
+      },
+      "historical_evidence": {
+        "original_envelope": {
+          "schema_version": 1,
+          "kind": "portable_evidence",
+          "archive": {
+            "path": "/workspace/nexus/build/recovery-20261103/tls-ipo/ordinary/native-producer-bytes/archive/eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf.tar.gz",
+            "sha256": "eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf",
+            "size": 654022083
+          },
+          "manifest_sha256": "c1ef0097cad31d0e8906ffb4895afe778ad5c5e55f9c02f48ebd083f1bc878f7",
+          "files": 422,
+          "bytes": 1122576352,
+          "signature_status": "unsigned",
+          "product_promotion": false
+        },
+        "historical_actual_restore_evidence": "original completed state and exact retain.py retained; no separate fresh command receipt created",
+        "member_manifest": "inside unchanged original archive: delivery-manifest.json; original envelope manifest_sha256 binds bytes",
+        "fresh_inner_tree_restore": false
+      }
+    },
+    {
+      "original": {
+        "id": "native-intermediate",
+        "bytes": 270199403,
+        "sha256": "e1a8000cc781c0936fc49900d4a3d30d3b9bd6961fed8eddb736c496ed7eb836",
+        "mode": 384,
+        "path": "/workspace/nexus/build/release-0.2.0-integration-20261031/native-intermediate-cache-20261031.tar.gz"
+      },
+      "opaque_stream": {
+        "bytes": 270199403,
+        "sha256": "e1a8000cc781c0936fc49900d4a3d30d3b9bd6961fed8eddb736c496ed7eb836",
+        "parts": [
+          {
+            "path": "docs-private-six-archives-20261104/native-intermediate.part0000",
+            "whole_index": 0,
+            "segment_index": 0,
+            "segment_part": 0,
+            "offset": 0,
+            "bytes": 33554432,
+            "sha256": "5f384e34b5a1415d30d5533061744d7bc6f80d674880a5c965e87fe5a961ec44",
+            "git_blob_sha1": "2cfb25102e474760f4f42c13779a58d457268982",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/native-intermediate.part0001",
+            "whole_index": 1,
+            "segment_index": 0,
+            "segment_part": 1,
+            "offset": 33554432,
+            "bytes": 33554432,
+            "sha256": "44701968c503e325bb0888a6b99f400a7a9acc6f2c5cad44c5bf800cade48ebf",
+            "git_blob_sha1": "859f3aaf9b76c7d3f4d4c8e2039f7bf69887fd06",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/native-intermediate.part0002",
+            "whole_index": 2,
+            "segment_index": 0,
+            "segment_part": 2,
+            "offset": 67108864,
+            "bytes": 33554432,
+            "sha256": "3f784de2b4b247463a49309328ef8c22cf76e566a45295684efc3a8fa2c87465",
+            "git_blob_sha1": "faf093e51de22600190ec9dd72830dcb590eaa08",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/native-intermediate.part0003",
+            "whole_index": 3,
+            "segment_index": 0,
+            "segment_part": 3,
+            "offset": 100663296,
+            "bytes": 33554432,
+            "sha256": "7d3e8fd4871d499e8dcd0dd4eaf81ec51f97e43a59e21750b66b8671ef3f7d6a",
+            "git_blob_sha1": "e44dd60d9e316d6a8e7d9f8c1fe2032edd87f59b",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/native-intermediate.part0004",
+            "whole_index": 4,
+            "segment_index": 0,
+            "segment_part": 4,
+            "offset": 134217728,
+            "bytes": 33554432,
+            "sha256": "3973a925adeaafb7e10d58128408639ae6b3415a9a855f52c275156b830c12e4",
+            "git_blob_sha1": "cb840c52a51573675f53d9265a6c22e2f0bc2879",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/native-intermediate.part0005",
+            "whole_index": 5,
+            "segment_index": 0,
+            "segment_part": 5,
+            "offset": 167772160,
+            "bytes": 33554432,
+            "sha256": "2aa9e2a1a713a57fde27035e0e0c181726e145a5a515d5a70004f072c6d1c96b",
+            "git_blob_sha1": "bc684f6aebb6ddfbab98e5624e4e0f18b4fe5cb8",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/native-intermediate.part0006",
+            "whole_index": 6,
+            "segment_index": 0,
+            "segment_part": 6,
+            "offset": 201326592,
+            "bytes": 33554432,
+            "sha256": "cdeace01c98f924e228f0068000ed7820d0d0dc4b44de454be7fc58465e9a9c0",
+            "git_blob_sha1": "151c41a4146ba39451c4172f71051240b0971e2d",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/native-intermediate.part0007",
+            "whole_index": 7,
+            "segment_index": 0,
+            "segment_part": 7,
+            "offset": 234881024,
+            "bytes": 33554432,
+            "sha256": "50044cbd73bf393ad943e61a526e34867d68aeec6fe83b3c544dfc76ab38f39a",
+            "git_blob_sha1": "d714e1abfeec9df798a53398934c38e0d3298351",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/native-intermediate.part0008",
+            "whole_index": 8,
+            "segment_index": 0,
+            "segment_part": 8,
+            "offset": 268435456,
+            "bytes": 1763947,
+            "sha256": "4747d5b21989c5d89c7fcb8436e3d891a8caf9599b1944b6e422ae49a3edddee",
+            "git_blob_sha1": "c3a0dc0ea330b8e0de12b71a2e94914b33a88fa4",
+            "mode": "100644"
+          }
+        ],
+        "segments": [
+          {
+            "index": 0,
+            "offset": 0,
+            "bytes": 270199403,
+            "sha256": "e1a8000cc781c0936fc49900d4a3d30d3b9bd6961fed8eddb736c496ed7eb836",
+            "parts": [
+              "docs-private-six-archives-20261104/native-intermediate.part0000",
+              "docs-private-six-archives-20261104/native-intermediate.part0001",
+              "docs-private-six-archives-20261104/native-intermediate.part0002",
+              "docs-private-six-archives-20261104/native-intermediate.part0003",
+              "docs-private-six-archives-20261104/native-intermediate.part0004",
+              "docs-private-six-archives-20261104/native-intermediate.part0005",
+              "docs-private-six-archives-20261104/native-intermediate.part0006",
+              "docs-private-six-archives-20261104/native-intermediate.part0007",
+              "docs-private-six-archives-20261104/native-intermediate.part0008"
+            ]
+          }
+        ]
+      },
+      "historical_evidence": {
+        "original_retention": {
+          "archive": "/workspace/nexus/build/release-0.2.0-integration-20261031/native-intermediate-cache-20261031.tar.gz",
+          "sha256": "e1a8000cc781c0936fc49900d4a3d30d3b9bd6961fed8eddb736c496ed7eb836",
+          "bytes": 270199403,
+          "members": 2392,
+          "freed_bytes": 1146155008,
+          "preserved": "all final binaries, JUnit, raw logs, compilation database, source and historical evidence",
+          "restore": "tar -xf /workspace/nexus/build/release-0.2.0-integration-20261031/native-intermediate-cache-20261031.tar.gz -C /workspace/nexus/build/native-debug"
+        },
+        "historical_actual_restore_evidence": "not located; original restore field is only command text, not execution evidence",
+        "fresh_inner_tree_restore": false
+      }
+    },
+    {
+      "original": {
+        "id": "candidate-ce616ea9",
+        "bytes": 434248932,
+        "sha256": "ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a",
+        "mode": 384,
+        "path": "/workspace/nexus-examples/build/controlled-dependencies-ce616ea9/candidate-portable-store/ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a.tar.gz"
+      },
+      "opaque_stream": {
+        "bytes": 434248932,
+        "sha256": "ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a",
+        "parts": [
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0000",
+            "whole_index": 0,
+            "segment_index": 0,
+            "segment_part": 0,
+            "offset": 0,
+            "bytes": 33554432,
+            "sha256": "505e20cf809a34e35419f4f8301ee7525e9b08c7e3b6b9a4f274df03f4c37192",
+            "git_blob_sha1": "4482748dc3a882ff2ed075498f59b84367dbcbd6",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0001",
+            "whole_index": 1,
+            "segment_index": 0,
+            "segment_part": 1,
+            "offset": 33554432,
+            "bytes": 33554432,
+            "sha256": "73289855c3fd91aad6c50d17e25bccfc89733b28167943ad72a028fa62eb0cbc",
+            "git_blob_sha1": "29f9134b04ef94c9781fb8ce3f6a8f8772323a74",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0002",
+            "whole_index": 2,
+            "segment_index": 0,
+            "segment_part": 2,
+            "offset": 67108864,
+            "bytes": 33554432,
+            "sha256": "4191cbed1c5d90568cf5c20ae8efa894241452c43b6ce66aedcb1ba4b5c2d7f9",
+            "git_blob_sha1": "e5710bbee1c6ebf0aefeffc427a7a615419a4994",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0003",
+            "whole_index": 3,
+            "segment_index": 0,
+            "segment_part": 3,
+            "offset": 100663296,
+            "bytes": 33554432,
+            "sha256": "61b41b648d901839bda1ee63071decb0686a339a607df97c53a44ca72b7ee20e",
+            "git_blob_sha1": "8dc48c8cbd26a6703565d26a6a8e401aee30d969",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0004",
+            "whole_index": 4,
+            "segment_index": 0,
+            "segment_part": 4,
+            "offset": 134217728,
+            "bytes": 33554432,
+            "sha256": "8c525bf485a0507e0e56ad7e0589078f89c231df8ca473b816fb0e37f9819fa7",
+            "git_blob_sha1": "7c242223197e69c1a34a4a325f90fd5974d4d26f",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0005",
+            "whole_index": 5,
+            "segment_index": 0,
+            "segment_part": 5,
+            "offset": 167772160,
+            "bytes": 33554432,
+            "sha256": "cd2f830a3d04bd5f8a32e7d0d491f40682ba8912bc1285e73dbda19734331318",
+            "git_blob_sha1": "aac10bc8ff686ba87a769fb72a5f85773b926063",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0006",
+            "whole_index": 6,
+            "segment_index": 0,
+            "segment_part": 6,
+            "offset": 201326592,
+            "bytes": 33554432,
+            "sha256": "91864382e27bf2a08f8da5552ac2fd4d879d70fae1ecd5f80f00cfc04161d2f8",
+            "git_blob_sha1": "0916cc3f06fccb7de09fa8db257687a4ef04295c",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0007",
+            "whole_index": 7,
+            "segment_index": 0,
+            "segment_part": 7,
+            "offset": 234881024,
+            "bytes": 33554432,
+            "sha256": "e231cf31c3e3990b13a42d6323db7b0071b0e5d2c787440ec6cdffce8aa252f0",
+            "git_blob_sha1": "b0c229b4050a5fbef698555c22e21d9a792fb794",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0008",
+            "whole_index": 8,
+            "segment_index": 0,
+            "segment_part": 8,
+            "offset": 268435456,
+            "bytes": 33554432,
+            "sha256": "2953e9aa68fe0e6d0cd5745a4c871c4cf2b7ea8c27c61eff4b3e83d4c8ef2622",
+            "git_blob_sha1": "3bdb56d422bb664a25561588873754535e56f3fc",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0009",
+            "whole_index": 9,
+            "segment_index": 0,
+            "segment_part": 9,
+            "offset": 301989888,
+            "bytes": 33554432,
+            "sha256": "f23c911480db1579a6a982de834f8ba375097d58ca46acddfb92acf636df4dc1",
+            "git_blob_sha1": "4d67b5ff7104fcc1b8a95b4ec517bbb7b3598cd8",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0010",
+            "whole_index": 10,
+            "segment_index": 0,
+            "segment_part": 10,
+            "offset": 335544320,
+            "bytes": 33554432,
+            "sha256": "f7e441eabde894613aafe679b1c6c31fe4e84c6cb1f3e59fed6b78e0efe2dc86",
+            "git_blob_sha1": "48b36cb77563da23ab709089c6c0d973ce4c89ae",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0011",
+            "whole_index": 11,
+            "segment_index": 0,
+            "segment_part": 11,
+            "offset": 369098752,
+            "bytes": 33554432,
+            "sha256": "5ea55f3d26821b366bfbcf426c201bc22abace37f270d8943c025edc633565dc",
+            "git_blob_sha1": "0ca5a97063a702f8cf0f8479be6b6a5c305b4698",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-ce616ea9.part0012",
+            "whole_index": 12,
+            "segment_index": 0,
+            "segment_part": 12,
+            "offset": 402653184,
+            "bytes": 31595748,
+            "sha256": "e3de50051b350e34663fe196d2f0af631cbd6331f18013c39d58b012cd29368a",
+            "git_blob_sha1": "ae96913eea5904aa206bcb2fe96bec26e27a07b8",
+            "mode": "100644"
+          }
+        ],
+        "segments": [
+          {
+            "index": 0,
+            "offset": 0,
+            "bytes": 434248932,
+            "sha256": "ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a",
+            "parts": [
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0000",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0001",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0002",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0003",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0004",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0005",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0006",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0007",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0008",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0009",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0010",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0011",
+              "docs-private-six-archives-20261104/candidate-ce616ea9.part0012"
+            ]
+          }
+        ]
+      },
+      "historical_evidence": {
+        "original_envelope": {
+          "archive": {
+            "path": "/workspace/nexus-examples/build/controlled-dependencies-ce616ea9/candidate-portable-store/ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a.tar.gz",
+            "sha256": "ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a",
+            "size": 434248932
+          },
+          "bytes": 519293585,
+          "files": 6448,
+          "kind": "portable_evidence",
+          "manifest_sha256": "9c1d8e0154207c713419c7e74516f81af6d378b899ad49ed57f4481e3d9a02a7",
+          "product_promotion": false,
+          "schema_version": 1,
+          "signature_status": "unsigned"
+        },
+        "original_candidate_manifest": {
+          "artifacts": {
+            "bin": {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/reproduction-runs/run-a/build/bin/nexus_firmware.bin",
+              "sha256": "8efaf6bda92a2bb8e1f85d054d40c9fd5cf62eca32c6c22c695cc89808147d8d",
+              "size": 9300
+            },
+            "elf": {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/reproduction-runs/run-a/build/bin/nexus_firmware.elf",
+              "sha256": "72f7b699690a0e196dce31637e85571bba83e6103daa17eb5c68ea99327670a7",
+              "size": 27960
+            },
+            "map": {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/reproduction-runs/run-a/build/bin/nexus_firmware.map",
+              "sha256": "2fba04623ea6c511b45537ff9739881733f216753bbcea20b8412f586dc9dbf2",
+              "size": 52151
+            }
+          },
+          "candidate_id": "controlled-dependencies-ce616ea9b30f-cef24bd1c7bc",
+          "configuration": {
+            "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/finalization/generated/resolved.json",
+            "sha256": "66159979e35bf35d36f2e067a277e5a19b9531bb8a5439d307b88a48ab6de3ca",
+            "size": 30630
+          },
+          "dependencies": [
+            {
+              "path": "/workspace/nexus/.gitmodules",
+              "sha256": "ef60881f4fd7098d1f93286824a3d54fc5d7f0b5e5056d8344b85880ede6b113",
+              "size": 1727
+            },
+            {
+              "path": "/workspace/nexus/dependencies/actionlint.lock.json",
+              "sha256": "0bf30ff8d5dd4062d63f897c27f3e7225c673447855e977a0560e121cd2872d5",
+              "size": 2943
+            },
+            {
+              "path": "/workspace/nexus/dependencies/actions.lock.json",
+              "sha256": "795aa8834e81db176e07668f789dc566f01faac73354bc4a1613cf73d51a3fef",
+              "size": 4772
+            },
+            {
+              "path": "/workspace/nexus/dependencies/build-recipe.lock.json",
+              "sha256": "184f54646e38adea736a62f7e7b9ce7115dc8399f329ef2906f75cbd5daf30a6",
+              "size": 832
+            },
+            {
+              "path": "/workspace/nexus/dependencies/ccache.lock.json",
+              "sha256": "3b88cd0013b53aa8c5e22194499b281799fa6e473c11c06eac498b546e2b1a9e",
+              "size": 514
+            },
+            {
+              "path": "/workspace/nexus/dependencies/development-tools.txt",
+              "sha256": "ec369eef06a87082723b82321827296fb0059e36b6eddd41223ade4d73bb5994",
+              "size": 122
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-applehelp.txt",
+              "sha256": "445e28ceb62ff34619a7031148aea9fce3560dc55fd8e15a719614b1fb8b956a",
+              "size": 1441
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-devhelp.txt",
+              "sha256": "c166b04a478c94b74910f162c63867359671d2cedd766e9a873c4db8eb40f64c",
+              "size": 1437
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-htmlhelp.txt",
+              "sha256": "dccf210bbbdda1b97caff8333a45bd8a7621f32b6f8b1d13a748f24a4e5d99d3",
+              "size": 1439
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-qthelp.txt",
+              "sha256": "27b1953612e4740d49737ff7dfe12c11aa9151da8e7f4a8224b5247d07a37695",
+              "size": 1435
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-serializinghtml.txt",
+              "sha256": "3684cbcc712af8e969688e1d63fcf14d97c24422da92cf15f77f25859e15f2f5",
+              "size": 1453
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-python-linux-cp312.txt",
+              "sha256": "f76786c30ef2f2920f40c0663371d7982618475046a792c61b740ec65cc066c7",
+              "size": 2833
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-tools.lock.json",
+              "sha256": "9c33a22690587cd9c02f1b2d78e0f9a70313f4359afa67dd404b449c8f565288",
+              "size": 37835
+            },
+            {
+              "path": "/workspace/nexus/dependencies/environment-tools.txt",
+              "sha256": "1e965d2ecb655a6d65d775a62cc5e2948da8a176b092f9f1c9e88aebd8d3357a",
+              "size": 101
+            },
+            {
+              "path": "/workspace/nexus/dependencies/environment.lock.json",
+              "sha256": "ba90902e9048279fc38121fbcab003e8fed07dfd17044637d4aed979a7e966cd",
+              "size": 1181
+            },
+            {
+              "path": "/workspace/nexus/dependencies/freertos-transport.lock.json",
+              "sha256": "eb60eb1ac46c402306e39962cc68e5b56673576bcf10daa868923cae51d454d3",
+              "size": 577
+            },
+            {
+              "path": "/workspace/nexus/dependencies/googletest.lock.json",
+              "sha256": "5e296b2b741102294ba02d47d273d7a169841c832aacd106a2dd1bd43a54f4d3",
+              "size": 312
+            },
+            {
+              "path": "/workspace/nexus/dependencies/hook-build-tools.txt",
+              "sha256": "037010feefb29df6fd96413b289386e18b99303032d1914a1ad4b0ee634ec184",
+              "size": 160
+            },
+            {
+              "path": "/workspace/nexus/dependencies/platform-compatibility.json",
+              "sha256": "fe92b01e52c307526769877f8ffaa899cb23e6149f8136b44f200227032d9a6d",
+              "size": 585
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp311.lock.json",
+              "sha256": "4a8667fb3be548bb4eab499466ed82cba0f4430b7775e096847bea78ed6ace8b",
+              "size": 3880
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp311.txt",
+              "sha256": "80bc61d5910db99b7386b8b07766b93f176b573ee6704b5872a1530baabd4040",
+              "size": 1442
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp312.lock.json",
+              "sha256": "80c1972306abd1d9b22158a68abab31d93dafc41387e3e66bb071cc90885490c",
+              "size": 3880
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp312.txt",
+              "sha256": "0c2b01c2ccbe113e21acffb28174805411b454a57849409700c3594a507130f0",
+              "size": 1442
+            },
+            {
+              "path": "/workspace/nexus/dependencies/reviews/freertos/transport.patch",
+              "sha256": "f14ecdc5076ba0c36089f8e9abf3b03a6c7c163def1d7c943ebc830407a4305c",
+              "size": 747
+            },
+            {
+              "path": "/workspace/nexus/dependencies/reviews/freertos/upstream.gitmodules",
+              "sha256": "fd4a188f73aa3233d9065de227950fd8f5e7809c46bba7228b06b4b7cc323810",
+              "size": 390
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32f1-hal.lock.json",
+              "sha256": "1cf6c98ea2006103933623ca4c9a7c5122ac16c28bda08fb7264c65f8eb38063",
+              "size": 1142
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32f1.lock.json",
+              "sha256": "b10f1852f47e45e7660b906dc707aca9e059cbdd634c81d2ab7d3a878af100ce",
+              "size": 1058
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32f4-hal.lock.json",
+              "sha256": "59e9b509aa7c9612793dce5851e7d9c13b39c9fa2e753fc743cb970ab893cfdc",
+              "size": 2296
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32g4-hal.lock.json",
+              "sha256": "bcb8a3f8bf190e55b1d2d0526ce20c00abb7e73169bc9334abf80a87304ba135",
+              "size": 1884
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32g4.lock.json",
+              "sha256": "17a79ace0ac3626f5631da4e79b211390237de7e7bf0c7bd9878c3c98d6ca9a3",
+              "size": 1058
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32h7-hal.lock.json",
+              "sha256": "42304d23b00f830feb5d791e5377ae0c05d8ae689d25d1333e2764fc9d5000b0",
+              "size": 1290
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32h7.lock.json",
+              "sha256": "31b165b640640d95c804c911557dc9db2da56b50746465cf6d2960b34bbf088c",
+              "size": 1217
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32u5-hal.lock.json",
+              "sha256": "0c6fd21b74f040f127e1306067d71230147f3bcc71913532a84933c996f5d2e3",
+              "size": 1866
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32u5.lock.json",
+              "sha256": "3ea56fca19228bd8e9e12a1a71d4590cf8cc31044183a2a36fd6a41f6b901d30",
+              "size": 1061
+            },
+            {
+              "path": "/workspace/nexus/dependencies/style-baseline.json",
+              "sha256": "46b2a878e8aee3e4ef9cdd894a720f272b724f5b4b92d752f556acc717ea4b92",
+              "size": 228
+            },
+            {
+              "path": "/workspace/nexus/dependencies/threadx.lock.json",
+              "sha256": "a9785a8be298555fc93aa09e714bf4ff3047936c5214b0aead5898d83f22ed12",
+              "size": 43594
+            },
+            {
+              "path": "/workspace/nexus/dependencies/toolchains.lock.json",
+              "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+              "size": 469
+            },
+            {
+              "path": "/workspace/nexus/dependencies/workflow-tools.txt",
+              "sha256": "3aa451bd75cf16c3cdf8f7783db0a54dd22c02ecb34e102875aec6cfbd283061",
+              "size": 92
+            },
+            {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/finalization/tidy-contexts-package.json",
+              "sha256": "be969a7e0805d838a179b72b4676848bddf72aa1b1b406f9cd700d6acc62b6ff",
+              "size": 534
+            },
+            {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/finalization/cppcheck-contexts-package.json",
+              "sha256": "bd407976d61179d1e775dce074178ca75af2c2a4bb70153f9c1e5ee2c8038e13",
+              "size": 545
+            },
+            {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/finalization/execution-receipts.json",
+              "sha256": "e6bfdabeed217b9c55aba60b19d0cefb5edb77b4b71bb357900bfbb118ab9c37",
+              "size": 538
+            },
+            {
+              "path": "/workspace/nexus-examples/dependencies/nexus.lock.json",
+              "sha256": "d674a86c60541042e83242aaa878424f032dffa69daee817d5ff9de507a10bdd",
+              "size": 798
+            },
+            {
+              "path": "/tmp/nexus-controlled-dependencies/examples-cef24bd1c7bc-all-01/execution.json",
+              "sha256": "bef4746e319a9080e8e08eb86b58c47d45b33ba2b7c652dc8d67991965378a6b",
+              "size": 17466
+            }
+          ],
+          "environment": {
+            "path": "/workspace/nexus/build/soc-ip-layout/delivery-environment/environment.json",
+            "sha256": "0013f6279c94ff3a6115987241644fa40e8e11ab40b4584b59dd9726483ce735",
+            "size": 1083
+          },
+          "qualifications": [
+            {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/reproducibility.json",
+              "sha256": "723b0f5305b4da993e6860ef695bde384334da61c797ef7f86a3658dcb7e56c8",
+              "size": 13616
+            },
+            {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/finalization/host_contracts.json",
+              "sha256": "c0a49e699896b9da228533091c5ac52179b306666b2f97d11d5e0851eac7dbf5",
+              "size": 863483
+            },
+            {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/finalization/arm_link.json",
+              "sha256": "6cda796b7e330f1e515ebae7d005415c376fa1bcce99fd9c65271f35239d3122",
+              "size": 6821
+            },
+            {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/finalization/resource_budget.json",
+              "sha256": "39dd2a65e26bc9ebbf4398858b49ff8a51e5e8dcf0623caf3ffd1ffa35857b64",
+              "size": 3705
+            },
+            {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/finalization/source_sdk.json",
+              "sha256": "d6c61963e9b366b42e4d4b5107f295a3f30fd68e77bb7e88f393d2638c43d405",
+              "size": 97786
+            },
+            {
+              "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/finalization/hil_tooling.json",
+              "sha256": "0414aa45f2b2f41589c27293283e6d04de954337b694dfe53a773ef5ccb9fa7f",
+              "size": 4324
+            }
+          ],
+          "schema_version": 1,
+          "source": {
+            "commit": "ce616ea9b30fd2bbd9511f73e2f3b5d8028224b4",
+            "dirty": false,
+            "root": "/workspace/nexus",
+            "submodules": [
+              " 062e1e0d8b176ae73d257ac928766b33bea17b6f ext/freertos (V11.1.0-1-g062e1e0d8)",
+              " 9c5bad7b2f42b4e8420f12290b9bc085d3309e8b ext/freertos/portable/ThirdParty/Community-Supported-Ports (9c5bad7)",
+              " dc3afc6e837426b4bda81bbb6cf45bfb6f34c7e9 ext/freertos/portable/ThirdParty/Partner-Supported-Ports (dc3afc6)",
+              " 6910c9d9165801d8827d628cb72eb7ea9dd538c5 ext/googletest (release-1.8.0-3518-g6910c9d9)",
+              " 93387b0a60382a29579bbad5045c68328e3751df ext/threadx (v6.5.0.202601_pre-232-g93387b0a)",
+              " af1b110e46a1720349f6f125e386e126767699bd vendors/arm/CMSIS_6 (v6.4.0)",
+              " c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22 vendors/st/cmsis_device_f1 (v4.3.5-1-gc8e9a4a)",
+              " 3c77349ce04c8af401454cc51f85ea9a50e34fc1 vendors/st/cmsis_device_f4 (v2.6.11-1-g3c77349)",
+              " 626ee412334a5ed2e5b320af5a8d77d69f03a558 vendors/st/cmsis_device_g4 (v1.2.6-1-g626ee41)",
+              " 8f922cdc7cc6de2344e75ddd657889f4ff761790 vendors/st/cmsis_device_h7 (v1.10.7)",
+              " 624374fa1e21ca195d6f2102ac0caaa50d0ea4c8 vendors/st/cmsis_device_u5 (v1.4.3)",
+              " fee494a92b5ad331f92ad21f76c66a5cb83773ee vendors/st/stm32f1_hal (v1.1.10-17-gfee494a)",
+              " b6f0ed3829f3829eb358a2e7417d80bba1a42db7 vendors/st/stm32f4_hal (v1.8.5)",
+              " f5929f431f9effe45fbe18f5337e4753ced9ac92 vendors/st/stm32g4_hal (v1.2.7)",
+              " a1996eed9172b59887bafaaa0ea1816ea14d48b5 vendors/st/stm32h7_hal (v1.11.6)",
+              " 2552682ee5a0d6f826a6435750fc9267be65868b vendors/st/stm32u5_hal (v1.6.3)"
+            ],
+            "tree": "a12bd07ff114e51d5dc22ec4bfba4ec7a515cadb"
+          }
+        },
+        "member_manifest": "inside unchanged original archive: delivery-manifest.json; original envelope manifest_sha256 binds bytes",
+        "historical_actual_restore_evidence": "not located in bounded original metadata inspection; no actual restore success inferred",
+        "fresh_inner_tree_restore": false
+      }
+    },
+    {
+      "original": {
+        "id": "candidate-fc01d863",
+        "bytes": 434092822,
+        "sha256": "a443e9c3b39528d5d5fbbdd19ee1c065496cd86b8df78cb5380aab4505bf3aa9",
+        "mode": 384,
+        "path": "/workspace/nexus-examples/build/platform-candidate-fc01d863c337-acb5179ec09e-01/candidate-portable-store/a443e9c3b39528d5d5fbbdd19ee1c065496cd86b8df78cb5380aab4505bf3aa9.tar.gz"
+      },
+      "opaque_stream": {
+        "bytes": 434092822,
+        "sha256": "a443e9c3b39528d5d5fbbdd19ee1c065496cd86b8df78cb5380aab4505bf3aa9",
+        "parts": [
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0000",
+            "whole_index": 0,
+            "segment_index": 0,
+            "segment_part": 0,
+            "offset": 0,
+            "bytes": 33554432,
+            "sha256": "6cb15e5bf805e850bc80a0e62d1da7dba146cb5cbafdd0bf06f6822f9a112ffa",
+            "git_blob_sha1": "0ee3a2630fc07bb02b8bc4489234b21512b71d37",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0001",
+            "whole_index": 1,
+            "segment_index": 0,
+            "segment_part": 1,
+            "offset": 33554432,
+            "bytes": 33554432,
+            "sha256": "313d44b9788bbe4af1f55a48a82891ae1ced48eba8b959e46e8c0586255e9195",
+            "git_blob_sha1": "6948d93d37f5c5073d067f331499def9359d17f3",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0002",
+            "whole_index": 2,
+            "segment_index": 0,
+            "segment_part": 2,
+            "offset": 67108864,
+            "bytes": 33554432,
+            "sha256": "70c2ab82ac741272aa8be339e2a67a5b1b74bff77b4a65e64ab4bf8ad6d7336d",
+            "git_blob_sha1": "5e0d406e8a17949eb313bfb8ea41528ee2e702bd",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0003",
+            "whole_index": 3,
+            "segment_index": 0,
+            "segment_part": 3,
+            "offset": 100663296,
+            "bytes": 33554432,
+            "sha256": "163e725693752bd63e1017fe59862026a276e53978693d2efc6340359f74f6ec",
+            "git_blob_sha1": "4a63d3fbc6c6a1ff2a34a834fab09cab94b93a63",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0004",
+            "whole_index": 4,
+            "segment_index": 0,
+            "segment_part": 4,
+            "offset": 134217728,
+            "bytes": 33554432,
+            "sha256": "43e22655e2636aec7dbf02e4fe168524352f4c605e93dbf477dbbae03d532599",
+            "git_blob_sha1": "e87a5116ad072ca7c82206939bb9fd5b104a5572",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0005",
+            "whole_index": 5,
+            "segment_index": 0,
+            "segment_part": 5,
+            "offset": 167772160,
+            "bytes": 33554432,
+            "sha256": "d36c7b3c6ccb547e0000027b7f0ecd4ec1f14073c5381b83c94ee5cd103e86d7",
+            "git_blob_sha1": "2336cf42bbabf576c2e2461cdbfb5e942f6b76ee",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0006",
+            "whole_index": 6,
+            "segment_index": 0,
+            "segment_part": 6,
+            "offset": 201326592,
+            "bytes": 33554432,
+            "sha256": "2959bff5b4fb820ab4162c79c3f9d85b7e15dda6a4a7d5ed886f5f2b89e1d32a",
+            "git_blob_sha1": "295c85fc361bd109e5c4222c4cef180f5dc29325",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0007",
+            "whole_index": 7,
+            "segment_index": 0,
+            "segment_part": 7,
+            "offset": 234881024,
+            "bytes": 33554432,
+            "sha256": "09806d09689f892c403d587935a2fad146f3db81cee64d72bb6002ceb7c0240b",
+            "git_blob_sha1": "620f67f20e2c4ff35724684e076a5841c6e6f86b",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0008",
+            "whole_index": 8,
+            "segment_index": 0,
+            "segment_part": 8,
+            "offset": 268435456,
+            "bytes": 33554432,
+            "sha256": "b912887d865771ed8ee4c791a0a2efd5e27243843ba1de2d7f09b888e6fc0912",
+            "git_blob_sha1": "0c3e1897a5cff7aa26403108202fae083f2fcc45",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0009",
+            "whole_index": 9,
+            "segment_index": 0,
+            "segment_part": 9,
+            "offset": 301989888,
+            "bytes": 33554432,
+            "sha256": "18ebc820bcc76fc56bbd8646199817e50632d330bab16affee205a848afa9881",
+            "git_blob_sha1": "f2a42676451c7ce8b621bc2e3cf2e747a7878b3b",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0010",
+            "whole_index": 10,
+            "segment_index": 0,
+            "segment_part": 10,
+            "offset": 335544320,
+            "bytes": 33554432,
+            "sha256": "a397aa5fd99d13d6f73458183d0c4a4d87e87618f352288d73f4f4af73267fb9",
+            "git_blob_sha1": "bce358017430521d0c5ccabd89619e6649051bc8",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0011",
+            "whole_index": 11,
+            "segment_index": 0,
+            "segment_part": 11,
+            "offset": 369098752,
+            "bytes": 33554432,
+            "sha256": "f0a2f8dd9856120544c5c960a9e35b1fe566e5d575d0a515ea32671879333d10",
+            "git_blob_sha1": "007f19d1eeac3177523b8ef4c67ed8a86ff70945",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-fc01d863.part0012",
+            "whole_index": 12,
+            "segment_index": 0,
+            "segment_part": 12,
+            "offset": 402653184,
+            "bytes": 31439638,
+            "sha256": "5572f07000e0f46c88e3d2ca4a71700e59fffe1ebf064116e4c7791840968dcd",
+            "git_blob_sha1": "8344dd88cc6af03d05d6c17a720687721d80fd86",
+            "mode": "100644"
+          }
+        ],
+        "segments": [
+          {
+            "index": 0,
+            "offset": 0,
+            "bytes": 434092822,
+            "sha256": "a443e9c3b39528d5d5fbbdd19ee1c065496cd86b8df78cb5380aab4505bf3aa9",
+            "parts": [
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0000",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0001",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0002",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0003",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0004",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0005",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0006",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0007",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0008",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0009",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0010",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0011",
+              "docs-private-six-archives-20261104/candidate-fc01d863.part0012"
+            ]
+          }
+        ]
+      },
+      "historical_evidence": {
+        "original_envelope": {
+          "archive": {
+            "path": "/workspace/nexus-examples/build/platform-candidate-fc01d863c337-acb5179ec09e-01/candidate-portable-store/a443e9c3b39528d5d5fbbdd19ee1c065496cd86b8df78cb5380aab4505bf3aa9.tar.gz",
+            "sha256": "a443e9c3b39528d5d5fbbdd19ee1c065496cd86b8df78cb5380aab4505bf3aa9",
+            "size": 434092822
+          },
+          "bytes": 518917220,
+          "files": 6441,
+          "kind": "portable_evidence",
+          "manifest_sha256": "6783602963daa75cddb5a367a9affd3218a9fdc24bc91af8813307431130ac50",
+          "product_promotion": false,
+          "schema_version": 1,
+          "signature_status": "unsigned"
+        },
+        "original_candidate_manifest": {
+          "artifacts": {
+            "bin": {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/reproduction-runs/run-a/build/bin/nexus_firmware.bin",
+              "sha256": "8efaf6bda92a2bb8e1f85d054d40c9fd5cf62eca32c6c22c695cc89808147d8d",
+              "size": 9300
+            },
+            "elf": {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/reproduction-runs/run-a/build/bin/nexus_firmware.elf",
+              "sha256": "6c385bd54c79b7dd4350636fd3009ae48e62acdd0f077c1d58e8078c697994f1",
+              "size": 27960
+            },
+            "map": {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/reproduction-runs/run-a/build/bin/nexus_firmware.map",
+              "sha256": "c43fb8cb2b3297b13bde24988826420da267dcfb9e805c314ed16df16291b8ed",
+              "size": 52150
+            }
+          },
+          "candidate_id": "typed-unification-fc01d863c337-acb5179ec09e",
+          "configuration": {
+            "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/generated/resolved.json",
+            "sha256": "025a40711a01d3103abbf307d9eb0531ed3d1b5ae71f7359dade7390f51770ad",
+            "size": 30630
+          },
+          "dependencies": [
+            {
+              "path": "/workspace/nexus/.gitmodules",
+              "sha256": "06e30ac517644a4dfaeb49d833259ac3098967aa82dad4e66fc211d0eb3ac61e",
+              "size": 1822
+            },
+            {
+              "path": "/workspace/nexus/dependencies/actionlint.lock.json",
+              "sha256": "0bf30ff8d5dd4062d63f897c27f3e7225c673447855e977a0560e121cd2872d5",
+              "size": 2943
+            },
+            {
+              "path": "/workspace/nexus/dependencies/actions.lock.json",
+              "sha256": "795aa8834e81db176e07668f789dc566f01faac73354bc4a1613cf73d51a3fef",
+              "size": 4772
+            },
+            {
+              "path": "/workspace/nexus/dependencies/build-recipe.lock.json",
+              "sha256": "184f54646e38adea736a62f7e7b9ce7115dc8399f329ef2906f75cbd5daf30a6",
+              "size": 832
+            },
+            {
+              "path": "/workspace/nexus/dependencies/ccache.lock.json",
+              "sha256": "3b88cd0013b53aa8c5e22194499b281799fa6e473c11c06eac498b546e2b1a9e",
+              "size": 514
+            },
+            {
+              "path": "/workspace/nexus/dependencies/development-tools.txt",
+              "sha256": "ec369eef06a87082723b82321827296fb0059e36b6eddd41223ade4d73bb5994",
+              "size": 122
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-applehelp.txt",
+              "sha256": "445e28ceb62ff34619a7031148aea9fce3560dc55fd8e15a719614b1fb8b956a",
+              "size": 1441
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-devhelp.txt",
+              "sha256": "c166b04a478c94b74910f162c63867359671d2cedd766e9a873c4db8eb40f64c",
+              "size": 1437
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-htmlhelp.txt",
+              "sha256": "dccf210bbbdda1b97caff8333a45bd8a7621f32b6f8b1d13a748f24a4e5d99d3",
+              "size": 1439
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-qthelp.txt",
+              "sha256": "27b1953612e4740d49737ff7dfe12c11aa9151da8e7f4a8224b5247d07a37695",
+              "size": 1435
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-serializinghtml.txt",
+              "sha256": "3684cbcc712af8e969688e1d63fcf14d97c24422da92cf15f77f25859e15f2f5",
+              "size": 1453
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-python-linux-cp312.txt",
+              "sha256": "f76786c30ef2f2920f40c0663371d7982618475046a792c61b740ec65cc066c7",
+              "size": 2833
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-tools.lock.json",
+              "sha256": "9c33a22690587cd9c02f1b2d78e0f9a70313f4359afa67dd404b449c8f565288",
+              "size": 37835
+            },
+            {
+              "path": "/workspace/nexus/dependencies/environment-tools.txt",
+              "sha256": "1e965d2ecb655a6d65d775a62cc5e2948da8a176b092f9f1c9e88aebd8d3357a",
+              "size": 101
+            },
+            {
+              "path": "/workspace/nexus/dependencies/environment.lock.json",
+              "sha256": "ba90902e9048279fc38121fbcab003e8fed07dfd17044637d4aed979a7e966cd",
+              "size": 1181
+            },
+            {
+              "path": "/workspace/nexus/dependencies/googletest.lock.json",
+              "sha256": "5e296b2b741102294ba02d47d273d7a169841c832aacd106a2dd1bd43a54f4d3",
+              "size": 312
+            },
+            {
+              "path": "/workspace/nexus/dependencies/hook-build-tools.txt",
+              "sha256": "037010feefb29df6fd96413b289386e18b99303032d1914a1ad4b0ee634ec184",
+              "size": 160
+            },
+            {
+              "path": "/workspace/nexus/dependencies/platform-compatibility.json",
+              "sha256": "fe92b01e52c307526769877f8ffaa899cb23e6149f8136b44f200227032d9a6d",
+              "size": 585
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp311.lock.json",
+              "sha256": "4a8667fb3be548bb4eab499466ed82cba0f4430b7775e096847bea78ed6ace8b",
+              "size": 3880
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp311.txt",
+              "sha256": "80bc61d5910db99b7386b8b07766b93f176b573ee6704b5872a1530baabd4040",
+              "size": 1442
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp312.lock.json",
+              "sha256": "80c1972306abd1d9b22158a68abab31d93dafc41387e3e66bb071cc90885490c",
+              "size": 3880
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp312.txt",
+              "sha256": "0c2b01c2ccbe113e21acffb28174805411b454a57849409700c3594a507130f0",
+              "size": 1442
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32f1-hal.lock.json",
+              "sha256": "1cf6c98ea2006103933623ca4c9a7c5122ac16c28bda08fb7264c65f8eb38063",
+              "size": 1142
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32f1.lock.json",
+              "sha256": "b10f1852f47e45e7660b906dc707aca9e059cbdd634c81d2ab7d3a878af100ce",
+              "size": 1058
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32f4-hal.lock.json",
+              "sha256": "59e9b509aa7c9612793dce5851e7d9c13b39c9fa2e753fc743cb970ab893cfdc",
+              "size": 2296
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32g4-hal.lock.json",
+              "sha256": "bcb8a3f8bf190e55b1d2d0526ce20c00abb7e73169bc9334abf80a87304ba135",
+              "size": 1884
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32g4.lock.json",
+              "sha256": "17a79ace0ac3626f5631da4e79b211390237de7e7bf0c7bd9878c3c98d6ca9a3",
+              "size": 1058
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32h7-hal.lock.json",
+              "sha256": "42304d23b00f830feb5d791e5377ae0c05d8ae689d25d1333e2764fc9d5000b0",
+              "size": 1290
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32h7.lock.json",
+              "sha256": "31b165b640640d95c804c911557dc9db2da56b50746465cf6d2960b34bbf088c",
+              "size": 1217
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32u5-hal.lock.json",
+              "sha256": "0c6fd21b74f040f127e1306067d71230147f3bcc71913532a84933c996f5d2e3",
+              "size": 1866
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32u5.lock.json",
+              "sha256": "3ea56fca19228bd8e9e12a1a71d4590cf8cc31044183a2a36fd6a41f6b901d30",
+              "size": 1061
+            },
+            {
+              "path": "/workspace/nexus/dependencies/style-baseline.json",
+              "sha256": "46b2a878e8aee3e4ef9cdd894a720f272b724f5b4b92d752f556acc717ea4b92",
+              "size": 228
+            },
+            {
+              "path": "/workspace/nexus/dependencies/threadx.lock.json",
+              "sha256": "a9785a8be298555fc93aa09e714bf4ff3047936c5214b0aead5898d83f22ed12",
+              "size": 43594
+            },
+            {
+              "path": "/workspace/nexus/dependencies/toolchains.lock.json",
+              "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+              "size": 469
+            },
+            {
+              "path": "/workspace/nexus/dependencies/workflow-tools.txt",
+              "sha256": "3aa451bd75cf16c3cdf8f7783db0a54dd22c02ecb34e102875aec6cfbd283061",
+              "size": 92
+            },
+            {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/tidy-contexts-package.json",
+              "sha256": "81d4c7e83115565f55306155404bcf703c30dbcf14a3a2e0088867ce8afb150d",
+              "size": 549
+            },
+            {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/cppcheck-contexts-package.json",
+              "sha256": "9fa7d0cd9bd15000762b22ca36454a208f1009334a981be678d85506e0729fed",
+              "size": 560
+            },
+            {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/execution-receipts.json",
+              "sha256": "2db5fe9e5954823d4b771eaa0e10cf73a9e686a652d8886b2334c64db11ad738",
+              "size": 553
+            },
+            {
+              "path": "/workspace/nexus-examples/dependencies/nexus.lock.json",
+              "sha256": "661220ab5dbf29c09f6eb78183b8aa2e14d1914fc944b62934e168d1f1284e96",
+              "size": 713
+            },
+            {
+              "path": "/tmp/nexus-examples-typed-fc01d863c337-all-001/execution.json",
+              "sha256": "c89682f4b2b30383dca2c3e845aad6170c6f4271b310886d72deb358b136348b",
+              "size": 15662
+            }
+          ],
+          "environment": {
+            "path": "/workspace/nexus/build/soc-ip-layout/delivery-environment/environment.json",
+            "sha256": "0013f6279c94ff3a6115987241644fa40e8e11ab40b4584b59dd9726483ce735",
+            "size": 1083
+          },
+          "qualifications": [
+            {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/reproducibility.json",
+              "sha256": "e2e60314c9aa805125f41f6ebfa8f4e02c696c4cc756525fa3e913b935fbeaec",
+              "size": 13535
+            },
+            {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/host_contracts.json",
+              "sha256": "52daa14c9a731be1cf7320e389b972d0eee8271cd8c950e05b5429278fd87d91",
+              "size": 863230
+            },
+            {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/arm_link.json",
+              "sha256": "87c4826fc543578edd32dfc6d71dbea09437a3f12c01445ed37515046b909898",
+              "size": 6734
+            },
+            {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/resource_budget.json",
+              "sha256": "1fe1b13b4023b4260d7b76f38dd46ba9ec84ce98f28ef055c10111495c7e9f6b",
+              "size": 3652
+            },
+            {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/source_sdk.json",
+              "sha256": "5b740880f84af18661542001da275d49df4f2d62dd5adc3fbb7f9e8d71a1098d",
+              "size": 93647
+            },
+            {
+              "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/hil_tooling.json",
+              "sha256": "e1d6659fc61c4cd8364b76609476049dc56e44322c436aaabe6729e4e49e7128",
+              "size": 4245
+            }
+          ],
+          "schema_version": 1,
+          "source": {
+            "commit": "fc01d863c3374643c276195ae19a24e6f8b8c8ee",
+            "dirty": false,
+            "root": "/workspace/nexus",
+            "submodules": [
+              " dbf70559b27d39c1fdb68dfb9a32140b6a6777a0 ext/freertos (V11.1.0)",
+              " 9c5bad7b2f42b4e8420f12290b9bc085d3309e8b ext/freertos/portable/ThirdParty/Community-Supported-Ports (9c5bad7)",
+              " dc3afc6e837426b4bda81bbb6cf45bfb6f34c7e9 ext/freertos/portable/ThirdParty/Partner-Supported-Ports (dc3afc6)",
+              " 6910c9d9165801d8827d628cb72eb7ea9dd538c5 ext/googletest (release-1.8.0-3518-g6910c9d9)",
+              " 93387b0a60382a29579bbad5045c68328e3751df ext/threadx (v6.5.0.202601_pre-232-g93387b0a)",
+              " af1b110e46a1720349f6f125e386e126767699bd vendors/arm/CMSIS_6 (v6.4.0)",
+              " c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22 vendors/st/cmsis_device_f1 (v4.3.5-1-gc8e9a4a)",
+              " 3c77349ce04c8af401454cc51f85ea9a50e34fc1 vendors/st/cmsis_device_f4 (v2.6.11-1-g3c77349)",
+              " 626ee412334a5ed2e5b320af5a8d77d69f03a558 vendors/st/cmsis_device_g4 (v1.2.6-1-g626ee41)",
+              " 8f922cdc7cc6de2344e75ddd657889f4ff761790 vendors/st/cmsis_device_h7 (v1.10.7)",
+              " 624374fa1e21ca195d6f2102ac0caaa50d0ea4c8 vendors/st/cmsis_device_u5 (v1.4.3)",
+              " fee494a92b5ad331f92ad21f76c66a5cb83773ee vendors/st/stm32f1_hal (v1.1.10-17-gfee494a)",
+              " b6f0ed3829f3829eb358a2e7417d80bba1a42db7 vendors/st/stm32f4_hal (v1.8.5)",
+              " f5929f431f9effe45fbe18f5337e4753ced9ac92 vendors/st/stm32g4_hal (v1.2.7)",
+              " a1996eed9172b59887bafaaa0ea1816ea14d48b5 vendors/st/stm32h7_hal (v1.11.6)",
+              " 2552682ee5a0d6f826a6435750fc9267be65868b vendors/st/stm32u5_hal (v1.6.3)"
+            ],
+            "tree": "e6f3d6310fd46265be49d47ef3fd7a4d944a8386"
+          }
+        },
+        "member_manifest": "inside unchanged original archive: delivery-manifest.json; original envelope manifest_sha256 binds bytes",
+        "historical_actual_restore_evidence": "not located in bounded original metadata inspection; no actual restore success inferred",
+        "fresh_inner_tree_restore": false
+      }
+    },
+    {
+      "original": {
+        "id": "candidate-92e66923",
+        "bytes": 433850915,
+        "sha256": "7f89e8ec33a543e150e7165a3e4252aa11a96d62fe5d3187a9b0d4791aa618b4",
+        "mode": 384,
+        "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/candidate-portable-store/7f89e8ec33a543e150e7165a3e4252aa11a96d62fe5d3187a9b0d4791aa618b4.tar.gz"
+      },
+      "opaque_stream": {
+        "bytes": 433850915,
+        "sha256": "7f89e8ec33a543e150e7165a3e4252aa11a96d62fe5d3187a9b0d4791aa618b4",
+        "parts": [
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0000",
+            "whole_index": 0,
+            "segment_index": 0,
+            "segment_part": 0,
+            "offset": 0,
+            "bytes": 33554432,
+            "sha256": "b2881793e462b4d6ddb15fc406a9bb2988467889f0603b5c494b4a4590063942",
+            "git_blob_sha1": "d7f0aee6e058786355cf78ea6c7260997332035b",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0001",
+            "whole_index": 1,
+            "segment_index": 0,
+            "segment_part": 1,
+            "offset": 33554432,
+            "bytes": 33554432,
+            "sha256": "0fd234223b7fdfe15ee4676cf83fdf75c3202be590e913211d05949bdd1f292e",
+            "git_blob_sha1": "5b09ee06674853f0f2b8891f306388d60d6f6402",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0002",
+            "whole_index": 2,
+            "segment_index": 0,
+            "segment_part": 2,
+            "offset": 67108864,
+            "bytes": 33554432,
+            "sha256": "6011ac67829e9d8590634878666b723cf5a79d6caccbeac8f348ff84a746dcae",
+            "git_blob_sha1": "70c40231342ad84d46d6d5f8311541b31a328c24",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0003",
+            "whole_index": 3,
+            "segment_index": 0,
+            "segment_part": 3,
+            "offset": 100663296,
+            "bytes": 33554432,
+            "sha256": "40a77d57c0707f50cfacd12cf6ec6aabd4898a4e93bb082f2236540393d20059",
+            "git_blob_sha1": "c80683404ef52f3b17921a80ed5d83df6fe325e1",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0004",
+            "whole_index": 4,
+            "segment_index": 0,
+            "segment_part": 4,
+            "offset": 134217728,
+            "bytes": 33554432,
+            "sha256": "6ad2de8c91ed59a33b6339beda906603bde4f4b581d108ec799e2789a1645545",
+            "git_blob_sha1": "e33225999db42dac7a0e07c85a811c7f766e463c",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0005",
+            "whole_index": 5,
+            "segment_index": 0,
+            "segment_part": 5,
+            "offset": 167772160,
+            "bytes": 33554432,
+            "sha256": "8173d863a06c08d109cf64353549c42b1e2a460e05fdcc06a8860d007f4fa171",
+            "git_blob_sha1": "618543e9afd0e431d717d9ba6a0aab44c2e16ab3",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0006",
+            "whole_index": 6,
+            "segment_index": 0,
+            "segment_part": 6,
+            "offset": 201326592,
+            "bytes": 33554432,
+            "sha256": "c402b34a5712c0aec2db435beeb5370879b1ebd009852b9a1664c75b3fd4af10",
+            "git_blob_sha1": "93a25806a18595a67aed0fd30d18786cb0d3bc82",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0007",
+            "whole_index": 7,
+            "segment_index": 0,
+            "segment_part": 7,
+            "offset": 234881024,
+            "bytes": 33554432,
+            "sha256": "b4a055e762799f1966f87800e513250b85336f28213a716ba50221696c3aa3b0",
+            "git_blob_sha1": "fa2fd904f6630fb7e810ab31e5d0be3a31665a2f",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0008",
+            "whole_index": 8,
+            "segment_index": 0,
+            "segment_part": 8,
+            "offset": 268435456,
+            "bytes": 33554432,
+            "sha256": "c61c5a48f72c91a6a36cf76784a5f836979414a91352edc71043a01b8a204807",
+            "git_blob_sha1": "d3f3b12a45652564e46141c25bb5272b49173a98",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0009",
+            "whole_index": 9,
+            "segment_index": 0,
+            "segment_part": 9,
+            "offset": 301989888,
+            "bytes": 33554432,
+            "sha256": "6ce4a12a2861f6b9c90f1d302d6c9688ae86a88cea3ed1802dce7d5697dcff72",
+            "git_blob_sha1": "5fce8c51b13b6e2599a8de43ed680d04d5312406",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0010",
+            "whole_index": 10,
+            "segment_index": 0,
+            "segment_part": 10,
+            "offset": 335544320,
+            "bytes": 33554432,
+            "sha256": "31ec9156d3356729a571c60912300617f98a78a5710f1a275642c658d4214bb8",
+            "git_blob_sha1": "374a367df7f81ad9727889e5cadb72da818bae07",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0011",
+            "whole_index": 11,
+            "segment_index": 0,
+            "segment_part": 11,
+            "offset": 369098752,
+            "bytes": 33554432,
+            "sha256": "f1d7c9f0ca397a23c5f05a8a06d17b86f29bd34a5ab4b35d897c7d8de4cf57c6",
+            "git_blob_sha1": "1ccefdf107f09c365b868c4842acf2c8997635fd",
+            "mode": "100644"
+          },
+          {
+            "path": "docs-private-six-archives-20261104/candidate-92e66923.part0012",
+            "whole_index": 12,
+            "segment_index": 0,
+            "segment_part": 12,
+            "offset": 402653184,
+            "bytes": 31197731,
+            "sha256": "8ee8359303c3ab662b7cb8ef96f26e4c5bd91e547c41c7970c8f6ac93648a400",
+            "git_blob_sha1": "dcf08ab9506e8a57c67e720e0606a5ffc0895114",
+            "mode": "100644"
+          }
+        ],
+        "segments": [
+          {
+            "index": 0,
+            "offset": 0,
+            "bytes": 433850915,
+            "sha256": "7f89e8ec33a543e150e7165a3e4252aa11a96d62fe5d3187a9b0d4791aa618b4",
+            "parts": [
+              "docs-private-six-archives-20261104/candidate-92e66923.part0000",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0001",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0002",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0003",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0004",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0005",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0006",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0007",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0008",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0009",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0010",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0011",
+              "docs-private-six-archives-20261104/candidate-92e66923.part0012"
+            ]
+          }
+        ]
+      },
+      "historical_evidence": {
+        "original_envelope": {
+          "archive": {
+            "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/candidate-portable-store/7f89e8ec33a543e150e7165a3e4252aa11a96d62fe5d3187a9b0d4791aa618b4.tar.gz",
+            "sha256": "7f89e8ec33a543e150e7165a3e4252aa11a96d62fe5d3187a9b0d4791aa618b4",
+            "size": 433850915
+          },
+          "bytes": 518907237,
+          "files": 6401,
+          "kind": "portable_evidence",
+          "manifest_sha256": "c27f84f74f528c7800f14186e6cb393257a0418105375876ee8e0c39b24d453c",
+          "product_promotion": false,
+          "schema_version": 1,
+          "signature_status": "unsigned"
+        },
+        "original_candidate_manifest": {
+          "artifacts": {
+            "bin": {
+              "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/reproduction-quiet1-runs/run-a/build/bin/nexus_firmware.bin",
+              "sha256": "c6775c5b28353dc6e41e4484862cc4babf339cab9832922cf1031a98100f4ae7",
+              "size": 10684
+            },
+            "elf": {
+              "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/reproduction-quiet1-runs/run-a/build/bin/nexus_firmware.elf",
+              "sha256": "597d5b0f86ba1da7eeece1fdaeac7a68f1f1f6ec67cf763c37ff7cc7cc5b0cff",
+              "size": 28752
+            },
+            "map": {
+              "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/reproduction-quiet1-runs/run-a/build/bin/nexus_firmware.map",
+              "sha256": "f84cc8f915ff1fa0c6616621b263783226d1bdc2e7a2cf02df4d996fc72aefa4",
+              "size": 53002
+            }
+          },
+          "candidate_id": "soc-ip-layout-92e669233957",
+          "configuration": {
+            "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/generated/resolved.json",
+            "sha256": "6d56985475eb6db875a8448c80c840c4f1ca4b06a16bf7acb371dc71e112008f",
+            "size": 30883
+          },
+          "dependencies": [
+            {
+              "path": "/workspace/nexus/.gitmodules",
+              "sha256": "06e30ac517644a4dfaeb49d833259ac3098967aa82dad4e66fc211d0eb3ac61e",
+              "size": 1822
+            },
+            {
+              "path": "/workspace/nexus/dependencies/actionlint.lock.json",
+              "sha256": "0bf30ff8d5dd4062d63f897c27f3e7225c673447855e977a0560e121cd2872d5",
+              "size": 2943
+            },
+            {
+              "path": "/workspace/nexus/dependencies/actions.lock.json",
+              "sha256": "795aa8834e81db176e07668f789dc566f01faac73354bc4a1613cf73d51a3fef",
+              "size": 4772
+            },
+            {
+              "path": "/workspace/nexus/dependencies/build-recipe.lock.json",
+              "sha256": "184f54646e38adea736a62f7e7b9ce7115dc8399f329ef2906f75cbd5daf30a6",
+              "size": 832
+            },
+            {
+              "path": "/workspace/nexus/dependencies/ccache.lock.json",
+              "sha256": "3b88cd0013b53aa8c5e22194499b281799fa6e473c11c06eac498b546e2b1a9e",
+              "size": 514
+            },
+            {
+              "path": "/workspace/nexus/dependencies/development-tools.txt",
+              "sha256": "ec369eef06a87082723b82321827296fb0059e36b6eddd41223ade4d73bb5994",
+              "size": 122
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-applehelp.txt",
+              "sha256": "445e28ceb62ff34619a7031148aea9fce3560dc55fd8e15a719614b1fb8b956a",
+              "size": 1441
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-devhelp.txt",
+              "sha256": "c166b04a478c94b74910f162c63867359671d2cedd766e9a873c4db8eb40f64c",
+              "size": 1437
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-htmlhelp.txt",
+              "sha256": "dccf210bbbdda1b97caff8333a45bd8a7621f32b6f8b1d13a748f24a4e5d99d3",
+              "size": 1439
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-qthelp.txt",
+              "sha256": "27b1953612e4740d49737ff7dfe12c11aa9151da8e7f4a8224b5247d07a37695",
+              "size": 1435
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-serializinghtml.txt",
+              "sha256": "3684cbcc712af8e969688e1d63fcf14d97c24422da92cf15f77f25859e15f2f5",
+              "size": 1453
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-python-linux-cp312.txt",
+              "sha256": "f76786c30ef2f2920f40c0663371d7982618475046a792c61b740ec65cc066c7",
+              "size": 2833
+            },
+            {
+              "path": "/workspace/nexus/dependencies/docs-tools.lock.json",
+              "sha256": "9c33a22690587cd9c02f1b2d78e0f9a70313f4359afa67dd404b449c8f565288",
+              "size": 37835
+            },
+            {
+              "path": "/workspace/nexus/dependencies/environment-tools.txt",
+              "sha256": "1e965d2ecb655a6d65d775a62cc5e2948da8a176b092f9f1c9e88aebd8d3357a",
+              "size": 101
+            },
+            {
+              "path": "/workspace/nexus/dependencies/environment.lock.json",
+              "sha256": "ba90902e9048279fc38121fbcab003e8fed07dfd17044637d4aed979a7e966cd",
+              "size": 1181
+            },
+            {
+              "path": "/workspace/nexus/dependencies/googletest.lock.json",
+              "sha256": "5e296b2b741102294ba02d47d273d7a169841c832aacd106a2dd1bd43a54f4d3",
+              "size": 312
+            },
+            {
+              "path": "/workspace/nexus/dependencies/hook-build-tools.txt",
+              "sha256": "037010feefb29df6fd96413b289386e18b99303032d1914a1ad4b0ee634ec184",
+              "size": 160
+            },
+            {
+              "path": "/workspace/nexus/dependencies/platform-compatibility.json",
+              "sha256": "6deaf49d165ca8c9f7da9f0659124cf5a8d59ddcb7804cb8a4e3b82c039e1a57",
+              "size": 585
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp311.lock.json",
+              "sha256": "4a8667fb3be548bb4eab499466ed82cba0f4430b7775e096847bea78ed6ace8b",
+              "size": 3880
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp311.txt",
+              "sha256": "80bc61d5910db99b7386b8b07766b93f176b573ee6704b5872a1530baabd4040",
+              "size": 1442
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp312.lock.json",
+              "sha256": "80c1972306abd1d9b22158a68abab31d93dafc41387e3e66bb071cc90885490c",
+              "size": 3880
+            },
+            {
+              "path": "/workspace/nexus/dependencies/python-tools-linux-cp312.txt",
+              "sha256": "0c2b01c2ccbe113e21acffb28174805411b454a57849409700c3594a507130f0",
+              "size": 1442
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32f1-hal.lock.json",
+              "sha256": "1cf6c98ea2006103933623ca4c9a7c5122ac16c28bda08fb7264c65f8eb38063",
+              "size": 1142
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32f1.lock.json",
+              "sha256": "b10f1852f47e45e7660b906dc707aca9e059cbdd634c81d2ab7d3a878af100ce",
+              "size": 1058
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32f4-hal.lock.json",
+              "sha256": "59e9b509aa7c9612793dce5851e7d9c13b39c9fa2e753fc743cb970ab893cfdc",
+              "size": 2296
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32g4-hal.lock.json",
+              "sha256": "bcb8a3f8bf190e55b1d2d0526ce20c00abb7e73169bc9334abf80a87304ba135",
+              "size": 1884
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32g4.lock.json",
+              "sha256": "17a79ace0ac3626f5631da4e79b211390237de7e7bf0c7bd9878c3c98d6ca9a3",
+              "size": 1058
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32h7-hal.lock.json",
+              "sha256": "42304d23b00f830feb5d791e5377ae0c05d8ae689d25d1333e2764fc9d5000b0",
+              "size": 1290
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32h7.lock.json",
+              "sha256": "31b165b640640d95c804c911557dc9db2da56b50746465cf6d2960b34bbf088c",
+              "size": 1217
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32u5-hal.lock.json",
+              "sha256": "0c6fd21b74f040f127e1306067d71230147f3bcc71913532a84933c996f5d2e3",
+              "size": 1866
+            },
+            {
+              "path": "/workspace/nexus/dependencies/stm32u5.lock.json",
+              "sha256": "3ea56fca19228bd8e9e12a1a71d4590cf8cc31044183a2a36fd6a41f6b901d30",
+              "size": 1061
+            },
+            {
+              "path": "/workspace/nexus/dependencies/style-baseline.json",
+              "sha256": "46b2a878e8aee3e4ef9cdd894a720f272b724f5b4b92d752f556acc717ea4b92",
+              "size": 228
+            },
+            {
+              "path": "/workspace/nexus/dependencies/threadx.lock.json",
+              "sha256": "a9785a8be298555fc93aa09e714bf4ff3047936c5214b0aead5898d83f22ed12",
+              "size": 43594
+            },
+            {
+              "path": "/workspace/nexus/dependencies/toolchains.lock.json",
+              "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+              "size": 469
+            },
+            {
+              "path": "/workspace/nexus/dependencies/workflow-tools.txt",
+              "sha256": "3aa451bd75cf16c3cdf8f7783db0a54dd22c02ecb34e102875aec6cfbd283061",
+              "size": 92
+            },
+            {
+              "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/execution-receipts.json",
+              "sha256": "35c5af8f178b0f511715a1e7ac61428a712b63265fc2cc7e7782369098465c5b",
+              "size": 553
+            }
+          ],
+          "environment": {
+            "path": "/workspace/nexus/build/soc-ip-layout/delivery-environment/environment.json",
+            "sha256": "0013f6279c94ff3a6115987241644fa40e8e11ab40b4584b59dd9726483ce735",
+            "size": 1083
+          },
+          "qualifications": [
+            {
+              "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/reproduction-quiet1-qualification.json",
+              "sha256": "42fc377e809e829664426e4631f3d69479e2a8467f6e9d40ad7dc4079e355f18",
+              "size": 12503
+            },
+            {
+              "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/host_contracts.json",
+              "sha256": "c07b894127ce2d9ca39d38297886264e65cd0cd29bfdb5484f60b4ae0f85ce72",
+              "size": 863746
+            },
+            {
+              "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/arm_link.json",
+              "sha256": "e25cbdf3931ad724768adf3f467d98b53482fe5af4e1c34245f8c6896419156a",
+              "size": 6640
+            },
+            {
+              "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/resource_budget.json",
+              "sha256": "6d46757623428c97730e67ad9b47c04b06efe7042e7ad403d6487842b5ff643c",
+              "size": 3685
+            },
+            {
+              "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/source_sdk.json",
+              "sha256": "313b3e0b3c5fde20708b6abf17b8569608efc7d8b5280d93a94020315e6781d2",
+              "size": 102588
+            },
+            {
+              "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/hil_tooling.json",
+              "sha256": "04d1a7d1ee26bbbf402a1349a7bce1156e9daa9c89372a37996d51b97f893e78",
+              "size": 4343
+            }
+          ],
+          "schema_version": 1,
+          "source": {
+            "commit": "92e669233957a2e450a528394e8f4dd0794c7049",
+            "dirty": false,
+            "root": "/workspace/nexus",
+            "submodules": [
+              " dbf70559b27d39c1fdb68dfb9a32140b6a6777a0 ext/freertos (V11.1.0)",
+              " 9c5bad7b2f42b4e8420f12290b9bc085d3309e8b ext/freertos/portable/ThirdParty/Community-Supported-Ports (9c5bad7)",
+              " dc3afc6e837426b4bda81bbb6cf45bfb6f34c7e9 ext/freertos/portable/ThirdParty/Partner-Supported-Ports (dc3afc6)",
+              " 6910c9d9165801d8827d628cb72eb7ea9dd538c5 ext/googletest (release-1.8.0-3518-g6910c9d9)",
+              " 93387b0a60382a29579bbad5045c68328e3751df ext/threadx (v6.5.0.202601_pre-232-g93387b0a)",
+              " af1b110e46a1720349f6f125e386e126767699bd vendors/arm/CMSIS_6 (v6.4.0)",
+              " c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22 vendors/st/cmsis_device_f1 (v4.3.5-1-gc8e9a4a)",
+              " 3c77349ce04c8af401454cc51f85ea9a50e34fc1 vendors/st/cmsis_device_f4 (v2.6.11-1-g3c77349)",
+              " 626ee412334a5ed2e5b320af5a8d77d69f03a558 vendors/st/cmsis_device_g4 (v1.2.6-1-g626ee41)",
+              " 8f922cdc7cc6de2344e75ddd657889f4ff761790 vendors/st/cmsis_device_h7 (v1.10.7)",
+              " 624374fa1e21ca195d6f2102ac0caaa50d0ea4c8 vendors/st/cmsis_device_u5 (v1.4.3)",
+              " fee494a92b5ad331f92ad21f76c66a5cb83773ee vendors/st/stm32f1_hal (v1.1.10-17-gfee494a)",
+              " b6f0ed3829f3829eb358a2e7417d80bba1a42db7 vendors/st/stm32f4_hal (v1.8.5)",
+              " f5929f431f9effe45fbe18f5337e4753ced9ac92 vendors/st/stm32g4_hal (v1.2.7)",
+              " a1996eed9172b59887bafaaa0ea1816ea14d48b5 vendors/st/stm32h7_hal (v1.11.6)",
+              " 2552682ee5a0d6f826a6435750fc9267be65868b vendors/st/stm32u5_hal (v1.6.3)"
+            ],
+            "tree": "6e38d4c43d59330a0a9a9b7cac21f591d9c2719f"
+          }
+        },
+        "member_manifest": "inside unchanged original archive: delivery-manifest.json; original envelope manifest_sha256 binds bytes",
+        "historical_actual_restore_evidence": "not located in bounded original metadata inspection; no actual restore success inferred",
+        "fresh_inner_tree_restore": false
+      }
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-retention.json",
+      "bytes": 741,
+      "sha256": "ee00c82d474542f9cb5d221e8bf969c97fc542dc252899b44a4dd1b3909df9bc",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/retention.json",
+        "bytes": 741,
+        "sha256": "ee00c82d474542f9cb5d221e8bf969c97fc542dc252899b44a4dd1b3909df9bc",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-state.json",
+      "bytes": 802,
+      "sha256": "dcad404adb549e377ce87fae299701c46ccde8ae6bf9d87576fbfe1c8c031088",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/state.json",
+        "bytes": 802,
+        "sha256": "dcad404adb549e377ce87fae299701c46ccde8ae6bf9d87576fbfe1c8c031088",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-retain.py",
+      "bytes": 4231,
+      "sha256": "d486414722748c41c40097a5209a292ab4173adb1877323621c848c3d7650e88",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/retain.py",
+        "bytes": 4231,
+        "sha256": "d486414722748c41c40097a5209a292ab4173adb1877323621c848c3d7650e88",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-members.json",
+      "bytes": 23711211,
+      "sha256": "e80af09465d0e0a43357af7a9eb53b9929a37024c44d6d15870ea40d3efc9ad7",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/members.json",
+        "bytes": 23711211,
+        "sha256": "e80af09465d0e0a43357af7a9eb53b9929a37024c44d6d15870ea40d3efc9ad7",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-archive-command.json",
+      "bytes": 1521,
+      "sha256": "4161f514331d2dc2971e2fe294a0ce3cf6e4dca770607a3aece7a685b0e46a27",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/archive.command.json",
+        "bytes": 1521,
+        "sha256": "4161f514331d2dc2971e2fe294a0ce3cf6e4dca770607a3aece7a685b0e46a27",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-archive-attempt.json",
+      "bytes": 1357,
+      "sha256": "4ac397ea3cfbc72c91a52e1c579d0a2c9ad7da14dba7929b7bbc87651ee2d955",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/archive.attempts/1793685531611197966-ddd34144b6074691b588236c1649833c/receipt.json",
+        "bytes": 1357,
+        "sha256": "4ac397ea3cfbc72c91a52e1c579d0a2c9ad7da14dba7929b7bbc87651ee2d955",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-archive-stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/archive.attempts/1793685531611197966-ddd34144b6074691b588236c1649833c/stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-archive-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/archive.attempts/1793685531611197966-ddd34144b6074691b588236c1649833c/stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-restore-command.json",
+      "bytes": 1568,
+      "sha256": "543a7691553dc9ced83728a2b6eaebba5930a3e1714abb23e134e551cc9fcfe0",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/restore.command.json",
+        "bytes": 1568,
+        "sha256": "543a7691553dc9ced83728a2b6eaebba5930a3e1714abb23e134e551cc9fcfe0",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-restore-attempt.json",
+      "bytes": 1404,
+      "sha256": "8e62bbe4c4fc71438fc1437c9ebfaa24574821ae85876eeccdda6c74c8351c21",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/restore.attempts/1793685537232859965-5e42980aaa934b40903eb4cbe4ffdeff/receipt.json",
+        "bytes": 1404,
+        "sha256": "8e62bbe4c4fc71438fc1437c9ebfaa24574821ae85876eeccdda6c74c8351c21",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-restore-stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/restore.attempts/1793685537232859965-5e42980aaa934b40903eb4cbe4ffdeff/stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/old-native-debug-restore-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/cache-retention/restore.attempts/1793685537232859965-5e42980aaa934b40903eb4cbe4ffdeff/stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/ordinary-native-producer-package.json",
+      "bytes": 548,
+      "sha256": "8f69d65fec28e94ccd502e2f9a8d507962e94c3616600f1aa38945b4521d35e1",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/tls-ipo/ordinary/native-producer-bytes/package.json",
+        "bytes": 548,
+        "sha256": "8f69d65fec28e94ccd502e2f9a8d507962e94c3616600f1aa38945b4521d35e1",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/ordinary-native-producer-store-envelope.json",
+      "bytes": 548,
+      "sha256": "b3221d5bf9daa766d9778f5e2394b2b63f292010646802d7889b17ab128f63c8",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/tls-ipo/ordinary/native-producer-bytes/archive/eccab58d563e1e01e60e34452152b22d7748feba2ab0d875a2fdd265dceae3bf.json",
+        "bytes": 548,
+        "sha256": "b3221d5bf9daa766d9778f5e2394b2b63f292010646802d7889b17ab128f63c8",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/ordinary-native-producer-state.json",
+      "bytes": 657,
+      "sha256": "d8dd3fbc440e3195de1a0deb8cd1a12ba070356c961afb1db4d5646292095406",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/tls-ipo/ordinary/native-producer-bytes/state.json",
+        "bytes": 657,
+        "sha256": "d8dd3fbc440e3195de1a0deb8cd1a12ba070356c961afb1db4d5646292095406",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/ordinary-native-producer-retain.py",
+      "bytes": 1423,
+      "sha256": "72ce369b7dbea182bd51288c96e4ad6d570af02df834f70a010fb1e62a913371",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/recovery-20261103/tls-ipo/ordinary/native-producer-bytes/retain.py",
+        "bytes": 1423,
+        "sha256": "72ce369b7dbea182bd51288c96e4ad6d570af02df834f70a010fb1e62a913371",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/native-intermediate-retention.json",
+      "bytes": 540,
+      "sha256": "9be3051c1652fe0092b1d8779326891e0236fa2d79a633aa590f5ad910620d0c",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/release-0.2.0-integration-20261031/native-intermediate-cache-retention.json",
+        "bytes": 540,
+        "sha256": "9be3051c1652fe0092b1d8779326891e0236fa2d79a633aa590f5ad910620d0c",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/native-intermediate-members.json",
+      "bytes": 717881,
+      "sha256": "5faa47ffd5a11fc390f5da22fd676c0b70a50b3754b126ee5d5c153ad9c50185",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/release-0.2.0-integration-20261031/native-intermediate-cache-manifest.json",
+        "bytes": 717881,
+        "sha256": "5faa47ffd5a11fc390f5da22fd676c0b70a50b3754b126ee5d5c153ad9c50185",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-ce616ea9-store-envelope.json",
+      "bytes": 550,
+      "sha256": "23e34f6ab529c17c97cfb519064e8d548bcb72299c14604e93755e937240ae79",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/controlled-dependencies-ce616ea9/candidate-portable-store/ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a.json",
+        "bytes": 550,
+        "sha256": "23e34f6ab529c17c97cfb519064e8d548bcb72299c14604e93755e937240ae79",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-ce616ea9-portable-envelope.json",
+      "bytes": 550,
+      "sha256": "23e34f6ab529c17c97cfb519064e8d548bcb72299c14604e93755e937240ae79",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/controlled-dependencies-ce616ea9/candidate-portable.json",
+        "bytes": 550,
+        "sha256": "23e34f6ab529c17c97cfb519064e8d548bcb72299c14604e93755e937240ae79",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-ce616ea9-candidate-manifest.json",
+      "bytes": 12741,
+      "sha256": "6220969aa51fc1cec50145d3b99a954916777682850d476abbc8caf340d2bea3",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/controlled-dependencies-ce616ea9/candidate-manifest.json",
+        "bytes": 12741,
+        "sha256": "6220969aa51fc1cec50145d3b99a954916777682850d476abbc8caf340d2bea3",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-ce616ea9-delivery-index.json",
+      "bytes": 4696,
+      "sha256": "83c2d715800dd478f242e5cd5aa47e528eed7ceef3bb799d57551bc46a0b6ee5",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/controlled-dependencies-ce616ea9/delivery-index.json",
+        "bytes": 4696,
+        "sha256": "83c2d715800dd478f242e5cd5aa47e528eed7ceef3bb799d57551bc46a0b6ee5",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-fc01d863-store-envelope.json",
+      "bytes": 565,
+      "sha256": "44b83639ad9a2c077144d634e43ab6861b39f9a1e0f2bf922223bb088a79f1c9",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/platform-candidate-fc01d863c337-acb5179ec09e-01/candidate-portable-store/a443e9c3b39528d5d5fbbdd19ee1c065496cd86b8df78cb5380aab4505bf3aa9.json",
+        "bytes": 565,
+        "sha256": "44b83639ad9a2c077144d634e43ab6861b39f9a1e0f2bf922223bb088a79f1c9",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-fc01d863-portable-envelope.json",
+      "bytes": 565,
+      "sha256": "44b83639ad9a2c077144d634e43ab6861b39f9a1e0f2bf922223bb088a79f1c9",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/platform-candidate-fc01d863c337-acb5179ec09e-01/candidate-portable.json",
+        "bytes": 565,
+        "sha256": "44b83639ad9a2c077144d634e43ab6861b39f9a1e0f2bf922223bb088a79f1c9",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-fc01d863-candidate-manifest.json",
+      "bytes": 12050,
+      "sha256": "0c96ac6185fffc9c3a399fdf3b81881cc88a4a242604e7873ec387aff3d16fcb",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/platform-candidate-fc01d863c337-acb5179ec09e-01/candidate-manifest.json",
+        "bytes": 12050,
+        "sha256": "0c96ac6185fffc9c3a399fdf3b81881cc88a4a242604e7873ec387aff3d16fcb",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-fc01d863-delivery-index.json",
+      "bytes": 4716,
+      "sha256": "5e99131826172355a95506b0293c8fe98f75cb07f3b6298f5f3805d6008caf43",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/platform-candidate-fc01d863c337-acb5179ec09e-01/delivery-index.json",
+        "bytes": 4716,
+        "sha256": "5e99131826172355a95506b0293c8fe98f75cb07f3b6298f5f3805d6008caf43",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-92e66923-store-envelope.json",
+      "bytes": 562,
+      "sha256": "5cc151d8ccbc30905132dd0aa7ce9f95dd2db781a25b13b3d01b8a5f36bb856c",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/candidate-portable-store/7f89e8ec33a543e150e7165a3e4252aa11a96d62fe5d3187a9b0d4791aa618b4.json",
+        "bytes": 562,
+        "sha256": "5cc151d8ccbc30905132dd0aa7ce9f95dd2db781a25b13b3d01b8a5f36bb856c",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-92e66923-portable-envelope.json",
+      "bytes": 562,
+      "sha256": "5cc151d8ccbc30905132dd0aa7ce9f95dd2db781a25b13b3d01b8a5f36bb856c",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/candidate-portable.json",
+        "bytes": 562,
+        "sha256": "5cc151d8ccbc30905132dd0aa7ce9f95dd2db781a25b13b3d01b8a5f36bb856c",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/candidate-92e66923-candidate-manifest.json",
+      "bytes": 11259,
+      "sha256": "003be0d164f07aa84167357ccb39b6bc45bc8bb6509a65af10564ac9fc9743bf",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus-examples/build/platform-candidate-92e669233957/completion-2/candidate-manifest.json",
+        "bytes": 11259,
+        "sha256": "003be0d164f07aa84167357ccb39b6bc45bc8bb6509a65af10564ac9fc9743bf",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/historical-private-audience.json",
+      "bytes": 9754,
+      "sha256": "07f1173aeb14bf75aa5b1002a9ed2f39933896c1739d6bfad2fc6e3faf6fa9fc",
+      "mode": "100644",
+      "original": {
+        "path": "/workspace/nexus/build/current-completion-20261030/publication/private-retention-prepared.json",
+        "bytes": 9754,
+        "sha256": "07f1173aeb14bf75aa5b1002a9ed2f39933896c1739d6bfad2fc6e3faf6fa9fc",
+        "mode": 384
+      }
+    },
+    {
+      "path": "docs-private-six-archives-20261104/recover_private_six_archives.py",
+      "bytes": 5429,
+      "sha256": "c56336b764c0c47136d7e9acc33e4b87ce9402cc9bdf570260e348f08b36fc9b",
+      "mode": "100644",
+      "original": null
+    }
+  ],
+  "part_limit_bytes": 33554432,
+  "legacy_2GiB_helper_invoked": false,
+  "same_private_audience_boundary": {
+    "schema_version": 1,
+    "kind": "publication_boundary",
+    "destination": {
+      "id": 1411376163,
+      "full_name": "X-Gen-Lab/nexus-examples",
+      "visibility": "private"
+    },
+    "sources": [
+      {
+        "id": 1411376163,
+        "full_name": "X-Gen-Lab/nexus-examples",
+        "visibility": "private",
+        "commit": "601580990df0e8232c3b6f3cc641cc3a8ee30ab8",
+        "tree": "aa78bbf2df0bdebb523a9d03f93a4ddaa24fd5c1"
+      },
+      {
+        "id": 1411376163,
+        "full_name": "X-Gen-Lab/nexus-examples",
+        "visibility": "private",
+        "commit": "70593409c8a5afae142ae6fc8e94510903043ae1",
+        "tree": "aa78bbf2df0bdebb523a9d03f93a4ddaa24fd5c1"
+      },
+      {
+        "id": 1411376163,
+        "full_name": "X-Gen-Lab/nexus-examples",
+        "visibility": "private",
+        "commit": "9d7d4d3430b8555766aba5bc7c76d5b49f8fd67d",
+        "tree": "752829b139ff1f5335f0f6ea61c31414132a7429"
+      },
+      {
+        "id": 1411376163,
+        "full_name": "X-Gen-Lab/nexus-examples",
+        "visibility": "private",
+        "commit": "6f09ae5539d58161acdab944767e8067895ad9bb",
+        "tree": "1616b4faa55c2f63cc4eaac62b1b6dc23c790b84"
+      },
+      {
+        "id": 1411376163,
+        "full_name": "X-Gen-Lab/nexus-examples",
+        "visibility": "private",
+        "commit": "b029cc4b7e8e7a7d3e5e1f1be080a0aa24b1ee09",
+        "tree": "cf01babc4901604f02f14d2e205b53f5a231ddad"
+      },
+      {
+        "id": 1132493112,
+        "full_name": "X-Gen-Lab/nexus",
+        "visibility": "public",
+        "commit": "58297516d707fdee117bd27b5df6af09d72edd2e",
+        "tree": "06feab8ef3e89df60b4cdc5671c66ab0e3c08c21"
+      },
+      {
+        "id": 1132493112,
+        "full_name": "X-Gen-Lab/nexus",
+        "visibility": "public",
+        "commit": "5d60b56e09686776c72ce95dfa9384357e57d2bf",
+        "tree": "be71adaac61fc3cbf6a92f5f63e8c2a8ac84cb8b"
+      },
+      {
+        "id": 1132493112,
+        "full_name": "X-Gen-Lab/nexus",
+        "visibility": "public",
+        "commit": "d742cdb5a0606bd4be22e14eff0738df3ba07549",
+        "tree": "570f807e722649e976670f747950fe1acb61fcc7"
+      },
+      {
+        "id": 1132493112,
+        "full_name": "X-Gen-Lab/nexus",
+        "visibility": "public",
+        "commit": "7590b2d457d6042112abb78a4f4df74d613df6ff",
+        "tree": "17c18aea10066d5d7418f3a7fd3b42e619ee3414"
+      }
+    ]
+  },
+  "audience_scope": "The existing nine-source observation is a same-private-audience guard, not a complete origin catalogue or qualification for these six historical archives. Original inside-member source identities remain unchanged.",
+  "scope": "Opaque storage relocation only; original six archives and selected original metadata remain byte-identical. No current P2 identity is assigned to historical candidates.",
+  "fresh_inner_tree_restore": false,
+  "P2_source_qualification": false,
+  "physical_hil_qualification": false,
+  "product_release": false,
+  "source_fetch_scope": "Explicit source main/feature/commit only; do not broad-fetch artifact branch into source clones."
+}

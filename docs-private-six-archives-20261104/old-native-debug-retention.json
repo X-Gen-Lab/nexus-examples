@@ -1,0 +1,13 @@
+{
+  "archive": "/workspace/nexus/build/recovery-20261103/cache-retention/native-debug.tar.zst",
+  "archive_sha256": "1aeccae46c04a82cf1b21dc2bfd402680647b541c5a8072e0a2315ffc0d56283",
+  "archive_bytes": 785709349,
+  "verified_regular_members": 88308,
+  "verified_symlink_identity_members": 1682,
+  "historical_alias_targets": "metadata retained only; temporary target bytes did not survive restart, no functional object-cache restoration claimed",
+  "free_before": 149667840,
+  "free_after_deletion": 2323632128,
+  "free_after_persisting_archive": 1514209280,
+  "scope": "ended old public native-debug only; current source/Git/private trees/other caches untouched",
+  "qualification": "actual retention check only; not new test execution"
+}

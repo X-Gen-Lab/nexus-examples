@@ -1,0 +1,99 @@
+{
+  "artifacts": {
+    "bin": {
+      "path": "payloads/8efaf6bda92a2bb8e1f85d054d40c9fd5cf62eca32c6c22c695cc89808147d8d",
+      "sha256": "8efaf6bda92a2bb8e1f85d054d40c9fd5cf62eca32c6c22c695cc89808147d8d",
+      "size": 9300
+    },
+    "elf": {
+      "path": "payloads/72f7b699690a0e196dce31637e85571bba83e6103daa17eb5c68ea99327670a7",
+      "sha256": "72f7b699690a0e196dce31637e85571bba83e6103daa17eb5c68ea99327670a7",
+      "size": 27960
+    },
+    "map": {
+      "path": "payloads/2fba04623ea6c511b45537ff9739881733f216753bbcea20b8412f586dc9dbf2",
+      "sha256": "2fba04623ea6c511b45537ff9739881733f216753bbcea20b8412f586dc9dbf2",
+      "size": 52151
+    }
+  },
+  "candidate_id": "controlled-dependencies-ce616ea9b30f-cef24bd1c7bc",
+  "candidate_json": {
+    "path": "/tmp/nexus-controlled-dependencies/candidate-ce616ea9-cef24bd1-01/finalization/candidate/candidate.json",
+    "sha256": "0657e27bbaa63bdafe3b626178f0039845280ad816f8d39244cb58384377cb21",
+    "size": 2405331
+  },
+  "candidate_portable": {
+    "archive": {
+      "path": "/workspace/nexus-examples/build/controlled-dependencies-ce616ea9/candidate-portable-store/ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a.tar.gz",
+      "sha256": "ef270bca90ebe3ca64211430efe1440a887de36e9f8d3d78c74640835d53c12a",
+      "size": 434248932
+    },
+    "bytes": 519293585,
+    "files": 6448,
+    "kind": "portable_evidence",
+    "manifest_sha256": "9c1d8e0154207c713419c7e74516f81af6d378b899ad49ed57f4481e3d9a02a7",
+    "product_promotion": false,
+    "schema_version": 1,
+    "signature_status": "unsigned"
+  },
+  "configuration_sha256": "11e8e60f2432aa9169ee6b1c8431f4c0415e79e38ed46672c5cb376b3e31702d",
+  "consumer_commit": "cef24bd1c7bc500fb28a17a6e1ff9cc7d5511711",
+  "consumer_tree": "1345fd439ee19a50d565251e32ce3ab9bd5c89a2",
+  "finalization_package": {
+    "archive": {
+      "path": "/workspace/nexus-examples/build/controlled-dependencies-ce616ea9/finalization-store/b116eb77b53b44e073baceb7cb124d954f8213d1fa347182864cf33af29d09c0.tar.gz",
+      "sha256": "b116eb77b53b44e073baceb7cb124d954f8213d1fa347182864cf33af29d09c0",
+      "size": 257117
+    },
+    "bytes": 1107805,
+    "files": 49,
+    "kind": "portable_evidence",
+    "manifest_sha256": "6e2fda1a0be3945f8fbdaad09430ec2db864cf28be090075b30d47d27322b793",
+    "product_promotion": false,
+    "schema_version": 1,
+    "signature_status": "unsigned"
+  },
+  "input_manifest": {
+    "path": "/workspace/nexus-examples/build/controlled-dependencies-ce616ea9/candidate-manifest.json",
+    "sha256": "6220969aa51fc1cec50145d3b99a954916777682850d476abbc8caf340d2bea3",
+    "size": 12741
+  },
+  "kind": "task_delivery_navigation",
+  "physical_status": "not_executed",
+  "platform": {
+    "commit": "ce616ea9b30fd2bbd9511f73e2f3b5d8028224b4",
+    "dirty": false,
+    "root": "/workspace/nexus",
+    "submodules": [
+      " 062e1e0d8b176ae73d257ac928766b33bea17b6f ext/freertos (V11.1.0-1-g062e1e0d8)",
+      " 9c5bad7b2f42b4e8420f12290b9bc085d3309e8b ext/freertos/portable/ThirdParty/Community-Supported-Ports (9c5bad7)",
+      " dc3afc6e837426b4bda81bbb6cf45bfb6f34c7e9 ext/freertos/portable/ThirdParty/Partner-Supported-Ports (dc3afc6)",
+      " 6910c9d9165801d8827d628cb72eb7ea9dd538c5 ext/googletest (release-1.8.0-3518-g6910c9d9)",
+      " 93387b0a60382a29579bbad5045c68328e3751df ext/threadx (v6.5.0.202601_pre-232-g93387b0a)",
+      " af1b110e46a1720349f6f125e386e126767699bd vendors/arm/CMSIS_6 (v6.4.0)",
+      " c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22 vendors/st/cmsis_device_f1 (v4.3.5-1-gc8e9a4a)",
+      " 3c77349ce04c8af401454cc51f85ea9a50e34fc1 vendors/st/cmsis_device_f4 (v2.6.11-1-g3c77349)",
+      " 626ee412334a5ed2e5b320af5a8d77d69f03a558 vendors/st/cmsis_device_g4 (v1.2.6-1-g626ee41)",
+      " 8f922cdc7cc6de2344e75ddd657889f4ff761790 vendors/st/cmsis_device_h7 (v1.10.7)",
+      " 624374fa1e21ca195d6f2102ac0caaa50d0ea4c8 vendors/st/cmsis_device_u5 (v1.4.3)",
+      " fee494a92b5ad331f92ad21f76c66a5cb83773ee vendors/st/stm32f1_hal (v1.1.10-17-gfee494a)",
+      " b6f0ed3829f3829eb358a2e7417d80bba1a42db7 vendors/st/stm32f4_hal (v1.8.5)",
+      " f5929f431f9effe45fbe18f5337e4753ced9ac92 vendors/st/stm32g4_hal (v1.2.7)",
+      " a1996eed9172b59887bafaaa0ea1816ea14d48b5 vendors/st/stm32h7_hal (v1.11.6)",
+      " 2552682ee5a0d6f826a6435750fc9267be65868b vendors/st/stm32u5_hal (v1.6.3)"
+    ],
+    "tree": "a12bd07ff114e51d5dc22ec4bfba4ec7a515cadb"
+  },
+  "product_promotion": "not_performed",
+  "qualified_scopes": [
+    "arm_link",
+    "hil_tooling",
+    "host_contracts",
+    "reproducibility",
+    "resource_budget",
+    "source_sdk"
+  ],
+  "schema_version": 1,
+  "signature_status": "unsigned",
+  "status": "software_qualified"
+}

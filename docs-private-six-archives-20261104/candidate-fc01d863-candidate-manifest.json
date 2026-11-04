@@ -1,0 +1,289 @@
+{
+  "artifacts": {
+    "bin": {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/reproduction-runs/run-a/build/bin/nexus_firmware.bin",
+      "sha256": "8efaf6bda92a2bb8e1f85d054d40c9fd5cf62eca32c6c22c695cc89808147d8d",
+      "size": 9300
+    },
+    "elf": {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/reproduction-runs/run-a/build/bin/nexus_firmware.elf",
+      "sha256": "6c385bd54c79b7dd4350636fd3009ae48e62acdd0f077c1d58e8078c697994f1",
+      "size": 27960
+    },
+    "map": {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/reproduction-runs/run-a/build/bin/nexus_firmware.map",
+      "sha256": "c43fb8cb2b3297b13bde24988826420da267dcfb9e805c314ed16df16291b8ed",
+      "size": 52150
+    }
+  },
+  "candidate_id": "typed-unification-fc01d863c337-acb5179ec09e",
+  "configuration": {
+    "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/generated/resolved.json",
+    "sha256": "025a40711a01d3103abbf307d9eb0531ed3d1b5ae71f7359dade7390f51770ad",
+    "size": 30630
+  },
+  "dependencies": [
+    {
+      "path": "/workspace/nexus/.gitmodules",
+      "sha256": "06e30ac517644a4dfaeb49d833259ac3098967aa82dad4e66fc211d0eb3ac61e",
+      "size": 1822
+    },
+    {
+      "path": "/workspace/nexus/dependencies/actionlint.lock.json",
+      "sha256": "0bf30ff8d5dd4062d63f897c27f3e7225c673447855e977a0560e121cd2872d5",
+      "size": 2943
+    },
+    {
+      "path": "/workspace/nexus/dependencies/actions.lock.json",
+      "sha256": "795aa8834e81db176e07668f789dc566f01faac73354bc4a1613cf73d51a3fef",
+      "size": 4772
+    },
+    {
+      "path": "/workspace/nexus/dependencies/build-recipe.lock.json",
+      "sha256": "184f54646e38adea736a62f7e7b9ce7115dc8399f329ef2906f75cbd5daf30a6",
+      "size": 832
+    },
+    {
+      "path": "/workspace/nexus/dependencies/ccache.lock.json",
+      "sha256": "3b88cd0013b53aa8c5e22194499b281799fa6e473c11c06eac498b546e2b1a9e",
+      "size": 514
+    },
+    {
+      "path": "/workspace/nexus/dependencies/development-tools.txt",
+      "sha256": "ec369eef06a87082723b82321827296fb0059e36b6eddd41223ade4d73bb5994",
+      "size": 122
+    },
+    {
+      "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-applehelp.txt",
+      "sha256": "445e28ceb62ff34619a7031148aea9fce3560dc55fd8e15a719614b1fb8b956a",
+      "size": 1441
+    },
+    {
+      "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-devhelp.txt",
+      "sha256": "c166b04a478c94b74910f162c63867359671d2cedd766e9a873c4db8eb40f64c",
+      "size": 1437
+    },
+    {
+      "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-htmlhelp.txt",
+      "sha256": "dccf210bbbdda1b97caff8333a45bd8a7621f32b6f8b1d13a748f24a4e5d99d3",
+      "size": 1439
+    },
+    {
+      "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-qthelp.txt",
+      "sha256": "27b1953612e4740d49737ff7dfe12c11aa9151da8e7f4a8224b5247d07a37695",
+      "size": 1435
+    },
+    {
+      "path": "/workspace/nexus/dependencies/docs-licenses/sphinxcontrib-serializinghtml.txt",
+      "sha256": "3684cbcc712af8e969688e1d63fcf14d97c24422da92cf15f77f25859e15f2f5",
+      "size": 1453
+    },
+    {
+      "path": "/workspace/nexus/dependencies/docs-python-linux-cp312.txt",
+      "sha256": "f76786c30ef2f2920f40c0663371d7982618475046a792c61b740ec65cc066c7",
+      "size": 2833
+    },
+    {
+      "path": "/workspace/nexus/dependencies/docs-tools.lock.json",
+      "sha256": "9c33a22690587cd9c02f1b2d78e0f9a70313f4359afa67dd404b449c8f565288",
+      "size": 37835
+    },
+    {
+      "path": "/workspace/nexus/dependencies/environment-tools.txt",
+      "sha256": "1e965d2ecb655a6d65d775a62cc5e2948da8a176b092f9f1c9e88aebd8d3357a",
+      "size": 101
+    },
+    {
+      "path": "/workspace/nexus/dependencies/environment.lock.json",
+      "sha256": "ba90902e9048279fc38121fbcab003e8fed07dfd17044637d4aed979a7e966cd",
+      "size": 1181
+    },
+    {
+      "path": "/workspace/nexus/dependencies/googletest.lock.json",
+      "sha256": "5e296b2b741102294ba02d47d273d7a169841c832aacd106a2dd1bd43a54f4d3",
+      "size": 312
+    },
+    {
+      "path": "/workspace/nexus/dependencies/hook-build-tools.txt",
+      "sha256": "037010feefb29df6fd96413b289386e18b99303032d1914a1ad4b0ee634ec184",
+      "size": 160
+    },
+    {
+      "path": "/workspace/nexus/dependencies/platform-compatibility.json",
+      "sha256": "fe92b01e52c307526769877f8ffaa899cb23e6149f8136b44f200227032d9a6d",
+      "size": 585
+    },
+    {
+      "path": "/workspace/nexus/dependencies/python-tools-linux-cp311.lock.json",
+      "sha256": "4a8667fb3be548bb4eab499466ed82cba0f4430b7775e096847bea78ed6ace8b",
+      "size": 3880
+    },
+    {
+      "path": "/workspace/nexus/dependencies/python-tools-linux-cp311.txt",
+      "sha256": "80bc61d5910db99b7386b8b07766b93f176b573ee6704b5872a1530baabd4040",
+      "size": 1442
+    },
+    {
+      "path": "/workspace/nexus/dependencies/python-tools-linux-cp312.lock.json",
+      "sha256": "80c1972306abd1d9b22158a68abab31d93dafc41387e3e66bb071cc90885490c",
+      "size": 3880
+    },
+    {
+      "path": "/workspace/nexus/dependencies/python-tools-linux-cp312.txt",
+      "sha256": "0c2b01c2ccbe113e21acffb28174805411b454a57849409700c3594a507130f0",
+      "size": 1442
+    },
+    {
+      "path": "/workspace/nexus/dependencies/stm32f1-hal.lock.json",
+      "sha256": "1cf6c98ea2006103933623ca4c9a7c5122ac16c28bda08fb7264c65f8eb38063",
+      "size": 1142
+    },
+    {
+      "path": "/workspace/nexus/dependencies/stm32f1.lock.json",
+      "sha256": "b10f1852f47e45e7660b906dc707aca9e059cbdd634c81d2ab7d3a878af100ce",
+      "size": 1058
+    },
+    {
+      "path": "/workspace/nexus/dependencies/stm32f4-hal.lock.json",
+      "sha256": "59e9b509aa7c9612793dce5851e7d9c13b39c9fa2e753fc743cb970ab893cfdc",
+      "size": 2296
+    },
+    {
+      "path": "/workspace/nexus/dependencies/stm32g4-hal.lock.json",
+      "sha256": "bcb8a3f8bf190e55b1d2d0526ce20c00abb7e73169bc9334abf80a87304ba135",
+      "size": 1884
+    },
+    {
+      "path": "/workspace/nexus/dependencies/stm32g4.lock.json",
+      "sha256": "17a79ace0ac3626f5631da4e79b211390237de7e7bf0c7bd9878c3c98d6ca9a3",
+      "size": 1058
+    },
+    {
+      "path": "/workspace/nexus/dependencies/stm32h7-hal.lock.json",
+      "sha256": "42304d23b00f830feb5d791e5377ae0c05d8ae689d25d1333e2764fc9d5000b0",
+      "size": 1290
+    },
+    {
+      "path": "/workspace/nexus/dependencies/stm32h7.lock.json",
+      "sha256": "31b165b640640d95c804c911557dc9db2da56b50746465cf6d2960b34bbf088c",
+      "size": 1217
+    },
+    {
+      "path": "/workspace/nexus/dependencies/stm32u5-hal.lock.json",
+      "sha256": "0c6fd21b74f040f127e1306067d71230147f3bcc71913532a84933c996f5d2e3",
+      "size": 1866
+    },
+    {
+      "path": "/workspace/nexus/dependencies/stm32u5.lock.json",
+      "sha256": "3ea56fca19228bd8e9e12a1a71d4590cf8cc31044183a2a36fd6a41f6b901d30",
+      "size": 1061
+    },
+    {
+      "path": "/workspace/nexus/dependencies/style-baseline.json",
+      "sha256": "46b2a878e8aee3e4ef9cdd894a720f272b724f5b4b92d752f556acc717ea4b92",
+      "size": 228
+    },
+    {
+      "path": "/workspace/nexus/dependencies/threadx.lock.json",
+      "sha256": "a9785a8be298555fc93aa09e714bf4ff3047936c5214b0aead5898d83f22ed12",
+      "size": 43594
+    },
+    {
+      "path": "/workspace/nexus/dependencies/toolchains.lock.json",
+      "sha256": "1393be450d4d1ba3e182807ae0236f968cf9773f2e43a14ce3a57f9251387170",
+      "size": 469
+    },
+    {
+      "path": "/workspace/nexus/dependencies/workflow-tools.txt",
+      "sha256": "3aa451bd75cf16c3cdf8f7783db0a54dd22c02ecb34e102875aec6cfbd283061",
+      "size": 92
+    },
+    {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/tidy-contexts-package.json",
+      "sha256": "81d4c7e83115565f55306155404bcf703c30dbcf14a3a2e0088867ce8afb150d",
+      "size": 549
+    },
+    {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/cppcheck-contexts-package.json",
+      "sha256": "9fa7d0cd9bd15000762b22ca36454a208f1009334a981be678d85506e0729fed",
+      "size": 560
+    },
+    {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/execution-receipts.json",
+      "sha256": "2db5fe9e5954823d4b771eaa0e10cf73a9e686a652d8886b2334c64db11ad738",
+      "size": 553
+    },
+    {
+      "path": "/workspace/nexus-examples/dependencies/nexus.lock.json",
+      "sha256": "661220ab5dbf29c09f6eb78183b8aa2e14d1914fc944b62934e168d1f1284e96",
+      "size": 713
+    },
+    {
+      "path": "/tmp/nexus-examples-typed-fc01d863c337-all-001/execution.json",
+      "sha256": "c89682f4b2b30383dca2c3e845aad6170c6f4271b310886d72deb358b136348b",
+      "size": 15662
+    }
+  ],
+  "environment": {
+    "path": "/workspace/nexus/build/soc-ip-layout/delivery-environment/environment.json",
+    "sha256": "0013f6279c94ff3a6115987241644fa40e8e11ab40b4584b59dd9726483ce735",
+    "size": 1083
+  },
+  "qualifications": [
+    {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/reproducibility.json",
+      "sha256": "e2e60314c9aa805125f41f6ebfa8f4e02c696c4cc756525fa3e913b935fbeaec",
+      "size": 13535
+    },
+    {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/host_contracts.json",
+      "sha256": "52daa14c9a731be1cf7320e389b972d0eee8271cd8c950e05b5429278fd87d91",
+      "size": 863230
+    },
+    {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/arm_link.json",
+      "sha256": "87c4826fc543578edd32dfc6d71dbea09437a3f12c01445ed37515046b909898",
+      "size": 6734
+    },
+    {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/resource_budget.json",
+      "sha256": "1fe1b13b4023b4260d7b76f38dd46ba9ec84ce98f28ef055c10111495c7e9f6b",
+      "size": 3652
+    },
+    {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/source_sdk.json",
+      "sha256": "5b740880f84af18661542001da275d49df4f2d62dd5adc3fbb7f9e8d71a1098d",
+      "size": 93647
+    },
+    {
+      "path": "/tmp/nexus-unification/candidate-fc01d863c337-acb5179ec09e-02/completion/hil_tooling.json",
+      "sha256": "e1d6659fc61c4cd8364b76609476049dc56e44322c436aaabe6729e4e49e7128",
+      "size": 4245
+    }
+  ],
+  "schema_version": 1,
+  "source": {
+    "commit": "fc01d863c3374643c276195ae19a24e6f8b8c8ee",
+    "dirty": false,
+    "root": "/workspace/nexus",
+    "submodules": [
+      " dbf70559b27d39c1fdb68dfb9a32140b6a6777a0 ext/freertos (V11.1.0)",
+      " 9c5bad7b2f42b4e8420f12290b9bc085d3309e8b ext/freertos/portable/ThirdParty/Community-Supported-Ports (9c5bad7)",
+      " dc3afc6e837426b4bda81bbb6cf45bfb6f34c7e9 ext/freertos/portable/ThirdParty/Partner-Supported-Ports (dc3afc6)",
+      " 6910c9d9165801d8827d628cb72eb7ea9dd538c5 ext/googletest (release-1.8.0-3518-g6910c9d9)",
+      " 93387b0a60382a29579bbad5045c68328e3751df ext/threadx (v6.5.0.202601_pre-232-g93387b0a)",
+      " af1b110e46a1720349f6f125e386e126767699bd vendors/arm/CMSIS_6 (v6.4.0)",
+      " c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22 vendors/st/cmsis_device_f1 (v4.3.5-1-gc8e9a4a)",
+      " 3c77349ce04c8af401454cc51f85ea9a50e34fc1 vendors/st/cmsis_device_f4 (v2.6.11-1-g3c77349)",
+      " 626ee412334a5ed2e5b320af5a8d77d69f03a558 vendors/st/cmsis_device_g4 (v1.2.6-1-g626ee41)",
+      " 8f922cdc7cc6de2344e75ddd657889f4ff761790 vendors/st/cmsis_device_h7 (v1.10.7)",
+      " 624374fa1e21ca195d6f2102ac0caaa50d0ea4c8 vendors/st/cmsis_device_u5 (v1.4.3)",
+      " fee494a92b5ad331f92ad21f76c66a5cb83773ee vendors/st/stm32f1_hal (v1.1.10-17-gfee494a)",
+      " b6f0ed3829f3829eb358a2e7417d80bba1a42db7 vendors/st/stm32f4_hal (v1.8.5)",
+      " f5929f431f9effe45fbe18f5337e4753ced9ac92 vendors/st/stm32g4_hal (v1.2.7)",
+      " a1996eed9172b59887bafaaa0ea1816ea14d48b5 vendors/st/stm32h7_hal (v1.11.6)",
+      " 2552682ee5a0d6f826a6435750fc9267be65868b vendors/st/stm32u5_hal (v1.6.3)"
+    ],
+    "tree": "e6f3d6310fd46265be49d47ef3fd7a4d944a8386"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "archive": "/workspace/nexus/build/release-0.2.0-integration-20261031/native-intermediate-cache-20261031.tar.gz",
+  "sha256": "e1a8000cc781c0936fc49900d4a3d30d3b9bd6961fed8eddb736c496ed7eb836",
+  "bytes": 270199403,
+  "members": 2392,
+  "freed_bytes": 1146155008,
+  "preserved": "all final binaries, JUnit, raw logs, compilation database, source and historical evidence",
+  "restore": "tar -xf /workspace/nexus/build/release-0.2.0-integration-20261031/native-intermediate-cache-20261031.tar.gz -C /workspace/nexus/build/native-debug"
+}
