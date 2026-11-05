@@ -58,6 +58,7 @@ re-prove the FreeRTOS commit's parent relationship or full tree diff.
 | `stream_recovery` | 慢消费者、loss、BUSY stop、恢复及只读诊断 | 独立 H743 continuous DMA 软件参考，Cache off |
 | `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 八套参考配置、两后端，显式静态任务或裸机 pump |
 | [`industrial_control`](apps/industrial_control/README.md) | BMP280＋真实 SPI owner、Modbus 授权、Settings 维护提交、watchdog 与 completion/timer/stop/join | 先交付 Native 组合；未推断传感器、RS485 或 Flash 分区 |
+| [`usb_configuration`](apps/usb_configuration/README.md) | USBControl＋外部标准请求子集、activation staging、STATUS ACK／epoch 提交、排空与 restart | Native 公共端口合同＋F407ZG 软件参考；完整 Chapter 9／class 与物理枚举未验证 |
 
 Native 注册有限应用 CTest、GoogleTest 执行，以及真实 FreeRTOS POSIX 内核
 合同和共享 SPI 应用。新增模板、创建练习、三条生命周期路径及迁移步骤见
