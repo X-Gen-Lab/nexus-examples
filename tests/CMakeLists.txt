@@ -84,6 +84,7 @@ add_test(NAME reference_lifecycle_google COMMAND "${Python3_EXECUTABLE}" -B
 set_tests_properties(reference_lifecycle_google PROPERTIES TIMEOUT 30
     LABELS "native;example;GoogleTest")
 include("${CMAKE_CURRENT_LIST_DIR}/uart_fifo_acquisition.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/usb_configuration.cmake")
 
 # Same C11 application behavior runs under a host-only GoogleTest harness.
 add_executable(developer_recipes_test developer_recipes_test.cpp

@@ -45,6 +45,8 @@ class ApplicationBuildContracts(unittest.TestCase):
             for relative, targets in (
                     ('apps/flash_maintenance/flash_application.c',
                      {'flash_maintenance_test'}),
+                    ('apps/usb_configuration/usb_configuration.c',
+                     {'usb_configuration_test'}),
                     ('apps/retained_stop2/stop2_application.c',
                      {'retained_stop2_test', 'compound_stop2_test'})):
                 selected = [item['command'] for item in commands
@@ -92,6 +94,7 @@ class ApplicationBuildContracts(unittest.TestCase):
                 'industrial_control_google', 'owner_lifecycle_google',
                 'product_fault_policy_google', 'reference_rx_policy_google',
                 'reference_lifecycle_google', 'fifo_acquisition_google',
+                'usb_configuration_google',
                 'shared_spi_two_devices', 'stream_slow_consumer',
                 'developer_recipes_google', 'shared_spi_real_freertos',
                 'contract_os_freertos', 'continuous_rx_google',
