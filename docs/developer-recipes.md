@@ -20,14 +20,43 @@ flowchart LR
 
 ## 固定身份创建 / Reproducible creation
 
-`templates/manifest.json` 版本 1 列出四个完整最小工程，每个恰有 CMake、TOML、C11
-入口和双语说明。所有文件绑定 SHA-256；配置仅在 TOML 编写一次。模板 ID：
-`native`、`qiming`、`sky`、`liangshan`。分别选择 Native、启明 F407ZG V3.1、天空星
-F407VE 青春版及梁山派 F470。GPIO 统一逻辑别名 `status`，UART 为 `console`；硬件
-绑定仍来自精确 Board。
-Version 1 binds every template file by SHA-256. The four IDs select Native and
-three exact maintained Boards. Logical aliases are `status` and `console`; TOML
-is the only authored hardware composition. No Board wiring is inferred.
+`templates/manifest.json` 版本 1 是模板的唯一目录清单。每个工程恰有 CMake、
+TOML、C11 入口和双语说明，全部绑定 SHA-256；配置仅在 TOML 编写一次。
+Version 1 is the sole template catalogue. It binds each CMake/TOML/C11/README
+file by SHA-256. The authored TOML is the only hardware composition.
+
+| Template ID | Exact Board / 精确板卡 |
+| --- | --- |
+| `native` | Native |
+| `qiming` | Qiming F407ZG V3.1 / 启明 F407ZG V3.1 |
+| `qiming-core` | `stm32f407zg_qiming_core` / 启明 F407ZGT6 核心板 |
+| `qiming-v41` | `stm32f407zg_qiming_v41` / 启明 F407 高配版 V4.1 |
+| `sky` | Sky F407VE Youth / 天空星 F407VE 青春版 |
+| `liangshan` | Liangshan F470 / 梁山派 F470 |
+
+GPIO 统一逻辑别名 `status`，UART 为 `console`；硬件绑定来自精确 Board。
+两个新启明模板复用同一 C11 应用，显式声明 SWD 和全部 hardware 选项，最小配置
+要求可选模块未连接、共享接口断开；这不是 DNP 或装配检测。模块的已知型号不会
+自动启用屏幕、触摸、媒体或网络。旧 V3.1 模板保留。参阅各模板的使用前提。
+Logical aliases remain `status` and `console`. The two new Qiming templates
+reuse the established application, explicitly select SWD and all hardware
+choices, and require optional modules absent/shared connectors disconnected for
+this minimal profile. Known module models do not enable display, touch, media
+or network behavior. V3.1 remains separate. See each template's setup conditions.
+
+新模板需依赖锁包含对应新 Board，并完成源码和安装 SDK 两条消费验收。配置可解析
+不等于 ARM 已链接或实板已验证；当前实板 HIL 仍为 `not_executed`。
+The new templates require a pinned SDK containing those Boards and separate
+source/installed consumption evidence. Resolver success does not prove ARM
+linking or hardware execution. Physical HIL remains `not_executed`.
+
+本次锁定 SDK 的两板源码与安装消费 ARM 结果、配置与产物摘要见
+[集成索引](qiming-board-integration-results.json)。普通 host/Google 验收由实际提交
+hooks 独立执行；本索引不预报其结果，也不证明物理行为。
+The [integration index](qiming-board-integration-results.json) binds this locked
+SDK, four actual ARM consumers and their artifact hashes. Normal commit hooks
+separately execute fresh host/Google contracts; the index does not predict their
+result or establish physical behavior.
 
 使用平台的 `tools/dev/dev.py create`，显式传入本仓库检出和完整 40 位提交。该提交中的
 源码锁给出期望 SDK 身份；创建时实际 resolver 的输入身份另行记录。创建工具读取提交对象，拒绝脏模板、覆盖及链接逃逸；不联网

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "90088b4fe71a7d59f21a0bbc474a9a201fe61c39",
-  "tree": "282619e4d5d0a239faae386717abc0198fdd796a",
+  "commit": "cb060a8de58166c4653dd9cd000c8fe01bd24a96",
+  "tree": "19829a466bb286703e3a6d555f58ba1b33e4fb80",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
   "baseline_status": "Exact platform source and matching publishable Source SDK selected; private examples require fresh source and installed integration evidence, independent of the public SDK complete-plan result; physical HIL is not executed.",

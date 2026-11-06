@@ -123,13 +123,16 @@ qualify that tuple.
 
 ## Versioned developer recipes / 版本化开发入口
 
-The current iteration adds manifest-bound Native/Qiming/Sky/Liangshan starters,
+The manifest indexes Native/Qiming/Sky/Liangshan starters plus separate Qiming
+core and V4.1 minimal projects with explicit hardware choices. Other recipes cover
 two-endpoint SPI with real Native/FreeRTOS host tasks, and slow-consumer stream
 recovery. Standalone MCU recipes deliberately distinguish an F407ZG silicon
 fixture from a physical Board and select only the supported H743 continuous RX
 mode. [The bilingual guide](developer-recipes.md) is the caller contract.
-本次入口包含四个摘要绑定模板、两端点真实任务共享 SPI 和慢消费者流恢复；MCU
-软件 fixture 与实板严格区分，仅选择实际支持的 H743 连续模式。
+当前清单包含六个摘要绑定模板，其中启明核心板与 V4.1 独立配置全部 hardware
+选项，保留 V3.1。另有两端点真实任务共享 SPI 和慢消费者流恢复；MCU 软件 fixture
+与实板严格区分，仅选择实际支持的 H743 连续模式。新模板在 pin 更新及两条 SDK
+消费路径验证前只属于开发准备，不增加已有构建或 HIL 资格。
 
 Final identity ordering is platform commit P, examples lock/Gitlink update to P,
 ordinary complete gates, then examples commit E. The delivery record binds P/E

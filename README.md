@@ -62,7 +62,8 @@ re-prove the FreeRTOS commit's parent relationship or full tree diff.
 
 Native 注册有限应用 CTest、GoogleTest 执行，以及真实 FreeRTOS POSIX 内核
 合同和共享 SPI 应用。新增模板、创建练习、三条生命周期路径及迁移步骤见
-[双语工程指南](docs/developer-recipes.md)。四个版本化模板保存在 `templates/`。
+[双语工程指南](docs/developer-recipes.md)。六个版本化模板由 `templates/manifest.json` 统一索引，新增启明核心板与 V4.1
+最小工程保留独立的精确 Board 和显式 hardware 选项；旧 V3.1 模板继续保留。
 UART 由应用显式注入接收事实，服务推进发送并等待真正
 TC 完成。模型没有自动串口设备或后台 RX 生产者。Flash 文件示例验证宿主恢复流程，
 不证明 MCU 掉电安全。三板为启明欣欣 F407ZG V3.1、天空星 F407VE 青春版和梁山派
