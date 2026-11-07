@@ -49,6 +49,30 @@
         "interface_epoch": 1,
         "assembly_schema": 2
       }
+    },
+    "qiming-core": {
+      "files": {
+        "CMakeLists.txt": "6f3089febf9a395f544cf5ea99aa9af456ed4e1f24e00e4916bdf12b08b499c1",
+        "README.md": "49caac98bdeecdaccb3abcc8e484717d9be6c8433f55300137e83e57a786c181",
+        "assembly.toml": "b03fde63cba36dcf1ebd8f986993667accd1ce18417770dda0904ecf0702b8c7",
+        "main.c": "260c8b0d755ccf686e33a06140f86701bc0cce5e9333a02ffc06423d649bcdd1"
+      },
+      "platform": {
+        "interface_epoch": 1,
+        "assembly_schema": 2
+      }
+    },
+    "qiming-v41": {
+      "files": {
+        "CMakeLists.txt": "6f3089febf9a395f544cf5ea99aa9af456ed4e1f24e00e4916bdf12b08b499c1",
+        "README.md": "86ecb77570f7752b4d1614c05547901308d91a2ccbb2fdf2c31ff4b6004f5ec1",
+        "assembly.toml": "6043854ec400e8609033ec97e72c93f3dab14c14891176b0a42a83e86ed39a3d",
+        "main.c": "260c8b0d755ccf686e33a06140f86701bc0cce5e9333a02ffc06423d649bcdd1"
+      },
+      "platform": {
+        "interface_epoch": 1,
+        "assembly_schema": 2
+      }
     }
   }
 }
