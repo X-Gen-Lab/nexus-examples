@@ -28,6 +28,14 @@
 static std::atomic<bool> inject_cold_failure{false};
 static std::atomic<bool> inject_join_failure{false};
 static std::atomic<size_t> settings_closes{0U};
+static std::atomic<bool> inspect_owner_progress{false};
+static std::atomic<bool> force_owner_busy{false};
+static std::atomic<bool> fail_owner_transfer{false};
+static std::atomic<size_t> owner_waits{0U};
+static std::atomic<size_t> waits_with_polling_result{0U};
+static std::atomic<size_t> maximum_service_steps{0U};
+static thread_local nx_bus_owner_t* observed_owner;
+static thread_local size_t service_steps;
 extern "C" nx_platform_start_result_t __real_nx_platform_start(void);
 extern "C" nx_platform_start_result_t __wrap_nx_platform_start(void) {
     if (inject_cold_failure.exchange(false)) {
@@ -43,9 +51,58 @@ extern "C" void __wrap_nx_settings_close(nx_settings_t* settings) {
 extern "C" nx_result_t __real_nx_native_task_join(nx_native_task_t* task);
 extern "C" nx_result_t __wrap_nx_native_task_join(nx_native_task_t* task) {
     const auto result = __real_nx_native_task_join(task);
+    if (result == NX_SUCCESS && force_owner_busy.exchange(false)) {
+        nx_native_spi_model_fault(nx_factory_spi_ref(NX_SPI_REF_SPI0), SIZE_MAX,
+                                  false);
+    }
     return result == NX_SUCCESS && inject_join_failure.exchange(false)
                ? NX_ERROR_IO
                : result;
+}
+extern "C" nx_result_t __real_nx_bus_owner_service(nx_bus_owner_t* owner);
+extern "C" nx_result_t __wrap_nx_bus_owner_service(nx_bus_owner_t* owner) {
+    if (inspect_owner_progress.load()) {
+        observed_owner = owner;
+        ++service_steps;
+        if (force_owner_busy.load() || fail_owner_transfer.load()) {
+            nx_native_spi_model_fault(nx_factory_spi_ref(NX_SPI_REF_SPI0),
+                                      fail_owner_transfer.load() ? 0U
+                                                                 : SIZE_MAX,
+                                      force_owner_busy.load());
+        }
+    }
+    return __real_nx_bus_owner_service(owner);
+}
+extern "C" nx_wait_port_t
+__real_nx_native_notify_port(nx_native_notify_t* notification);
+
+/* Observe the real worker's wait boundary, without progressing its owner. */
+static nx_result_t observed_wait(void* context, uint32_t sequence,
+                                 nx_time_us_t deadline) {
+    if (inspect_owner_progress.load() && observed_owner != nullptr &&
+        observed_owner->wake.context == context) {
+        ++owner_waits;
+        const auto* executor = static_cast<const nx_spi_owner_executor_t*>(
+            observed_owner->executor.context);
+        if (executor->pending) {
+            ++waits_with_polling_result;
+        }
+        if (service_steps > maximum_service_steps.load()) {
+            maximum_service_steps.store(service_steps);
+        }
+        service_steps = 0U;
+    }
+    const auto real =
+        __real_nx_native_notify_port(static_cast<nx_native_notify_t*>(context));
+    return real.wait(real.context, sequence, deadline);
+}
+extern "C" nx_wait_port_t
+__wrap_nx_native_notify_port(nx_native_notify_t* notification) {
+    auto port = __real_nx_native_notify_port(notification);
+    if (inspect_owner_progress.load()) {
+        port.wait = observed_wait;
+    }
+    return port;
 }
 
 namespace {
@@ -362,6 +419,12 @@ class IndustrialPersistence : public testing::Test {
     }
     void SetUp() override {
         bytes.fill(0xFFU);
+        inspect_owner_progress.store(false);
+        force_owner_busy.store(false);
+        fail_owner_transfer.store(false);
+        owner_waits.store(0U);
+        waits_with_polling_result.store(0U);
+        maximum_service_steps.store(0U);
         ASSERT_EQ(reopen(), NX_STORAGE_OK);
     }
     void seed(uint32_t schema, uint32_t period) {
@@ -406,6 +469,55 @@ TEST_F(IndustrialPersistence,
     EXPECT_GT(mutations, 0U);
 }
 
+TEST_F(IndustrialPersistence, CompletedPollingIoIsPublishedBeforeWorkerWait) {
+    config.sample_limit = 1U;
+    inspect_owner_progress.store(true);
+    example_industrial_report_t report{};
+    const auto result = example_industrial_run(&storage, &config, &report);
+    inspect_owner_progress.store(false);
+    ASSERT_EQ(result, NX_SUCCESS);
+    EXPECT_GE(report.spi_completions, 8U);
+    EXPECT_EQ(waits_with_polling_result.load(), 0U);
+    EXPECT_LE(maximum_service_steps.load(), 2U);
+    EXPECT_TRUE(report.joined);
+    EXPECT_TRUE(report.platform_stopped);
+}
+
+TEST_F(IndustrialPersistence, BusyPollingIoStillWaitsAndHonorsItsDeadline) {
+    config.sample_limit = 1U;
+    force_owner_busy.store(true);
+    inspect_owner_progress.store(true);
+    example_industrial_report_t report{};
+    const auto result = example_industrial_run(&storage, &config, &report);
+    inspect_owner_progress.store(false);
+    force_owner_busy.store(false);
+    EXPECT_EQ(result, NX_ERROR_TIMEOUT);
+    EXPECT_GT(owner_waits.load(), 0U);
+    EXPECT_LE(maximum_service_steps.load(), 2U);
+    EXPECT_EQ(report.samples, 0U);
+    EXPECT_EQ(report.spi_completions, 1U);
+    EXPECT_EQ(mutations, 0U);
+    EXPECT_TRUE(report.joined);
+    EXPECT_TRUE(report.platform_stopped);
+    EXPECT_FALSE(report.storage_retained);
+}
+
+TEST_F(IndustrialPersistence, FailedPollingIoIsPublishedBeforeWorkerWait) {
+    fail_owner_transfer.store(true);
+    inspect_owner_progress.store(true);
+    example_industrial_report_t report{};
+    const auto result = example_industrial_run(&storage, &config, &report);
+    inspect_owner_progress.store(false);
+    fail_owner_transfer.store(false);
+    EXPECT_EQ(result, NX_ERROR_IO);
+    EXPECT_EQ(waits_with_polling_result.load(), 0U);
+    EXPECT_EQ(report.spi_completions, 1U);
+    EXPECT_EQ(mutations, 0U);
+    EXPECT_TRUE(report.joined);
+    EXPECT_TRUE(report.platform_stopped);
+    EXPECT_FALSE(report.storage_retained);
+}
+
 TEST_F(IndustrialPersistence,
        ReopenUsesCommittedConfigurationInsteadOfDefaults) {
     config.sample_limit = 1U;
@@ -413,7 +525,13 @@ TEST_F(IndustrialPersistence,
     ASSERT_EQ(example_industrial_run(&storage, &config, &first), NX_SUCCESS);
     ASSERT_EQ(reopen(), NX_STORAGE_OK);
     example_industrial_report_t second{};
-    ASSERT_EQ(example_industrial_run(&storage, &config, &second), NX_SUCCESS);
+    ASSERT_EQ(example_industrial_run(&storage, &config, &second), NX_SUCCESS)
+        << "samples=" << second.samples
+        << " completions=" << second.spi_completions
+        << " replies=" << second.modbus_replies << " joined=" << second.joined
+        << " stopped=" << second.platform_stopped
+        << " storage=" << second.storage_status
+        << " watchdog_expired=" << second.watchdog_expired;
     EXPECT_TRUE(second.restored_settings);
     EXPECT_EQ(second.initial_period_us, first.durable_period_us);
     EXPECT_EQ(second.durable_period_us, first.durable_period_us + 10000U);

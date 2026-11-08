@@ -141,7 +141,8 @@ target_link_libraries(industrial_control_test PRIVATE Nexus::Platform
     nexus_owned_warnings nexus_build_options)
 target_link_options(industrial_control_test PRIVATE
     "LINKER:--wrap=nx_platform_start" "LINKER:--wrap=nx_settings_close"
-    "LINKER:--wrap=nx_native_task_join")
+    "LINKER:--wrap=nx_native_task_join" "LINKER:--wrap=nx_bus_owner_service"
+    "LINKER:--wrap=nx_native_notify_port")
 add_test(NAME industrial_control_google COMMAND "${Python3_EXECUTABLE}" -B
     "${PROJECT_SOURCE_DIR}/scripts/run_google.py"
     --nexus-source "${NEXUS_SOURCE}"

@@ -76,6 +76,16 @@ authorize request or buffer reuse.
 不会重入 BMP280 或 Modbus。独立的操作期限检查防止持续 ready 的 timer 延长预算。
 通知次数不能授权请求或缓冲复用。
 
+The polling SPI worker publishes an already completed transfer before waiting.
+Each turn performs at most two owner service steps; a BUSY start still waits.
+This removes an unnecessary 1 ms delay per transfer without extending the
+absolute operation deadline. Arbitrary host scheduling can still exhaust that
+deadline; a successful software run establishes no real-time guarantee.
+
+SPI 轮询工作线程在等待前发布已经完成的传输结果。每轮至多推进两步 owner；
+启动返回 BUSY 时仍进入等待。这样去除每次传输不必要的 1 ms 等待，不延长绝对操作
+期限。主机调度仍可能耗尽期限，软件通过不构成实时保证。
+
 | Budget / 预算 | Value / 明确取值 |
 | --- | --- |
 | Sampling / 采样 | CLI: 100 ms, 3 samples / CLI 默认三次 |
