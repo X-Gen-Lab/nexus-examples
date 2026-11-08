@@ -12,6 +12,7 @@ if(CMAKE_CROSSCOMPILING)
     set(NEXUS_ASSEMBLY_FILE "${CMAKE_CURRENT_SOURCE_DIR}/assembly.toml" CACHE FILEPATH
         "Owned software-only USB pin and configuration recipe")
 else()
+    set(NEXUS_TEST_SUPPORT ON CACHE BOOL "Explicit Native public-port model" FORCE)
     set(NEXUS_ASSEMBLY_FILE "${usb_examples_root}/reproduction/assemblies/native.toml"
         CACHE FILEPATH "Native public-port contract harness")
 endif()

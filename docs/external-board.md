@@ -51,7 +51,7 @@ python "$NEXUS_SOURCE/tools/configure/configure.py" init \
   --output "$PRODUCT_DIR/platform.toml"
 python "$NEXUS_SOURCE/tools/configure/configure.py" provider-check \
   --assembly "$PRODUCT_DIR/platform.toml" \
-  --expect-family stm32f407 --expect-part STM32F407ZGT6 --json
+  --expect-family stm32f4 --expect-part STM32F407ZGT6 --json
 python "$NEXUS_SOURCE/tools/configure/configure.py" explain \
   --assembly "$PRODUCT_DIR/platform.toml" --json
 python "$NEXUS_SOURCE/tools/configure/configure.py" list-bindings \

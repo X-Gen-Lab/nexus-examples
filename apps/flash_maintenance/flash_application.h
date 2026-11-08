@@ -21,8 +21,8 @@ typedef struct {
     bool verified;
 } example_flash_report_t;
 /**
- * \brief           Erase one selected sector, program and verify one flashword.
- * \param[in]       region: Application-reserved writable sector; 32-byte unit.
+ * \brief           Erase one selected sector, program and verify 32 bytes.
+ * \param[in]       region: Reserved writable sector; program unit divides 32.
  * \param[in]       authorized: Explicit product maintenance admission.
  * \param[in]       deadline: Absolute live Core deadline, never a duration.
  * \param[in,out]   payload: Separate caller-owned 32-byte writable RAM buffer.
@@ -31,11 +31,10 @@ typedef struct {
  * \note            Serialized Thread only. The caller joins every other master
  *                  and owns execution, voltage, watchdog and power-loss policy.
  *                  Returning Flash calls settle their pulse; a stuck physical
- *                  pulse may never return. No retry programs an ECC word twice.
+ *                  pulse may never return. There is no automatic retry.
  *                  Rejected authorization performs no Flash operation.
- *                  The exact H743 provider rejects payload inside physical
- *                  Flash or its private RAM pod; keep the separate caller
- *                  buffer alive until this synchronous function returns.
+ *                  The selected provider owns physical buffer admission. Keep
+ *                  the separate caller RAM alive until this function returns.
  */
 nx_result_t example_flash_maintenance(const nx_flash_region_t* region,
                                       bool authorized, nx_time_us_t deadline,

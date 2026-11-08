@@ -25,11 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout pinned SDK and recursive dependencies
+      - name: Checkout application sources
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          submodules: recursive
-          fetch-depth: 0
+          submodules: false
+          fetch-depth: 1
+      - name: Checkout pinned SDK
+        run: git submodule update --init --depth 1 -- external/nexus
       - name: Validate candidate reference
         if: github.event_name == 'workflow_dispatch'
         env:
@@ -39,15 +41,15 @@ jobs:
             echo "Candidate must be a complete lowercase 40-digit commit SHA" >&2
             exit 1
           fi
-      - name: Checkout explicit candidate SDK and recursive dependencies
+      - name: Checkout explicit candidate SDK
         if: github.event_name == 'workflow_dispatch' && inputs.candidate_nexus_ref != ''
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: X-Gen-Lab/nexus
           ref: ${{ inputs.candidate_nexus_ref }}
           path: external/nexus
-          submodules: recursive
-          fetch-depth: 0
+          submodules: false
+          fetch-depth: 1
       - name: Setup Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
@@ -67,6 +69,8 @@ jobs:
           python3 scripts/setup_dev_tools.py --skip-hooks
           .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
           echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
+      - name: Prepare selected SDK dependencies
+        run: python3 external/nexus/tools/dev/dev.py prepare --scope native --allow-network
       - name: Verify source dependency identity
         env:
           CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
@@ -89,6 +93,7 @@ jobs:
           python3 external/nexus/cmake/package/package_source_sdk.py \
             --source "$GITHUB_WORKSPACE/external/nexus" \
             --output "$RUNNER_TEMP/nexus-source-sdk" \
+            --host-support --component network --component tls --component mqtt \
             | tee build/installed-native/sdk-preparation.json
           cp "$RUNNER_TEMP/nexus-source-sdk/share/nexus/src/.nexus-source-sdk.json" \
             build/installed-native/source-sdk-manifest.json
@@ -106,6 +111,7 @@ jobs:
             -DNEXUS_EXPECTED_SOURCE_REVISION="$SDK_COMMIT" \
             -DNEXUS_ASSEMBLY_FILE="$GITHUB_WORKSPACE/reproduction/assemblies/native.toml" \
             -DNEXUS_BUILD_TESTS=OFF -DNEXUS_BUILD_WORKLOAD=OFF \
+            -DNEXUS_TEST_SUPPORT=ON \
             -DNEXUS_ENABLE_SANITIZERS=ON -DCMAKE_BUILD_TYPE=Debug \
             2>&1 | tee build/installed-native/configure.log
       - name: Build the installed Native consumer
@@ -172,24 +178,18 @@ jobs:
           - stm32-qiming-freertos
           - stm32-sky-baremetal
           - stm32-sky-freertos
-          - gd32-liangshan-baremetal
-          - gd32-liangshan-freertos
-          - stm32-h743-nucleo-baremetal
-          - stm32-h743-nucleo-freertos
-          - stm32-u575-nucleo-baremetal
-          - stm32-u575-nucleo-freertos
-          - stm32-f103-reference-baremetal
-          - stm32-f103-reference-freertos
-          - gd32-f303-reference-baremetal
-          - gd32-f303-reference-freertos
-          - stm32-g474-reference-baremetal
-          - stm32-g474-reference-freertos
+          - stm32-qiming-core-baremetal
+          - stm32-qiming-core-freertos
+          - stm32-qiming-v41-baremetal
+          - stm32-qiming-v41-freertos
     steps:
-      - name: Checkout pinned SDK and recursive dependencies
+      - name: Checkout application sources
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          submodules: recursive
-          fetch-depth: 0
+          submodules: false
+          fetch-depth: 1
+      - name: Checkout pinned SDK
+        run: git submodule update --init --depth 1 -- external/nexus
       - name: Validate candidate reference
         if: github.event_name == 'workflow_dispatch'
         env:
@@ -199,15 +199,15 @@ jobs:
             echo "Candidate must be a complete lowercase 40-digit commit SHA" >&2
             exit 1
           fi
-      - name: Checkout explicit candidate SDK and recursive dependencies
+      - name: Checkout explicit candidate SDK
         if: github.event_name == 'workflow_dispatch' && inputs.candidate_nexus_ref != ''
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: X-Gen-Lab/nexus
           ref: ${{ inputs.candidate_nexus_ref }}
           path: external/nexus
-          submodules: recursive
-          fetch-depth: 0
+          submodules: false
+          fetch-depth: 1
       - name: Setup Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
@@ -227,6 +227,8 @@ jobs:
           python3 scripts/setup_dev_tools.py --skip-hooks
           .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
           echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
+      - name: Prepare selected SDK dependencies
+        run: python3 external/nexus/tools/dev/dev.py prepare --scope native --allow-network
       - name: Verify source dependency identity
         env:
           CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
@@ -242,44 +244,23 @@ jobs:
           echo "$RUNNER_TEMP/nexus-arm-toolchain/bin" >> "$GITHUB_PATH"
       - name: Build real ARM firmware
         run: python3 scripts/build.py --preset ${{ matrix.preset }} --parallel 4
-      - name: Build the standalone UART FIFO software reference
-        if: matrix.preset == 'stm32-h743-nucleo-baremetal' || matrix.preset == 'stm32-u575-nucleo-baremetal'
-        env:
-          PRESET: ${{ matrix.preset }}
-        run: |
-          set -euo pipefail
-          case "$PRESET" in
-            stm32-h743-nucleo-baremetal) reference=h743 ;;
-            stm32-u575-nucleo-baremetal) reference=u575 ;;
-            *) exit 1 ;;
-          esac
-          fifo_build="$GITHUB_WORKSPACE/build/$PRESET/uart-fifo"
-          mkdir -p "$fifo_build"
-          cmake -S apps/uart_fifo_acquisition -B "$fifo_build" -G Ninja \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/external/nexus/cmake/toolchains/arm-gcc.cmake" \
-            -DNEXUS_SOURCE="$GITHUB_WORKSPACE/external/nexus" \
-            -DNEXUS_ASSEMBLY_FILE="$GITHUB_WORKSPACE/external/nexus/cmake/package/verification/io_evolution/${reference}-uart-fifo.toml" \
-            2>&1 | tee "$fifo_build/configure.log"
-          cmake --build "$fifo_build" --target uart_fifo_acquisition --parallel 4 \
-            2>&1 | tee "$fifo_build/build.log"
       - name: Build standalone recipes and all MCU starters
         if: >-
           matrix.preset == 'stm32-qiming-freertos' ||
-          matrix.preset == 'stm32-h743-nucleo-baremetal' ||
           matrix.preset == 'stm32-qiming-baremetal' ||
           matrix.preset == 'stm32-sky-baremetal' ||
-          matrix.preset == 'gd32-liangshan-baremetal'
+          matrix.preset == 'stm32-qiming-core-baremetal' ||
+          matrix.preset == 'stm32-qiming-v41-baremetal'
         env:
           PRESET: ${{ matrix.preset }}
         run: |
           set -euo pipefail
           case "$PRESET" in
             stm32-qiming-freertos) recipe=apps/shared_spi_runtime; target=shared_spi_runtime ;;
-            stm32-h743-nucleo-baremetal) recipe=apps/stream_recovery/h743; target=continuous_rx ;;
             stm32-qiming-baremetal) recipe=templates/qiming; target=nexus_starter ;;
             stm32-sky-baremetal) recipe=templates/sky; target=nexus_starter ;;
-            gd32-liangshan-baremetal) recipe=templates/liangshan; target=nexus_starter ;;
+            stm32-qiming-core-baremetal) recipe=templates/qiming-core; target=nexus_starter ;;
+            stm32-qiming-v41-baremetal) recipe=templates/qiming-v41; target=nexus_starter ;;
             *) exit 1 ;;
           esac
           recipe_build="$GITHUB_WORKSPACE/build/$PRESET/recipe"
@@ -296,41 +277,6 @@ jobs:
             --resolved "$recipe_build/nexus/generated/resolved.json" \
             --budget "$recipe_build/nexus/generated/resource-budget.json" \
             --report "$recipe_build/resource-budget.json"
-      - name: Build advanced runtime recipes
-        if: matrix.preset == 'stm32-h743-nucleo-baremetal' || matrix.preset == 'stm32-u575-nucleo-baremetal'
-        env:
-          PRESET: ${{ matrix.preset }}
-        run: |
-          set -euo pipefail
-          case "$PRESET" in
-            stm32-h743-nucleo-baremetal)
-              recipes=(apps/stream_recovery/h743_cache_on:continuous_rx_cache_on
-                       apps/runtime_pause/h743:runtime_pause
-                       apps/flash_maintenance/h743:flash_maintenance) ;;
-            stm32-u575-nucleo-baremetal)
-              recipes=(apps/retained_stop2/u575:retained_stop2
-                       apps/retained_stop2/u575_copy:retained_stop2_copy
-                       apps/retained_stop2/u575_lptim1:retained_stop2_lptim1) ;;
-            *) exit 1 ;;
-          esac
-          for specification in "${recipes[@]}"; do
-            recipe="${specification%:*}"
-            target="${specification#*:}"
-            recipe_build="$GITHUB_WORKSPACE/build/$PRESET/advanced/$target"
-            mkdir -p "$recipe_build"
-            cmake -S "$recipe" -B "$recipe_build" -G Ninja \
-              -DCMAKE_BUILD_TYPE=Release \
-              -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/external/nexus/cmake/toolchains/arm-gcc.cmake" \
-              -DNEXUS_SOURCE="$GITHUB_WORKSPACE/external/nexus" \
-              2>&1 | tee "$recipe_build/configure.log"
-            cmake --build "$recipe_build" --target "$target" --parallel 2 \
-              2>&1 | tee "$recipe_build/build.log"
-            python3 external/nexus/tools/measurement/resources.py \
-              --elf "$recipe_build/bin/$target.elf" \
-              --resolved "$recipe_build/nexus/generated/resolved.json" \
-              --budget "$recipe_build/nexus/generated/resource-budget.json" \
-              --report "$recipe_build/resource-budget.json"
-          done
       - name: Verify physical ELF identity and each RAM/Flash budget
         run: >-
           python3 external/nexus/tools/measurement/resources.py
@@ -346,17 +292,14 @@ jobs:
           --budget build/${{ matrix.preset }}/nexus/generated/resource-budget.json
           --report build/${{ matrix.preset }}/uart-owner-resource-budget.json
       - name: Prepare the unbound physical station work plan
-        if: ${{ !startsWith(matrix.preset, 'stm32-f103-reference-') && !startsWith(matrix.preset, 'gd32-f303-reference-') }}
         env:
           PRESET: ${{ matrix.preset }}
         run: |
           case "$PRESET" in
-            stm32-qiming-*) fixture=stm32f407_qiming_v31 ;;
             stm32-sky-*) fixture=stm32f407ve_sky_qingchun ;;
-            gd32-liangshan-*) fixture=gd32f470_liangshan ;;
-            stm32-h743-nucleo-*) fixture=stm32h743_nucleo_zi2 ;;
-            stm32-u575-nucleo-*) fixture=stm32u575_nucleo_zi_q ;;
-            stm32-g474-reference-*) fixture=stm32g474re_hse24_reference ;;
+            stm32-qiming-core-*) fixture=stm32f407zg_qiming_core ;;
+            stm32-qiming-v41-*) fixture=stm32f407zg_qiming_v41 ;;
+            stm32-qiming-*) fixture=stm32f407_qiming_v31 ;;
             *) exit 1 ;;
           esac
           python3 -B external/nexus/tools/hil/prepare.py \
@@ -378,16 +321,9 @@ jobs:
             build/${{ matrix.preset }}/compile_commands.json
             build/${{ matrix.preset }}/nexus/generated/*
             build/${{ matrix.preset }}/bin/*
-            build/${{ matrix.preset }}/uart-fifo/configure.log
-            build/${{ matrix.preset }}/uart-fifo/build.log
-            build/${{ matrix.preset }}/uart-fifo/CMakeCache.txt
-            build/${{ matrix.preset }}/uart-fifo/compile_commands.json
-            build/${{ matrix.preset }}/uart-fifo/nexus/generated/*
-            build/${{ matrix.preset }}/uart-fifo/bin/*
             build/${{ matrix.preset }}/recipe/configure.log
             build/${{ matrix.preset }}/recipe/build.log
             build/${{ matrix.preset }}/recipe/resource-budget.json
             build/${{ matrix.preset }}/recipe/nexus/generated/*
             build/${{ matrix.preset }}/recipe/bin/*
-            build/${{ matrix.preset }}/advanced/
           retention-days: 14

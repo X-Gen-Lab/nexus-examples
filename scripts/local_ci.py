@@ -52,30 +52,14 @@ def arm_presets(root, selected=()):
 
 def standalones(preset):
     """Existing independent CMake consumers selected by their workflow rows."""
-    rows = []
-    for family in ("h743", "u575"):
-        if preset == f"stm32-{family}-nucleo-baremetal":
-            rows.append(("apps/uart_fifo_acquisition", "uart_fifo_acquisition",
-                         f"cmake/package/verification/io_evolution/{family}-uart-fifo.toml"))
     recipes = {
         "stm32-qiming-freertos": ("apps/shared_spi_runtime", "shared_spi_runtime"),
-        "stm32-h743-nucleo-baremetal": ("apps/stream_recovery/h743", "continuous_rx"),
         "stm32-qiming-baremetal": ("templates/qiming", "nexus_starter"),
         "stm32-sky-baremetal": ("templates/sky", "nexus_starter"),
-        "gd32-liangshan-baremetal": ("templates/liangshan", "nexus_starter"),
+        "stm32-qiming-core-baremetal": ("templates/qiming-core", "nexus_starter"),
+        "stm32-qiming-v41-baremetal": ("templates/qiming-v41", "nexus_starter"),
     }
-    if preset in recipes:
-        rows.append((*recipes[preset], None))
-    if preset == "stm32-h743-nucleo-baremetal":
-        rows.extend((("apps/stream_recovery/h743_cache_on",
-                      "continuous_rx_cache_on", None),
-                     ("apps/runtime_pause/h743", "runtime_pause", None),
-                     ("apps/flash_maintenance/h743", "flash_maintenance", None)))
-    if preset == "stm32-u575-nucleo-baremetal":
-        rows.extend((("apps/retained_stop2/u575", "retained_stop2", None),
-                     ("apps/retained_stop2/u575_copy", "retained_stop2_copy", None),
-                     ("apps/retained_stop2/u575_lptim1", "retained_stop2_lptim1", None)))
-    return rows
+    return [(*recipes[preset], None)] if preset in recipes else []
 
 
 def fixture_for(preset):
@@ -83,12 +67,8 @@ def fixture_for(preset):
     prefixes = {
         "stm32-qiming": "stm32f407_qiming_v31",
         "stm32-sky": "stm32f407ve_sky_qingchun",
-        "gd32-liangshan": "gd32f470_liangshan",
-        "stm32-h743-nucleo": "stm32h743_nucleo_zi2",
-        "stm32-u575-nucleo": "stm32u575_nucleo_zi_q",
-        "stm32-g474-reference": "stm32g474re_hse24_reference",
-        "stm32-f103-reference": None,
-        "gd32-f303-reference": None,
+        "stm32-qiming-core": "stm32f407zg_qiming_core",
+        "stm32-qiming-v41": "stm32f407zg_qiming_v41",
     }
     board, _, backend = preset.rpartition("-")
     if board not in prefixes or backend not in ("baremetal", "freertos"):
@@ -176,7 +156,9 @@ class LocalCI:
         if installed_sdk is None:
             self.command("sdk-package", [sys.executable,
                          self.source / "cmake/package/package_source_sdk.py",
-                         "--source", self.source, "--output", prefix])
+                         "--source", self.source, "--output", prefix, "--host-support",
+                         "--component", "network", "--component", "tls",
+                         "--component", "mqtt"])
         self.installed(prefix)
 
     def installed(self, prefix):
@@ -192,6 +174,7 @@ class LocalCI:
             "-DNEXUS_EXPECTED_SOURCE_REVISION=" + self.identity["nexus_revision"],
             f"-DNEXUS_ASSEMBLY_FILE={self.root / 'reproduction/assemblies/native.toml'}",
             "-DNEXUS_BUILD_TESTS=OFF", "-DNEXUS_BUILD_WORKLOAD=OFF",
+            "-DNEXUS_TEST_SUPPORT=ON",
             "-DNEXUS_ENABLE_SANITIZERS=ON", "-DCMAKE_BUILD_TYPE=Debug"])
         self.command("installed-build", ["cmake", "--build", build,
                                           "--parallel", str(self.jobs)])

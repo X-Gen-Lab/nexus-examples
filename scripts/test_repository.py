@@ -19,10 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REFERENCE_PRESETS = frozenset({
     "native-debug",
     *(f"{board}-{backend}" for board in (
-        "stm32-qiming", "stm32-sky", "gd32-liangshan",
-        "stm32-h743-nucleo", "stm32-u575-nucleo",
-        "stm32-f103-reference", "gd32-f303-reference",
-        "stm32-g474-reference",
+        "stm32-qiming", "stm32-sky", "stm32-qiming-core", "stm32-qiming-v41",
     ) for backend in ("baremetal", "freertos")),
 })
 
@@ -76,7 +73,7 @@ def verify_presets():
     configured = sections["configurePresets"]
     visible = {name for name, entry in configured.items() if not entry.get("hidden", False)}
     if visible != REFERENCE_PRESETS:
-        raise ValueError("The reference matrix requires Native and the sixteen maintained ARM presets")
+        raise ValueError("The reference matrix requires Native and eight F407 ARM presets")
     for name, entry in configured.items():
         inherited = entry.get("inherits", [])
         if isinstance(inherited, str):
@@ -109,6 +106,7 @@ def candidate_commit(value):
 def prepared_submodules(report):
     """Project the pinned SDK's verified Native closure, without another list."""
     expected = {"schema_version", "kind", "status", "scope", "backend",
+                "components", "host_support",
                 "family", "network_authorized", "submodules",
                 "recursive_submodules"}
     if (not isinstance(report, dict) or set(report) != expected or
@@ -117,6 +115,7 @@ def prepared_submodules(report):
             report["kind"] != "dependency_preparation" or
             report["status"] != "verified" or report["scope"] != "native" or
             report["backend"] != "baremetal" or report["family"] is not None or
+            report["components"] != [] or report["host_support"] is not False or
             report["network_authorized"] is not False):
         raise ValueError("SDK dependency preparation report is not verified")
 
@@ -195,8 +194,10 @@ def verify(source, override, candidate_revision=None):
         except (OSError, ValueError) as error:
             raise ValueError("SDK dependency preparation report is invalid") from error
     vendor = checked_output([
-        sys.executable, str(source / "scripts/ci/verify_vendor_source.py"),
-        "--root", str(source / "vendors/gigadevice/gd32f4xx"),
+        sys.executable, str(source / "tools/maintenance/stm32f4_hal_lock.py"),
+        "--source", str(source / "vendors/st/stm32f4_hal"),
+        "--lock", str(source / "dependencies/stm32f4-hal.lock.json"),
+        "--cmsis-source", str(source / "vendors/st/cmsis_device_f4"),
     ], ROOT)
     return {
         "schema_version": 1,
@@ -217,7 +218,7 @@ def verify(source, override, candidate_revision=None):
         "dependency_preparation": {"scope": "native",
                                    "network_authorized": False,
                                    "status": preparation},
-        "reviewed_vendor_import": json.loads(vendor),
+        "stm32f4_vendor_verification": json.loads(vendor),
         "hardware_verified": False,
     }
 

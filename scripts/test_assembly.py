@@ -15,7 +15,7 @@ class ExampleAssemblyTests(unittest.TestCase):
         presets = json.loads((ROOT / "CMakePresets.json").read_text())
         visible = [entry for entry in presets["configurePresets"]
                    if not entry.get("hidden")]
-        self.assertEqual(len(visible), 17)
+        self.assertEqual(len(visible), 9)
         source = sdk_root()
         with tempfile.TemporaryDirectory(prefix="example TOML resolution ") as value:
             directory = Path(value)
@@ -27,7 +27,8 @@ class ExampleAssemblyTests(unittest.TestCase):
                     output = directory / preset["name"]
                     result = subprocess.run(
                         [sys.executable, "-B", str(source / "tools/configure/configure.py"),
-                         "--assembly", str(assembly), "--output", str(output)],
+                         "--assembly", str(assembly), "--output", str(output),
+                         *(["--test-support"] if preset["name"] == "native-debug" else [])],
                         capture_output=True, text=True, timeout=30)
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     resolved = json.loads((output / "resolved.json").read_text())

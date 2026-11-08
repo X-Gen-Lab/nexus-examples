@@ -26,3 +26,4 @@ capacity = 32
 
 [uart.uart1.irq]
 priority = 5
+calls_os = true

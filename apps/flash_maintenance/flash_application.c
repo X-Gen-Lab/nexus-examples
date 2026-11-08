@@ -27,6 +27,14 @@ nx_result_t example_flash_maintenance(const nx_flash_region_t* region,
         return result;
     }
     const nx_flash_geometry_t* geometry = nx_flash_port_geometry(region->port);
+    /* Region bounds alone do not establish programming geometry. Reject
+     * incompatible storage before issuing the destructive erase operation.
+     */
+    if (geometry == NULL || geometry->sectors == NULL ||
+        geometry->program_unit == 0U || 32U % geometry->program_unit != 0U ||
+        region->offset % geometry->program_unit != 0U || region->size < 32U) {
+        return NX_ERROR_INVALID;
+    }
     bool whole_sector = false;
     for (size_t index = 0U; index < geometry->sector_count; ++index) {
         const nx_flash_sector_t* sector = &geometry->sectors[index];
@@ -35,11 +43,11 @@ nx_result_t example_flash_maintenance(const nx_flash_region_t* region,
             break;
         }
     }
-    if (!whole_sector || geometry->program_unit != 32U || region->size < 32U) {
+    if (!whole_sector) {
         return NX_ERROR_INVALID;
     }
-    /* Physical Flash is excluded by this provider's input alias guard. Fill
-     * the caller's writable RAM object before starting either physical pulse.
+    /* Validation already established a nonzero programming unit. Fill the
+     * separate caller-owned RAM before requesting any erase/program operation.
      */
     memset(payload, 0, 32U);
     payload[0] = 0x4eU;

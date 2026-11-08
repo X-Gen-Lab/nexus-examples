@@ -4,7 +4,7 @@
   "templates": {
     "native": {
       "files": {
-        "CMakeLists.txt": "6f3089febf9a395f544cf5ea99aa9af456ed4e1f24e00e4916bdf12b08b499c1",
+        "CMakeLists.txt": "d09c4e651a526dbb72d33beeb5a0c2acaa0a243fb5791ac3baa61df0dd6e1ff3",
         "README.md": "ff536b62b80f360d33b5db0bb1c3c68312f6dc2f9ed5266ea14b837fb442fc99",
         "assembly.toml": "1c6763588ed7cb6b7163cdda7d01bd6a62200654ca58987bc8187e48f14eee70",
         "main.c": "260c8b0d755ccf686e33a06140f86701bc0cce5e9333a02ffc06423d649bcdd1"
@@ -31,18 +31,6 @@
         "CMakeLists.txt": "6f3089febf9a395f544cf5ea99aa9af456ed4e1f24e00e4916bdf12b08b499c1",
         "README.md": "3ab5582cac9f8876c610cdf3ac979fb224fb954bc07f748efa659e4db4665434",
         "assembly.toml": "7d5cad636c163cc161c3bb310d1666cebaa0f02b155becf53cd953c7db553e07",
-        "main.c": "260c8b0d755ccf686e33a06140f86701bc0cce5e9333a02ffc06423d649bcdd1"
-      },
-      "platform": {
-        "interface_epoch": 1,
-        "assembly_schema": 2
-      }
-    },
-    "liangshan": {
-      "files": {
-        "CMakeLists.txt": "6f3089febf9a395f544cf5ea99aa9af456ed4e1f24e00e4916bdf12b08b499c1",
-        "README.md": "86036caf539de99cdbdf2d33e091d21c4904f404a4e12d64bba2399a5813c60e",
-        "assembly.toml": "f1a964aa55e99b4d852bd4e3e1885c9bc4c824592af0f223c2c97f4058aae4ee",
         "main.c": "260c8b0d755ccf686e33a06140f86701bc0cce5e9333a02ffc06423d649bcdd1"
       },
       "platform": {

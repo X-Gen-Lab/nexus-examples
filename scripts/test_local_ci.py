@@ -65,7 +65,8 @@ class LocalCiContracts(unittest.TestCase):
     def test_fixtures_are_explicit_and_unknown_boards_cannot_prepare_hil(self):
         self.assertEqual(local_ci.fixture_for("stm32-qiming-baremetal"),
                          "stm32f407_qiming_v31")
-        self.assertIsNone(local_ci.fixture_for("gd32-f303-reference-freertos"))
+        with self.assertRaises(ValueError):
+            local_ci.fixture_for("gd32-f303-reference-freertos")
         with self.assertRaisesRegex(ValueError, "fixture"):
             local_ci.fixture_for("unreviewed-board-baremetal")
 
@@ -162,20 +163,14 @@ class LocalCiContracts(unittest.TestCase):
             cache.write_text(f"CMAKE_C_COMPILER:STRING={toolchain}/bin/arm-none-eabi-gcc\n")
             local_ci.verify_arm_cache(build, toolchain)
 
-    def test_standalone_targets_keep_software_scope_and_all_thirteen_consumers(self):
+    def test_current_standalones_match_f407_software_recipes(self):
         rows = [row for preset in local_ci.arm_presets(ROOT)
                 for row in local_ci.standalones(preset)]
-        self.assertEqual(len(rows), 13)
-        self.assertEqual(sum(row[1] == "nexus_starter" for row in rows), 3)
-        self.assertEqual(sum(row[1] == "uart_fifo_acquisition" for row in rows), 2)
-        self.assertIn(("apps/shared_spi_runtime", "shared_spi_runtime", None), rows)
-        self.assertIn(("apps/stream_recovery/h743_cache_on",
-                       "continuous_rx_cache_on", None), rows)
-        self.assertIn(("apps/runtime_pause/h743", "runtime_pause", None), rows)
-        self.assertIn(("apps/flash_maintenance/h743", "flash_maintenance", None), rows)
-        self.assertIn(("apps/retained_stop2/u575", "retained_stop2", None), rows)
-        self.assertIn(("apps/retained_stop2/u575_copy", "retained_stop2_copy", None), rows)
-        self.assertIn(("apps/retained_stop2/u575_lptim1", "retained_stop2_lptim1", None), rows)
+        self.assertEqual({
+            ("apps/shared_spi_runtime", "shared_spi_runtime", None),
+            *(("templates/" + name, "nexus_starter", None)
+              for name in ("qiming", "sky", "qiming-core", "qiming-v41")),
+        }, set(rows))
 
 
 if __name__ == "__main__":

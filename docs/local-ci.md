@@ -15,7 +15,7 @@ index 一致、平台源码干净，lock 与 Gitlink 对应同一完整 commit/t
 Use Linux x86_64, Python 3.12, Git, GCC/G++, the pinned CMake/Ninja and formatter.
 Install host dependencies explicitly; the runner never calls apt or pip. The SDK
 `doctor --target tools` checks the locked Python minimum and build tool versions.
-Both SDK source and its recursive dependencies must be present. A relocated source
+The SDK and its selected dependency closure must be prepared. A relocated source
 checkout is supported with exactly the same lock, clean tree and Gitlink checks.
 
 使用 Linux x86_64、Python 3.12、Git、GCC/G++ 及锁定的 CMake/Ninja/格式化工具。
@@ -88,11 +88,11 @@ Native 默认生成正式 SDK。可用 `--installed-sdk` 复用同一 commit/tre
 
 ## Workflow coverage / 工作流覆盖
 
-The hosted workflow has 14 Native steps and 14 ARM steps. This mapping covers all
-28 definitions; the ARM rows are expanded through the existing sixteen presets.
+The workflow and local runner cover one Native and eight F407 ARM presets.
+Only complete execution qualifies that matrix; selected scopes remain partial.
 
-工作流共 Native 14 步、ARM 14 步。以下覆盖全部 28 个定义；ARM 使用原有 16 个
-preset 展开。只跑某一 scope/preset 时，报告明确标记为非完整矩阵。
+工作流与本地 runner 覆盖一个 Native 和八个 F407 ARM preset。全部完成才是完整矩阵；
+部分 scope 或 preset 始终明确标记为部分结果。
 
 | Hosted step group | Local execution / 本地执行 |
 | --- | --- |
@@ -104,7 +104,7 @@ preset 展开。只跑某一 scope/preset 时，报告明确标记为非完整�
 | ARM toolchain and main firmware | Original locked installer; `build.py` for every selected preset; bounded `--parallel`, default 1. |
 | Standalone FIFO and recipes | Existing H743/U575 FIFO projects, shared SPI, continuous RX/cache-on, runtime pause, Flash maintenance, three retained Stop2 recipes and three MCU starters: thirteen actual consumers. |
 | Main/owner ELF budget checks | Existing resource checker for each actual ELF and its own generated resolution/budget. Standalone ELFs are also checked. |
-| HIL plan preparation | Original prepare tool, twelve reviewed board/backend plans; F103 and GD32F303 are not substituted with another PCB. `prepared_unbound` / `not_executed` only. |
+| HIL plan preparation | Original prepare tool, eight reviewed F407 board/backend plans; no retired Board fallback. `prepared_unbound` / `not_executed` only. |
 | Artifact upload; both jobs | Local retained logs, command receipts, existing build artifacts and run summary; no hosted upload or remote status is claimed. |
 
 ## Results and failures / 结果与失败
@@ -123,12 +123,12 @@ warm-build output. The exit code and summary must both indicate success.
 身份变化、空/旧/跳过测试报告均失败，不读取历史成功结果补齐。部分运行的成功
 不能替代完整矩阵；本地成功也不是 GitHub 托管检查或物理 HIL 成功。
 
-Three initial boards remain disconnected. See [Board facts](boards.md) and
+All four F407 Boards remain disconnected. See [Board facts](boards.md) and
 [HIL preparation](delivery-preparation.md#hil-readiness) before selecting any
 station. Never fill an observed chip UID, probe serial or wiring field from a
 software reference. The runner has no station binding or acquisition option.
 
-首发三板尚未接入。芯片 UID、探针编号、接线等必须来自实际观测，不能由软件参考
+四块 F407 Board 尚未接入。芯片 UID、探针编号、接线等必须来自实际观测，不能由软件参考
 补造。本入口仅准备计划，没有绑定 station、采集、自动烧写或破坏性测试选项。
 
 To inspect one prepared plan after a successful source build, the existing
@@ -143,13 +143,14 @@ python external/nexus/tools/hil/prepare.py \
   --report build/qiming-hil-preparation.json
 ```
 
-The three initial mappings are Qiming → `stm32f407_qiming_v31`, Sky →
-`stm32f407ve_sky_qingchun`, Liangshan → `gd32f470_liangshan`. A Sky fixture
+The four mappings are Qiming V3.1 → `stm32f407_qiming_v31`, Sky →
+`stm32f407ve_sky_qingchun`, Qiming core → `stm32f407zg_qiming_core`, and
+Qiming V4.1 → `stm32f407zg_qiming_v41`. A Sky fixture
 paired with a Qiming resolution is rejected; unknown presets and `--station`
 on `local_ci.py` are rejected rather than choosing a fallback. Future physical
 admission uses the SDK's existing `tools/hil/admit.py` and observed station
 schema, after the equipment and workload have actually been reviewed.
 
-三板 fixture 必须对应上列准确身份。天空星 fixture 配启明 resolved 会拒绝；
+四板 fixture 必须对应上列准确身份。天空星 fixture 配启明 resolved 会拒绝；
 未知 preset 或向 local_ci 传入 --station 也会拒绝，不静默替换。将来接入实板后，
 使用原有 admit.py 和真实观测 station schema；先审核实际设备及负载，再执行采集。

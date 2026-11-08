@@ -4,6 +4,7 @@ get_target_property(gateway_family Nexus::Platform NEXUS_SOC_FAMILY)
 if(NOT gateway_family STREQUAL "native")
     message(FATAL_ERROR "The gateway host reference requires the Native backend")
 endif()
+nexus_add_lwip()
 nexus_add_coremqtt()
 nexus_add_tls()
 nexus_add_firmware(network_gateway SOURCES

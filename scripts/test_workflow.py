@@ -161,6 +161,9 @@ else:
                        'Prepare a complete publishable Source SDK')
         self.assertIn('cmake/package/package_source_sdk.py', prepare['run'])
         self.assertIn('--source "$GITHUB_WORKSPACE/external/nexus"', prepare['run'])
+        self.assertIn('--host-support', prepare['run'])
+        for component in ('network', 'tls', 'mqtt'):
+            self.assertIn('--component ' + component, prepare['run'])
         self.assertNotIn('--development-fixture', prepare['run'])
         configure = next(step for step in steps if step.get('name') ==
                          'Configure the installed Native consumer')
@@ -172,11 +175,30 @@ else:
         self.assertIn('-DNexus_DIR="$RUNNER_TEMP/nexus-source-sdk/lib/cmake/Nexus"',
                       configure['run'])
         self.assertIn('-DNEXUS_EXPECTED_SOURCE_REVISION="$SDK_COMMIT"', configure['run'])
+        self.assertIn('-DNEXUS_TEST_SUPPORT=ON', configure['run'])
         build = next(step for step in steps if step.get('name') ==
                      'Build the installed Native consumer')
         self.assertIn('cmake --build build/installed-native', build['run'])
         self.assertLess(steps.index(prepare), steps.index(configure))
         self.assertLess(steps.index(configure), steps.index(build))
+
+    def test_checkout_prepares_selected_dependencies_after_candidate_checkout(self):
+        document = yaml.load((ROOT / '.github/workflows/ci.yml').read_text(),
+                             Loader=yaml.BaseLoader)
+        for job in document['jobs'].values():
+            steps = job['steps']
+            checkouts = [step for step in steps
+                         if step.get('uses', '').startswith('actions/checkout@')]
+            for checkout in checkouts:
+                self.assertNotEqual(checkout['with'].get('submodules'), 'recursive')
+            prepare = next(step for step in steps if step.get('name') ==
+                           'Prepare selected SDK dependencies')
+            self.assertIn('tools/dev/dev.py prepare --scope native --allow-network',
+                          prepare['run'])
+            self.assertLess(steps.index(checkouts[-1]), steps.index(prepare))
+            verify = next(step for step in steps if step.get('name') ==
+                          'Verify source dependency identity')
+            self.assertLess(steps.index(prepare), steps.index(verify))
 
     def test_installed_consumer_requires_fresh_nonempty_ctest_and_retained_evidence(self):
         document = yaml.load((ROOT / '.github/workflows/ci.yml').read_text(),
@@ -201,127 +223,18 @@ else:
             self.assertIn('build/installed-native/' + path,
                           artifact['with']['path'])
 
-    def test_advanced_recipes_run_each_real_build_and_stop_on_failure(self):
-        document = yaml.load((ROOT / '.github/workflows/ci.yml').read_text(),
-                             Loader=yaml.BaseLoader)
-        steps = document['jobs']['arm']['steps']
-        advanced = next(step for step in steps if step.get('name') ==
-                        'Build advanced runtime recipes')
-        self.assertEqual(advanced['if'],
-                         "matrix.preset == 'stm32-h743-nucleo-baremetal' || "
-                         "matrix.preset == 'stm32-u575-nucleo-baremetal'")
-        stub = f'#!{sys.executable}\n' + r'''import json, os, sys
-from pathlib import Path
-command = Path(sys.argv[0]).name
-arguments = sys.argv[1:]
-with open(os.environ['ADVANCED_LOG'], 'a') as stream:
-    stream.write(json.dumps([command, *arguments]) + '\n')
-if command == 'cmake' and arguments[:1] == ['-S']:
-    phase = 'configure'
-    target = Path(arguments[arguments.index('-B') + 1]).name
-elif command == 'cmake' and arguments[:1] == ['--build']:
-    phase = 'build'
-    target = arguments[arguments.index('--target') + 1]
-elif command == 'python3' and '--elf' in arguments:
-    phase = 'resources'
-    target = Path(arguments[arguments.index('--elf') + 1]).stem
-else:
-    raise SystemExit(127)
-if (os.environ.get('ADVANCED_FAIL_PHASE') == phase and
-        os.environ.get('ADVANCED_FAIL_TARGET') == target):
-    raise SystemExit(17)
-'''
-        selections = {
-            'stm32-h743-nucleo-baremetal': [
-                ('apps/stream_recovery/h743_cache_on', 'continuous_rx_cache_on'),
-                ('apps/runtime_pause/h743', 'runtime_pause'),
-                ('apps/flash_maintenance/h743', 'flash_maintenance')],
-            'stm32-u575-nucleo-baremetal': [
-                ('apps/retained_stop2/u575', 'retained_stop2'),
-                ('apps/retained_stop2/u575_copy', 'retained_stop2_copy'),
-                ('apps/retained_stop2/u575_lptim1', 'retained_stop2_lptim1')],
-            'unreviewed-preset': [],
-        }
-        for preset, selected in selections.items():
-            failures = [('', '')] + [
-                (phase, target) for _, target in selected
-                for phase in ('configure', 'build', 'resources')]
-            for failed_phase, failed_target in failures:
-                with self.subTest(preset=preset, phase=failed_phase,
-                                  target=failed_target), \
-                    tempfile.TemporaryDirectory(prefix='advanced recipe ') as value:
-                    root = Path(value)
-                    tools = root / 'tools'
-                    tools.mkdir()
-                    for name in ('cmake', 'python3'):
-                        tool = tools / name
-                        tool.write_text(stub)
-                        tool.chmod(0o755)
-                    log = root / 'commands.jsonl'
-                    environment = dict(os.environ, GITHUB_WORKSPACE=str(root),
-                                       PRESET=preset, ADVANCED_LOG=str(log),
-                                       ADVANCED_FAIL_PHASE=failed_phase,
-                                       ADVANCED_FAIL_TARGET=failed_target)
-                    environment['PATH'] = str(tools) + os.pathsep + environment['PATH']
-                    result = subprocess.run(
-                        ['bash', '--noprofile', '--norc', '-e', '-o', 'pipefail',
-                         '-c', advanced['run']], cwd=root, env=environment,
-                        text=True, capture_output=True, timeout=10)
-                    calls = ([json.loads(line) for line in log.read_text().splitlines()]
-                             if log.exists() else [])
-                    expected_exit = (1 if not selected else
-                                     17 if failed_phase else 0)
-                    self.assertEqual(result.returncode, expected_exit,
-                                     result.stdout + result.stderr + repr(calls))
-                    expected = []
-                    for recipe, target in selected:
-                        for phase in ('configure', 'build', 'resources'):
-                            expected.append((phase, recipe, target))
-                            if (phase, target) == (failed_phase, failed_target):
-                                break
-                        if failed_phase and target == failed_target:
-                            break
-                    # Exact call order also rejects a later target or budget
-                    # running after a configure/build/resource checker fails.
-                    self.assertEqual(len(calls), len(expected))
-                    for call, (phase, recipe, target) in zip(calls, expected):
-                        build = root / 'build' / preset / 'advanced' / target
-                        if phase == 'configure':
-                            self.assertEqual(call[:3], ['cmake', '-S', recipe])
-                            self.assertEqual(call[call.index('-B') + 1], str(build))
-                            self.assertIn('-DCMAKE_BUILD_TYPE=Release', call)
-                            self.assertIn('-DNEXUS_SOURCE=' +
-                                          str(root / 'external/nexus'), call)
-                            self.assertIn('-DCMAKE_TOOLCHAIN_FILE=' + str(
-                                root / 'external/nexus/cmake/toolchains/arm-gcc.cmake'),
-                                call)
-                        elif phase == 'build':
-                            self.assertEqual(call[:3], ['cmake', '--build', str(build)])
-                            self.assertEqual(call[call.index('--target') + 1], target)
-                        else:
-                            self.assertEqual(call[0], 'python3')
-                            self.assertEqual((root / call[1]).resolve(), (
-                                root / 'external/nexus/tools/measurement/resources.py').resolve())
-                            for option, path in (
-                                    ('--elf', build / 'bin' / (target + '.elf')),
-                                    ('--resolved', build / 'nexus/generated/resolved.json'),
-                                    ('--budget', build / 'nexus/generated/resource-budget.json'),
-                                    ('--report', build / 'resource-budget.json')):
-                                self.assertEqual(call[call.index(option) + 1], str(path))
-        artifact = next(step for step in steps if step.get('name') ==
-                        'Retain firmware and static validation evidence')
-        self.assertIn('build/${{ matrix.preset }}/advanced/',
-                      artifact['with']['path'])
-
     def test_arm_hil_preparation_never_substitutes_an_unreviewed_reference_fixture(self):
         document = yaml.load((ROOT / '.github/workflows/ci.yml').read_text(),
                              Loader=yaml.BaseLoader)
         step = next(step for step in document['jobs']['arm']['steps']
                     if step.get('name') == 'Prepare the unbound physical station work plan')
-        self.assertIn("!startsWith(matrix.preset, 'stm32-f103-reference-')", step['if'])
-        self.assertIn("!startsWith(matrix.preset, 'gd32-f303-reference-')", step['if'])
-        self.assertIn('stm32-g474-reference-*) fixture=stm32g474re_hse24_reference',
-                      step['run'])
+        for board, fixture in (
+                ("stm32-qiming", "stm32f407_qiming_v31"),
+                ("stm32-sky", "stm32f407ve_sky_qingchun"),
+                ("stm32-qiming-core", "stm32f407zg_qiming_core"),
+                ("stm32-qiming-v41", "stm32f407zg_qiming_v41")):
+            self.assertIn(board + '-*) fixture=' + fixture, step['run'])
+
 
 
 if __name__ == '__main__':

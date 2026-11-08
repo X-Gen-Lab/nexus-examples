@@ -40,7 +40,7 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         git(self.source, "init", "--quiet")
         git(self.source, "remote", "add", "origin", "https://github.com/X-Gen-Lab/nexus.git")
         (self.source / "CMakeLists.txt").write_text("# identity fixture only\n")
-        vendor = self.source / "scripts/ci/verify_vendor_source.py"
+        vendor = self.source / "tools/maintenance/stm32f4_hal_lock.py"
         vendor.parent.mkdir(parents=True)
         vendor.write_text('print(\'{"kind":"tooling-import-fixture"}\')\n')
         admission = self.source / "tools/dev/dependencies.py"
@@ -62,7 +62,7 @@ class CandidateSDKIdentityTests(unittest.TestCase):
             '"commit": line[1:].split()[0]} for line in raw.splitlines()]\n'
             '    Path(sys.argv[7]).write_text(json.dumps({"schema_version": 1, '
             '"kind": "dependency_preparation", "status": "verified", '
-            '"scope": "native", "backend": "baremetal", "family": None, '
+            '"scope": "native", "backend": "baremetal", "family": None, "components": [], "host_support": False, '
             '"network_authorized": False, "submodules": rows, '
             '"recursive_submodules": rows}))\n'
             'print(mode)\n')
@@ -82,7 +82,7 @@ class CandidateSDKIdentityTests(unittest.TestCase):
             git(self.source, "update-index", "--add", "--cacheinfo", f"160000,{revision},{name}")
             gitmodules.append(f'[submodule "{name}"]\n\tpath = {name}\n\turl = https://example.invalid/{name}.git\n')
         (self.source / ".gitmodules").write_text("".join(gitmodules))
-        git(self.source, "add", "CMakeLists.txt", ".gitmodules", "scripts", "tools")
+        git(self.source, "add", "CMakeLists.txt", ".gitmodules", "tools")
         git(self.source, "commit", "--quiet", "-m", "formal SDK fixture")
         git(self.source, "submodule", "init")
         self.pinned = git(self.source, "rev-parse", "HEAD")

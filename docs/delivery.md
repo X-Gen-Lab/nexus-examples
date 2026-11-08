@@ -1,8 +1,10 @@
 # Delivery boundaries
 
-Software deliverables are five explicit application examples, seventeen explicit
-configuration presets, direct generated bindings, SDK-locked development hooks,
-source/dependency verification, finite Native execution and real MCU ELF budgets.
+当前交付范围以 [README](../README.md) 的九个 preset、五种模板和当前源码锁为准。
+以下 2026-10-12 数据为固定历史记录，不授予当前 F407 迭代资格。
+
+The current scope follows the README and source lock. The dated execution below
+is historical and does not qualify this changed SDK pin.
 Platform providers remain in Nexus; product policies remain external.
 
 The software execution recorded on 2026-10-12 passed for examples code commit

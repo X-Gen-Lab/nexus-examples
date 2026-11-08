@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "cb060a8de58166c4653dd9cd000c8fe01bd24a96",
-  "tree": "19829a466bb286703e3a6d555f58ba1b33e4fb80",
+  "commit": "3c9db67c17f40b6744e855f9065bb4500e8e7725",
+  "tree": "e70a43bdc76ffc395697f1cbe2b9f826a0c5cdfd",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Exact platform source and matching publishable Source SDK selected; private examples require fresh source and installed integration evidence, independent of the public SDK complete-plan result; physical HIL is not executed.",
+  "baseline_status": "Exact F407VE/ZG development SDK selected after source, eight ARM presets, five standalone consumers and installed Native integration; ordinary complete commit gates remain independent. Physical HIL is not executed; no release or sealed candidate is established.",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

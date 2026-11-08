@@ -154,9 +154,52 @@ TEST_F(FlashMaintenance, FailedReadPreservesItsErrorAfterTheSettledPulse) {
     EXPECT_FALSE(report.verified);
 }
 TEST_F(FlashMaintenance, AnotherProgrammingGeometryRejectsBeforeAnyPulse) {
-    geometry.program_unit = 8U;
+    geometry.program_unit = 64U;
     EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
               NX_ERROR_INVALID);
     EXPECT_FALSE(report.erased);
 }
+TEST_F(FlashMaintenance, UnalignedSectorRejectsBeforeDestroyingItsBytes) {
+    const nx_flash_sector_t unaligned[] = {{131073U, 131071U}};
+    geometry.program_unit = 4U;
+    geometry.sectors = unaligned;
+    geometry.sector_count = 1U;
+    region.offset = 131073U;
+    region.size = 131071U;
+    EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
+              NX_ERROR_INVALID);
+    EXPECT_FALSE(report.erased);
+}
+TEST_F(FlashMaintenance, MissingSectorTableRejectsBeforeDereference) {
+    geometry.sectors = nullptr;
+    EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
+              NX_ERROR_INVALID);
+    EXPECT_FALSE(report.erased);
+}
+TEST_F(FlashMaintenance, ZeroProgrammingUnitRejectsWithoutDivisionOrErase) {
+    geometry.program_unit = 0U;
+    EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
+              NX_ERROR_INVALID);
+    EXPECT_FALSE(report.erased);
+}
+class FlashProgramUnits : public FlashMaintenance,
+                          public testing::WithParamInterface<uint32_t> {};
+TEST_P(FlashProgramUnits, ProgramsAlignedPayloadAfterOneAuthorizedSectorErase) {
+    geometry.program_unit = GetParam();
+    testing::InSequence order;
+    expect_erase();
+    expect_program();
+    EXPECT_CALL(hardware, Read(131072U, testing::_, 32U))
+        .WillOnce([this](uint32_t, void* destination, size_t count) {
+            std::memcpy(destination, programmed, count);
+            return NX_SUCCESS;
+        });
+    EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
+              NX_SUCCESS);
+    EXPECT_TRUE(report.erased);
+    EXPECT_TRUE(report.programmed);
+    EXPECT_TRUE(report.verified);
+}
+INSTANTIATE_TEST_SUITE_P(CompatibleGeometry, FlashProgramUnits,
+                         testing::Values(1U, 2U, 4U, 8U, 16U, 32U));
 } /* namespace */

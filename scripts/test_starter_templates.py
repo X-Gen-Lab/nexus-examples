@@ -24,7 +24,7 @@ class StarterTemplateTests(unittest.TestCase):
         manifest = json.loads((ROOT / 'templates/manifest.json').read_text())
         self.assertEqual(manifest['schema'], 1)
         self.assertEqual(manifest['version'], 1)
-        self.assertTrue({'native', 'qiming', 'sky', 'liangshan'}.issubset(
+        self.assertTrue({'native', 'qiming', 'sky', 'qiming-core', 'qiming-v41'}.issubset(
             manifest['templates']))
         directories = {path.name for path in (ROOT / 'templates').iterdir()
                        if path.is_dir()}
@@ -52,7 +52,8 @@ class StarterTemplateTests(unittest.TestCase):
                     assembly = ROOT / 'templates' / name / 'assembly.toml'
                     result = subprocess.run(
                         ['python3', '-B', str(source / 'tools/configure/configure.py'),
-                         '--assembly', str(assembly), '--output', str(directory / name)],
+                         '--assembly', str(assembly), '--output', str(directory / name),
+                         *(['--test-support'] if name == 'native' else [])],
                         capture_output=True, text=True, timeout=30)
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     ir = json.loads((directory / name / 'resolved.json').read_text())
