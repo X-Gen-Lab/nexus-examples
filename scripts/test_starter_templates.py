@@ -22,6 +22,8 @@ class StarterTemplateTests(unittest.TestCase):
 
     def test_manifest_binds_every_owned_template_file(self):
         manifest = json.loads((ROOT / 'templates/manifest.json').read_text())
+        policy = json.loads((sdk_root() / 'dependencies/platform-compatibility.json')
+                            .read_text())
         self.assertEqual(manifest['schema'], 1)
         self.assertEqual(manifest['version'], 1)
         self.assertTrue({'native', 'qiming', 'sky', 'qiming-core', 'qiming-v41'}.issubset(
@@ -31,6 +33,7 @@ class StarterTemplateTests(unittest.TestCase):
         self.assertEqual(set(manifest['templates']), directories)
         for name, entry in manifest['templates'].items():
             with self.subTest(template=name):
+                self.assertEqual(set(entry), {'files', 'platform'})
                 directory = ROOT / 'templates' / name
                 actual = {str(path.relative_to(directory)):
                           hashlib.sha256(path.read_bytes()).hexdigest()
@@ -40,20 +43,27 @@ class StarterTemplateTests(unittest.TestCase):
                                  {'CMakeLists.txt', 'assembly.toml',
                                   'main.c', 'README.md'})
                 self.assertEqual(entry['platform'],
-                                 {'interface_epoch': 1, 'assembly_schema': 2})
+                                 {'interface_epoch': policy['factory_abi_epoch'],
+                                  'assembly_schema': 2})
 
-    def test_every_template_resolves_independently(self):
+    def test_current_templates_resolve_independently(self):
         source = sdk_root()
         with tempfile.TemporaryDirectory(prefix='starter configuration ') as value:
             directory = Path(value)
             manifest = json.loads((ROOT / 'templates/manifest.json').read_text())
-            for name in manifest['templates']:
+            policy = json.loads((source / 'dependencies/platform-compatibility.json')
+                                .read_text())
+            expected = {'interface_epoch': policy['factory_abi_epoch'],
+                        'assembly_schema': policy['schemas']['assembly_authoring']}
+            for name, entry in manifest['templates'].items():
+                self.assertEqual(entry['platform'], expected)
                 with self.subTest(template=name):
                     assembly = ROOT / 'templates' / name / 'assembly.toml'
-                    result = subprocess.run(
-                        ['python3', '-B', str(source / 'tools/configure/configure.py'),
-                         '--assembly', str(assembly), '--output', str(directory / name),
-                         *(['--test-support'] if name == 'native' else [])],
+                    command = ['python3', '-B', str(source / 'tools/configure/configure.py'),
+                               '--assembly', str(assembly), '--output', str(directory / name)]
+                    if name == 'native':
+                        command.append('--test-support')
+                    result = subprocess.run(command,
                         capture_output=True, text=True, timeout=30)
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     ir = json.loads((directory / name / 'resolved.json').read_text())
@@ -162,6 +172,19 @@ class StarterTemplateTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn('Nexus starter: transfer settled; platform stopped',
                           result.stdout)
+
+    def test_native_starter_explicitly_admits_the_host_model(self):
+        source = sdk_root()
+        with tempfile.TemporaryDirectory(prefix='native starter admission ') as value:
+            build = Path(value) / 'build'
+            result = subprocess.run([
+                'cmake', '-S', str(ROOT / 'templates/native'), '-B', str(build),
+                '-G', 'Ninja', '-DNEXUS_SOURCE:PATH=' + str(source),
+                '-DCMAKE_BUILD_TYPE=Debug'], capture_output=True, text=True,
+                timeout=60)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn('NEXUS_TEST_SUPPORT:BOOL=ON',
+                          (build / 'CMakeCache.txt').read_text())
 
 
 if __name__ == '__main__':

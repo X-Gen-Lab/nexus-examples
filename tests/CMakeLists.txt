@@ -1,7 +1,6 @@
-# The pinned Nexus source checkout verifies its locked Gitlink and clean source
-# before enabling host C++. Firmware never acquires the test runtime.
-include("${NEXUS_SOURCE}/cmake/testing/GoogleTest.cmake")
-nexus_host_google_test()
+# The application independently locks its host-only test framework.
+include("${CMAKE_CURRENT_LIST_DIR}/cmake/GoogleTest.cmake")
+examples_host_google_test()
 add_executable(owner_lifecycle_test owner_lifecycle_test.cpp
     owner_bootstrap_test.cpp
     scheduler_return_test.cpp
@@ -106,26 +105,11 @@ add_test(NAME developer_recipes_google COMMAND "${Python3_EXECUTABLE}" -B
 set_tests_properties(developer_recipes_google PROPERTIES TIMEOUT 30
     LABELS "native;example;GoogleTest")
 
-# Reuse the pinned SDK's real POSIX FreeRTOS kernel seam. This is a test-only
-# composition; Native Platform keeps its native backend and gains no RTOS port.
-find_package(Threads REQUIRED)
-set(NEXUS_SOURCE_DIR "${NEXUS_SOURCE}")
-add_subdirectory("${NEXUS_SOURCE}/tests/contracts/os_freertos_runtime"
-    freertos-kernel EXCLUDE_FROM_ALL)
-add_executable(shared_spi_freertos_host
-    "${PROJECT_SOURCE_DIR}/apps/shared_spi_runtime/main.c"
-    "${PROJECT_SOURCE_DIR}/apps/shared_spi_runtime/shared_spi_application.c")
-target_compile_definitions(shared_spi_freertos_host PRIVATE EXAMPLE_FREERTOS_HOST=1)
-target_link_libraries(shared_spi_freertos_host PRIVATE Nexus::Platform
-    Nexus::SpiOwner Nexus::Arch contract_os_freertos_posix
-    nexus_owned_warnings nexus_build_options)
-add_dependencies(shared_spi_freertos_host contract_os_freertos)
-add_test(NAME shared_spi_real_freertos COMMAND shared_spi_freertos_host)
-set_tests_properties(shared_spi_real_freertos PROPERTIES TIMEOUT 30
-    LABELS "native;example;FreeRTOS")
+include("${CMAKE_CURRENT_LIST_DIR}/cmake/FreeRTOSPosix.cmake")
 
 include("${CMAKE_CURRENT_LIST_DIR}/continuous_rx.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/advanced_recipes.cmake")
+# Non-F4 power recipes remain in the historical snapshot, outside this graph.
 
 # The product consumer uses the same real SPI owner and POSIX wait backend.
 add_executable(industrial_control_test industrial_control_test.cpp

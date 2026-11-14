@@ -612,7 +612,7 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
         nx_modbus_config_t modbus = {
             .address = 17U,
             .baudrate = 115200U,
-            .bits_per_character = 11U,
+            .bits_per_character = 10U,
             .tx_timeout_us = PRODUCT_TX_US,
             .abort_timeout_us = PRODUCT_ABORT_US,
             .registers = {app, read_registers, authorize, write_registers},

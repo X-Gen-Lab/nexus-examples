@@ -82,6 +82,7 @@ class LocalCiContracts(unittest.TestCase):
                 runner.installed(output / "SDK with spaces")
             configure = next(argv for name, argv in commands if name == "installed-configure")
             self.assertIn("-DNEXUS_EXPECTED_SOURCE_REVISION=" + "a" * 40, configure)
+            self.assertIn("-DNEXUS_TEST_SUPPORT=ON", configure)
             self.assertNotIn("NEXUS_SOURCE", runner.environment)
             self.assertEqual(runner.environment.get("PYTHONDONTWRITEBYTECODE"), "1")
             for name, argv in commands:

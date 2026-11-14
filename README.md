@@ -10,6 +10,12 @@ checks. Nexus owns reusable mechanisms. Keep application source and evidence
 inside this access boundary. The source lock and Gitlink select one exact SDK;
 a version string or a successful older run never substitutes for that identity.
 
+当前接口为 source epoch 5、TOML schema 2；精确 commit/tree 只由源码锁与
+Gitlink 选定。开发探针和旧结果不能替代同一 pin 的完整源码及 installed SDK 验收。
+
+The current interface uses source epoch 5 and TOML schema 2. The lock and Gitlink
+select the exact commit/tree; development probes and old runs do not qualify it.
+
 ```mermaid
 flowchart TD
     A[Application TOML and reviewed Board facts] --> B[Typed static configuration]
@@ -64,11 +70,27 @@ Native is explicit test support. Firmware stays C11; GoogleTest/GoogleMock are
 host-only. Factory lookup has no hardware effects. Applications own execution,
 borrowed storage and recovery, including storage retained after a failed drain.
 
+共享 Native Modbus 参考明确使用 115200、8N1、每字符 10 位；方向回调仅修改
+软件状态，不声明标准串行 Modbus 格式或实物 RS485 电气资格。
+The shared Native Modbus reference uses 115200/8N1/ten wire bits. Its direction
+callback changes software state; serial Modbus and RS485 physical qualification
+remain unexecuted.
+
+宿主 GoogleTest／GoogleMock 由本仓库独立锁定 `external/googletest`；固件 SDK
+不导出该框架。installed SDK 验证复用公开 JUnit 接口，默认只运行两个应用 CTest。
+真实 POSIX FreeRTOS 共享 SPI 应用保留为显式 source-only 测试；默认 Native preset
+明确关闭该选项，以免重复纳入平台 kernel-only 合同。
+The project pins its own host framework. Installed SDK checks use the public
+JUnit API and two application CTests. The real POSIX FreeRTOS shared-SPI
+application remains an explicit source-only test; the Native preset disables it
+by default to avoid repeating the platform kernel contract.
+
 ## 开发与验证 / Development and verification
 
 ```sh
-git submodule sync -- external/nexus
+git submodule sync -- external/nexus external/googletest
 git submodule update --init --depth 1 -- external/nexus
+git submodule update --init --depth 2 -- external/googletest
 python3 external/nexus/tools/dev/dev.py prepare --scope native --allow-network
 python3 scripts/setup_dev_tools.py
 .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt

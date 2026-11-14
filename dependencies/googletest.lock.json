@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "name": "googletest",
+  "version": "1.16.0",
+  "commit": "58ec32c09ed8a099e55cbdab9418597c4fd9b14f",
+  "upstream_commit": "6910c9d9165801d8827d628cb72eb7ea9dd538c5",
+  "path": "external/googletest",
+  "url": "https://github.com/X-Gen-Lab/googletest.git",
+  "upstream_url": "https://github.com/google/googletest.git",
+  "license": "BSD-3-Clause",
+  "scope": "host tests only; no firmware or configure-time network"
+}

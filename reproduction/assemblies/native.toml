@@ -20,6 +20,13 @@ binding = "uart0"
 mode = "irq"
 baud = 115200
 
+# Selected software UART: start + eight data + one stop, ten wire bits.
+[uart.uart0.frame]
+data_bits = 8
+parity = "none"
+stop_bits = 1
+flow = "none"
+
 [uart.uart0.rx]
 format = "events"
 capacity = 32

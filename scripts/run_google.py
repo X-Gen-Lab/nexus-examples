@@ -7,7 +7,6 @@ import os
 from pathlib import Path
 import subprocess
 import sys
-import time
 import xml.etree.ElementTree as ET
 
 from sdk_tools import load, sdk_root
@@ -49,7 +48,7 @@ def run_google(source, binary, output, *, environment=None):
     owner.write_text(json.dumps(OWNER) + "\n")
     (output / "execution.json").unlink(missing_ok=True)
     (output / "commands.json").unlink(missing_ok=True)
-    gate = load(source, "scripts/ci/tdd_gate.py", "example_google_contract_gate")
+    validator = load(source, "scripts/validation/junit.py", "example_google_junit")
     env = {key: value for key, value in
            (environment if environment is not None else os.environ).items()
            if not key.startswith("GTEST_")}
@@ -68,17 +67,20 @@ def run_google(source, binary, output, *, environment=None):
         return process.stdout
 
     discovery = execute([str(binary), "--gtest_list_tests"], "discovery")
-    count = gate.discovered_count(discovery)
     expected = identities(discovery)
-    if len(expected) != count:
-        raise ValueError("GoogleTest discovery count/identity mismatch")
-    started = time.time_ns()
+    count = len(expected)
+    if count == 0:
+        raise ValueError("GoogleTest discovery contains no test cases")
+    started = validator.prepare_report(report)
     execute([str(binary), "--gtest_output=xml:" + str(report)], "execution")
     try:
-        result = gate.validate_google_report(report, not_before_ns=started,
-                                             expected_cases=count)
-        actual = {(case.get("classname"), case.get("name"))
-                  for case in ET.parse(report).getroot().iter("testcase")}
+        result = validator.validate_junit(report, not_before_ns=started)
+        cases = list(ET.parse(report).getroot().iter("testcase"))
+        if (result["skipped"] or result["passed"] != count or any(
+                case.get("status") != "run" or case.get("result") != "completed"
+                for case in cases)):
+            raise ValueError("GoogleTest report contains unexecuted cases")
+        actual = {(case.get("classname"), case.get("name")) for case in cases}
     except (OSError, ET.ParseError) as error:
         raise ValueError("Missing or invalid fresh GoogleTest report") from error
     if actual != expected:

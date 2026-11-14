@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "106ffc2d0975da42c6f3064f0615b419152d8dd6",
-  "tree": "01831e9484512afab7a8123f894ea125b2823a4c",
+  "commit": "ba13686b91c94d19ef11acf910653ee2fcc9aa8b",
+  "tree": "fe6e8bcacfc59a159ecf2505ac39252866a5ef52",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Exact F407VE/ZG SDK selection for source, Native and installed consumer integration. Complete ordinary hooks and per-pin local CI remain independent requirements. Physical HIL is not executed; no release or sealed candidate is established.",
+  "baseline_status": "Exact source epoch 5 platform pin; software qualification requires fresh source and matching publishable Source SDK integration evidence; physical HIL is not executed.",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

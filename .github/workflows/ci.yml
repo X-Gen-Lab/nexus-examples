@@ -32,6 +32,8 @@ jobs:
           fetch-depth: 1
       - name: Checkout pinned SDK
         run: git submodule update --init --depth 1 -- external/nexus
+      - name: Checkout project host framework
+        run: git submodule update --init --depth 2 -- external/googletest
       - name: Validate candidate reference
         if: github.event_name == 'workflow_dispatch'
         env:

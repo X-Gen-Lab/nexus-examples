@@ -124,13 +124,16 @@ work, joins all producers, then stops the Native platform. MCU FreeRTOS retains
 clocks/Tick and a static keeper: producer joins do not prove scheduler teardown.
 
 Native 模型给两端点设置不同寄存器值，并核对各自结果，不仅检查“编译成功”。
-`shared_spi_real_freertos` 使用 SDK 现有 POSIX 测试接缝和真实固定 FreeRTOS 内核，
+显式开启 `NEXUS_EXAMPLES_FREERTOS_POSIX_TESTS` 后，`shared_spi_real_freertos`
+使用完整平台源码的 POSIX 测试接缝和真实固定 FreeRTOS 内核，
 验证相同 C11 应用的任务回收；Native Platform 本身仍选择 native 后端。目标 MCU
 独立工程使用 FreeRTOS、SPI1 PA5/PA6/PA7、PE4/PE3 两个低有效 CS 的 **F407ZG
 硅片软件 fixture**。它不代表启明、天空星开发板实际存在这些接线及外部设备。
 Native gives the endpoints distinct register contents and checks their values.
-`shared_spi_real_freertos` reuses the SDK POSIX fixture and the actual pinned
-FreeRTOS kernel. The Native Platform still selects its native backend. The MCU
+Opt-in `NEXUS_EXAMPLES_FREERTOS_POSIX_TESTS` reuses the development source POSIX
+fixture and the actual pinned FreeRTOS kernel for `shared_spi_real_freertos`.
+It is excluded from default installed-SDK acceptance; an explicit request without
+the development harness fails. The Native Platform still selects its native backend. The MCU
 standalone project selects FreeRTOS and an explicit **F407ZG silicon software
 fixture**: SPI1 PA5/PA6/PA7 and active-low PE4/PE3 CS. It claims no physical
 wiring or attached device on any of the four real Boards.
@@ -204,8 +207,8 @@ Failure retains truthful progress; it never invents atomicity or an erase region
 升级时先完成平台提交 P，再把 examples 的 `external/nexus` Gitlink 与
 `dependencies/nexus.lock.json` 同时更新为 P 并记录 tree；完整普通 gate 通过后提交
 examples 得到 E。发布索引关联 P、E、模板 manifest 摘要及实际 CI/产物，避免两仓
-相互引用未来提交。`interface_epoch=1`、`assembly_schema=2` 是兼容声明，不能替代
-精确源身份。旧结果不自动证明新 pin。
+相互引用未来提交。当前五种模板声明 `interface_epoch=5`、`assembly_schema=2`；历史模板仅在固定
+历史快照中恢复。兼容声明不能替代精确源身份，旧结果不自动证明新 pin。
 Freeze platform P first. Update the examples Gitlink and lock to P with its
 actual tree, pass ordinary gates, then commit examples E. Delivery records bind
 P, E, manifest digest and actual CI/artifacts. Epoch/schema compatibility never

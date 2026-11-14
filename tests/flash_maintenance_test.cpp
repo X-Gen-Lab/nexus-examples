@@ -22,11 +22,10 @@ class FlashHardware {
 class FlashMaintenance : public testing::Test {
   protected:
     testing::StrictMock<FlashHardware> hardware;
-    static constexpr nx_flash_sector_t sectors[] = {{0U, 131072U},
-                                                    {131072U, 131072U}};
+    static constexpr nx_flash_erase_span_t spans[] = {{0U, 131072U, 2U}};
     nx_flash_geometry_t geometry{
         0x08000000U, 262144U, 32U,
-        sectors,     2U,      NX_FLASH_PROGRAM_REQUIRES_FRESH_ERASE};
+        spans,       1U,      NX_FLASH_PROGRAM_REQUIRES_FRESH_ERASE};
     static const nx_flash_geometry_t* describe(const void* context) {
         return &static_cast<const FlashMaintenance*>(context)->geometry;
     }
@@ -47,7 +46,7 @@ class FlashMaintenance : public testing::Test {
                    static_cast<const FlashMaintenance*>(context))
             ->hardware.Read(offset, bytes, count);
     }
-    const nx_flash_ops_t operations{describe, read, program, erase};
+    const nx_flash_ops_t operations{describe, read, program, erase, nullptr};
     const nx_flash_port_t port{&operations, this};
     nx_flash_region_t region{&port, 131072U, 131072U, true};
     example_flash_report_t report{};
@@ -160,18 +159,19 @@ TEST_F(FlashMaintenance, AnotherProgrammingGeometryRejectsBeforeAnyPulse) {
     EXPECT_FALSE(report.erased);
 }
 TEST_F(FlashMaintenance, UnalignedSectorRejectsBeforeDestroyingItsBytes) {
-    const nx_flash_sector_t unaligned[] = {{131073U, 131071U}};
+    const nx_flash_erase_span_t unaligned[] = {{0U, 131073U, 1U},
+                                               {131073U, 131071U, 1U}};
     geometry.program_unit = 4U;
-    geometry.sectors = unaligned;
-    geometry.sector_count = 1U;
+    geometry.erase_spans = unaligned;
+    geometry.erase_span_count = 2U;
     region.offset = 131073U;
     region.size = 131071U;
     EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
               NX_ERROR_INVALID);
     EXPECT_FALSE(report.erased);
 }
-TEST_F(FlashMaintenance, MissingSectorTableRejectsBeforeDereference) {
-    geometry.sectors = nullptr;
+TEST_F(FlashMaintenance, MissingEraseSpansRejectsBeforeDereference) {
+    geometry.erase_spans = nullptr;
     EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
               NX_ERROR_INVALID);
     EXPECT_FALSE(report.erased);

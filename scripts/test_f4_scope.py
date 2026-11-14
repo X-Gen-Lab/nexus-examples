@@ -9,28 +9,31 @@ import tomllib
 import unittest
 
 import local_ci
-from sdk_tools import ROOT
+from sdk_tools import ROOT, sdk_root
 import test_repository as repository
 
 
 class F4ScopeTests(unittest.TestCase):
     def test_candidate_sdk_checks_the_current_official_f4_source(self):
         revision = subprocess.check_output(
-            ["git", "-C", str(ROOT / "external/nexus"), "rev-parse", "HEAD"],
+            ["git", "-C", str(sdk_root()), "rev-parse", "HEAD"],
             text=True).strip()
         with tempfile.TemporaryDirectory() as value:
             report = Path(value) / "identity.json"
             result = subprocess.run(
                 [sys.executable, str(ROOT / "scripts/test_repository.py"),
+                 "--nexus-source", str(sdk_root()),
                  "--candidate-nexus-commit", revision, "--report", str(report)],
                 cwd=ROOT, capture_output=True, text=True, timeout=120)
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
             identity = json.loads(report.read_text())
             self.assertEqual(revision, identity["nexus_revision"])
-            vendor = identity["stm32f4_vendor_verification"]
-            self.assertEqual("nexus-stm32f4-official-source-verification",
-                             vendor["kind"])
-            self.assertFalse(vendor["software_qualified"])
+            self.assertEqual(identity["dependency_preparation"], {
+                "scope": "native", "network_authorized": False,
+                "status": "verified"})
+            self.assertIn("vendors/st/stm32f4_hal",
+                          {row["path"] for row in identity["submodules"]})
+            self.assertFalse(identity["hardware_verified"])
 
     def test_complete_reference_matrix_uses_only_four_f407_boards(self):
         expected = {"native-debug"}

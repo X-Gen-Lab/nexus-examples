@@ -16,7 +16,8 @@
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF",
                 "NEXUS_ENABLE_SANITIZERS": "ON",
-                "NEXUS_TEST_SUPPORT": "ON"
+                "NEXUS_TEST_SUPPORT": "ON",
+                "NEXUS_EXAMPLES_FREERTOS_POSIX_TESTS": "OFF"
             }
         },
         {

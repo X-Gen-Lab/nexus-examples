@@ -81,7 +81,7 @@ TEST_F(ActiveReference, RepeatedStartDoesNotReleaseTheOriginalOwner) {
         nx_platform_start_diagnosed(&diagnostic);
     EXPECT_EQ(startup.primary, NX_ERROR_STATE);
     EXPECT_EQ(startup.cleanup, NX_SUCCESS);
-    /* The retained platform receipt reports the existing owner's effects. */
+    /* Refusing a restart preserves responsibility for the original owner. */
     EXPECT_EQ(startup.remaining_effects, 1U);
     EXPECT_EQ(diagnostic.phase, NX_PLATFORM_PHASE_CONTEXT);
     EXPECT_EQ(diagnostic.controller_index, SIZE_MAX);

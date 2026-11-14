@@ -38,8 +38,7 @@ class ApplicationBuildContracts(unittest.TestCase):
             self.assertEqual(set(applications), {
                 'platform_reference', 'sensor_spi', 'journal', 'modbus_registers',
                 'uart_owner_runtime', 'shared_spi_runtime', 'stream_recovery',
-                'industrial_control', 'network_gateway',
-                'shared_spi_freertos_host'})
+                'industrial_control', 'network_gateway'})
             application_targets = set(applications)
             for relative, targets in (
                     ('apps/flash_maintenance/flash_application.c',
@@ -70,7 +69,7 @@ class ApplicationBuildContracts(unittest.TestCase):
             framework = {
                 Path(item['file']).name for item in commands
                 if Path(item['file']).is_relative_to(
-                    sdk_root() / 'ext/googletest')}
+                    ROOT / 'external/googletest')}
             self.assertEqual(framework, {
                 'gtest-all.cc', 'gtest_main.cc', 'gmock-all.cc', 'gmock_main.cc'})
             catalogue = subprocess.run(
@@ -88,8 +87,7 @@ class ApplicationBuildContracts(unittest.TestCase):
                 'reference_lifecycle_google', 'fifo_acquisition_google',
                 'usb_configuration_google',
                 'shared_spi_two_devices', 'stream_slow_consumer',
-                'developer_recipes_google', 'shared_spi_real_freertos',
-                'contract_os_freertos', 'continuous_rx_google',
+                'developer_recipes_google', 'continuous_rx_google',
                 'flash_maintenance_google', 'network_gateway_policy_google',
                 'network_gateway_frames_google',
                 'network_gateway_application_google',

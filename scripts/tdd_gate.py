@@ -18,14 +18,14 @@ from sdk_tools import ROOT, load
 
 RELEVANT_PREFIXES = (".github/", "apps/", "reproduction/", "assemblies/", "templates/", "tests/", "scripts/", "dependencies/")
 RELEVANT_FILES = {"CMakeLists.txt", "CMakePresets.json", ".pre-commit-config.yaml",
-                  ".gitmodules", "external/nexus", "AGENTS.md"}
+                  ".gitmodules", "external/nexus", "external/googletest", "AGENTS.md"}
 EXPECTED_CTEST_NAMES = (
     "uart_owner_shutdown", "platform_static_ports", "sensor_explicit_spi",
     "persistent_journal", "protocol_authorized_registers", "owner_lifecycle_google",
     "product_fault_policy_google", "reference_rx_policy_google",
     "reference_lifecycle_google", "fifo_acquisition_google",
     "shared_spi_two_devices", "stream_slow_consumer", "developer_recipes_google",
-    "shared_spi_real_freertos", "contract_os_freertos", "continuous_rx_google",
+    "continuous_rx_google",
     "industrial_control_reference", "industrial_control_google",
     "network_gateway_policy_google", "network_gateway_frames_google",
     "network_gateway_application_google", "network_gateway_peer_google",

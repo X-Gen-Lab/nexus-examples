@@ -51,7 +51,11 @@ class ReferencePlatformTests(unittest.TestCase):
     def test_source_identity_rejects_unverified_preparation(self):
         for key, value in (("schema_version", True), ("scope", "arm"),
                            ("status", "not_assessed"),
-                           ("network_authorized", True), ("kind", "other")):
+                           ("network_authorized", True), ("kind", "other"),
+                           ("host_support", True), ("host_support", 0),
+                           ("components", ["network"]),
+                           ("components", None), ("family", "stm32f4"),
+                           ("unexpected", False)):
             report = self.preparation()
             report[key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):

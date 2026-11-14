@@ -238,7 +238,7 @@ int main(void) {
     nx_modbus_config_t config = {
         .address = 17U,
         .baudrate = 115200U,
-        .bits_per_character = 11U,
+        .bits_per_character = 10U,
         .tx_timeout_us = 100000U,
         .abort_timeout_us = 1000U,
         .registers = {&app, read_registers, authorize, write_registers},

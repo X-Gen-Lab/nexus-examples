@@ -18,12 +18,13 @@ build/native-debug/bin/industrial_control /tmp/dedicated-industrial-model.dat
 
 Use one dedicated file-NOR path. Reopening restores committed configuration;
 unknown schema and damaged records fail closed without automatic formatting.
-The sixteen other main presets retain their MCU references. This application
-uses the existing Native preset and its explicit product-owned software Board.
+The eight other main presets cover reviewed STM32F407 Board/backend
+combinations. This application uses the Native preset and its explicit
+product-owned software Board.
 
 只使用一个专用文件 NOR 路径。重开后恢复配置，未知 schema 或损坏记录失败关闭，
-不会自动格式化。其余十六个主 preset 保持原 MCU 参考；本应用使用现有 Native
-preset 和显式产品 software Board。
+不会自动格式化。其余八个主 preset 覆盖审核过的 STM32F407 Board／后端组合；
+本应用使用 Native preset 和显式产品 software Board。
 
 The existing installed-SDK `reproduction` entry includes the same
 `firmware.cmake`; its `installed_industrial_control` test runs this CLI against
@@ -91,7 +92,7 @@ SPI 轮询工作线程在等待前发布已经完成的传输结果。每轮至�
 | Sampling / 采样 | CLI: 100 ms, 3 samples / CLI 默认三次 |
 | Period constraints / 周期约束 | 50..1000 ms, integral milliseconds; at least operation budget + 50 ms / 整毫秒且覆盖操作预算＋50 ms |
 | SPI / 操作 | Default 30 ms absolute deadline, one owner slot / 默认 30 ms 绝对期限、一个 owner 槽 |
-| Modbus / 协议 | 115200 baud, 11 bits/character, TX 30 ms, abort 2 ms |
+| Modbus / 协议 | 115200 baud, 8N1, 10 bits/character, TX 30 ms, abort 2 ms |
 | Shutdown / 停机 | Default 500 ms; expiry does not revoke loans / 默认 500 ms，到期不撤销借用 |
 | Watchdog / 健康窗口 | Default 1 s request; returned minimum must cover 2 periods + 100 ms / 以返回的实际最小值验算 |
 | Native static memory / 主机静态存储 | 64 KiB executor stack, 25-byte TX/RX, 32 RX events, 64-byte Settings image / 均显式提供 |

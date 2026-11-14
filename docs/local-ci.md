@@ -23,8 +23,9 @@ checkout is supported with exactly the same lock, clean tree and Gitlink checks.
 编译器实际版本保存在日志。平台依赖必须完整，显式源码路径不放宽正式身份验证。
 
 ```sh
-git submodule sync -- external/nexus
-git submodule update --init -- external/nexus
+git submodule sync -- external/nexus external/googletest
+git submodule update --init --depth 1 -- external/nexus
+git submodule update --init --depth 2 -- external/googletest
 python3 external/nexus/tools/dev/dev.py prepare --scope native --allow-network
 python3 scripts/setup_dev_tools.py
 .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
@@ -86,13 +87,46 @@ Native 默认生成正式 SDK。可用 `--installed-sdk` 复用同一 commit/tre
 所有子进程禁止生成 Python 字节码；消费者结束后再次完整校验 SDK 和原 manifest
 身份。即使应用测试通过，安装包中新增 pyc 或其他变化仍会让整次验证失败。
 
+## Host framework and source-only tests / 宿主框架与源码测试
+
+The examples pin GoogleTest/GoogleMock independently at `external/googletest`.
+The two-commit shallow checkout retains the reviewed upstream parent required
+by its offline verifier. Firmware and the installed SDK do not acquire it.
+
+示例独立锁定宿主框架；depth 2 保留离线校验所需的审核 upstream 父提交。固件与
+installed SDK 不因此引入框架。普通提交仍要求干净的固定平台源码检出。
+
+`NEXUS_EXAMPLES_FREERTOS_POSIX_TESTS` defaults to OFF; the Native preset explicitly
+keeps it OFF, including reuse of an older CMake cache. Installed reproduction
+continues to run its two application CTests and uses the SDK's public JUnit API.
+The actual shared-SPI FreeRTOS application is retained for explicit source-only
+development. The platform's private POSIX harness also registers its kernel
+contract when enabled, so that larger graph is outside default example admission.
+
+该选项和 Native preset 默认关闭，避免旧 cache 把平台内核合同带回默认验收。
+真实共享 SPI 应用测试仍可在完整源码环境显式执行；该开发图使用平台私有 POSIX
+harness，同时包含其 kernel 合同，不能冒充默认 installed SDK 验收：
+
+```sh
+cmake --preset native-debug -DNEXUS_EXAMPLES_FREERTOS_POSIX_TESTS=ON
+cmake --build --preset native-debug --target shared_spi_freertos_host --parallel 1
+./build/native-debug/tests/shared_spi_freertos_host
+```
+
+This executes the complete application binary, not a filtered default CI run.
+It proves only that explicit source-tool configuration; equipment is unexecuted.
+这里运行完整应用二进制，不是过滤默认 CI；其证据限于该源码开发配置，不证明实板。
+
 ## Workflow coverage / 工作流覆盖
 
-The workflow and local runner cover one Native and eight F407 ARM presets.
-Only complete execution qualifies that matrix; selected scopes remain partial.
+The workflow defines 17 Native steps and 15 ARM steps; its ARM matrix expands
+eight F407 presets. The local runner covers the same software execution with
+one Native and eight ARM builds. Only complete execution qualifies that matrix;
+selected scopes remain partial.
 
-工作流与本地 runner 覆盖一个 Native 和八个 F407 ARM preset。全部完成才是完整矩阵；
-部分 scope 或 preset 始终明确标记为部分结果。
+工作流定义 Native 17 步和 ARM 15 步；ARM 矩阵展开为八个 F407 preset。本地
+runner 覆盖相同软件执行。全部完成才是完整矩阵，部分 scope 或 preset 明确标记
+为部分结果。
 
 | Hosted step group | Local execution / 本地执行 |
 | --- | --- |
