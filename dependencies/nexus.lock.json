@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "ba13686b91c94d19ef11acf910653ee2fcc9aa8b",
-  "tree": "fe6e8bcacfc59a159ecf2505ac39252866a5ef52",
+  "commit": "9ab4e11e7218693bc9ba8fcf15e258b1824d4b48",
+  "tree": "26c5c66ec6521f4538cdf3469205da90dcff0f43",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Exact source epoch 5 platform pin; software qualification requires fresh source and matching publishable Source SDK integration evidence; physical HIL is not executed.",
+  "baseline_status": "Exact source epoch 5 declarative-package platform pin; software qualification requires fresh source and matching publishable Source SDK integration evidence; physical HIL is not executed.",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }
