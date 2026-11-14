@@ -38,17 +38,13 @@ class ApplicationBuildContracts(unittest.TestCase):
             self.assertEqual(set(applications), {
                 'platform_reference', 'sensor_spi', 'journal', 'modbus_registers',
                 'uart_owner_runtime', 'shared_spi_runtime', 'stream_recovery',
-                'industrial_control', 'network_gateway',
-                'shared_spi_freertos_host', 'stop2_copy_hook_source',
-                'stop2_lptim1_hook_source'})
+                'industrial_control', 'network_gateway'})
             application_targets = set(applications)
             for relative, targets in (
                     ('apps/flash_maintenance/flash_application.c',
                      {'flash_maintenance_test'}),
                     ('apps/usb_configuration/usb_configuration.c',
-                     {'usb_configuration_test'}),
-                    ('apps/retained_stop2/stop2_application.c',
-                     {'retained_stop2_test', 'compound_stop2_test'})):
+                     {'usb_configuration_test'})):
                 selected = [item['command'] for item in commands
                             if Path(item['file']) == ROOT / relative]
                 self.assertEqual(len(selected), len(targets), relative)
@@ -61,11 +57,6 @@ class ApplicationBuildContracts(unittest.TestCase):
                 # The exact production C policy is instrumented independently
                 # from its host-only C++ GoogleTest/GoogleMock harness.
                 applications.update(actual)
-            for mode in ('copy', 'lptim1'):
-                command = applications['stop2_' + mode + '_hook_source']
-                self.assertIn('-Dmain=example_stop2_' + mode + '_firmware_main',
-                              command.split())
-                self.assertIn('-DEXAMPLE_STOP2_COMPOUND=1', command.split())
             for name, command in applications.items():
                 with self.subTest(application=name):
                     self.assertIn('-std=c11', command.split())
@@ -78,7 +69,7 @@ class ApplicationBuildContracts(unittest.TestCase):
             framework = {
                 Path(item['file']).name for item in commands
                 if Path(item['file']).is_relative_to(
-                    sdk_root() / 'ext/googletest')}
+                    ROOT / 'external/googletest')}
             self.assertEqual(framework, {
                 'gtest-all.cc', 'gtest_main.cc', 'gmock-all.cc', 'gmock_main.cc'})
             catalogue = subprocess.run(
@@ -96,11 +87,8 @@ class ApplicationBuildContracts(unittest.TestCase):
                 'reference_lifecycle_google', 'fifo_acquisition_google',
                 'usb_configuration_google',
                 'shared_spi_two_devices', 'stream_slow_consumer',
-                'developer_recipes_google', 'shared_spi_real_freertos',
-                'contract_os_freertos', 'continuous_rx_google',
-                'flash_maintenance_google', 'retained_stop2_google',
-                'compound_stop2_google', 'stop2_copy_hooks_google',
-                'stop2_lptim1_hooks_google', 'network_gateway_policy_google',
+                'developer_recipes_google', 'continuous_rx_google',
+                'flash_maintenance_google', 'network_gateway_policy_google',
                 'network_gateway_frames_google',
                 'network_gateway_application_google',
                 'network_gateway_peer_google', 'network_gateway_main_google'})

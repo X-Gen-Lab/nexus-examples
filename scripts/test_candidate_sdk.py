@@ -63,6 +63,7 @@ class CandidateSDKIdentityTests(unittest.TestCase):
             '    Path(sys.argv[7]).write_text(json.dumps({"schema_version": 1, '
             '"kind": "dependency_preparation", "status": "verified", '
             '"scope": "native", "backend": "baremetal", "family": None, '
+            '"components": [], "host_support": False, '
             '"network_authorized": False, "submodules": rows, '
             '"recursive_submodules": rows}))\n'
             'print(mode)\n')
@@ -122,6 +123,14 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         self.assertEqual(lock_before, (self.root / "dependencies/nexus.lock.json").read_bytes())
         self.assertEqual(gitlink_before, git(self.root, "ls-files", "--stage", "--", "external/nexus"))
         self.assertFalse(report["hardware_verified"])
+
+    def test_native_identity_does_not_require_unselected_gd32_inventory(self):
+        git(self.source, 'rm', 'scripts/ci/verify_vendor_source.py')
+        git(self.source, 'commit', '--quiet', '-m', 'Native selected closure only')
+        candidate = git(self.source, 'rev-parse', 'HEAD')
+        report = repository.verify(self.source, False, candidate)
+        self.assertEqual(report['nexus_revision'], candidate)
+        self.assertEqual(report['dependency_preparation']['status'], 'verified')
 
     def test_normal_verification_still_rejects_unpinned_candidate(self):
         with self.assertRaisesRegex(ValueError, "revision mismatch"):

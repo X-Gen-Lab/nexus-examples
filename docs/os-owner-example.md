@@ -187,10 +187,10 @@ bookkeeping is not zero-heap MCU evidence. MCU task arrays declare 8-byte alignm
 `StackType_t` words; that reference budget must still be checked for workload and
 exception nesting on equipment.
 
-`tests/owner_lifecycle_test.cpp` uses the pinned Nexus source checkout's locked
-offline GoogleTest/GoogleMock Git submodule through
-`cmake/testing/GoogleTest.cmake`. The installed firmware Source SDK excludes this
-host-only helper and test framework. The tests exercise the actual BusOwner and
+`tests/owner_lifecycle_test.cpp` uses the example-owned locked offline
+GoogleTest/GoogleMock Git submodule through `tests/cmake/GoogleTest.cmake`.
+The firmware Source SDK excludes the platform's host-only helper and test
+framework. The tests exercise the actual BusOwner and
 application lifecycle source, mocking
 only external join and hardware-quiescence actions. It covers admission closure
 before join, deadline failure retention, owner join failure, premature publication

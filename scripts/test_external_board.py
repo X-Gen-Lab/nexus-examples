@@ -34,7 +34,7 @@ class ExternalBoardContracts(unittest.TestCase):
     def test_private_package_remains_relative_and_uses_exact_provider_facts(self):
         self.assertIn('board_package = "boards/software-fixture"', self.assembly.read_text())
         report = json.loads(self.run_cli("provider-check", "--assembly", self.assembly,
-                            "--expect-family", "stm32f407", "--expect-part", "STM32F407ZGT6",
+                            "--expect-family", "stm32f4", "--expect-part", "STM32F407ZGT6",
                             "--json").stdout)
         self.assertEqual(report["part"], "STM32F407ZGT6")
         self.assertEqual(report["controllers"][0]["controller"], "GPIOE")

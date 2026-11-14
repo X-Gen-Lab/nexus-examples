@@ -27,19 +27,17 @@ nx_result_t example_flash_maintenance(const nx_flash_region_t* region,
         return result;
     }
     const nx_flash_geometry_t* geometry = nx_flash_port_geometry(region->port);
-    bool whole_sector = false;
-    for (size_t index = 0U; index < geometry->sector_count; ++index) {
-        const nx_flash_sector_t* sector = &geometry->sectors[index];
-        if (region->offset == sector->offset && region->size == sector->size) {
-            whole_sector = true;
-            break;
-        }
-    }
-    if (!whole_sector || geometry->program_unit != 32U || region->size < 32U) {
+    uint32_t ordinal;
+    nx_flash_sector_t sector;
+    if (nx_flash_geometry_sector_index(geometry, region->offset, &ordinal) !=
+            NX_SUCCESS ||
+        nx_flash_geometry_sector_at(geometry, ordinal, &sector) != NX_SUCCESS ||
+        sector.size != region->size || 32U % geometry->program_unit != 0U ||
+        region->offset % geometry->program_unit != 0U || region->size < 32U) {
         return NX_ERROR_INVALID;
     }
-    /* Physical Flash is excluded by this provider's input alias guard. Fill
-     * the caller's writable RAM object before starting either physical pulse.
+    /* The checked geometry supplies a positive programming unit. Fill the
+     * separate caller-owned RAM after admission, before any Flash operation.
      */
     memset(payload, 0, 32U);
     payload[0] = 0x4eU;

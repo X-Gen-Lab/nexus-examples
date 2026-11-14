@@ -68,8 +68,8 @@ nx_result_t Stall(void* c, bool stalled) {
     return ep->ports->Stall(ep->slot, stalled);
 }
 const nx_usb_endpoint_ops_t endpoint_ops{Submit, Cancel, Stall};
-const nx_usb_device_ops_t device_ops{Service, Events,  State,
-                                     Address, nullptr, Stop};
+const nx_usb_device_ops_t device_ops{Service, Events, State,   Address,
+                                     nullptr, Stop,   nullptr, nullptr};
 const nx_usb_activation_ops_t activation_ops{Activate};
 const nx_usb_setup_decision_ops_t decision_ops{Reject};
 class UsbConfiguration : public testing::Test {

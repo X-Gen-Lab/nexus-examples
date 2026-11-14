@@ -15,7 +15,9 @@
                 "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/native.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF",
-                "NEXUS_ENABLE_SANITIZERS": "ON"
+                "NEXUS_ENABLE_SANITIZERS": "ON",
+                "NEXUS_TEST_SUPPORT": "ON",
+                "NEXUS_EXAMPLES_FREERTOS_POSIX_TESTS": "OFF"
             }
         },
         {
@@ -67,144 +69,48 @@
             "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
         },
         {
-            "name": "gd32-liangshan-baremetal",
+            "name": "stm32-qiming-core-baremetal",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/gd32-liangshan-baremetal",
+            "binaryDir": "${sourceDir}/build/stm32-qiming-core-baremetal",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/liangshan-baremetal.toml",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/qiming-core-baremetal.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
             "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
         },
         {
-            "name": "gd32-liangshan-freertos",
+            "name": "stm32-qiming-core-freertos",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/gd32-liangshan-freertos",
+            "binaryDir": "${sourceDir}/build/stm32-qiming-core-freertos",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/liangshan-freertos.toml",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/qiming-core-freertos.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
             "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
         },
         {
-            "name": "stm32-h743-nucleo-baremetal",
+            "name": "stm32-qiming-v41-baremetal",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-h743-nucleo-baremetal",
+            "binaryDir": "${sourceDir}/build/stm32-qiming-v41-baremetal",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/h743-nucleo-baremetal.toml",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/qiming-v41-baremetal.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
             "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
         },
         {
-            "name": "stm32-h743-nucleo-freertos",
+            "name": "stm32-qiming-v41-freertos",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-h743-nucleo-freertos",
+            "binaryDir": "${sourceDir}/build/stm32-qiming-v41-freertos",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/h743-nucleo-freertos.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
-        },
-        {
-            "name": "stm32-u575-nucleo-baremetal",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-u575-nucleo-baremetal",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/u575-nucleo-baremetal.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
-        },
-        {
-            "name": "stm32-u575-nucleo-freertos",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-u575-nucleo-freertos",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/u575-nucleo-freertos.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
-        },
-        {
-            "name": "stm32-f103-reference-baremetal",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-f103-reference-baremetal",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/f103-baremetal.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
-        },
-        {
-            "name": "stm32-f103-reference-freertos",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-f103-reference-freertos",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/f103-freertos.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
-        },
-        {
-            "name": "gd32-f303-reference-baremetal",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/gd32-f303-reference-baremetal",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/gd303-baremetal.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
-        },
-        {
-            "name": "gd32-f303-reference-freertos",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/gd32-f303-reference-freertos",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/gd303-freertos.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
-        },
-        {
-            "name": "stm32-g474-reference-baremetal",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-g474-reference-baremetal",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/g474-baremetal.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
-        },
-        {
-            "name": "stm32-g474-reference-freertos",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-g474-reference-freertos",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/g474-freertos.toml",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/qiming-v41-freertos.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
@@ -233,52 +139,20 @@
             "configurePreset": "stm32-sky-freertos"
         },
         {
-            "name": "gd32-liangshan-baremetal",
-            "configurePreset": "gd32-liangshan-baremetal"
+            "name": "stm32-qiming-core-baremetal",
+            "configurePreset": "stm32-qiming-core-baremetal"
         },
         {
-            "name": "gd32-liangshan-freertos",
-            "configurePreset": "gd32-liangshan-freertos"
+            "name": "stm32-qiming-core-freertos",
+            "configurePreset": "stm32-qiming-core-freertos"
         },
         {
-            "name": "stm32-h743-nucleo-baremetal",
-            "configurePreset": "stm32-h743-nucleo-baremetal"
+            "name": "stm32-qiming-v41-baremetal",
+            "configurePreset": "stm32-qiming-v41-baremetal"
         },
         {
-            "name": "stm32-h743-nucleo-freertos",
-            "configurePreset": "stm32-h743-nucleo-freertos"
-        },
-        {
-            "name": "stm32-u575-nucleo-baremetal",
-            "configurePreset": "stm32-u575-nucleo-baremetal"
-        },
-        {
-            "name": "stm32-u575-nucleo-freertos",
-            "configurePreset": "stm32-u575-nucleo-freertos"
-        },
-        {
-            "name": "stm32-f103-reference-baremetal",
-            "configurePreset": "stm32-f103-reference-baremetal"
-        },
-        {
-            "name": "stm32-f103-reference-freertos",
-            "configurePreset": "stm32-f103-reference-freertos"
-        },
-        {
-            "name": "gd32-f303-reference-baremetal",
-            "configurePreset": "gd32-f303-reference-baremetal"
-        },
-        {
-            "name": "gd32-f303-reference-freertos",
-            "configurePreset": "gd32-f303-reference-freertos"
-        },
-        {
-            "name": "stm32-g474-reference-baremetal",
-            "configurePreset": "stm32-g474-reference-baremetal"
-        },
-        {
-            "name": "stm32-g474-reference-freertos",
-            "configurePreset": "stm32-g474-reference-freertos"
+            "name": "stm32-qiming-v41-freertos",
+            "configurePreset": "stm32-qiming-v41-freertos"
         }
     ],
     "testPresets": [

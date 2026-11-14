@@ -1,188 +1,129 @@
 # Nexus Examples
 
-本仓库维护应用示例、装配配置和集成验证，当前 GitHub 仓库为私有仓库。Nexus 维护通用平台；客户协议、
-私有产品、密钥、PCB 数据和部署策略由对应产品仓库维护。
+本私有仓库维护应用组合、工程模板和平台消费验证。Nexus 主库只维护通用机制；
+应用任务、协议、Flash 分区、产品恢复策略和 PCB 私有资料由应用或产品仓库维护。
+源码、日志及归档不得随公共平台发布。精确平台身份由
+[源码锁](dependencies/nexus.lock.json) 与 `external/nexus` Gitlink 一起确定。
 
-This repository currently has private GitHub visibility. Examples, their source
-archives and provenance stay within that access boundary; platform publication
-does not authorize publishing these application sources.
+This private repository owns application composition, starters and integration
+checks. Nexus owns reusable mechanisms. Keep application source and evidence
+inside this access boundary. The source lock and Gitlink select one exact SDK;
+a version string or a successful older run never substitutes for that identity.
 
-当前代码消费静态 factory 与共享多态接口：`nexus/core`、`nexus/io`、`nexus/os` 和
-`nexus/components`。`nx_platform_start()` 只建立已选择的基础设施，应用自己决定
-任务、组件、资源预算和恢复策略。依赖通过 `external/nexus` Gitlink 和
-[源码锁](dependencies/nexus.lock.json) 固定，最终验收必须与该身份一致。
+当前接口为 source epoch 5、TOML schema 2；精确 commit/tree 只由源码锁与
+Gitlink 选定。开发探针和旧结果不能替代同一 pin 的完整源码及 installed SDK 验收。
 
-当前集成面向 Nexus 0.2 开发周期，精确源码提交与 tree 以
-[源码锁](dependencies/nexus.lock.json) 和 `external/nexus` Gitlink 为准。平台提供
-官方 STM32F4 LL 复用和可选冷态生命周期诊断。SDK 元数据版本为 `0.2.1`，
-保留已有的 `v0.2.0` 预览和已发布的 `v0.1.0` 标签，
-也不冒充这些标签的原始产物。本仓库独立的应用工程版本仍为 `1.0.0`；精确依赖以
-Gitlink 和源码锁为准。[0.1.0 集成说明](docs/release-0.1.0.md) 保留原始发布快照及
-证据边界；该历史证据不自动证明当前迭代。MCU 实板 HIL 保持 `not_executed`。
+The current interface uses source epoch 5 and TOML schema 2. The lock and Gitlink
+select the exact commit/tree; development probes and old runs do not qualify it.
 
-当前平台版本由上述源码锁和 Gitlink 唯一选择。外部 Git 依赖通过 X-Gen-Lab
-托管的 forks 获取，官方 upstream 地址继续记录来源与升级线索。每个依赖仍固定到
-精确提交；FreeRTOS 的组织提交只调整两个嵌套子模块地址，保留内核代码与子模块
-版本。公共 CMSIS-Core 保持官方 v6.4.0，Device/startup 与 HAL/LL 分别锁定。
-此迁移不启用额外 CMSIS 组件，也不扩大芯片或实板支持。
+```mermaid
+flowchart TD
+    A[Application TOML and reviewed Board facts] --> B[Typed static configuration]
+    B --> C[Platform start and static factory]
+    C --> D[C11 application and explicit execution owner]
+    D --> E[Close admission and drain hardware]
+    E --> F[Join borrowers and stop Platform]
+    G[Source lock and Gitlink] --> B
+    G --> H[Source and installed SDK verification]
+```
 
-The source lock and Gitlink select one exact platform revision. External Git
-sources are fetched from X-Gen-Lab forks; official upstream identities remain
-available for provenance and upgrade review. Every dependency stays pinned.
-The FreeRTOS integration changes only two nested fetch URLs, preserving kernel
-code and nested source revisions. CMSIS-Core remains official v6.4.0, with
-separate Device/startup and HAL/LL locks. This migration does not enable extra
-CMSIS components or extend chip or physical-board qualification.
+## 当前范围 / Current scope
 
-本地 CI 和 installed SDK 消费者必须验证新的精确 pin。项目来源与历史验收记录保持
-原始身份。GoogleTest／GoogleMock 仅用于宿主测试；固件 Source SDK 排除该依赖。
-SDK 内部清单校验用于检查内容一致性，消费前还须确认组织批准的归档哈希或发行身份；
-没有 Git 历史的 SDK 不重新证明 FreeRTOS 提交的父链与完整树差异。
+生产 MCU 示例收敛为 STM32F4，目前只选择 F407VE／ZG。主工程维护 **9 个 preset**：
+Native 加四个精确 Board 的裸机／FreeRTOS 两后端。模板清单维护 **5 个工程**：
+Native、启明 V3.1、天空星青春版、启明核心板、启明 V4.1。对应原理图、引脚与
+模块选择见[Board 说明](docs/boards.md)。ILI9341／XPT2046 型号已知并不自动
+启用模块；最小工程明确要求未选模块断开，不能替代实际装配检查。
 
-Local CI and installed-SDK consumers validate the new exact pin. Project origins
-and historical evidence keep their original identities. GoogleTest/GoogleMock
-remain host-only and are excluded from the firmware Source SDK. Verify an
-approved archive hash or release identity before executing SDK tools; the
-internal manifest checks consistency. An SDK without Git history does not
-re-prove the FreeRTOS commit's parent relationship or full tree diff.
+Production examples currently select F407VE/ZG through four exact Boards and
+two backends: eight ARM presets plus one explicit Native test preset. The five
+starters are indexed and hashed by `templates/manifest.json`. Board facts,
+selected software modes and physical acceptance remain distinct.
 
-## 应用与最小工程
+H7、U5、F1、G4、GD32 的工程、preset 和专属测试退出当前入口；平台保留的 vendor
+库存不因此删除。通用流借用、FIFO 消费、Flash 维护和失败恢复测试继续维护。
+[固定历史源码](https://github.com/X-Gen-Lab/nexus-examples/tree/e48c442d78ddf438ed5be0b562e541dabc069b8f)
+保留原工程和其原始身份；旧结果不授予新版本资格。
 
-| Target | Native 有限执行 | MCU 裸机 / FreeRTOS |
-| --- | --- | --- |
-| `platform_reference` | GPIO、显式 RX 注入、IRQ TX 完成和停止 | 八套软件参考配置的 GPIO 与 UART；FreeRTOS 静态任务 |
-| `sensor_spi` | BMP280 SPI 端口、芯片身份与 Bosch 参考结果 | 暂无审定传感器板级接线 |
-| `journal` | 文件 NOR 模型、关闭重开后恢复记录 | 暂无指定产品 Flash 分区与电源测试 |
-| `modbus_registers` | 实际 UART 模型、CRC、写权限、异常回复、有限日志 | 暂无 RS485 收发器接线和方向时序验收 |
-| `shared_spi_runtime` | 两个真实任务、两端点、满队列拒绝、取消、join/stop | 独立 F407ZG FreeRTOS 硅片软件 fixture；不声明实板双 CS 接线 |
-| `stream_recovery` | 慢消费者、loss、BUSY stop、恢复及只读诊断 | 独立 H743 continuous DMA 软件参考，Cache off |
-| `uart_owner_runtime` | 两个真实 producer 共享 owner，IRQ hint、cancel/drain/join、分阶段启动回收 | 八套参考配置、两后端，显式静态任务或裸机 pump |
-| [`industrial_control`](apps/industrial_control/README.md) | BMP280＋真实 SPI owner、Modbus 授权、Settings 维护提交、watchdog 与 completion/timer/stop/join | 先交付 Native 组合；未推断传感器、RS485 或 Flash 分区 |
-| [`usb_configuration`](apps/usb_configuration/README.md) | USBControl＋外部标准请求子集、activation staging、STATUS ACK／epoch 提交、排空与 restart | Native 公共端口合同＋F407ZG 软件参考；完整 Chapter 9／class 与物理枚举未验证 |
+Retired SoC recipes and tests of their removed capabilities are available at
+that fixed historical source. Generic contracts retain their real C tests.
+No board is connected: physical HIL remains **`not_executed`**.
 
-Native 注册有限应用 CTest、GoogleTest 执行，以及真实 FreeRTOS POSIX 内核
-合同和共享 SPI 应用。新增模板、创建练习、三条生命周期路径及迁移步骤见
-[双语工程指南](docs/developer-recipes.md)。六个版本化模板由 `templates/manifest.json` 统一索引，新增启明核心板与 V4.1
-最小工程保留独立的精确 Board 和显式 hardware 选项；旧 V3.1 模板继续保留。
-UART 由应用显式注入接收事实，服务推进发送并等待真正
-TC 完成。模型没有自动串口设备或后台 RX 生产者。Flash 文件示例验证宿主恢复流程，
-不证明 MCU 掉电安全。三板为启明欣欣 F407ZG V3.1、天空星 F407VE 青春版和梁山派
-GD32F470ZG。其余五套为 NUCLEO-H743ZI2、NUCLEO-U575ZI-Q、F103RB、
-GD32F303RC 和 G474RE 软件参考；GD32F303RC 不指定实物 PCB 或 LED。当前实板
-未接入，所有物理资格均未验证。
+| 应用 / Application | 当前行为 / Current behavior |
+| --- | --- |
+| `platform_reference` | Native 有限执行；四板 GPIO／UART、裸机或静态 FreeRTOS / GPIO and UART composition |
+| `uart_owner_runtime` | 多 producer、取消、排空、join 与启动失败责任 / Shared owner and explicit shutdown |
+| `sensor_spi` | Native BMP280 参考数据及 SPI 端点 / Sensor calculation and endpoint contract |
+| `journal` | 文件 Flash、关闭重开和恢复 / File-backed persistence recovery |
+| `modbus_registers` | 授权、CRC、异常回复及 TX 完成 / Register policy and wire completion |
+| `shared_spi_runtime` | 两任务、两端点；独立 F407 软件 fixture / Two tasks and endpoints, software wiring only |
+| `stream_recovery` | 有限 Native 流、loss、借用及停止失败 / Stream ownership and backpressure |
+| `industrial_control` | Native 采集、协议、持久化和健康组合 / Explicit industrial composition |
+| `network_gateway` | Native lwIP、TLS、MQTT 与独立 peer / Explicit network composition |
+| `usb_configuration` | 独立 Native USBControl 合同 / Standalone control-request application |
 
-故障策略使用 Core `nx_fault_observe`。正式 SDK 身份以源码锁和 Gitlink 为准。
-历史代码提交 `3de85238` 与固定 SDK `98270512` 已通过 8 项 Native CTest、三组共
-43 项 GoogleTest、44 项 Python 工具测试，以及十个 ARM 配置的 20 个实际 ELF
-预算检查。[验收记录](docs/soc-refinement-results.json) 固定完整提交、tree 和原始证据
-哈希；后续文档提交不会自动获得新的代码资格。10 份 HIL 计划已准备，实板未执行。
-旧 pin 的成功或失败只描述历史快照。
-[交付准备](docs/delivery-preparation.md) 区分开发证据和最终软件资格。
+Native 模型仅在 `NEXUS_TEST_SUPPORT=ON` 时使用。固件为 C11；GoogleTest／
+GoogleMock 只进入宿主合同。factory 返回已有只读接口，不分配、不初始化硬件。
+`nx_platform_start/stop` 管基础设施，应用决定任务、调度、队列和恢复。
 
-## 开发与构建
+Native is explicit test support. Firmware stays C11; GoogleTest/GoogleMock are
+host-only. Factory lookup has no hardware effects. Applications own execution,
+borrowed storage and recovery, including storage retained after a failed drain.
 
-完整本地 CI 入口：`python scripts/local_ci.py --help`。单 job 的全矩阵、独立 installed SDK
-验证与工作流步骤映射见[双语本地 CI 指南](docs/local-ci.md)。GitHub Actions 额度不足时，
-保留实际本地报告；不把本地结果标成托管 CI 或实板验证通过。
-The [local CI guide](docs/local-ci.md) replays the complete software workflow with
-one job by default and retains actual evidence without GitHub Actions minutes.
+共享 Native Modbus 参考明确使用 115200、8N1、每字符 10 位；方向回调仅修改
+软件状态，不声明标准串行 Modbus 格式或实物 RS485 电气资格。
+The shared Native Modbus reference uses 115200/8N1/ten wire bits. Its direction
+callback changes software state; serial Modbus and RS485 physical qualification
+remain unexecuted.
+
+宿主 GoogleTest／GoogleMock 由本仓库独立锁定 `external/googletest`；固件 SDK
+不导出该框架。installed SDK 验证复用公开 JUnit 接口，默认只运行两个应用 CTest。
+真实 POSIX FreeRTOS 共享 SPI 应用保留为显式 source-only 测试；默认 Native preset
+明确关闭该选项，以免重复纳入平台 kernel-only 合同。
+The project pins its own host framework. Installed SDK checks use the public
+JUnit API and two application CTests. The real POSIX FreeRTOS shared-SPI
+application remains an explicit source-only test; the Native preset disables it
+by default to avoid repeating the platform kernel contract.
+
+## 开发与验证 / Development and verification
 
 ```sh
-git submodule sync -- external/nexus
-git submodule update --init -- external/nexus
+git submodule sync -- external/nexus external/googletest
+git submodule update --init --depth 1 -- external/nexus
+git submodule update --init --depth 2 -- external/googletest
 python3 external/nexus/tools/dev/dev.py prepare --scope native --allow-network
 python3 scripts/setup_dev_tools.py
 .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
 . .venv/bin/activate
 python scripts/test_repository.py
 python scripts/check_style.py --all
-python -m unittest discover -s scripts -p 'test_*.py' -v
-python scripts/build.py --preset native-debug --test
-python scripts/build.py --preset stm32-qiming-baremetal
-python scripts/build.py --preset stm32-sky-freertos
-python scripts/build.py --preset gd32-liangshan-freertos
-python scripts/build.py --preset stm32-h743-nucleo-baremetal
-python scripts/build.py --preset stm32-u575-nucleo-freertos
+python scripts/build.py --preset native-debug --test --parallel 2
+python scripts/build.py --preset stm32-qiming-baremetal --parallel 2
+python scripts/build.py --preset stm32-qiming-core-freertos --parallel 2
 ```
 
-ARM 构建还需 SDK 固定的 GNU Arm 工具链，可用
-`external/nexus/scripts/ci/install_arm_toolchain.py --install-dir <目录>` 安装。
-Windows 使用 `.venv/Scripts/python.exe` 并将工具路径加入 PATH。
+仅显式准备阶段允许获取已锁定依赖；普通检查和构建离线运行，不递归下载未选库存。
+ARM 使用 SDK 的 SHA-256 锁定工具链。每个 preset 有独立构建目录，平台参考与
+UART owner 各产生一个 ELF，并分别检查实际 Flash／RAM 预算。
 
-每个配置使用自己的 `build/<preset>`，主示例配置输入是 `reproduction/assemblies/*.toml`；独立应用和模板各有唯一 `assembly.toml`。
-配置器生成定型实例、只读接口、factory ID、链接脚本和预算。
-`nx_factory_uart(NX_UART_ID_UART0)` 仅返回静态实例，不分配内存或启动硬件；
-SPI 设备使用 `nx_factory_spi_device`，控制器与外部设备身份分开。
-本仓库有 Native 加八个精确参考配置、两后端共十七个 preset；ARM 每组分别产生平台参考和共享 UARTOwner
-两个实际链接的 ELF，并独立检查各自预算。
+Only preparation downloads selected dependencies. Builds and ordinary checks
+stay offline. ARM uses the SDK's locked GNU toolchain. Presets own separate
+build roots; both firmware targets receive independent ELF budget checks.
 
-H743 初始范围是 HSI64、Cache off、PB0 LED 与 USART3 PD8/PD9 IRQ byte RX；
-U575 是 MSIS4、TZEN0、PC7 LED 与 USART1 PA9/PA10 IRQ byte RX。两个软件参考均不
-启用 DMA、Cache 或 TrustZone。`platform_reference` 优先读取公共 event 接口，只有
-UNSUPPORTED 才转到公共 byte 接口；事件损坏或 byte overflow 会停止回显，不制造
-字符、时间戳或丢失恢复结果。产品协议与恢复策略仍由产品仓库决定。
+完整本地 CI 见[本地指南](docs/local-ci.md)。GitHub Actions 额度不足时，以实际
+本地记录为准，不把本地结果写成托管 CI。普通 commit hook 执行完整 Native／
+Google 合同和工具测试，不能用部分目标结果替代。
 
-`platform_reference` 使用 `nx_platform_start_diagnosed()` 和
-`nx_platform_stop_diagnosed()`，把可选阶段诊断写入调用者自己的存储。Native 失败时
-打印实际 primary、cleanup、remaining effects 及阶段；MCU 不因此引入 logger、堆或
-额外 worker。`controller_index` 是同一次装配 `resolved.json` 中 `controllers` 的零基
-下标，**不是 factory ID**；`SIZE_MAX` 表示该阶段没有控制器。错误返回仍是行为依据，
-诊断不会授权释放 buffer、复位或重试。真实生成平台的 GoogleTest 覆盖成功清空、
-非法上下文拒绝、重复启动不接管原 owner，以及 UART 借用未结清时 stop 返回 BUSY、
-继续 service 后才能释放。启动失败且 cleanup 未完成时，产品必须继续保留实际责任；
-本示例不虚构自动恢复。
+The [local CI guide](docs/local-ci.md) reuses the maintained build graph and
+complete ordinary gate. It also consumes a fresh installed SDK. Local execution
+does not establish GitHub-hosted CI or physical qualification.
 
-提交钩子检查暂存文件的格式、机械注释、文本和 Conventional Commit，并对行为变更
-验证正式干净 SDK，执行全部工具测试、Native CTest 和 GoogleTest；不改写或暂存源文件。
-执行前后须保持相同 index/SDK 身份，拒绝未暂存行为、过滤、跳过、缺失或陈旧报告。
-C 格式和注释规则复用固定 SDK，避免复制一套规则。手动完整检查使用
-`python scripts/tdd_gate.py --all`；CI 保留实际 Google discovery、XML、commands 和退出码。
+## 消费入口 / Consumer entry points
 
-变更行为先用失败测试定义合同，通过后再重构。Nexus 通用固件合同使用
-GoogleTest／GoogleMock 宿主测试；示例固件保持 C11，目标映像没有测试框架。
-Python 边界测试执行真实配置器，并检查十七组 TOML、生成 factory 和报告拒绝逻辑。
-
-本地 `--nexus-source /absolute/path` 只改变 SDK 位置；正式依赖检查仍要求锁、
-Gitlink、tree、干净源码和供应商身份一致。未提交的联合开发可以显式使用临时装配，
-但其输出只能标为 `publishable=false`，不能冒充已封存发行验收。
-
-[构建集成](docs/build-integration.md)、[板卡](docs/boards.md)、
-[软件验证边界](docs/refactor-validation.md)、[后续迭代](docs/examples-roadmap.md)
-说明当前接口和交付范围。旧架构的测试数量与证据保留为历史记录，不能证明新架构。
-
-[多生产者 UARTOwner 示例](docs/os-owner-example.md) 说明唯一 execution owner、IRQ wake、
-active cancel/drain 和 producer/owner join 后才能回收通知的顺序。GoogleTest／GoogleMock
-通过固定 Nexus 源码检出中的 `cmake/testing/GoogleTest.cmake` 校验并使用固定
-`ext/googletest` 子模块，配置时不联网，只进入 Native host 测试。已安装的固件
-Source SDK 不包含该 helper 和宿主测试框架；MCU 示例保持 C11。
-
-[UART FIFO 采集 / UART FIFO acquisition](apps/uart_fifo_acquisition/README.md)
-提供 H743/U575 两个软件参考的独立有界流量应用；不新增 preset，也不建立实板资格。
-Opt-in bounded UART traffic for the H743/U575 software references; the seventeen
-presets stay unchanged and physical HIL remains unexecuted.
-
-[Cache 与运行时维护边界 / Cache and runtime maintenance](docs/developer-recipes.md)
-增加两个独立 H743 软件参考：Cache-on 连续接收及 SPI4 fixed-run pause/resume。
-Two independent H743 software recipes cover Cache-on continuous receive and
-SPI4 fixed-run pause/resume; exact loan retention and failure policy stay explicit.
-
-[H743 Flash/RAM](apps/flash_maintenance/h743/README.md) 与
-[U575 保留时间／Stop2](apps/retained_stop2/u575/README.md) 提供独立显式启用工程、
-同一 C11 应用策略的 GoogleTest／GoogleMock 失败路径测试及现有本地 CI 集成。
-默认不开启擦写或低功耗；产品 boot、物理前提及恢复决策仍外置，全部实板未执行。
-Independent opt-in H743 Flash/RAM and U575 retained-time/Stop2 recipes share
-their C11 policy with host failure tests and the existing local CI. Default
-execution performs neither maintenance nor sleep; boot, physical premises and
-recovery remain product obligations, with all hardware acceptance unexecuted.
-
-U575 的全部当前有限 Stop2 路径分别由 [WUT-only](apps/retained_stop2/u575/README.md)、
-[SRAM4 copy](apps/retained_stop2/u575_copy/README.md) 和
-[LPTIM1 单元组 LPBAM](apps/retained_stop2/u575_lptim1/README.md) 独立工程维护。
-三者按编译时选择互斥 owner；compound 路径在实际排空后 acquire 请求结果并 join
-receiver，才恢复 mask／重开 RUN。全部主机失败路径与独立 ARM 入口接入同一 CI，
-不扩大通用 LPBAM 或实板承诺。
-All maintained finite U575 Stop2 modes have separate WUT-only, SRAM4-copy and
-single-tuple LPTIM1 LPBAM projects. Each selects one mutually exclusive owner;
-compound paths acquire results and join the receiver after actual drain, before
-restoring masks or reopening RUN. Host failure tests and independent ARM entries
-join the same CI without general-LPBAM or physical qualification claims.
+- [SDK 构建与身份 / SDK identity and build](docs/build-integration.md)
+- [五种模板与应用生命周期 / Starters and lifecycle](docs/developer-recipes.md)
+- [外部 Board / External Board](docs/external-board.md)
+- [组件组合 / Component composition](docs/component-examples.md)
+- [交付边界 / Delivery boundaries](docs/delivery.md)
+- [验收准备 / Acceptance preparation](docs/delivery-preparation.md)
+- [后续硬件工作 / Remaining hardware work](docs/examples-roadmap.md)

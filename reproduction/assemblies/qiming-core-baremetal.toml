@@ -1,9 +1,19 @@
 schema = 2
-board = "stm32h743_nucleo_zi2"
+board = "stm32f407zg_qiming_core"
 backend = "baremetal"
-clock = "hsi64-fixed-cache-off"
+clock = "hse8-pll168"
 optimization = "Os"
 components = ["uart-owner"]
+
+[hardware]
+debug_port = "swd"
+nor_population = "absent"
+can1_transceiver = "absent"
+can2_transceiver = "absent"
+usb_port = "disconnected"
+display_module = "absent"
+touch_module = "absent"
+sram_population = "absent"
 
 [memory]
 main_stack_bytes = 2048
@@ -16,14 +26,13 @@ binding = "led0"
 mode = "output"
 
 [uart.uart1]
-binding = "uart3"
-mode = "irq-bytes"
+binding = "uart1"
+mode = "irq"
 baud = 115200
 
 [uart.uart1.rx]
-format = "bytes"
+format = "events"
 capacity = 32
 
 [uart.uart1.irq]
 priority = 5
-calls_os = false

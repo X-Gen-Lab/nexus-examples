@@ -18,12 +18,13 @@ build/native-debug/bin/industrial_control /tmp/dedicated-industrial-model.dat
 
 Use one dedicated file-NOR path. Reopening restores committed configuration;
 unknown schema and damaged records fail closed without automatic formatting.
-The sixteen other main presets retain their MCU references. This application
-uses the existing Native preset and its explicit product-owned software Board.
+The eight other main presets cover reviewed STM32F407 Board/backend
+combinations. This application uses the Native preset and its explicit
+product-owned software Board.
 
 只使用一个专用文件 NOR 路径。重开后恢复配置，未知 schema 或损坏记录失败关闭，
-不会自动格式化。其余十六个主 preset 保持原 MCU 参考；本应用使用现有 Native
-preset 和显式产品 software Board。
+不会自动格式化。其余八个主 preset 覆盖审核过的 STM32F407 Board／后端组合；
+本应用使用 Native preset 和显式产品 software Board。
 
 The existing installed-SDK `reproduction` entry includes the same
 `firmware.cmake`; its `installed_industrial_control` test runs this CLI against
@@ -76,12 +77,22 @@ authorize request or buffer reuse.
 不会重入 BMP280 或 Modbus。独立的操作期限检查防止持续 ready 的 timer 延长预算。
 通知次数不能授权请求或缓冲复用。
 
+The polling SPI worker publishes an already completed transfer before waiting.
+Each turn performs at most two owner service steps; a BUSY start still waits.
+This removes an unnecessary 1 ms delay per transfer without extending the
+absolute operation deadline. Arbitrary host scheduling can still exhaust that
+deadline; a successful software run establishes no real-time guarantee.
+
+SPI 轮询工作线程在等待前发布已经完成的传输结果。每轮至多推进两步 owner；
+启动返回 BUSY 时仍进入等待。这样去除每次传输不必要的 1 ms 等待，不延长绝对操作
+期限。主机调度仍可能耗尽期限，软件通过不构成实时保证。
+
 | Budget / 预算 | Value / 明确取值 |
 | --- | --- |
 | Sampling / 采样 | CLI: 100 ms, 3 samples / CLI 默认三次 |
 | Period constraints / 周期约束 | 50..1000 ms, integral milliseconds; at least operation budget + 50 ms / 整毫秒且覆盖操作预算＋50 ms |
 | SPI / 操作 | Default 30 ms absolute deadline, one owner slot / 默认 30 ms 绝对期限、一个 owner 槽 |
-| Modbus / 协议 | 115200 baud, 11 bits/character, TX 30 ms, abort 2 ms |
+| Modbus / 协议 | 115200 baud, 8N1, 10 bits/character, TX 30 ms, abort 2 ms |
 | Shutdown / 停机 | Default 500 ms; expiry does not revoke loans / 默认 500 ms，到期不撤销借用 |
 | Watchdog / 健康窗口 | Default 1 s request; returned minimum must cover 2 periods + 100 ms / 以返回的实际最小值验算 |
 | Native static memory / 主机静态存储 | 64 KiB executor stack, 25-byte TX/RX, 32 RX events, 64-byte Settings image / 均显式提供 |

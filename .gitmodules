@@ -1,3 +1,7 @@
 [submodule "external/nexus"]
 	path = external/nexus
 	url = https://github.com/X-Gen-Lab/nexus.git
+
+[submodule "external/googletest"]
+	path = external/googletest
+	url = https://github.com/X-Gen-Lab/googletest.git

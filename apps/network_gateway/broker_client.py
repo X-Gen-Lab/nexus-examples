@@ -13,7 +13,11 @@ import sys
 import uuid
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "external/nexus"))
+SOURCE = Path(os.environ.get("NEXUS_SOURCE", ROOT / "external/nexus")).resolve()
+if not (SOURCE / "tools/dev/process.py").is_file():
+    raise ValueError(
+        f"Source SDK process helper missing: {SOURCE}; initialize external/nexus")
+sys.path.insert(0, str(SOURCE))
 from tools.dev import process
 
 

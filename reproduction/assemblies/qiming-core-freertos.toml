@@ -1,14 +1,24 @@
 schema = 2
-board = "stm32g474re_hse24_reference"
+board = "stm32f407zg_qiming_core"
 backend = "freertos"
-clock = "hse24-pll170"
+clock = "hse8-pll168"
 optimization = "Os"
 components = ["uart-owner"]
+
+[hardware]
+debug_port = "swd"
+nor_population = "absent"
+can1_transceiver = "absent"
+can2_transceiver = "absent"
+usb_port = "disconnected"
+display_module = "absent"
+touch_module = "absent"
+sram_population = "absent"
 
 [memory]
 main_stack_bytes = 2048
 flash_load_limit_bytes = 65536
-static_ram_limit_bytes = 16384
+static_ram_limit_bytes = 32768
 libc_heap_bytes = 0
 
 [gpio.led0]
@@ -17,11 +27,11 @@ mode = "output"
 
 [uart.uart1]
 binding = "uart1"
-mode = "irq-bytes"
+mode = "irq"
 baud = 115200
 
 [uart.uart1.rx]
-format = "bytes"
+format = "events"
 capacity = 32
 
 [uart.uart1.irq]

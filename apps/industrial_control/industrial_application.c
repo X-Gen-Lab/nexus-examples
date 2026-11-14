@@ -111,6 +111,11 @@ static void owner_entry(void* context) {
     for (;;) {
         uint32_t sequence = wake.arm(wake.context);
         (void)nx_bus_owner_service(&app->owner);
+        /* Polling has already finished I/O. Publish its result before waiting;
+         * a BUSY start has no pending result and still yields below. */
+        if (app->executor.pending) {
+            (void)nx_bus_owner_service(&app->owner);
+        }
         if (nx_atomic_u32_load_acquire(&app->worker_exit) != 0U &&
             nx_bus_owner_idle(&app->owner)) {
             break;
@@ -607,7 +612,7 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
         nx_modbus_config_t modbus = {
             .address = 17U,
             .baudrate = 115200U,
-            .bits_per_character = 11U,
+            .bits_per_character = 10U,
             .tx_timeout_us = PRODUCT_TX_US,
             .abort_timeout_us = PRODUCT_ABORT_US,
             .registers = {app, read_registers, authorize, write_registers},

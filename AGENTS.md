@@ -13,8 +13,11 @@ PCB data belong to separate product repositories.
   registry or implicit ownership. Use generated typed factory IDs to obtain
   readonly faces; factory lookup has no allocation or hardware side effects.
   Public types use the selected SDK ABI.
-- Each composition owns one authored TOML. Main examples use `reproduction/assemblies/*.toml`; standalone recipes and versioned starters own their local `assembly.toml`. CMake presets define seventeen
-  maintained builds. Separate build roots prevent stale effective configuration.
+- Each composition owns one authored TOML. Main examples use
+  `reproduction/assemblies/*.toml`; standalone recipes and versioned starters own
+  their local `assembly.toml`. Nine Native/F407 builds cover four exact F407 Boards and both MCU
+  backends. Retired SoC recipes remain in their historical Git snapshot. Separate
+  build roots prevent stale effective configuration.
 - `nx_platform_start/stop` own selected infrastructure. Applications own workers,
   scheduler start, component composition, budgets and recovery. No implicit main.
 - Document task/ISR context, absolute clock-domain deadlines, admission, caller
@@ -41,8 +44,10 @@ PCB data belong to separate product repositories.
 - Conventional Commit examples: `feat(examples): ...`, `fix(uart): ...`.
 
 Use TDD for changed behavior: capture a failing contract, implement the smallest
-correct change and refactor after it passes. Nexus firmware contract development
-uses the SDK repository's pinned GoogleTest/GoogleMock host framework; the target
-application remains C11 and contains no host test runtime. Python tooling tests
+correct change and refactor after it passes. Application contract development
+uses this repository's pinned `external/googletest` GoogleTest/GoogleMock host
+framework; the target application remains C11 and contains no host test runtime.
+Installed SDK tests use its public JUnit validator, not platform development-test
+helpers. Python tooling tests
 cover configuration, invocation and evidence boundaries. A hook pass alone does
 not establish the historical order of edits or physical board qualification.

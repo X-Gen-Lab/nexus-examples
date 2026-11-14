@@ -1,4 +1,4 @@
-"""Require explicit, isolated H743/U575 software-reference compositions."""
+"""Require explicit, isolated F407 application compositions."""
 
 import json
 import copy
@@ -16,8 +16,10 @@ import tdd_gate
 
 
 REFERENCE_BOARDS = {
-    "h743": ("stm32h743_nucleo_zi2", "hsi64-fixed-cache-off", "uart3"),
-    "u575": ("stm32u575_nucleo_zi_q", "msis4", "uart1"),
+    "qiming": "stm32f407_qiming_v31",
+    "sky": "stm32f407ve_sky_qingchun",
+    "qiming-core": "stm32f407zg_qiming_core",
+    "qiming-v41": "stm32f407zg_qiming_v41",
 }
 
 
@@ -36,7 +38,8 @@ class ReferencePlatformTests(unittest.TestCase):
         return {"schema_version": 1, "kind": "dependency_preparation",
                 "scope": "native", "status": "verified",
                 "network_authorized": False, "backend": "baremetal",
-                "family": None, "submodules": modules,
+                "family": None, "components": [], "host_support": False,
+                "submodules": modules,
                 "recursive_submodules": copy.deepcopy(modules)}
 
     def test_source_identity_projects_the_sdk_native_closure(self):
@@ -48,7 +51,11 @@ class ReferencePlatformTests(unittest.TestCase):
     def test_source_identity_rejects_unverified_preparation(self):
         for key, value in (("schema_version", True), ("scope", "arm"),
                            ("status", "not_assessed"),
-                           ("network_authorized", True), ("kind", "other")):
+                           ("network_authorized", True), ("kind", "other"),
+                           ("host_support", True), ("host_support", 0),
+                           ("components", ["network"]),
+                           ("components", None), ("family", "stm32f4"),
+                           ("unexpected", False)):
             report = self.preparation()
             report[key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
@@ -91,9 +98,9 @@ class ReferencePlatformTests(unittest.TestCase):
         document = json.loads((ROOT / "CMakePresets.json").read_text())
         presets = {entry["name"]: entry for entry in document["configurePresets"]}
         builds = {entry["name"]: entry for entry in document["buildPresets"]}
-        for family, (board, clock, binding) in REFERENCE_BOARDS.items():
+        for family, board in REFERENCE_BOARDS.items():
             for backend in ("baremetal", "freertos"):
-                name = f"stm32-{family}-nucleo-{backend}"
+                name = f"stm32-{family}-{backend}"
                 with self.subTest(preset=name):
                     self.assertIn(name, presets)
                     self.assertEqual(presets[name]["binaryDir"],
@@ -103,18 +110,18 @@ class ReferencePlatformTests(unittest.TestCase):
                     data = tomllib.loads(Path(assembly.replace(
                         "${sourceDir}", str(ROOT))).read_text())
                     self.assertEqual(data["board"], board)
-                    self.assertEqual(data["clock"], clock)
+                    self.assertEqual(data["clock"], "hse8-pll168")
                     self.assertEqual(data["backend"], backend)
                     self.assertEqual(set(data["gpio"]), {"led0"})
                     self.assertEqual(data["gpio"]["led0"]["binding"], "led0")
                     self.assertEqual(set(data["uart"]), {"uart1"})
                     uart = data["uart"]["uart1"]
-                    self.assertEqual(uart["binding"], binding)
-                    self.assertEqual(uart["mode"], "irq-bytes")
+                    self.assertEqual(uart["binding"], "uart1")
+                    self.assertEqual(uart["mode"], "irq")
                     self.assertEqual(uart["baud"], 115200)
-                    self.assertEqual(uart["rx"], {"format": "bytes", "capacity": 32})
+                    self.assertEqual(uart["rx"], {"format": "events", "capacity": 32})
                     self.assertEqual(uart["irq"]["priority"], 5)
-                    self.assertEqual(uart["irq"]["calls_os"], backend == "freertos")
+                    self.assertEqual(uart["irq"].get("calls_os", False), backend == "freertos")
                     self.assertEqual(data["components"], ["uart-owner"])
                     self.assertEqual(data["memory"]["libc_heap_bytes"], 0)
                     self.assertNotIn("dma", uart)
@@ -128,7 +135,7 @@ class ReferencePlatformTests(unittest.TestCase):
         matrix = workflow["jobs"]["arm"]["strategy"]["matrix"]["preset"]
         for family in REFERENCE_BOARDS:
             for backend in ("baremetal", "freertos"):
-                self.assertIn(f"stm32-{family}-nucleo-{backend}", matrix)
+                self.assertIn(f"stm32-{family}-{backend}", matrix)
         self.assertEqual(set(matrix), expected)
         paths = next(step["with"]["path"]
                      for step in workflow["jobs"]["native"]["steps"]

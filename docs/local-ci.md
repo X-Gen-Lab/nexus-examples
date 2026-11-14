@@ -15,7 +15,7 @@ index 一致、平台源码干净，lock 与 Gitlink 对应同一完整 commit/t
 Use Linux x86_64, Python 3.12, Git, GCC/G++, the pinned CMake/Ninja and formatter.
 Install host dependencies explicitly; the runner never calls apt or pip. The SDK
 `doctor --target tools` checks the locked Python minimum and build tool versions.
-Both SDK source and its recursive dependencies must be present. A relocated source
+The SDK and its selected dependency closure must be prepared. A relocated source
 checkout is supported with exactly the same lock, clean tree and Gitlink checks.
 
 使用 Linux x86_64、Python 3.12、Git、GCC/G++ 及锁定的 CMake/Ninja/格式化工具。
@@ -23,8 +23,9 @@ checkout is supported with exactly the same lock, clean tree and Gitlink checks.
 编译器实际版本保存在日志。平台依赖必须完整，显式源码路径不放宽正式身份验证。
 
 ```sh
-git submodule sync -- external/nexus
-git submodule update --init -- external/nexus
+git submodule sync -- external/nexus external/googletest
+git submodule update --init --depth 1 -- external/nexus
+git submodule update --init --depth 2 -- external/googletest
 python3 external/nexus/tools/dev/dev.py prepare --scope native --allow-network
 python3 scripts/setup_dev_tools.py
 .venv/bin/python -m pip install -r external/nexus/dependencies/environment-tools.txt
@@ -86,13 +87,46 @@ Native 默认生成正式 SDK。可用 `--installed-sdk` 复用同一 commit/tre
 所有子进程禁止生成 Python 字节码；消费者结束后再次完整校验 SDK 和原 manifest
 身份。即使应用测试通过，安装包中新增 pyc 或其他变化仍会让整次验证失败。
 
+## Host framework and source-only tests / 宿主框架与源码测试
+
+The examples pin GoogleTest/GoogleMock independently at `external/googletest`.
+The two-commit shallow checkout retains the reviewed upstream parent required
+by its offline verifier. Firmware and the installed SDK do not acquire it.
+
+示例独立锁定宿主框架；depth 2 保留离线校验所需的审核 upstream 父提交。固件与
+installed SDK 不因此引入框架。普通提交仍要求干净的固定平台源码检出。
+
+`NEXUS_EXAMPLES_FREERTOS_POSIX_TESTS` defaults to OFF; the Native preset explicitly
+keeps it OFF, including reuse of an older CMake cache. Installed reproduction
+continues to run its two application CTests and uses the SDK's public JUnit API.
+The actual shared-SPI FreeRTOS application is retained for explicit source-only
+development. The platform's private POSIX harness also registers its kernel
+contract when enabled, so that larger graph is outside default example admission.
+
+该选项和 Native preset 默认关闭，避免旧 cache 把平台内核合同带回默认验收。
+真实共享 SPI 应用测试仍可在完整源码环境显式执行；该开发图使用平台私有 POSIX
+harness，同时包含其 kernel 合同，不能冒充默认 installed SDK 验收：
+
+```sh
+cmake --preset native-debug -DNEXUS_EXAMPLES_FREERTOS_POSIX_TESTS=ON
+cmake --build --preset native-debug --target shared_spi_freertos_host --parallel 1
+./build/native-debug/tests/shared_spi_freertos_host
+```
+
+This executes the complete application binary, not a filtered default CI run.
+It proves only that explicit source-tool configuration; equipment is unexecuted.
+这里运行完整应用二进制，不是过滤默认 CI；其证据限于该源码开发配置，不证明实板。
+
 ## Workflow coverage / 工作流覆盖
 
-The hosted workflow has 14 Native steps and 14 ARM steps. This mapping covers all
-28 definitions; the ARM rows are expanded through the existing sixteen presets.
+The workflow defines 17 Native steps and 15 ARM steps; its ARM matrix expands
+eight F407 presets. The local runner covers the same software execution with
+one Native and eight ARM builds. Only complete execution qualifies that matrix;
+selected scopes remain partial.
 
-工作流共 Native 14 步、ARM 14 步。以下覆盖全部 28 个定义；ARM 使用原有 16 个
-preset 展开。只跑某一 scope/preset 时，报告明确标记为非完整矩阵。
+工作流定义 Native 17 步和 ARM 15 步；ARM 矩阵展开为八个 F407 preset。本地
+runner 覆盖相同软件执行。全部完成才是完整矩阵，部分 scope 或 preset 明确标记
+为部分结果。
 
 | Hosted step group | Local execution / 本地执行 |
 | --- | --- |
@@ -102,9 +136,9 @@ preset 展开。只跑某一 scope/preset 时，报告明确标记为非完整�
 | Native style, tool tests, Native build/execution | `check_style.py --all`; one `tdd_gate.py --all` owns all Python, complete Native CTest and Google discovery/execution. No filtered or skipped run qualifies. |
 | SDK package, installed configure/build/execute | Original packager or complete package verification; independent sanitized CMake/CTest; SDK JUnit validator rejects missing, empty, skipped or stale XML. |
 | ARM toolchain and main firmware | Original locked installer; `build.py` for every selected preset; bounded `--parallel`, default 1. |
-| Standalone FIFO and recipes | Existing H743/U575 FIFO projects, shared SPI, continuous RX/cache-on, runtime pause, Flash maintenance, three retained Stop2 recipes and three MCU starters: thirteen actual consumers. |
+| Standalone recipes and starters | Shared SPI runtime and the Qiming V3.1, Sky, Qiming core and Qiming V4.1 starters: five maintained consumers. 共享 SPI 运行例与启明 V3.1、天空星、启明核心板、启明 V4.1 启动模板，共五个当前维护的独立消费者。 |
 | Main/owner ELF budget checks | Existing resource checker for each actual ELF and its own generated resolution/budget. Standalone ELFs are also checked. |
-| HIL plan preparation | Original prepare tool, twelve reviewed board/backend plans; F103 and GD32F303 are not substituted with another PCB. `prepared_unbound` / `not_executed` only. |
+| HIL plan preparation | Original prepare tool, eight reviewed F407 board/backend plans; no retired Board fallback. `prepared_unbound` / `not_executed` only. |
 | Artifact upload; both jobs | Local retained logs, command receipts, existing build artifacts and run summary; no hosted upload or remote status is claimed. |
 
 ## Results and failures / 结果与失败
@@ -123,12 +157,12 @@ warm-build output. The exit code and summary must both indicate success.
 身份变化、空/旧/跳过测试报告均失败，不读取历史成功结果补齐。部分运行的成功
 不能替代完整矩阵；本地成功也不是 GitHub 托管检查或物理 HIL 成功。
 
-Three initial boards remain disconnected. See [Board facts](boards.md) and
+All four F407 Boards remain disconnected. See [Board facts](boards.md) and
 [HIL preparation](delivery-preparation.md#hil-readiness) before selecting any
 station. Never fill an observed chip UID, probe serial or wiring field from a
 software reference. The runner has no station binding or acquisition option.
 
-首发三板尚未接入。芯片 UID、探针编号、接线等必须来自实际观测，不能由软件参考
+四块 F407 Board 尚未接入。芯片 UID、探针编号、接线等必须来自实际观测，不能由软件参考
 补造。本入口仅准备计划，没有绑定 station、采集、自动烧写或破坏性测试选项。
 
 To inspect one prepared plan after a successful source build, the existing
@@ -143,13 +177,14 @@ python external/nexus/tools/hil/prepare.py \
   --report build/qiming-hil-preparation.json
 ```
 
-The three initial mappings are Qiming → `stm32f407_qiming_v31`, Sky →
-`stm32f407ve_sky_qingchun`, Liangshan → `gd32f470_liangshan`. A Sky fixture
+The four mappings are Qiming V3.1 → `stm32f407_qiming_v31`, Sky →
+`stm32f407ve_sky_qingchun`, Qiming core → `stm32f407zg_qiming_core`, and
+Qiming V4.1 → `stm32f407zg_qiming_v41`. A Sky fixture
 paired with a Qiming resolution is rejected; unknown presets and `--station`
 on `local_ci.py` are rejected rather than choosing a fallback. Future physical
 admission uses the SDK's existing `tools/hil/admit.py` and observed station
 schema, after the equipment and workload have actually been reviewed.
 
-三板 fixture 必须对应上列准确身份。天空星 fixture 配启明 resolved 会拒绝；
+四板 fixture 必须对应上列准确身份。天空星 fixture 配启明 resolved 会拒绝；
 未知 preset 或向 local_ci 传入 --station 也会拒绝，不静默替换。将来接入实板后，
 使用原有 admit.py 和真实观测 station schema；先审核实际设备及负载，再执行采集。

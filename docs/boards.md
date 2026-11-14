@@ -1,65 +1,48 @@
-# Maintained reference boards
+# 当前参考板 / Maintained reference Boards
 
-For product-owned manifests and exact provider checks, follow the
-[external Board guide](external-board.md). 产品自有板包、精确 provider 校验、
-配置差异与 SDK 消费见[外部 Board 指南](external-board.md)。
+当前主工程只选择以下四个 STM32F407 Board，均使用已审核的 HSE 8 MHz／168 MHz
+profile。Board ID 选择精确引脚和选装条件；原理图不能证明本次实物装配。
 
-| Board | Exact MCU | Selected clock source | Example LED | Console |
-| --- | --- | --- | --- | --- |
-| 启明欣欣 V3.1 | STM32F407ZGT6 | 8 MHz | PE3, low active | USART1 PA9/PA10 |
-| 天空星青春版 | STM32F407VET6 | 8 MHz | PB2, high active | USART1 PA9/PA10 |
-| 梁山派 | GD32F470ZGT6 | 25 MHz | PD7, high active | USART0 PA9/PA10 |
-| NUCLEO-H743ZI2 software reference | STM32H743ZIT6 | internal HSI 64 MHz | PB0, high active | USART3 PD8/PD9 AF7 |
-| NUCLEO-U575ZI-Q software reference | STM32U575ZIT6Q | internal MSIS 4 MHz | PC7, high active | USART1 PA9/PA10 AF7 |
-| NUCLEO-F103RB source reference | STM32F103RBT6 | internal HSI 8 MHz | PA5 LD2 source reference | USART2 PA2/PA3 |
-| GD32F303RC silicon fixture | GD32F303RCT6 | internal IRC 8 MHz | PA5 software output; no PCB/LED asserted | USART0 PA9/PA10 |
-| G474RE HSE24 source reference | STM32G474RET6 | 24 MHz source reference | PA5 LD2 source reference | LPUART1 PA2/PA3 AF12 |
+The four current Boards select the reviewed HSE8/168 MHz profile. Their exact
+packages own routing and population choices; no connected PCB has been observed.
 
-These facts come from reviewed SDK Board packages and their source references.
-They have not been compared with connected physical PCB revisions or fitted
-options. STM32 SWD PA13/PA14 remains reserved. The GD32 monotonic clock reserves
-TIMER1. Board defaults set reviewed inactive LED levels before application use.
+| Board ID | MCU | `led0` inactive level | Console |
+| --- | --- | --- | --- |
+| `stm32f407_qiming_v31` | STM32F407ZGT6 | PE3 high | USART1 PA9/PA10 |
+| `stm32f407ve_sky_qingchun` | STM32F407VET6 | PB2 low | USART1 PA9/PA10 |
+| `stm32f407zg_qiming_core` | STM32F407ZGT6 | PG13 high | USART1 PA9/PA10 |
+| `stm32f407zg_qiming_v41` | STM32F407ZGT6 | PE3 high | USART1 PA9/PA10 |
 
-Each reference has bare-metal and FreeRTOS assemblies. They select a 115200 baud
-console with an exact 32-event RX budget on the original three boards, or a
-32-byte RX budget on the other five software references. IRQ priorities and
-static memory budgets are explicit in each assembly. UART typed providers use IRQ TX,
-not DMA. RX loss/status-only events must never be interpreted as fabricated bytes.
+每板有裸机与 FreeRTOS 两个 preset，只选择 GPIO 和 115200 baud UART IRQ/event。
+RX 容量明确为 32 events；优先级为 5。FreeRTOS 配置显式声明 `calls_os=true`，
+裸机不调用内核。UART 损坏、溢出或状态事件不被当作可回显字节。
 
-The H743 reference requires the reviewed MB1364 LED1 PB0 path (SB39 ON/SB47
-OFF), USART3 VCP path (SB19/SB12), LDO supply entry and cold HSI64 Cache-off state.
-The U575 reference requires the reviewed MB1549 PC7 LD1 path (SB21 ON/SB23 OFF),
-USART1 VCP path (SB32/SB34 ON; SB24/SB26/SB31/SB33 OFF), TZEN0 and SWAP_BANK0.
-Actual PCB, regulator/SMPS fitting, bridges and option bytes remain unobserved.
-The example never modifies option bytes. Both references reserve TIM2 for time
-and maintain only the declared GPIO and IRQ-byte UART routes; DMA, cache,
-TrustZone, deep STOP and running-state handoff are outside their current scope.
+Both backend presets select only GPIO and IRQ/event UART with a 32-event budget.
+FreeRTOS explicitly permits the priority-5 notification to call the kernel.
+The application rejects damaged reception before authorizing any echo.
 
-The shared reference RX policy calls the public event operation first. Only an
-UNSUPPORTED result selects the public byte operation. A damaged event or byte
-overflow returns failure with zero bytes authorized for echo. The UART owner
-application uses the same public TX, IRQ hint and settlement contracts across
-all eight software references. FreeRTOS assemblies explicitly permit the
-configured priority-5
-UART hint to call the kernel; bare-metal hints do not call it.
+核心板／V4.1 最小配置显式选择 SWD，保留 PA13／PA14；可选 NOR、SRAM、显示、触摸、
+网络等状态均由 TOML 明确表达。最小工程选择 absent/disconnected 只是使用前提，
+不是自动识别实物。ILI9341／XPT2046 型号不授权驱动共享接口或推断其他模块。
 
-Only these declared GPIO/console routes are exercised by the MCU reference
-application. F103RB, GD32F303RC and G474RE fittings, loads, supply and serial
-connections remain unobserved; their compiled routes do not establish PCB wiring
-or physical LEDs. GD32F303RC is a silicon fixture with no selected development
-board.
+Core/V4.1 starters explicitly reserve SWD and declare optional module states.
+An absent/disconnected selection is a prerequisite, not a population detector.
+Known display and touch controller identities never enable other peripherals.
 
-Only selected routes are composed by each application.
-The Liangshan package also describes SPI4 PF6 CS and PF7/PF8/PF9, but the fitted
-NOR part is unknown; the sensor example is not declared supported there.
-Unknown I2C/PWM/ADC/EXTI external wiring is not automatically exposed by examples.
+[`shared_spi_runtime`](../apps/shared_spi_runtime/) 的独立 Board 是 F407ZG 硅片
+软件 fixture，声明 SPI1 PA5/PA6/PA7、PE4/PE3 CS。它不等同于任一开发板的已审
+双设备接线。传感器、RS485、MCU Flash 分区等仍需应用自有的实际配置。
 
-Before HIL, identify board revision, oscillator population, supply, probe,
-serial port and connector continuity. UART pins are MCU logic levels: use the
-board's documented compatible interface, do not assume RS232 voltages. Confirm
-safe output levels and external loads before driving GPIO/PWM.
+The shared-SPI Board is a silicon software fixture. Its explicit routes do not
+establish physical sensor, chip-select or transceiver connections on these Boards.
+Product-owned packages follow the [external Board guide](external-board.md).
 
-No board is attached in this session. Flash erase/program, watchdog reset,
-RS485 direction, power interruption and worst-load IRQ tests are unexecuted.
-The SDK HIL plan/station manifests prepare those checks without inventing a
-station or a passing physical result.
+HIL fixture 与 Board ID 一一选择，准备状态为 `prepared_unbound`。接入后应核对
+PCB revision、完整料号、晶振、供电、探针、串口路径、逻辑电平及安全初始输出，
+再执行启动、时钟、UART、IRQ/DMA、停止和故障恢复。Flash／掉电测试使用产品
+明确授权的保留区；示例不在启动时自动擦写。
+
+Physical HIL remains **`not_executed`**. Prepared work plans do not establish
+observed UID, wiring, electrical timing, watchdog reset or power-loss behavior.
+Retired Board examples remain at the fixed source linked from the repository
+README and never produce current station plans.

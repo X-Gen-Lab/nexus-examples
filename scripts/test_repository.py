@@ -19,10 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REFERENCE_PRESETS = frozenset({
     "native-debug",
     *(f"{board}-{backend}" for board in (
-        "stm32-qiming", "stm32-sky", "gd32-liangshan",
-        "stm32-h743-nucleo", "stm32-u575-nucleo",
-        "stm32-f103-reference", "gd32-f303-reference",
-        "stm32-g474-reference",
+        "stm32-qiming", "stm32-sky", "stm32-qiming-core", "stm32-qiming-v41",
     ) for backend in ("baremetal", "freertos")),
 })
 
@@ -76,7 +73,7 @@ def verify_presets():
     configured = sections["configurePresets"]
     visible = {name for name, entry in configured.items() if not entry.get("hidden", False)}
     if visible != REFERENCE_PRESETS:
-        raise ValueError("The reference matrix requires Native and the sixteen maintained ARM presets")
+        raise ValueError("The reference matrix requires Native and eight F407 ARM presets")
     for name, entry in configured.items():
         inherited = entry.get("inherits", [])
         if isinstance(inherited, str):
@@ -85,12 +82,15 @@ def verify_presets():
                 not isinstance(parent, str) or parent not in configured or parent == name
                 for parent in inherited):
             raise ValueError(f"Configure preset {name} has an invalid inheritance reference")
-    if set(sections["buildPresets"]) != visible:
+    active_builds = {name for name, entry in sections["buildPresets"].items()
+                     if not entry.get("hidden", False)}
+    if active_builds != visible:
         raise ValueError("Every reference configuration requires its matching build preset")
     for section in ("buildPresets", "testPresets"):
         for name, entry in sections[section].items():
             reference = entry.get("configurePreset")
-            if not isinstance(reference, str) or reference not in visible:
+            allowed = configured if entry.get("hidden", False) else visible
+            if not isinstance(reference, str) or reference not in allowed:
                 raise ValueError(f"{section} {name} references a missing or hidden configuration")
             if section == "buildPresets" and reference != name:
                 raise ValueError(f"Build preset {name} must reference its matching configuration")
@@ -110,14 +110,16 @@ def prepared_submodules(report):
     """Project the pinned SDK's verified Native closure, without another list."""
     expected = {"schema_version", "kind", "status", "scope", "backend",
                 "family", "network_authorized", "submodules",
-                "recursive_submodules"}
+                "recursive_submodules", "components", "host_support"}
     if (not isinstance(report, dict) or set(report) != expected or
             type(report["schema_version"]) is not int or
             report["schema_version"] != 1 or
             report["kind"] != "dependency_preparation" or
             report["status"] != "verified" or report["scope"] != "native" or
             report["backend"] != "baremetal" or report["family"] is not None or
-            report["network_authorized"] is not False):
+            report["network_authorized"] is not False or
+            report["components"] != [] or
+            report["host_support"] is not False):
         raise ValueError("SDK dependency preparation report is not verified")
 
     def records(value):
@@ -194,10 +196,6 @@ def verify(source, override, candidate_revision=None):
             modules = prepared_submodules(json.loads(report.read_text()))
         except (OSError, ValueError) as error:
             raise ValueError("SDK dependency preparation report is invalid") from error
-    vendor = checked_output([
-        sys.executable, str(source / "scripts/ci/verify_vendor_source.py"),
-        "--root", str(source / "vendors/gigadevice/gd32f4xx"),
-    ], ROOT)
     return {
         "schema_version": 1,
         "kind": ("example-candidate-source-dependency-identity" if candidate_revision
@@ -217,7 +215,6 @@ def verify(source, override, candidate_revision=None):
         "dependency_preparation": {"scope": "native",
                                    "network_authorized": False,
                                    "status": preparation},
-        "reviewed_vendor_import": json.loads(vendor),
         "hardware_verified": False,
     }
 
@@ -244,7 +241,7 @@ def main(argv=None):
         parser.exit(1, f"Repository dependency verification failed: {error}\n")
     print(f"Verified Nexus {report['nexus_revision']}, "
           f"{len(report['reference_presets'])} presets, "
-          f"{len(report['submodules'])} recursive dependency checkouts and the reviewed GD32 import")
+          f"{len(report['submodules'])} selected recursive dependency checkouts")
     if report["candidate_validation"]:
         print("Candidate SDK validation; formal source lock and example Gitlink remain unchanged")
     elif report["source_override"]:

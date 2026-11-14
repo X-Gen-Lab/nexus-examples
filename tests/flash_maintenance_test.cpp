@@ -22,11 +22,10 @@ class FlashHardware {
 class FlashMaintenance : public testing::Test {
   protected:
     testing::StrictMock<FlashHardware> hardware;
-    static constexpr nx_flash_sector_t sectors[] = {{0U, 131072U},
-                                                    {131072U, 131072U}};
+    static constexpr nx_flash_erase_span_t spans[] = {{0U, 131072U, 2U}};
     nx_flash_geometry_t geometry{
         0x08000000U, 262144U, 32U,
-        sectors,     2U,      NX_FLASH_PROGRAM_REQUIRES_FRESH_ERASE};
+        spans,       1U,      NX_FLASH_PROGRAM_REQUIRES_FRESH_ERASE};
     static const nx_flash_geometry_t* describe(const void* context) {
         return &static_cast<const FlashMaintenance*>(context)->geometry;
     }
@@ -47,7 +46,7 @@ class FlashMaintenance : public testing::Test {
                    static_cast<const FlashMaintenance*>(context))
             ->hardware.Read(offset, bytes, count);
     }
-    const nx_flash_ops_t operations{describe, read, program, erase};
+    const nx_flash_ops_t operations{describe, read, program, erase, nullptr};
     const nx_flash_port_t port{&operations, this};
     nx_flash_region_t region{&port, 131072U, 131072U, true};
     example_flash_report_t report{};
@@ -154,9 +153,53 @@ TEST_F(FlashMaintenance, FailedReadPreservesItsErrorAfterTheSettledPulse) {
     EXPECT_FALSE(report.verified);
 }
 TEST_F(FlashMaintenance, AnotherProgrammingGeometryRejectsBeforeAnyPulse) {
-    geometry.program_unit = 8U;
+    geometry.program_unit = 64U;
     EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
               NX_ERROR_INVALID);
     EXPECT_FALSE(report.erased);
 }
+TEST_F(FlashMaintenance, UnalignedSectorRejectsBeforeDestroyingItsBytes) {
+    const nx_flash_erase_span_t unaligned[] = {{0U, 131073U, 1U},
+                                               {131073U, 131071U, 1U}};
+    geometry.program_unit = 4U;
+    geometry.erase_spans = unaligned;
+    geometry.erase_span_count = 2U;
+    region.offset = 131073U;
+    region.size = 131071U;
+    EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
+              NX_ERROR_INVALID);
+    EXPECT_FALSE(report.erased);
+}
+TEST_F(FlashMaintenance, MissingEraseSpansRejectsBeforeDereference) {
+    geometry.erase_spans = nullptr;
+    EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
+              NX_ERROR_INVALID);
+    EXPECT_FALSE(report.erased);
+}
+TEST_F(FlashMaintenance, ZeroProgrammingUnitRejectsWithoutDivisionOrErase) {
+    geometry.program_unit = 0U;
+    EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
+              NX_ERROR_INVALID);
+    EXPECT_FALSE(report.erased);
+}
+class FlashProgramUnits : public FlashMaintenance,
+                          public testing::WithParamInterface<uint32_t> {};
+TEST_P(FlashProgramUnits, ProgramsAlignedPayloadAfterOneAuthorizedSectorErase) {
+    geometry.program_unit = GetParam();
+    testing::InSequence order;
+    expect_erase();
+    expect_program();
+    EXPECT_CALL(hardware, Read(131072U, testing::_, 32U))
+        .WillOnce([this](uint32_t, void* destination, size_t count) {
+            std::memcpy(destination, programmed, count);
+            return NX_SUCCESS;
+        });
+    EXPECT_EQ(example_flash_maintenance(&region, true, 1234U, payload, &report),
+              NX_SUCCESS);
+    EXPECT_TRUE(report.erased);
+    EXPECT_TRUE(report.programmed);
+    EXPECT_TRUE(report.verified);
+}
+INSTANTIATE_TEST_SUITE_P(CompatibleGeometry, FlashProgramUnits,
+                         testing::Values(1U, 2U, 4U, 8U, 16U, 32U));
 } /* namespace */

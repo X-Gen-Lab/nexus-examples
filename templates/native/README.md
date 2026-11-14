@@ -30,6 +30,10 @@ returns zero. Native UART is a deterministic software model, not a serial port.
 程序输出 `Nexus starter: transfer settled; platform stopped` 并返回零。
 Native UART 是软件模型，不是宿主串口，不建立任何 MCU 实板资格。
 
+The Native-only CMake project explicitly enables `NEXUS_TEST_SUPPORT`.
+Production F4 starters keep host test support disabled.
+此 Native 工程明确启用 `NEXUS_TEST_SUPPORT`；F4 生产工程保持宿主模型支持关闭。
+
 Change the baud or RX capacity in the authored TOML, then configure again. An
 unknown mode or conflicting resource must fail; do not edit generated files.
 修改手写 TOML 中的波特率或接收容量后重新配置。未知模式和冲突必须失败，勿编辑

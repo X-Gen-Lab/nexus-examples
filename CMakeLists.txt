@@ -30,6 +30,7 @@ nexus_add_firmware(uart_owner_runtime
         apps/uart_owner_runtime/fault_observer.c
     LIBRARIES Nexus::UARTOwner Nexus::Arch)
 if(soc_family STREQUAL "native")
+    find_package(Python3 3.11 REQUIRED COMPONENTS Interpreter)
     enable_testing()
     nexus_add_firmware(sensor_spi SOURCES apps/sensor_spi/main.c
         LIBRARIES Nexus::BMP280SPI)
