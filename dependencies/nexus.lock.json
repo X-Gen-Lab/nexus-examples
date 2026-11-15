@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "bdf61ede0e060752e36ca571ee482d925fe51355",
-  "tree": "823d0d1c8e10c384debc519c35dbb6b3f70eed32",
+  "commit": "0cdabc81dd3dd42a61ce91621b4d32809c1fbe51",
+  "tree": "41c49a68d3045e9401c55a3ea2758ef50c9c5198",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
   "baseline_status": "Exact source epoch 5 declarative-package platform pin; software qualification requires fresh source and matching publishable Source SDK integration evidence; physical HIL is not executed.",
