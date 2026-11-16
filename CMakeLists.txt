@@ -19,8 +19,8 @@ set(NEXUS_BUILD_WORKLOAD OFF CACHE BOOL "SDK minimal workloads" FORCE)
 add_subdirectory("${NEXUS_SOURCE}" nexus EXCLUDE_FROM_ALL)
 get_target_property(soc_family Nexus::Platform NEXUS_SOC_FAMILY)
 
-nexus_add_firmware(platform_reference SOURCES reproduction/main.c
-    reproduction/rx_policy.c)
+nexus_add_firmware(platform_reference SOURCES apps/platform_reference/main.c
+    apps/platform_reference/rx_policy.c)
 nexus_add_firmware(uart_owner_runtime
     SOURCES apps/uart_owner_runtime/main.c apps/uart_owner_runtime/lifecycle.c
         apps/uart_owner_runtime/bootstrap.c
@@ -46,6 +46,10 @@ if(soc_family STREQUAL "native")
     include("${CMAKE_CURRENT_SOURCE_DIR}/apps/industrial_control/firmware.cmake")
     add_subdirectory(tests)
     include("${CMAKE_CURRENT_SOURCE_DIR}/apps/network_gateway/firmware.cmake")
+    foreach(model_target IN ITEMS platform_reference uart_owner_runtime
+            sensor_spi modbus_registers shared_spi_runtime stream_recovery)
+        target_link_libraries(${model_target} PRIVATE Nexus::NativeModel)
+    endforeach()
     add_test(NAME shared_spi_two_devices COMMAND shared_spi_runtime)
     add_test(NAME stream_slow_consumer COMMAND stream_recovery)
     add_test(NAME uart_owner_shutdown COMMAND uart_owner_runtime)

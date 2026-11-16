@@ -1,9 +1,0 @@
-Nexus example format, comments and text..................................Passed
-Nexus pinned SDK and complete Native TDD contracts.......................Failed
-- hook id: nexus-example-tdd
-- exit code: 1
-
-+ /home/agent/.cache/pre-commit/repoziakv3mv/py_env-python3.12/bin/python scripts/test_repository.py --report /workspace/nexus-examples/build/native-debug/tdd/source.json
-+ /home/agent/.cache/pre-commit/repoziakv3mv/py_env-python3.12/bin/python -B -m unittest discover -s scripts -p 'test_*.py' -v
-Example TDD gate rejected: Command failed (1); see /workspace/nexus-examples/build/native-debug/tdd/tools.log
-

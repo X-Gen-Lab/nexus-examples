@@ -8,19 +8,17 @@
  */
 #include "industrial_application.h"
 #include "industrial_spi.h"
+#include "native/model.h"
 #include "nexus/arch/arch.h"
 #include "nexus/components/modbus_rtu.h"
 #include "nexus/components/settings.h"
-#include "nexus/io/native/model.h"
 #include "nexus/os/native.h"
 #include "nexus_bindings.h"
-#include "nexus_factory.h"
 #include "nexus_factory_strong.h"
 #include <string.h>
 
 #define PRODUCT_TX_US    30000U
 #define PRODUCT_ABORT_US 2000U
-#define PRODUCT_GAP_US   2000U
 #define PRODUCT_PUMP_US  1000U
 
 typedef struct {
@@ -29,7 +27,7 @@ typedef struct {
     nx_settings_t settings;
     uint8_t settings_image[64];
     nx_bmp280_t sensor;
-    uint8_t registers[128];
+    example_industrial_model_t model;
     example_industrial_spi_t bridge;
     nx_bus_owner_t owner;
     nx_owner_slot_t slot;
@@ -41,8 +39,6 @@ typedef struct {
     uint32_t worker_done;
     nx_modbus_rtu_t modbus;
     nx_uart_tx_request_t transmit;
-    nx_uart_rx_event_t receive[32];
-    uint8_t wire[128];
     uint16_t values[8];
     uint32_t period_us;
     uint32_t watchdog_min_us;
@@ -92,13 +88,6 @@ static nx_storage_status_t stage_period(application_t* app, uint32_t period) {
     return nx_settings_set(&app->settings, EXAMPLE_INDUSTRIAL_PERIOD_KEY, value,
                            sizeof(value));
 }
-static bool time_due(void* context) {
-    return now(NULL) >= *(const nx_time_us_t*)context;
-}
-static nx_result_t wait_time(application_t* app, nx_time_us_t deadline) {
-    nx_wait_port_t port = nx_native_notify_port(&app->changed);
-    return nx_wait_until(&port, time_due, &deadline, deadline);
-}
 static bool worker_done(void* context) {
     application_t* app = context;
     return nx_atomic_u32_load_acquire(&app->worker_done) != 0U;
@@ -128,27 +117,6 @@ static void owner_entry(void* context) {
     (void)changed.wake(changed.context);
 }
 
-/** \brief Product fixture data from the existing Bosch calibration reference.
- */
-static void sensor_model(application_t* app) {
-    app->registers[0x50] = 0x58U;
-    const int32_t calibration[12] = {27504, 26435, -1000, 36477, -10685, 3024,
-                                     2855,  140,   -7,    15500, -14600, 6000};
-    for (size_t index = 0U; index < 12U; ++index) {
-        uint16_t value = (uint16_t)calibration[index];
-        app->registers[8U + index * 2U] = (uint8_t)value;
-        app->registers[9U + index * 2U] = (uint8_t)(value >> 8U);
-    }
-    const uint32_t raw[2] = {415148U, 519888U};
-    for (size_t sample = 0U; sample < 2U; ++sample) {
-        for (size_t index = 0U; index < 3U; ++index) {
-            unsigned shift = (unsigned)(16U - index * 8U);
-            app->registers[0x77U + sample * 3U + index] =
-                (uint8_t)((raw[sample] << 4U) >> shift);
-        }
-    }
-}
-
 static bool direction(void* context, bool transmit) {
     application_t* app = context;
     if (!transmit && app->transmitting) {
@@ -165,15 +133,16 @@ static bool write_bytes(void* context, const uint8_t* bytes, size_t length,
             NX_SUCCESS) {
         return false;
     }
-    app->transmitting = nx_uart_port_submit(nx_factory_uart(NX_UART_ID_UART0),
-                                            &app->transmit) == NX_SUCCESS;
+    app->transmitting =
+        nx_uart_port_submit(nx_factory_uart_ref(NX_UART_REF_CONSOLE),
+                            &app->transmit) == NX_SUCCESS;
     return app->transmitting;
 }
 
 /** \brief Sole UART owner performs bounded service; no hidden TX worker. */
 static bool settle_uart(application_t* app, nx_time_us_t deadline) {
     while (nx_request_state(&app->transmit.base) != NX_REQUEST_SETTLED) {
-        nx_uart_port_service(nx_factory_uart(NX_UART_ID_UART0));
+        nx_uart_port_service(nx_factory_uart_ref(NX_UART_REF_CONSOLE));
         if (nx_request_state(&app->transmit.base) == NX_REQUEST_SETTLED) {
             break;
         }
@@ -200,7 +169,7 @@ static bool abort_uart(void* context, uint64_t deadline) {
     if (!app->transmitting) {
         return true;
     }
-    return nx_uart_port_cancel(nx_factory_uart(NX_UART_ID_UART0),
+    return nx_uart_port_cancel(nx_factory_uart_ref(NX_UART_REF_CONSOLE),
                                &app->transmit) == NX_SUCCESS &&
            settle_uart(app, deadline);
 }
@@ -251,82 +220,6 @@ static nx_modbus_register_result_t write_registers(void* context,
     return NX_MODBUS_OK;
 }
 
-/** \brief Inject finite host RX facts, then validate real protocol output. */
-static bool model_exchange(application_t* app, uint8_t function, uint16_t index,
-                           uint16_t value, size_t expected) {
-    uint8_t request[8] = {17U,
-                          function,
-                          (uint8_t)(index >> 8U),
-                          (uint8_t)index,
-                          (uint8_t)(value >> 8U),
-                          (uint8_t)value,
-                          0U,
-                          0U};
-    uint16_t crc = nx_modbus_crc16(request, 6U);
-    request[6] = (uint8_t)crc;
-    request[7] = (uint8_t)(crc >> 8U);
-    if (wait_time(app, nx_deadline_after(now(NULL), PRODUCT_GAP_US)) !=
-        NX_SUCCESS) {
-        return false;
-    }
-    size_t begin =
-        nx_native_uart_model_transmitted(nx_factory_uart(NX_UART_ID_UART0));
-    for (size_t byte = 0U; byte < sizeof(request); ++byte) {
-        if (nx_native_uart_model_receive(nx_factory_uart(NX_UART_ID_UART0),
-                                         request[byte], 0U) != NX_SUCCESS) {
-            return false;
-        }
-    }
-    nx_uart_rx_event_t events[8];
-    size_t count = 0U;
-    if (nx_uart_port_read_events(nx_factory_uart(NX_UART_ID_UART0), events, 8U,
-                                 &count) != NX_SUCCESS ||
-        count != 8U) {
-        return false;
-    }
-    for (size_t byte = 0U; byte < count; ++byte) {
-        if (events[byte].flags != 0U ||
-            !nx_modbus_rtu_feed(&app->modbus, events[byte].byte,
-                                events[byte].timestamp_us)) {
-            nx_modbus_rtu_rx_error(&app->modbus, events[byte].timestamp_us);
-            return false;
-        }
-    }
-    if (wait_time(app, nx_deadline_after(now(NULL), PRODUCT_GAP_US)) !=
-            NX_SUCCESS ||
-        !nx_modbus_rtu_poll(&app->modbus, now(NULL)) || app->transmitting ||
-        app->direction_tx) {
-        return false;
-    }
-    size_t end =
-        nx_native_uart_model_transmitted(nx_factory_uart(NX_UART_ID_UART0));
-    if (end - begin != expected ||
-        nx_modbus_crc16(&app->wire[begin], expected) != 0U) {
-        return false;
-    }
-    const uint8_t* response = &app->wire[begin];
-    if (function == 3U) {
-        if (response[1] != 3U || response[2] != 8U ||
-            response[3] != (uint8_t)(app->values[0] >> 8U) ||
-            response[4] != (uint8_t)app->values[0] ||
-            response[5] != (uint8_t)(app->values[1] >> 8U) ||
-            response[6] != (uint8_t)app->values[1] ||
-            response[7] != (uint8_t)(app->values[2] >> 8U) ||
-            response[8] != (uint8_t)app->values[2]) {
-            return false;
-        }
-    } else if (index == 4U) {
-        if (memcmp(response, request, sizeof(request)) != 0) {
-            return false;
-        }
-    } else if (response[1] != 0x86U ||
-               response[2] != NX_MODBUS_ILLEGAL_ADDRESS) {
-        return false;
-    }
-    ++app->report->modbus_replies;
-    return true;
-}
-
 static bool sample_due(void* context) {
     application_t* app = context;
     return now(NULL) >= app->bridge.next_tick;
@@ -358,6 +251,9 @@ static nx_result_t run_control(application_t* app) {
     uint32_t protocol_step = 0U;
     const nx_wait_source_t sources[] = {{stopping, app}, {sample_due, app}};
     nx_wait_port_t port = nx_native_notify_port(&app->changed);
+    const example_industrial_protocol_model_t protocol = {
+        &app->modbus, port, app->values, &app->transmitting,
+        &app->direction_tx};
     while (true) {
         uint32_t replies_before = app->report->modbus_replies;
         if (stopping(app)) {
@@ -386,8 +282,8 @@ static nx_result_t run_control(application_t* app) {
                 app->values[2] = (uint16_t)sample.pressure_pa;
                 app->values[3] = (uint16_t)app->report->samples;
                 measuring = false;
-                if (nx_watchdog_port_feed(nx_factory_watchdog(
-                        NX_WATCHDOG_ID_WATCHDOG0)) != NX_SUCCESS) {
+                if (nx_watchdog_port_feed(nx_factory_watchdog_ref(
+                        NX_WATCHDOG_REF_WATCHDOG0)) != NX_SUCCESS) {
                     return NX_ERROR_IO;
                 }
                 ++app->report->watchdog_feeds;
@@ -399,16 +295,20 @@ static nx_result_t run_control(application_t* app) {
         if (app->report->samples != 0U && protocol_step < 3U) {
             bool exchanged;
             if (protocol_step == 0U) {
-                exchanged = model_exchange(app, 3U, 0U, 4U, 13U);
+                exchanged = example_industrial_model_exchange(
+                    &app->model, &protocol, 3U, 0U, 4U, 13U);
             } else if (protocol_step == 1U) {
-                exchanged =
-                    model_exchange(app, 6U, 4U, next_reference_period(app), 8U);
+                exchanged = example_industrial_model_exchange(
+                    &app->model, &protocol, 6U, 4U, next_reference_period(app),
+                    8U);
             } else {
-                exchanged = model_exchange(app, 6U, 0U, 0U, 5U);
+                exchanged = example_industrial_model_exchange(
+                    &app->model, &protocol, 6U, 0U, 0U, 5U);
             }
             if (!exchanged) {
                 return NX_ERROR_IO;
             }
+            ++app->report->modbus_replies;
             ++protocol_step;
         }
         if (app->report->samples >= app->config.sample_limit &&
@@ -558,7 +458,7 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
         }
     }
     if (result == NX_SUCCESS) {
-        result = nx_native_clock_configure(false, 0U);
+        result = example_industrial_model_clock();
     }
     if (result == NX_SUCCESS) {
         result = nx_native_notify_init(&app->changed);
@@ -569,10 +469,8 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
         app->owner_event_open = result == NX_SUCCESS;
     }
     if (result == NX_SUCCESS) {
-        sensor_model(app);
-        result = nx_native_spi_model_configure(
-            nx_factory_spi_device_ref(NX_SPI_DEVICE_REF_SENSOR0),
-            app->registers, sizeof(app->registers));
+        result = example_industrial_model_sensor(
+            &app->model, nx_factory_spi_device_ref(NX_SPI_DEVICE_REF_SENSOR0));
     }
     if (result == NX_SUCCESS) {
         nx_wait_port_t wake = nx_native_notify_port(&app->owner_event);
@@ -601,11 +499,8 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
     }
     if (result == NX_SUCCESS) {
         nx_request_initialize(&app->transmit.base);
-        nx_native_uart_config_t uart = {
-            NX_UART_RX_EVENTS, app->receive,      32U,
-            app->wire,         sizeof(app->wire), true};
-        result = nx_native_uart_model_configure(
-            nx_factory_uart(NX_UART_ID_UART0), &uart);
+        result = example_industrial_model_uart(
+            &app->model, nx_factory_uart_ref(NX_UART_REF_CONSOLE));
     }
     if (result == NX_SUCCESS) {
         app->values[4] = (uint16_t)(app->period_us / 1000U);
@@ -622,8 +517,8 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
     }
     if (result == NX_SUCCESS) {
         const nx_watchdog_port_t* watchdog =
-            nx_factory_watchdog(NX_WATCHDOG_ID_WATCHDOG0);
-        nx_native_watchdog_model_boot(watchdog, NX_RESET_POWER_ON);
+            nx_factory_watchdog_ref(NX_WATCHDOG_REF_WATCHDOG0);
+        example_industrial_model_watchdog_boot(watchdog);
         nx_watchdog_state_t state;
         result = nx_watchdog_port_enable(watchdog, config->watchdog_timeout_us,
                                          false, &state);
@@ -671,11 +566,12 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
     }
     nx_watchdog_state_t state;
     if (app->platform_open &&
-        nx_watchdog_port_state(nx_factory_watchdog(NX_WATCHDOG_ID_WATCHDOG0),
-                               &state) == NX_SUCCESS) {
+        nx_watchdog_port_state(
+            nx_factory_watchdog_ref(NX_WATCHDOG_REF_WATCHDOG0), &state) ==
+            NX_SUCCESS) {
         report->watchdog_retained = state.enabled && state.irreversible;
-        report->watchdog_expired = nx_native_watchdog_model_expired(
-            nx_factory_watchdog(NX_WATCHDOG_ID_WATCHDOG0));
+        report->watchdog_expired = example_industrial_model_watchdog_expired(
+            nx_factory_watchdog_ref(NX_WATCHDOG_REF_WATCHDOG0));
         if (report->watchdog_expired && result == NX_SUCCESS) {
             result = NX_ERROR_IO;
         }

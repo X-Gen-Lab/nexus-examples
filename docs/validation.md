@@ -1,83 +1,80 @@
-> Historical previous-architecture record. This plan/result does not qualify
-> the current static-port architecture. See [current validation](refactor-validation.md)
-> and the pinned SDK `docs/design/next-generation-execution.csv` for current scope.
+# 验证与交付 / Validation and delivery
 
-# 历史首批示例的软件验证记录
+当前验证绑定例库源码、`dependencies/nexus.lock.json`、`external/nexus` Gitlink、
+装配、工具链和实际产物。写有 target、旧报告或平台主库的通过数量都不能替代本库
+执行。此页定义规则，不提前声明某个新 pin 已通过。
 
-记录日期：2026-10-09（Asia/Shanghai）。本页冻结 Nexus `069dcf14` 的首批历史软件
-集成证据，下面的 3 项 Native 测试、20 个 ARM ELF 和当时未执行项仅属于该基线。
-本轮已测试 snapshot Nexus `db6ca0c4`／示例 `fcc17963`、后续交付 pin 与完整结果见
-[最终软件验证](refactor-validation.md) 和
-[platform-refactor-validation.json](../evidence/platform-refactor-validation.json)。
-历史报告不替代当前软件验收，也不构成实板资格或产品发布报告。
+Validation binds actual examples source, exact SDK, configuration, tools and
+artifacts. Authored targets, historical reports and platform test counts do not
+qualify changed application code. This page defines admission, not a future pass.
 
-## 源码与执行环境
+## 软件验证 / Software checks
 
-- Nexus：`069dcf14f9cb1cd6fc4a869d87bf9827b91ce306`，tree
-  `b135a2cf0294319a8f02b15c578b35433864a3aa`。
-- 应用实现提交：`2a7b555`；构建入口和依赖核验提交：`7196841`。
-- 本地显式使用 `/workspace/nexus` checkout；父仓库 Gitlink、SDK commit/tree、
-  SDK 干净状态、7 个递归依赖 checkout 和 GD32 官方导入摘要均已核验。
-- CMake 4.4.4、Native GCC 14.2.0、ARM GNU 14.3.Rel1
-  （编译器报告 14.3.1 20250623）；Python 与工具二进制身份见 JSON 记录。
-- 本次未重新下载或验证 ARM 安装包摘要；使用工作区已有工具链并记录实际编译器摘要。
-  CI 定义使用 Nexus 的固定安装包 SHA-256 安装器，其线上执行状态另行记录。
+| 检查 / Check | 必须观察的事实 / Required observation |
+| --- | --- |
+| 源码身份 / Source identity | 锁、Gitlink、干净 SDK、选中递归依赖一致 / Matching exact identities |
+| 格式与注释 / Style | SDK 锁定工具、现有格式和 Doxygen 合同 / Locked tools and existing policy |
+| Native 合同 / Native contracts | 全部维护 CTest、真实应用 C、Google 完整发现与执行 / Complete unfiltered execution |
+| 工具回归 / Tooling | 实际配置、拒绝、撤回及 fresh-report 行为 / Real success and failure paths |
+| ARM 镜像 / ARM images | 四板两后端的两个主 ELF，逐个检查配置、向量和资源 / Independent ELF checks |
+| 独立工程 / Standalone projects | 已维护共享 SPI 与四 MCU starter / Existing standalone consumers |
+| Installed SDK | 精确正式包、同源应用消费、fresh JUnit、消费后完整校验 / Same-source consumption and integrity |
 
-机器可读记录见 [validation.json](../evidence/validation.json)。记录保存实际编译输入、
-配置、可执行文件和 ELF 摘要、测试枚举、退出码及依赖身份。
-构建发生在首次提交整理过程中，文档当时尚未全部提交；输入摘要与后续实现提交绑定，
-不把这些结果标作最终 clean checkout 的候选发布验证。
+普通 commit hook 执行完整 Native/Google 和工具门禁，拒绝不同的未暂存行为、
+变化的 index、过滤、空报告、全部跳过、陈旧 XML 和身份漂移。保留 pre-commit、
+Conventional Commit 及实际返回码；hook 验证执行，不自动证明历史 RED 顺序。
 
-## Native 实际运行
+The ordinary hook validates the complete index and actual execution. It never
+stages fixes or accepts filters, empty/skipped/stale output or source drift.
+TDD evidence retains the original expected RED, smallest implementation and GREEN;
+pure file moves do not invent earlier RED executions.
 
-执行入口：
+从[构建指南](build.md)运行完整本地 CI。部分 scope/preset 明确为部分结果；GitHub
+Actions 未执行时记录 local，不写成托管 CI success。Source SDK 按选定 profile
+导出，不携带未选库存或宿主 GoogleTest；完整固件配置须重新编译，无跨配置二进制
+ABI 承诺。
 
-```sh
-python3 scripts/build.py --preset native-debug --nexus-source /workspace/nexus --test --parallel 4
-python3 scripts/test_repository.py --nexus-source /workspace/nexus --report build/dependency-identity.json
-```
+Complete local CI reuses maintained presets and checkers. Partial runs remain
+partial; local execution is not hosted CI. SDK profiles select dependencies, and
+source-based ABI requires rebuilding the selected configuration.
 
-配置、编译、CTest 和依赖检查退出码均为 0。CTest 有 **3 项通过，0 失败、0 跳过**：
+## 输出与历史 / Output and history
 
-| 测试 | 实际观察范围 |
-|---|---|
-| `boot_blinky_finite` | 有限循环、GPIO 状态及正常退出 |
-| `rtos_pipeline_finite` | Native producer/consumer、队列和有限时间运行 |
-| `industrial_protocol_and_fault` | 软件 Modbus 帧、虚拟 plant 与过期传感器故障路径 |
+新执行选择 `build/` 下独立输出目录。保存实际命令、退出码、日志、fresh JUnit、
+source/SDK/配置摘要、ELF/BIN/MAP 和预算报告。缓存可复用，成功报告不能缓存为新
+资格；先前失败保留原始范围和 bytes。保留唯一原件或可恢复归档，不将多轮日志、
+源码副本或 `.o` 再提交到当前源码树。
 
-当前 Native 没有类型化 UART provider，因此没有用替身生成 `uart_echo` 的通过结论。
-两个构建脚本的 Python 编译检查通过。依赖检查还核验了 9 组 preset 的引用关系。
-另实际执行了一次错误 SDK 身份检查：退出码为 1，旧报告已删除，未留下成功记录。
+Use a new ignored output directory for each run. Retain raw failures and source
+identity with reports and artifacts. Cache tools/build inputs, never successful
+test reports. Archive one recoverable evidence copy rather than committing
+repeated logs and before-images. Fixed historical material is indexed in
+[history](history.md) and does not qualify this checkout.
 
-## ARM 实际编译、链接与 ELF 检查
+完整交付需先冻结平台提交 P，再同步例库 gitlink/lock、执行例库普通门禁得到 E，
+最后关联 P、E、模板清单与实际软件证据。版本号、声明能力和软件验证均不等同于
+产品发布、安全认证或 LTS 承诺。
 
-每组执行本仓库 `scripts/build.py`，随后执行固定 SDK 的
-`scripts/ci/validate_firmware_elf.py --build-dir build/<preset>/nexus`。
-8 组构建和检查退出码均为 0，共检查 **20 个 ELF**。
+Freeze the platform first, integrate its exact pin, then bind the committed
+examples source and executed consumer evidence. Version declarations and software
+checks establish neither product release nor safety certification.
 
-| Board | 裸机 | FreeRTOS |
-|---|---|---|
-| STM32F4Discovery | 2 ELF，通过 | 3 ELF，通过 |
-| 启明 STM32F407ZGT6 V3.1 | 2 ELF，通过 | 3 ELF，通过 |
-| 天空星 STM32F407VET6 青春版 | 2 ELF，通过 | 3 ELF，通过 |
-| 梁山派 GD32F470ZGT6 | 2 ELF，通过 | 3 ELF，通过 |
+## 实板准备 / Physical preparation
 
-裸机镜像为 `boot_blinky`、`uart_echo`；FreeRTOS 另含 `rtos_pipeline`。
-检查包括镜像入口、向量表、强中断 handler、设备注册条目、Flash/RAM 区域、
-保留存储区和 ELF 段属性，具体逐镜像数据见 JSON。未执行 MCU 镜像。
+四块 F407 Board 尚未接入。HIL 工具只生成 `prepared_unbound` 计划；物理状态为
+**`not_executed`**。接入后真实观测 PCB revision、完整料号/UID、探针、稳定串口
+路径、晶振、供电、接线、模块与安全初始电平，再绑定同一 ELF、resolved 和工具。
 
-MCU 使用 newlib-nosys，`rtos_pipeline` 的 `printf` 不是已接入的串口控制台；
-统计先通过调试器观察。串口演示使用独立 `uart_echo` 的类型化 UART 接口。
-链接器的 nosys 系统调用警告没有被解释为串口已可用。
+No connected station has been observed. Unbound plans do not invent UID, probe,
+wiring or measurements. Bind physical results only after observing the actual
+station and matching software artifacts.
 
-## 证据位置与未执行项
+先验证启动、时钟、GPIO、UART RX/TX/TC、IRQ 负载、停止和恢复，再扩展所选 DMA、
+传感器、RS485、显示触摸、模拟及联网模式。延迟、吞吐、功耗、栈峰值和振荡器精度
+需要实际设备与负载。Flash/掉电/看门狗须产品自有保留区和明确工装流程，默认不做
+破坏性操作。
 
-本地 `build/<preset>/` 保留构建日志、有效配置、ELF 静态报告及产物；Native
-保留 `ctest-results.xml`。提交中的 JSON 保存其摘要和检查数据，不包含大体积二进制。
-CI 配置了对应报告与产物上传；配置存在不表示线上任务已运行通过。
-
-未执行：全新网络 clone 的递归 submodule 获取、GitHub Actions、三块目标板刷写和运行、
-物理 UART/LED/SPI 波形、DMA 停止及取消、Flash 物理掉电、工业 RS485、长期负载。
-本次未改动 Nexus 核心，未重新运行其全量契约测试。
-这些项目按 [平台计划](platform-refactor-plan.md) 和
-[示例路线图](examples-roadmap.md) 验收，软件模型与 ARM 链接不能替代它们。
+Qualify the smallest board lifecycle first, then exact selected modes. Physical
+latency, throughput, power, stack peaks and reset/power-loss behavior require
+measurement. Application maintenance admission never follows from a diagnostic
+or an accepted software callback alone. See [Board facts](boards.md).

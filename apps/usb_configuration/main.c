@@ -7,7 +7,7 @@
  * \copyright       Copyright (c) 2026 Nexus Team
  */
 #include "nexus_bindings.h"
-#include "nexus_factory.h"
+#include "nexus_factory_strong.h"
 #include "usb_configuration.h"
 
 static example_usb_t application;
@@ -18,8 +18,9 @@ int main(void) {
     int result = 1;
     if (started.primary == NX_SUCCESS &&
         example_usb_initialize(
-            &application, nx_factory_usb_profile(NX_USB_DEVICE_ID_FS),
-            nx_factory_usb_activation(NX_USB_DEVICE_ID_FS)) == NX_SUCCESS) {
+            &application, nx_factory_usb_profile_ref(NX_USB_DEVICE_REF_FS),
+            nx_factory_usb_activation_ref(NX_USB_DEVICE_REF_FS)) ==
+            NX_SUCCESS) {
         bool sent = false;
         while (!application.closed) {
             (void)example_usb_step(&application);

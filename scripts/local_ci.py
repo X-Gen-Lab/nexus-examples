@@ -16,7 +16,7 @@ import sys
 import time
 
 from build import positive_integer
-from sdk_tools import ROOT, load
+from sdk_tools import ROOT, load, maintenance
 import tdd_gate
 
 
@@ -131,11 +131,12 @@ class LocalCI:
         log = self.output / (name + ".log")
         self.report["commands"].append(str(log.with_suffix(".command.json")))
         return tdd_gate.execute(self.root, arguments,
-                                environment or self.environment, log)
+                                environment or self.environment, log,
+                                tool_source=self.source)
 
     def source_identity(self, name):
         path = self.output / (name + ".json")
-        self.command(name, [sys.executable, "scripts/test_repository.py",
+        self.command(name, [sys.executable, "scripts/verify_sdk.py",
                            "--nexus-source", self.source, "--report", path])
         return json.loads(path.read_text())
 
@@ -149,9 +150,11 @@ class LocalCI:
                                "--nexus-source", self.source, "--report",
                                self.output / "style.json"])
         environment = dict(self.environment, NEXUS_SOURCE=str(self.source))
-        self.command("native", [sys.executable, "scripts/tdd_gate.py", "--all"], environment)
-        # The gate owns complete catalogue, fresh JUnit and all Google reports.
-        self.report["native_gate"] = str(self.root / "build/native-debug/tdd/execution.json")
+        lock, _ = maintenance(self.source)
+        with lock.build_lock(self.root / "build/native-debug"):
+            self.command("native", [sys.executable, "scripts/tdd_gate.py", "--all"], environment)
+            self.retain_native()
+
         prefix = installed_sdk or self.output / "source-sdk"
         if installed_sdk is None:
             self.command("sdk-package", [sys.executable,
@@ -161,6 +164,24 @@ class LocalCI:
                          "--component", "mqtt"])
         self.installed(prefix)
 
+    def retain_native(self):
+        """Retain this run's small raw results before releasing the build lease."""
+        build = self.root / "build/native-debug"
+        retained = self.output / "native-gate"
+        shutil.copytree(build / "tdd", retained,
+                        ignore=shutil.ignore_patterns("*.attempts"))
+        report = retained / "execution.json"
+        document = json.loads(report.read_text())
+        ctest = build / "ctest-results.xml"
+        if ctest.is_file():
+            shutil.copy2(ctest, retained / "ctest-results.xml")
+        for program in document.get("google_programs", []):
+            origin = Path(program["output"])
+            destination = retained / origin.relative_to(build)
+            shutil.copytree(origin, destination)
+        self.report["native_gate"] = str(report)
+        self.report["native_artifacts"] = str(retained)
+
     def installed(self, prefix):
         metadata = verify_sdk(prefix, self.identity)
         self.report["installed_sdk"] = {"prefix": str(prefix), **{
@@ -169,10 +190,10 @@ class LocalCI:
         build = self.output / "installed-native"
         build.mkdir()
         self.command("installed-configure", [
-            "cmake", "-S", self.root / "reproduction", "-B", build, "-G", "Ninja",
+            "cmake", "-S", self.root / "tests/integration/installed_sdk", "-B", build, "-G", "Ninja",
             f"-DNexus_DIR={prefix / 'lib/cmake/Nexus'}",
             "-DNEXUS_EXPECTED_SOURCE_REVISION=" + self.identity["nexus_revision"],
-            f"-DNEXUS_ASSEMBLY_FILE={self.root / 'reproduction/assemblies/native.toml'}",
+            f"-DNEXUS_ASSEMBLY_FILE={self.root / 'configs/native.toml'}",
             "-DNEXUS_BUILD_TESTS=OFF", "-DNEXUS_BUILD_WORKLOAD=OFF",
             "-DNEXUS_TEST_SUPPORT=ON",
             "-DNEXUS_ENABLE_SANITIZERS=ON", "-DCMAKE_BUILD_TYPE=Debug"])
@@ -207,38 +228,46 @@ class LocalCI:
         self.environment["PATH"] = str(toolchain / "bin") + os.pathsep + self.environment["PATH"]
         for preset in presets:
             build = self.root / "build" / preset
-            verify_arm_cache(build, toolchain)
-            self.command(preset, [sys.executable, "scripts/build.py", "--preset", preset,
-                         "--nexus-source", self.source, "--parallel", str(self.jobs)])
-            verify_arm_cache(build, toolchain)
-            for target in ("platform_reference", "uart_owner_runtime"):
-                self.budget(preset + "-" + target, build, target)
-            for relative, target, assembly in standalones(preset):
-                name = preset + "-" + target
-                standalone = self.output / name
-                configure = ["cmake", "-S", self.root / relative, "-B", standalone,
-                             "-G", "Ninja", "-DCMAKE_BUILD_TYPE=Release",
-                             f"-DCMAKE_TOOLCHAIN_FILE={self.source / 'cmake/toolchains/arm-gcc.cmake'}",
-                             f"-DNEXUS_SOURCE={self.source}"]
-                if assembly:
-                    configure.append(f"-DNEXUS_ASSEMBLY_FILE={self.source / assembly}")
-                self.command(name + "-configure", configure)
-                self.command(name + "-build", ["cmake", "--build", standalone,
-                             "--target", target, "--parallel", str(self.jobs)])
-                self.budget(name + "-resources", standalone, target)
-            fixture = fixture_for(preset)
-            if fixture:
-                self.command(preset + "-hil", [sys.executable, "-B",
-                             self.source / "tools/hil/prepare.py", "--fixture",
-                             self.source / "tools/hil/fixtures" / (fixture + ".json"),
-                             "--resolved", build / "nexus/generated/resolved.json",
-                             "--report", self.output / (preset + "-hil.json")])
+            lock, _ = maintenance(self.source)
+            with lock.build_lock(build):
+                self.arm_preset(preset, build, toolchain)
+
+    def arm_preset(self, preset, build, toolchain):
+        """Keep one warm build and its checked reports under its lease."""
+        verify_arm_cache(build, toolchain)
+        self.command(preset, [sys.executable, "scripts/build.py", "--preset", preset,
+                     "--nexus-source", self.source, "--parallel", str(self.jobs)])
+        verify_arm_cache(build, toolchain)
+        for target in ("platform_reference", "uart_owner_runtime"):
+            self.budget(preset + "-" + target, build, target)
+        for relative, target, assembly in standalones(preset):
+            name = preset + "-" + target
+            standalone = self.output / name
+            configure = ["cmake", "-S", self.root / relative, "-B", standalone,
+                         "-G", "Ninja", "-DCMAKE_BUILD_TYPE=Release",
+                         f"-DCMAKE_TOOLCHAIN_FILE={self.source / 'cmake/toolchains/arm-gcc.cmake'}",
+                         f"-DNEXUS_SOURCE={self.source}"]
+            if assembly:
+                configure.append(f"-DNEXUS_ASSEMBLY_FILE={self.source / assembly}")
+            self.command(name + "-configure", configure)
+            self.command(name + "-build", ["cmake", "--build", standalone,
+                         "--target", target, "--parallel", str(self.jobs)])
+            self.budget(name + "-resources", standalone, target)
+        fixture = fixture_for(preset)
+        if fixture:
+            self.command(preset + "-hil", [sys.executable, "-B",
+                         self.source / "tools/hil/prepare.py", "--fixture",
+                         self.source / "tools/hil/fixtures" / (fixture + ".json"),
+                         "--resolved", build / "nexus/generated/resolved.json",
+                         "--report", self.output / (preset + "-hil.json")])
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--nexus-source", type=Path, default=ROOT / "external/nexus")
-    parser.add_argument("--output", type=Path, required=True, help="new run directory; never overwritten")
+    parser.add_argument("--output", type=Path, help="new run directory; never overwritten")
+    parser.add_argument("--list-arm-presets", action="store_true",
+                        help="print the maintained ARM matrix without building")
     parser.add_argument("--scope", choices=("all", "native", "arm"), default="all")
     parser.add_argument("--parallel", type=positive_integer, default=1)
     parser.add_argument("--preset", action="append", default=[], help="ARM subset; report remains partial")
@@ -246,6 +275,11 @@ def main(argv=None):
     parser.add_argument("--arm-toolchain", type=Path, help="locked installer destination for ARM checks")
     parser.add_argument("--toolchain-cache", type=Path, help="original ARM archive cache; reverified by installer")
     args = parser.parse_args(argv)
+    if args.list_arm_presets:
+        print(json.dumps(arm_presets(ROOT)))
+        return 0
+    if args.output is None:
+        parser.error("--output is required for execution")
     if args.scope != "native" and args.arm_toolchain is None:
         parser.error("--arm-toolchain is required for ARM checks")
     if args.preset and args.scope == "native":

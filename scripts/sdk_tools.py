@@ -26,3 +26,12 @@ def load(source, relative, name):
     sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
+
+
+def maintenance(source=None):
+    """Reuse the selected SDK's process and kernel build-lease contracts."""
+    source = sdk_root(source)
+    if str(source) not in sys.path:
+        sys.path.insert(0, str(source))
+    from tools.dev import build_lock, process
+    return build_lock, process

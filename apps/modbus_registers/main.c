@@ -10,7 +10,7 @@
 #include "nexus/components/modbus_rtu.h"
 #include "nexus/io/native/model.h"
 #include "nexus_bindings.h"
-#include "nexus_factory.h"
+#include "nexus_factory_strong.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -57,8 +57,8 @@ static bool write_bytes(void* context, const uint8_t* bytes, size_t length,
             NX_SUCCESS) {
         return false;
     }
-    nx_result_t result =
-        nx_uart_port_submit(nx_factory_uart(NX_UART_ID_UART0), &app->transmit);
+    nx_result_t result = nx_uart_port_submit(
+        nx_factory_uart_ref(NX_UART_REF_CONSOLE), &app->transmit);
     app->sending = result == NX_SUCCESS;
     return app->sending;
 }
@@ -67,7 +67,7 @@ static bool write_bytes(void* context, const uint8_t* bytes, size_t length,
  */
 static bool settle(application_t* app, nx_time_us_t wait_deadline) {
     while (nx_request_state(&app->transmit.base) != NX_REQUEST_SETTLED) {
-        nx_uart_port_service(nx_factory_uart(NX_UART_ID_UART0));
+        nx_uart_port_service(nx_factory_uart_ref(NX_UART_REF_CONSOLE));
         if (nx_request_state(&app->transmit.base) == NX_REQUEST_SETTLED) {
             break;
         }
@@ -101,7 +101,7 @@ static bool abort_and_settle(void* context, uint64_t deadline) {
     if (!app->sending) {
         return true;
     }
-    if (nx_uart_port_cancel(nx_factory_uart(NX_UART_ID_UART0),
+    if (nx_uart_port_cancel(nx_factory_uart_ref(NX_UART_REF_CONSOLE),
                             &app->transmit) != NX_SUCCESS) {
         return false;
     }
@@ -163,16 +163,17 @@ static bool exchange(application_t* app, nx_modbus_rtu_t* server,
         return false;
     }
     for (size_t i = 0U; i < sizeof(packet); ++i) {
-        if (nx_native_uart_model_receive(nx_factory_uart(NX_UART_ID_UART0),
-                                         packet[i], 0U) != NX_SUCCESS ||
+        if (nx_native_uart_model_receive(
+                nx_factory_uart_ref(NX_UART_REF_CONSOLE), packet[i], 0U) !=
+                NX_SUCCESS ||
             nx_native_clock_advance(100U) != NX_SUCCESS) {
             return false;
         }
     }
     nx_uart_rx_event_t events[8];
     size_t count;
-    if (nx_uart_port_read_events(nx_factory_uart(NX_UART_ID_UART0), events, 8U,
-                                 &count) != NX_SUCCESS ||
+    if (nx_uart_port_read_events(nx_factory_uart_ref(NX_UART_REF_CONSOLE),
+                                 events, 8U, &count) != NX_SUCCESS ||
         count != sizeof(packet)) {
         return false;
     }
@@ -231,7 +232,7 @@ int main(void) {
     nx_native_uart_config_t uart = {NX_UART_RX_EVENTS, app.receive,      32U,
                                     app.wire,          sizeof(app.wire), true};
     if (nx_native_clock_configure(true, 0U) != NX_SUCCESS ||
-        nx_native_uart_model_configure(nx_factory_uart(NX_UART_ID_UART0),
+        nx_native_uart_model_configure(nx_factory_uart_ref(NX_UART_REF_CONSOLE),
                                        &uart) != NX_SUCCESS) {
         return 2;
     }
@@ -249,16 +250,16 @@ int main(void) {
         nx_native_clock_advance(server.t3_5_us) != NX_SUCCESS ||
         !nx_modbus_rtu_poll(&server, nx_time_now_us()) ||
         !exchange(&app, &server, 2U) || app.values[2] != 0x1234U ||
-        nx_native_uart_model_transmitted(nx_factory_uart(NX_UART_ID_UART0)) !=
-            8U ||
+        nx_native_uart_model_transmitted(
+            nx_factory_uart_ref(NX_UART_REF_CONSOLE)) != 8U ||
         nx_modbus_crc16(app.wire, 8U) != 0U) {
         return 3;
     }
-    size_t begin =
-        nx_native_uart_model_transmitted(nx_factory_uart(NX_UART_ID_UART0));
+    size_t begin = nx_native_uart_model_transmitted(
+        nx_factory_uart_ref(NX_UART_REF_CONSOLE));
     if (!exchange(&app, &server, 7U) || app.values[7] != 0U ||
-        nx_native_uart_model_transmitted(nx_factory_uart(NX_UART_ID_UART0)) !=
-            begin + 5U ||
+        nx_native_uart_model_transmitted(
+            nx_factory_uart_ref(NX_UART_REF_CONSOLE)) != begin + 5U ||
         app.wire[begin + 1U] != 0x86U ||
         app.wire[begin + 2U] != NX_MODBUS_DEVICE_BUSY ||
         nx_modbus_crc16(&app.wire[begin], 5U) != 0U) {

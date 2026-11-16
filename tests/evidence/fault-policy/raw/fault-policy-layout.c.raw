@@ -1,3 +1,0 @@
-#include "fault_policy.h"
-unsigned char example_policy_bytes[sizeof(example_fault_policy_t)];
-unsigned char example_snapshot_bytes[sizeof(example_fault_snapshot_t)];

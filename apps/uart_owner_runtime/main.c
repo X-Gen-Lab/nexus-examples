@@ -17,7 +17,7 @@
 #include "nexus/arch/atomic.h"
 #include "nexus/components/uart_owner.h"
 #include "nexus_bindings.h"
-#include "nexus_factory.h"
+#include "nexus_factory_strong.h"
 #include "scheduler_return.h"
 #if defined(NEXUS_BACKEND_NATIVE)
 #include "nexus/io/native/model.h"
@@ -93,11 +93,7 @@ static const uint8_t s_payload[PRODUCERS][8] = {
 
 /** \brief Select only an already generated public UART interface. */
 static const nx_uart_port_t* console(void) {
-#if defined(NEXUS_UART1_SELECTED)
-    return nx_factory_uart(NX_UART_ID_UART1);
-#else
-    return nx_factory_uart(NX_UART_ID_UART0);
-#endif
+    return nx_factory_uart_ref(NX_UART_REF_CONSOLE);
 }
 
 /** \brief One CPU-local metadata guard; no OS call while interrupts masked. */

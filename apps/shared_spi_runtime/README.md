@@ -3,8 +3,8 @@
 Two producers, one executor, two endpoint identities and explicit static storage.
 两个生产任务、唯一执行任务、两个设备身份，静态存储由应用拥有。
 
-Read [the bilingual lifecycle, build and validation guide](../../docs/developer-recipes.md).
-完整生命周期、命令与验证边界见[双语指南](../../docs/developer-recipes.md)。
+Read [the bilingual lifecycle, build and validation guide](../../docs/examples.md).
+完整生命周期、命令与验证边界见[双语指南](../../docs/examples.md)。
 
 The standalone FreeRTOS assembly is an F407ZG silicon software fixture, not a
 physical Board wiring claim. Native and real FreeRTOS POSIX executions use the

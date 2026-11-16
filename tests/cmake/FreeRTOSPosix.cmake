@@ -19,7 +19,7 @@ add_executable(shared_spi_freertos_host
     "${PROJECT_SOURCE_DIR}/apps/shared_spi_runtime/main.c"
     "${PROJECT_SOURCE_DIR}/apps/shared_spi_runtime/shared_spi_application.c")
 target_compile_definitions(shared_spi_freertos_host PRIVATE EXAMPLE_FREERTOS_HOST=1)
-target_link_libraries(shared_spi_freertos_host PRIVATE Nexus::Platform
+target_link_libraries(shared_spi_freertos_host PRIVATE Nexus::Platform Nexus::NativeModel
     Nexus::SpiOwner Nexus::Arch contract_os_freertos_posix
     nexus_owned_warnings nexus_build_options)
 add_dependencies(shared_spi_freertos_host contract_os_freertos)

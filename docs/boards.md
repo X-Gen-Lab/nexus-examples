@@ -6,7 +6,7 @@ profile。Board ID 选择精确引脚和选装条件；原理图不能证明本�
 The four current Boards select the reviewed HSE8/168 MHz profile. Their exact
 packages own routing and population choices; no connected PCB has been observed.
 
-| Board ID | MCU | `led0` inactive level | Console |
+| Board ID | MCU | Status inactive level | Console |
 | --- | --- | --- | --- |
 | `stm32f407_qiming_v31` | STM32F407ZGT6 | PE3 high | USART1 PA9/PA10 |
 | `stm32f407ve_sky_qingchun` | STM32F407VET6 | PB2 low | USART1 PA9/PA10 |
@@ -35,7 +35,7 @@ Known display and touch controller identities never enable other peripherals.
 
 The shared-SPI Board is a silicon software fixture. Its explicit routes do not
 establish physical sensor, chip-select or transceiver connections on these Boards.
-Product-owned packages follow the [external Board guide](external-board.md).
+Product-owned packages follow the external-Board procedure below.
 
 HIL fixture 与 Board ID 一一选择，准备状态为 `prepared_unbound`。接入后应核对
 PCB revision、完整料号、晶振、供电、探针、串口路径、逻辑电平及安全初始输出，
@@ -44,5 +44,72 @@ PCB revision、完整料号、晶振、供电、探针、串口路径、逻辑�
 
 Physical HIL remains **`not_executed`**. Prepared work plans do not establish
 observed UID, wiring, electrical timing, watchdog reset or power-loss behavior.
-Retired Board examples remain at the fixed source linked from the repository
-README and never produce current station plans.
+Retired Board examples remain at the fixed source in [history](history.md) and
+never produce current station plans.
+
+## 自有 Board 包 / Product-owned Board packages
+
+平台拥有 CPU/SoC/provider；产品拥有 PCB 事实、TOML、应用存储和恢复策略。
+`apps/shared_spi_runtime/software-board/board.json` 是精确 F407ZG 硅片软件例子，
+没有声称实际 PCB 或器件。公共 Native 测试板位于 `tests/support/native-board`，
+只在显式宿主模型装配中使用，不成为某个工业应用的私有依赖。
+
+The product owns routing and assembly while the platform owns hardware behavior.
+The shared-SPI package is a software fixture. The common Native Board belongs to
+explicit host-test support, not to an application-private source directory.
+
+以下练习只复制小型 Board 描述，不复制 HAL/provider。真实产品应在独立仓库维护
+经过原理图审核的板级事实；相对 Board 路径随 TOML/产品目录整体移动。
+
+Copy only the declarative Board fixture for this configuration exercise. A real
+product needs its own reviewed facts; a Board string cannot add a missing SoC,
+unsupported controller mode or physical wiring.
+
+```sh
+NEXUS_SOURCE="$PWD/external/nexus"
+PRODUCT_DIR="$PWD/build/product-exercise"
+mkdir -p "$PRODUCT_DIR/boards/software-fixture"
+cp apps/shared_spi_runtime/software-board/board.json \
+  "$PRODUCT_DIR/boards/software-fixture/board.json"
+python "$NEXUS_SOURCE/tools/configure/configure.py" init \
+  --board-package "$PRODUCT_DIR/boards/software-fixture" \
+  --backend baremetal --clock hse8-pll168 \
+  --profile gpio --binding primary-cs --instance select \
+  --output "$PRODUCT_DIR/platform.toml"
+python "$NEXUS_SOURCE/tools/configure/configure.py" provider-check \
+  --assembly "$PRODUCT_DIR/platform.toml" \
+  --expect-family stm32f4 --expect-part STM32F407ZGT6 --json
+python "$NEXUS_SOURCE/tools/configure/configure.py" explain \
+  --assembly "$PRODUCT_DIR/platform.toml" --json
+```
+
+`provider-check` 验证 typed resolution、静态构造及输入身份，不等于编译或实板。
+修改只发生在 TOML/Board 源；不要编辑生成的 resolved，也不要在冲突后静默选择
+另一条路线。可用现有 `diff --assembly <before> --against <after> --json` 审核
+变化，并用 `check --assembly <after> --diagnostics-json` 获取具体拒绝上下文。
+
+These tools check configuration and explain resource ownership. Correct authored
+inputs when rejected; generated output and diagnostics never authorize releasing
+borrowed requests or replacing a failed hardware route.
+
+完整双端点软件固件使用原应用与本地 TOML，从独立目录构建：
+
+Build the maintained two-endpoint application rather than treating a GPIO
+configuration exercise as a complete firmware application:
+
+```sh
+cmake -S apps/shared_spi_runtime -B build/board-source -G Ninja \
+  -DCMAKE_TOOLCHAIN_FILE="$NEXUS_SOURCE/cmake/toolchains/arm-gcc.cmake" \
+  -DNEXUS_SOURCE="$NEXUS_SOURCE" -DCMAKE_BUILD_TYPE=Release
+cmake --build build/board-source --target shared_spi_runtime --parallel 2
+```
+
+安装 SDK 路径改传 `Nexus_DIR`、同一 commit 的
+`NEXUS_EXPECTED_SOURCE_REVISION` 和 prefix 内的 ARM toolchain，使用另一个
+构建目录。两者消费同一应用和装配，不复制硬件实现。producer、owner 排空及
+`join(NEVER)` 仍不保证有限停机；在实际排空和 join 前必须保留静态借用存储。
+
+The installed form selects `Nexus_DIR`, its expected revision and its toolchain
+in a separate build directory. Both forms share application and assembly.
+Static storage remains live through failed drain or join; linking is not a
+measurement of wires, timing or bounded application shutdown.
