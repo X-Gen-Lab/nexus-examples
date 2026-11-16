@@ -22,12 +22,6 @@ EXCLUDED = {"external", "build", "out", "dist", ".venv", ".git", ".tools"}
 C_SUFFIXES = {".c", ".h", ".cc", ".cpp", ".hpp"}
 TEXT_SUFFIXES = C_SUFFIXES | {".py", ".json", ".toml", ".md", ".cmake", ".txt", ".yml", ".yaml"}
 TEXT_NAMES = {"CMakeLists.txt", ".gitignore", ".gitmodules", ".editorconfig"}
-# Original raw JSON for these two historical snapshots is retained byte-for-byte.
-# This is neither a source style baseline nor an exclusion of current evidence.
-HISTORICAL_REPORT_ROOTS = {
-    ("evidence", "reports", "a4d5ac6"),
-    ("evidence", "reports", "5498b2b"),
-}
 
 
 def select_files(root, names):
@@ -38,8 +32,6 @@ def select_files(root, names):
             raise ValueError(f"Path outside the example repository: {name}")
         relative = path.absolute().relative_to(root)
         if any(part in EXCLUDED for part in relative.parts):
-            continue
-        if relative.parts[:3] in HISTORICAL_REPORT_ROOTS and path.suffix == ".json":
             continue
         if path.is_symlink() or any(parent.is_symlink() for parent in path.parents
                                     if parent.is_relative_to(root)):

@@ -38,7 +38,7 @@ int example_stream_run(example_stream_report_t* report) {
     REQUIRE(started.primary == NX_SUCCESS && started.cleanup == NX_SUCCESS &&
                 started.remaining_effects == 0U,
             2);
-    const nx_uart_port_t* uart = nx_factory_uart_ref(NX_UART_REF_UART0);
+    const nx_uart_port_t* uart = nx_factory_uart_ref(NX_UART_REF_CONSOLE);
     for (size_t index = 0U; index < 2U; ++index) {
         s_slots[index].data = s_payload[index];
         s_slots[index].capacity = sizeof(s_payload[index]);

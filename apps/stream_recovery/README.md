@@ -1,18 +1,18 @@
 # Stream recovery / 流恢复
 
-Native executes real public model operations: immutable loans, capacity loss,
-BUSY stop, release, restart. `h743/` independently selects supported continuous
-DMA receive with explicit aligned storage and finite receive windows.
-`h743_cache_on/` reuses the same C11 application with whole-line reservations
-and an explicit Cache-on clock profile. Failed releases keep exact static loan
-tokens; failed drain parks without dropping storage.
-Native 执行公开模型的借用不变、容量丢失、BUSY stop、释放和重启；`h743/` 独立选择
-当前支持的连续 DMA 接收、显式对齐存储和有限接收窗口。`h743_cache_on/` 共用
-同一 C11 应用，选择完整 cache-line reservation 和显式 Cache-on 配置。release
-失败保留精确静态 token；排空失败则保留存储并停留。
+本目录有可运行的 Native 流示例，以及受独立应用合同执行的有限接收策略。
+`main.c`/`stream_application.c` 通过显式模型注入验证不可变借用、容量 LOSS、BUSY
+stop、归还和 restart；`receive_application.c` 保留有限窗口、失败 release 重试
+及关闭策略。两条路径使用真实公开接口，不声称已经运行 MCU DMA。
 
-See [the bilingual guide](../../docs/developer-recipes.md) for exact behavior,
-commands, slow-consumer assumptions and evidence boundaries. All physical HIL
-remains `not_executed`; Native does not establish DMA timing or MCU qualification.
-具体行为、命令、慢消费者假设及证据边界见[双语指南](../../docs/developer-recipes.md)。
-全部实板 HIL 均为 `not_executed`；Native 不证明 DMA 时序或 MCU 实物资格。
+The Native application exercises immutable loans, capacity loss, BUSY stop,
+release and restart. The finite receive fragment retains exact loan tokens on
+failed release and keeps storage through failed drain. These are distinct
+application contracts, not duplicate implementations.
+
+诊断仅解释已复制事实，不推断服务频率，也不授权释放数据。已退出的 H743/Cache
+工程仅在[固定历史](../../docs/history.md)恢复；当前目录没有这些固件入口。
+
+Diagnostics neither infer timing nor authorize reclamation. Retired SoC-specific
+projects remain historical. See the [application guide](../../docs/examples.md)
+and [validation boundary](../../docs/validation.md). Physical HIL is `not_executed`.

@@ -7,12 +7,24 @@
     },
     "configurePresets": [
         {
+            "name": "arm-common",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "NEXUS_BUILD_TESTS": "OFF",
+                "NEXUS_BUILD_WORKLOAD": "OFF"
+            },
+            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+        },
+        {
             "name": "native-debug",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/native-debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/native.toml",
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/native.toml",
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF",
                 "NEXUS_ENABLE_SANITIZERS": "ON",
@@ -22,99 +34,59 @@
         },
         {
             "name": "stm32-qiming-baremetal",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-qiming-baremetal",
+            "inherits": "arm-common",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/qiming-baremetal.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/qiming-baremetal.toml"
+            }
         },
         {
             "name": "stm32-qiming-freertos",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-qiming-freertos",
+            "inherits": "arm-common",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/qiming-freertos.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/qiming-freertos.toml"
+            }
         },
         {
             "name": "stm32-sky-baremetal",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-sky-baremetal",
+            "inherits": "arm-common",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/sky-baremetal.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/sky-baremetal.toml"
+            }
         },
         {
             "name": "stm32-sky-freertos",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-sky-freertos",
+            "inherits": "arm-common",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/sky-freertos.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/sky-freertos.toml"
+            }
         },
         {
             "name": "stm32-qiming-core-baremetal",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-qiming-core-baremetal",
+            "inherits": "arm-common",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/qiming-core-baremetal.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/qiming-core-baremetal.toml"
+            }
         },
         {
             "name": "stm32-qiming-core-freertos",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-qiming-core-freertos",
+            "inherits": "arm-common",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/qiming-core-freertos.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/qiming-core-freertos.toml"
+            }
         },
         {
             "name": "stm32-qiming-v41-baremetal",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-qiming-v41-baremetal",
+            "inherits": "arm-common",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/qiming-v41-baremetal.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/qiming-v41-baremetal.toml"
+            }
         },
         {
             "name": "stm32-qiming-v41-freertos",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/stm32-qiming-v41-freertos",
+            "inherits": "arm-common",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/reproduction/assemblies/qiming-v41-freertos.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
-            },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/qiming-v41-freertos.toml"
+            }
         }
     ],
     "buildPresets": [

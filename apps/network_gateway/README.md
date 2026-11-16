@@ -85,13 +85,13 @@ stop 关闭新准入并保留未确认记录。只有所有会话使用者及观
 配置及输入字节均复制，不保留调用者的数据指针。返回的尝试身份和事件元数据不
 授权并发访问。
 
-The Google contracts execute the real C policy using the pinned SDK's host
-GoogleTest framework. They exercise cleanup failures, bounded retries, QoS1
+The Google contracts execute the real C policy using this repository's pinned host
+GoogleTest/GoogleMock framework. They exercise cleanup failures, bounded retries, QoS1
 retention, stale acknowledgment, time reversal, overflow and independent
 instances. Focused compiler-context runs are development evidence; the ordinary
 complete-index example gate and real network/ARM/HIL evidence remain separate.
 
-Google 合同使用固定 SDK 的主机 GoogleTest 执行真实 C 策略，覆盖清理失败、
+Google 合同使用本仓库锁定的主机 GoogleTest／GoogleMock 执行真实 C 策略，覆盖清理失败、
 有界重试、QoS1 保留、旧确认、时间逆行、溢出及实例隔离。定向编译上下文执行
 属于开发证据；普通完整索引门禁、真实网络、ARM 链接与 HIL 证据分别记录。
 
@@ -186,6 +186,22 @@ consumer idempotence remain external policy.
 调用 run 表示显式开始新工作，并处置上一轮 RAM 记录。持久 outbox、产品消息 ID
 持久化与消费端幂等仍由外部产品决定。
 
+## Source layout / 源码职责
+
+`gateway_application.c` and `gateway_policy.c` own the portable C11 workflow
+and product decisions. `main.c` owns one static Native state and delegates the
+host composition. `native/host.c` owns the explicit child, descriptors, signal
+policy, stack/crypto startup and final withdrawal; its `host.h` is private to
+this example. Frame IPC, clocks, entropy, the peer and broker adapter also live
+under `native/`. None of these host mechanisms is an MCU network driver.
+
+`gateway_application.c` 与 `gateway_policy.c` 维护 C11 业务流程和产品策略。
+`main.c` 只拥有一份静态 Native 状态并调用组合入口；`native/host.c` 明确拥有
+子进程、描述符、信号策略、协议栈／crypto 启停与最终撤回，`host.h` 仅为本示例
+内部合同。frame IPC、时钟、熵源、peer 与 broker adapter 同样归入 `native/`，
+不将主机机制表述为 MCU 网络驱动。生命周期测试直接编译该模块，不再包含
+`main.c` 文本来访问其静态对象。
+
 ## Native composition / Native 组合
 
 The command is `network_gateway <broker-port> <case> <credential-directory>`.
@@ -223,20 +239,20 @@ PID 所有权，但不声称子进程成功退出。
 下层网络退出失败时，其借用的 frame 描述符保留至进程退出；超时不撤销借用。
 
 For broker orchestration, build `network_gateway`, set `NEXUS_GATEWAY_BINARY`
-to its executable and `NEXUS_GATEWAY_INTEROP_OUTPUT` to a fresh private evidence
+to its executable and `NEXUS_GATEWAY_INTEROP_OUTPUT` to a fresh local evidence
 directory, then run the pinned SDK's `tools/testing/mqtt_tls_interop.py` with
-`--transport external-client --client apps/network_gateway/broker_client.py`
+`--transport external-client --client apps/network_gateway/native/broker_client.py`
 and a fresh `--output-root`. The adapter maps the three fixture bundles to five
 actual C process executions and preserves each ordinary process exit. The
 public fixture owns the pinned Mosquitto image, CA generation and withdrawal;
 its external-client receipt alone does not assess this application's transport
-or authentication. Keep private application output in this private repository.
+or authentication. Keep local execution output outside tracked source.
 
 运行 broker 编排前，构建 `network_gateway`，将 `NEXUS_GATEWAY_BINARY` 指向其
-可执行文件，将 `NEXUS_GATEWAY_INTEROP_OUTPUT` 指向新的私有证据目录，再运行
+可执行文件，将 `NEXUS_GATEWAY_INTEROP_OUTPUT` 指向新的本地证据目录，再运行
 固定 SDK 的 `tools/testing/mqtt_tls_interop.py`，指定
-`--transport external-client --client apps/network_gateway/broker_client.py`
+`--transport external-client --client apps/network_gateway/native/broker_client.py`
 和新的 `--output-root`。adapter 将三个 fixture bundle 映射为五次真实 C 进程
 执行，保留每次普通进程退出。公共 fixture 负责固定 Mosquitto 镜像、CA 生成与
-退出；单独的 external-client 收据不评估本应用的 transport 或认证。私有应用
-输出始终保存在本私有仓库。
+退出；单独的 external-client 收据不评估本应用的 transport 或认证。执行输出
+保存在未跟踪的本地目录。

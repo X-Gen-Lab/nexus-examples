@@ -9,7 +9,7 @@
 #include "nexus/components/bmp280_spi.h"
 #include "nexus/io/native/model.h"
 #include "nexus_bindings.h"
-#include "nexus_factory.h"
+#include "nexus_factory_strong.h"
 #include <stdio.h>
 
 /** \brief Inject the same clock domain into the sensor's narrow transport. */
@@ -49,7 +49,7 @@ int main(void) {
     registers_initialize(registers);
     if (nx_native_clock_configure(true, 0U) != NX_SUCCESS ||
         nx_native_spi_model_configure(
-            nx_factory_spi_device(NX_SPI_DEVICE_ID_SENSOR0), registers,
+            nx_factory_spi_device_ref(NX_SPI_DEVICE_REF_SENSOR0), registers,
             sizeof(registers)) != NX_SUCCESS) {
         return 2;
     }
@@ -57,7 +57,7 @@ int main(void) {
     nx_clock_t clock = {read_clock, NULL};
     nx_time_us_t deadline = nx_deadline_after(nx_time_now_us(), 20000U);
     nx_bmp280_transport_port_t transport = nx_bmp280_spi_transport(
-        nx_factory_spi_device(NX_SPI_DEVICE_ID_SENSOR0), clock);
+        nx_factory_spi_device_ref(NX_SPI_DEVICE_REF_SENSOR0), clock);
     if (nx_bmp280_init(&sensor, transport, deadline) != NX_SUCCESS ||
         nx_bmp280_begin(&sensor, deadline) != NX_SUCCESS) {
         return 3;

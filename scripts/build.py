@@ -6,9 +6,10 @@ import os
 from pathlib import Path
 import re
 import shlex
-import subprocess
 import sys
 import time
+
+from sdk_tools import maintenance
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,19 +27,18 @@ def run(arguments, environment, log):
     print(command, end="", flush=True)
     log.write(command)
     log.flush()
-    started = time.monotonic()
-    with subprocess.Popen(arguments, cwd=ROOT, env=environment, text=True,
-                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                          bufsize=1) as process:
-        for line in process.stdout:
-            print(line, end="", flush=True)
-            log.write(line)
-        code = process.wait()
-    result = f"Exit {code}; elapsed {time.monotonic() - started:.3f}s\n"
-    print(result, end="", flush=True)
-    log.write(result)
+    _, process = maintenance(environment.get("NEXUS_SOURCE"))
+    log_name = getattr(log, "name", None)
+    attempt = (Path(log_name).parent / ("command-" + str(time.time_ns()) + ".log")
+               if isinstance(log_name, str) else None)
+    result = process.run(arguments, cwd=ROOT, env=environment, log=attempt,
+                         stage="example-build")
+    output = result.stdout + result.stderr
+    print(output, end="", flush=True)
+    log.write(output)
+    log.write(f"Exit {result.returncode}\n")
     log.flush()
-    return code
+    return result.returncode
 
 
 def main(argv=None):
@@ -78,22 +78,29 @@ def main(argv=None):
             sys.executable, str(source / "scripts/validation/junit.py"),
             "--report", str(output / "ctest-results.xml"),
         ])
-    with (output / "build.log").open("w", encoding="utf-8") as log:
-        try:
-            for command in commands:
-                if command[0] == "ctest":
-                    (output / "ctest-results.xml").unlink(missing_ok=True)
-                    test_started_ns = time.time_ns()
-                elif "--report" in command:
-                    command.extend(["--not-before-ns", str(test_started_ns)])
-                code = run(command, environment, log)
-                if code:
-                    return code
-        except OSError as error:
-            message = f"Build command could not run: {error}\n"
-            print(message, end="", file=sys.stderr)
-            log.write(message)
-            return 1
+    lock, _ = maintenance(source)
+    try:
+        with lock.build_lock(output):
+            with (output / "build.log").open("w", encoding="utf-8") as log:
+                try:
+                    for command in commands:
+                        if command[0] == "ctest":
+                            (output / "ctest-results.xml").unlink(missing_ok=True)
+                            test_started_ns = time.time_ns()
+                        elif "--report" in command:
+                            command.extend(["--not-before-ns", str(test_started_ns)])
+                        code = run(command, environment, log)
+                        if code:
+                            return code
+                except OSError as error:
+                    message = f"Build command could not run: {error}\n"
+                    print(message, end="", file=sys.stderr)
+                    log.write(message)
+                    return 1
+    except (OSError, ValueError) as error:
+        print("Build rejected: " + str(error), file=sys.stderr)
+        return 1
+
     return 0
 
 

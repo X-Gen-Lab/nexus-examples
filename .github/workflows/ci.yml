@@ -1,63 +1,39 @@
-name: Example source SDK integration
-
-on:
+name: Source SDK integration
+'on':
   push:
-    branches: [ main, develop ]
-  pull_request:
-  workflow_dispatch:
-    inputs:
-      candidate_nexus_ref:
-        description: 'Optional complete lowercase Nexus commit SHA; empty validates the formal pin'
-        required: false
-        type: string
-        default: ''
-
+    branches:
+      - main
+      - develop
+  pull_request: null
+  workflow_dispatch: null
 permissions:
   contents: read
-
 concurrency:
-  group: examples-${{ github.workflow }}-${{ github.ref }}-${{ inputs.candidate_nexus_ref || 'pinned' }}
+  group: examples-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   native:
-    name: Native build and execution
+    name: Native and installed SDK integration
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    outputs:
+      arm_presets: ${{ steps.matrix.outputs.presets }}
     steps:
       - name: Checkout application sources
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          submodules: false
-          fetch-depth: 1
+          submodules: 'false'
+          fetch-depth: '1'
       - name: Checkout pinned SDK
         run: git submodule update --init --depth 1 -- external/nexus
       - name: Checkout project host framework
         run: git submodule update --init --depth 2 -- external/googletest
-      - name: Validate candidate reference
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
-        run: |
-          if [[ -n "$CANDIDATE_NEXUS_REF" && ! "$CANDIDATE_NEXUS_REF" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "Candidate must be a complete lowercase 40-digit commit SHA" >&2
-            exit 1
-          fi
-      - name: Checkout explicit candidate SDK
-        if: github.event_name == 'workflow_dispatch' && inputs.candidate_nexus_ref != ''
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: X-Gen-Lab/nexus
-          ref: ${{ inputs.candidate_nexus_ref }}
-          path: external/nexus
-          submodules: false
-          fetch-depth: 1
       - name: Setup Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
       - name: Prepare host build dependencies
-        timeout-minutes: 10
+        timeout-minutes: '10'
         shell: bash
         run: |
           set -euo pipefail
@@ -73,100 +49,27 @@ jobs:
           echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
       - name: Prepare selected SDK dependencies
         run: python3 external/nexus/tools/dev/dev.py prepare --scope native --allow-network
-      - name: Verify source dependency identity
-        env:
-          CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
-        run: |
-          candidate_arguments=()
-          if [[ -n "$CANDIDATE_NEXUS_REF" ]]; then
-            candidate_arguments+=(--candidate-nexus-commit "$CANDIDATE_NEXUS_REF")
-          fi
-          python3 scripts/test_repository.py "${candidate_arguments[@]}" --report build/native-debug/dependency-identity.json
-      - name: Check all owned formatting, comments and text
-        run: python3 scripts/check_style.py --all --report build/quality/style.json
-      - name: Verify runner rejects empty and skipped execution
-        run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
-      - name: Build and run Native examples
-        run: python3 scripts/build.py --preset native-debug --test --parallel 4
-      - name: Prepare a complete publishable Source SDK
-        run: |
-          set -euo pipefail
-          mkdir -p build/installed-native
-          python3 external/nexus/cmake/package/package_source_sdk.py \
-            --source "$GITHUB_WORKSPACE/external/nexus" \
-            --output "$RUNNER_TEMP/nexus-source-sdk" \
-            --host-support --component network --component tls --component mqtt \
-            | tee build/installed-native/sdk-preparation.json
-          cp "$RUNNER_TEMP/nexus-source-sdk/share/nexus/src/.nexus-source-sdk.json" \
-            build/installed-native/source-sdk-manifest.json
-      - name: Configure the installed Native consumer
-        env:
-          CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
-        run: |
-          set -euo pipefail
-          SDK_COMMIT="$(python3 -c 'import json; print(json.load(open("dependencies/nexus.lock.json"))["commit"])')"
-          if [[ -n "$CANDIDATE_NEXUS_REF" ]]; then
-            SDK_COMMIT="$CANDIDATE_NEXUS_REF"
-          fi
-          cmake -S reproduction -B build/installed-native -G Ninja \
-            -DNexus_DIR="$RUNNER_TEMP/nexus-source-sdk/lib/cmake/Nexus" \
-            -DNEXUS_EXPECTED_SOURCE_REVISION="$SDK_COMMIT" \
-            -DNEXUS_ASSEMBLY_FILE="$GITHUB_WORKSPACE/reproduction/assemblies/native.toml" \
-            -DNEXUS_BUILD_TESTS=OFF -DNEXUS_BUILD_WORKLOAD=OFF \
-            -DNEXUS_TEST_SUPPORT=ON \
-            -DNEXUS_ENABLE_SANITIZERS=ON -DCMAKE_BUILD_TYPE=Debug \
-            2>&1 | tee build/installed-native/configure.log
-      - name: Build the installed Native consumer
-        run: |
-          set -euo pipefail
-          cmake --build build/installed-native --parallel 4 \
-            2>&1 | tee build/installed-native/build.log
-      - name: Execute and validate the installed Native consumer
-        run: |
-          set -euo pipefail
-          report="$GITHUB_WORKSPACE/build/installed-native/ctest-results.xml"
-          rm -f "$report"
-          started_ns="$(python3 -c 'import time; print(time.time_ns())')"
-          ctest --test-dir build/installed-native --output-on-failure \
-            --no-tests=error --output-junit "$report" \
-            2>&1 | tee build/installed-native/ctest.log
-          python3 external/nexus/scripts/validation/junit.py \
-            --report "$report" --not-before-ns "$started_ns" \
-            | tee build/installed-native/junit-validation.log
+      - name: Select the maintained ARM matrix
+        id: matrix
+        run: printf 'presets=%s\n' "$(python3 scripts/local_ci.py --list-arm-presets)" >> "$GITHUB_OUTPUT"
+      - name: Run complete local Native and installed SDK integration
+        run: python3 scripts/local_ci.py --scope native --output build/ci-native --parallel 4
       - name: Retain Native artifacts and execution evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: examples-native-debug-${{ inputs.candidate_nexus_ref || 'pinned' }}
-          path: |
-            build/native-debug/build.log
+          name: examples-native-debug
+          path: |-
+            build/ci-native/
+            build/native-debug/tdd/
+            build/native-debug/tests/*execution/
             build/native-debug/ctest-results.xml
-            build/native-debug/dependency-identity.json
+            build/native-debug/build.log
             build/native-debug/CMakeCache.txt
             build/native-debug/compile_commands.json
-            build/native-debug/tests/google-execution/
-            build/native-debug/tests/fault-google-execution/
-            build/native-debug/tests/reference-google-execution/
-            build/native-debug/tests/lifecycle-google-execution/
-            build/native-debug/tests/fifo-acquisition-execution/
-            build/native-debug/tests/recipes-google-execution/
-            build/native-debug/tests/continuous-rx-execution/
-            build/native-debug/nexus/generated/*
-            build/native-debug/bin/*
-            build/installed-native/source-sdk-manifest.json
-            build/installed-native/sdk-preparation.json
-            build/installed-native/configure.log
-            build/installed-native/build.log
-            build/installed-native/ctest.log
-            build/installed-native/junit-validation.log
-            build/installed-native/ctest-results.xml
-            build/installed-native/CMakeCache.txt
-            build/installed-native/compile_commands.json
-            build/installed-native/nexus-sdk/generated/*
-            build/installed-native/bin/*
-            build/quality/style.json
+            build/native-debug/nexus/generated/
+            build/native-debug/bin/
           retention-days: 14
-
   arm:
     name: ${{ matrix.preset }} linked firmware
     needs: native
@@ -175,47 +78,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        preset:
-          - stm32-qiming-baremetal
-          - stm32-qiming-freertos
-          - stm32-sky-baremetal
-          - stm32-sky-freertos
-          - stm32-qiming-core-baremetal
-          - stm32-qiming-core-freertos
-          - stm32-qiming-v41-baremetal
-          - stm32-qiming-v41-freertos
+        preset: ${{ fromJSON(needs.native.outputs.arm_presets) }}
     steps:
       - name: Checkout application sources
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          submodules: false
-          fetch-depth: 1
+          submodules: 'false'
+          fetch-depth: '1'
       - name: Checkout pinned SDK
         run: git submodule update --init --depth 1 -- external/nexus
-      - name: Validate candidate reference
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
-        run: |
-          if [[ -n "$CANDIDATE_NEXUS_REF" && ! "$CANDIDATE_NEXUS_REF" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "Candidate must be a complete lowercase 40-digit commit SHA" >&2
-            exit 1
-          fi
-      - name: Checkout explicit candidate SDK
-        if: github.event_name == 'workflow_dispatch' && inputs.candidate_nexus_ref != ''
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: X-Gen-Lab/nexus
-          ref: ${{ inputs.candidate_nexus_ref }}
-          path: external/nexus
-          submodules: false
-          fetch-depth: 1
       - name: Setup Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
       - name: Prepare host build dependencies
-        timeout-minutes: 10
+        timeout-minutes: '10'
         shell: bash
         run: |
           set -euo pipefail
@@ -231,101 +108,23 @@ jobs:
           echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
       - name: Prepare selected SDK dependencies
         run: python3 external/nexus/tools/dev/dev.py prepare --scope native --allow-network
-      - name: Verify source dependency identity
-        env:
-          CANDIDATE_NEXUS_REF: ${{ inputs.candidate_nexus_ref }}
-        run: |
-          candidate_arguments=()
-          if [[ -n "$CANDIDATE_NEXUS_REF" ]]; then
-            candidate_arguments+=(--candidate-nexus-commit "$CANDIDATE_NEXUS_REF")
-          fi
-          python3 scripts/test_repository.py "${candidate_arguments[@]}" --report build/${{ matrix.preset }}/dependency-identity.json
-      - name: Prepare SHA-256 locked ARM GNU toolchain
-        run: |
-          python3 external/nexus/scripts/ci/install_arm_toolchain.py --install-dir "$RUNNER_TEMP/nexus-arm-toolchain"
-          echo "$RUNNER_TEMP/nexus-arm-toolchain/bin" >> "$GITHUB_PATH"
-      - name: Build real ARM firmware
-        run: python3 scripts/build.py --preset ${{ matrix.preset }} --parallel 4
-      - name: Build standalone recipes and all MCU starters
-        if: >-
-          matrix.preset == 'stm32-qiming-freertos' ||
-          matrix.preset == 'stm32-qiming-baremetal' ||
-          matrix.preset == 'stm32-sky-baremetal' ||
-          matrix.preset == 'stm32-qiming-core-baremetal' ||
-          matrix.preset == 'stm32-qiming-v41-baremetal'
+      - name: Run the maintained ARM integration
         env:
           PRESET: ${{ matrix.preset }}
-        run: |
-          set -euo pipefail
-          case "$PRESET" in
-            stm32-qiming-freertos) recipe=apps/shared_spi_runtime; target=shared_spi_runtime ;;
-            stm32-qiming-baremetal) recipe=templates/qiming; target=nexus_starter ;;
-            stm32-sky-baremetal) recipe=templates/sky; target=nexus_starter ;;
-            stm32-qiming-core-baremetal) recipe=templates/qiming-core; target=nexus_starter ;;
-            stm32-qiming-v41-baremetal) recipe=templates/qiming-v41; target=nexus_starter ;;
-            *) exit 1 ;;
-          esac
-          recipe_build="$GITHUB_WORKSPACE/build/$PRESET/recipe"
-          mkdir -p "$recipe_build"
-          cmake -S "$recipe" -B "$recipe_build" -G Ninja \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/external/nexus/cmake/toolchains/arm-gcc.cmake" \
-            -DNEXUS_SOURCE="$GITHUB_WORKSPACE/external/nexus" \
-            2>&1 | tee "$recipe_build/configure.log"
-          cmake --build "$recipe_build" --target "$target" --parallel 2 \
-            2>&1 | tee "$recipe_build/build.log"
-          python3 external/nexus/tools/measurement/resources.py \
-            --elf "$recipe_build/bin/$target.elf" \
-            --resolved "$recipe_build/nexus/generated/resolved.json" \
-            --budget "$recipe_build/nexus/generated/resource-budget.json" \
-            --report "$recipe_build/resource-budget.json"
-      - name: Verify physical ELF identity and each RAM/Flash budget
-        run: >-
-          python3 external/nexus/tools/measurement/resources.py
-          --elf build/${{ matrix.preset }}/bin/platform_reference.elf
-          --resolved build/${{ matrix.preset }}/nexus/generated/resolved.json
-          --budget build/${{ matrix.preset }}/nexus/generated/resource-budget.json
-          --report build/${{ matrix.preset }}/firmware-resource-budget.json
-      - name: Verify UART owner firmware resources
-        run: >-
-          python3 external/nexus/tools/measurement/resources.py
-          --elf build/${{ matrix.preset }}/bin/uart_owner_runtime.elf
-          --resolved build/${{ matrix.preset }}/nexus/generated/resolved.json
-          --budget build/${{ matrix.preset }}/nexus/generated/resource-budget.json
-          --report build/${{ matrix.preset }}/uart-owner-resource-budget.json
-      - name: Prepare the unbound physical station work plan
-        env:
-          PRESET: ${{ matrix.preset }}
-        run: |
-          case "$PRESET" in
-            stm32-sky-*) fixture=stm32f407ve_sky_qingchun ;;
-            stm32-qiming-core-*) fixture=stm32f407zg_qiming_core ;;
-            stm32-qiming-v41-*) fixture=stm32f407zg_qiming_v41 ;;
-            stm32-qiming-*) fixture=stm32f407_qiming_v31 ;;
-            *) exit 1 ;;
-          esac
-          python3 -B external/nexus/tools/hil/prepare.py \
-            --fixture "external/nexus/tools/hil/fixtures/$fixture.json" \
-            --resolved "build/$PRESET/nexus/generated/resolved.json" \
-            --report "build/$PRESET/hil-preparation.json"
+        run: |-
+          python3 scripts/local_ci.py --scope arm --preset "$PRESET" \
+            --arm-toolchain "$RUNNER_TEMP/nexus-arm-toolchain" \
+            --output "build/ci-$PRESET" --parallel 4
       - name: Retain firmware and static validation evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: examples-${{ matrix.preset }}-${{ inputs.candidate_nexus_ref || 'pinned' }}
-          path: |
+          name: examples-${{ matrix.preset }}
+          path: |-
+            build/ci-${{ matrix.preset }}/
             build/${{ matrix.preset }}/build.log
-            build/${{ matrix.preset }}/dependency-identity.json
-            build/${{ matrix.preset }}/firmware-resource-budget.json
-            build/${{ matrix.preset }}/uart-owner-resource-budget.json
-            build/${{ matrix.preset }}/hil-preparation.json
             build/${{ matrix.preset }}/CMakeCache.txt
             build/${{ matrix.preset }}/compile_commands.json
-            build/${{ matrix.preset }}/nexus/generated/*
-            build/${{ matrix.preset }}/bin/*
-            build/${{ matrix.preset }}/recipe/configure.log
-            build/${{ matrix.preset }}/recipe/build.log
-            build/${{ matrix.preset }}/recipe/resource-budget.json
-            build/${{ matrix.preset }}/recipe/nexus/generated/*
-            build/${{ matrix.preset }}/recipe/bin/*
+            build/${{ matrix.preset }}/nexus/generated/
+            build/${{ matrix.preset }}/bin/
           retention-days: 14

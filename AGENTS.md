@@ -1,10 +1,9 @@
 # Nexus examples maintenance
 
-This repository owns application examples and composition. Nexus owns common
-platform code. Repository visibility is private; do not publish its source or
-execution artifacts into the public platform repository. Recheck authenticated
-repository visibility before publication. Proprietary products, credentials and
-PCB data belong to separate product repositories.
+This public repository owns application examples and composition. Nexus owns
+common platform code. Application source and execution artifacts stay at their
+owning repository; do not copy them into the platform repository. Proprietary
+products, credentials and PCB data belong to separate product repositories.
 
 - Use the source SDK at `external/nexus`; update its Gitlink and
   `dependencies/nexus.lock.json` together only with actual integration evidence.
@@ -14,9 +13,9 @@ PCB data belong to separate product repositories.
   readonly faces; factory lookup has no allocation or hardware side effects.
   Public types use the selected SDK ABI.
 - Each composition owns one authored TOML. Main examples use
-  `reproduction/assemblies/*.toml`; standalone recipes and versioned starters own
-  their local `assembly.toml`. Nine Native/F407 builds cover four exact F407 Boards and both MCU
-  backends. Retired SoC recipes remain in their historical Git snapshot. Separate
+  `configs/*.toml`; standalone recipes and versioned starters own
+  their local `assembly.toml`. Nine Native/F407 builds cover four exact F407
+  Boards and both MCU backends. Retired SoC recipes remain in their historical Git snapshot. Separate
   build roots prevent stale effective configuration.
 - `nx_platform_start/stop` own selected infrastructure. Applications own workers,
   scheduler start, component composition, budgets and recovery. No implicit main.
@@ -48,6 +47,7 @@ correct change and refactor after it passes. Application contract development
 uses this repository's pinned `external/googletest` GoogleTest/GoogleMock host
 framework; the target application remains C11 and contains no host test runtime.
 Installed SDK tests use its public JUnit validator, not platform development-test
-helpers. Python tooling tests
-cover configuration, invocation and evidence boundaries. A hook pass alone does
+helpers. Python tooling tests under `tests/tooling` cover configuration, invocation and
+evidence boundaries. Historical execution records are retained at the fixed
+Git revision indexed in `docs/history.md`, outside the active source tree. A hook pass alone does
 not establish the historical order of edits or physical board qualification.
