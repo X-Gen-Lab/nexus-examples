@@ -171,6 +171,7 @@ class LocalCiContracts(unittest.TestCase):
                 for row in local_ci.standalones(preset)]
         self.assertEqual({
             ("apps/shared_spi_runtime", "shared_spi_runtime", None),
+            ("apps/usb_configuration", "usb_configuration", None),
             *(("templates/" + name, "nexus_starter", None)
               for name in ("qiming", "sky", "qiming-core", "qiming-v41")),
         }, set(rows))
@@ -241,6 +242,37 @@ class LocalCiContracts(unittest.TestCase):
             with lease.build_lock(build):
                 shared.write_text(json.dumps(other))
             self.assertEqual(json.loads(retained.read_text()), own)
+
+
+    def test_qiming_arm_runs_usb_and_starter_with_unchanged_other_recipes(self):
+        expected = {
+            "stm32-qiming-freertos": [("apps/shared_spi_runtime", "shared_spi_runtime", None)],
+            "stm32-sky-baremetal": [("templates/sky", "nexus_starter", None)],
+            "stm32-qiming-core-baremetal": [("templates/qiming-core", "nexus_starter", None)],
+            "stm32-qiming-v41-baremetal": [("templates/qiming-v41", "nexus_starter", None)],
+        }
+        for preset in local_ci.arm_presets(ROOT):
+            if preset != "stm32-qiming-baremetal":
+                self.assertEqual(local_ci.standalones(preset), expected.get(preset, []))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "run"
+            output.mkdir()
+            runner = local_ci.LocalCI(root, sdk_root(), output, 1)
+            commands = []
+            runner.command = lambda name, argv: commands.append((name, list(map(str, argv))))
+            runner.arm_preset("stm32-qiming-baremetal", root / "build/arm", root / "toolchain")
+            configure = [argv for name, argv in commands if name.endswith("-configure")]
+            self.assertEqual({str(root / "templates/qiming"),
+                              str(root / "apps/usb_configuration")},
+                             {argv[argv.index("-S") + 1] for argv in configure})
+            build = next(argv for name, argv in commands
+                         if name == "stm32-qiming-baremetal-usb_configuration-build")
+            self.assertIn("usb_configuration", build)
+            resources = next(argv for name, argv in commands
+                             if name == "stm32-qiming-baremetal-usb_configuration-resources")
+            self.assertEqual(resources[resources.index("--elf") + 1],
+                             str(output / "stm32-qiming-baremetal-usb_configuration/bin/usb_configuration.elf"))
 
 
 if __name__ == "__main__":

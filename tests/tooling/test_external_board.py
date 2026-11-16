@@ -67,5 +67,21 @@ class ExternalBoardContracts(unittest.TestCase):
         self.assertIn(str(invalid), json.dumps(diagnostic))
 
 
+    def test_usb_standalone_resolves_its_f4_provider_and_strong_roles(self):
+        output = self.product / "usb bundle"
+        self.run_cli("--assembly", ROOT / "apps/usb_configuration/assembly.toml",
+                     "--output", output)
+        resolved = json.loads((output / "resolved.json").read_text())
+        self.assertEqual(resolved["soc_family"], "stm32f4")
+        self.assertEqual(resolved["part"], "STM32F407ZGT6")
+        self.assertFalse(resolved["physical_qualified"])
+        header = (output / "nexus_factory_strong.h").read_text()
+        self.assertIn("NX_USB_DEVICE_REF_FS", header)
+        self.assertIn("nx_factory_usb_device_ref", header)
+        extensions = (output / "nexus_factory.h").read_text()
+        self.assertIn("nx_factory_usb_profile(", extensions)
+        self.assertIn("nx_factory_usb_activation(", extensions)
+
+
 if __name__ == "__main__":
     unittest.main()

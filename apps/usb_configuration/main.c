@@ -18,8 +18,8 @@ int main(void) {
     int result = 1;
     if (started.primary == NX_SUCCESS &&
         example_usb_initialize(
-            &application, nx_factory_usb_profile_ref(NX_USB_DEVICE_REF_FS),
-            nx_factory_usb_activation_ref(NX_USB_DEVICE_REF_FS)) ==
+            &application, nx_factory_usb_profile(NX_USB_DEVICE_REF_FS.value),
+            nx_factory_usb_activation(NX_USB_DEVICE_REF_FS.value)) ==
             NX_SUCCESS) {
         bool sent = false;
         while (!application.closed) {

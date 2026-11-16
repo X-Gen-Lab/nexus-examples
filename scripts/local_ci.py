@@ -59,7 +59,10 @@ def standalones(preset):
         "stm32-qiming-core-baremetal": ("templates/qiming-core", "nexus_starter"),
         "stm32-qiming-v41-baremetal": ("templates/qiming-v41", "nexus_starter"),
     }
-    return [(*recipes[preset], None)] if preset in recipes else []
+    selected = [(*recipes[preset], None)] if preset in recipes else []
+    if preset == "stm32-qiming-baremetal":
+        selected.append(("apps/usb_configuration", "usb_configuration", None))
+    return selected
 
 
 def fixture_for(preset):
