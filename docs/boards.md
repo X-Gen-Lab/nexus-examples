@@ -21,6 +21,17 @@ Both backend presets select only GPIO and IRQ/event UART with a 32-event budget.
 FreeRTOS explicitly permits the priority-5 notification to call the kernel.
 The application rejects damaged reception before authorizing any echo.
 
+UART binding 的候选模式由 `list-bindings --board <Board ID> --kind uart` 查询。
+应用中的 `console` 是自定义角色，`uart1` 是板卡绑定；`mode = "irq"` 加
+`rx.format = "events"` 对应规范模式 `irq-byte-event`。选择其他模式时从维护示例
+开始，使用 `check` 检查整个装配，再查看 `explain` 的实际接口与资源。
+
+Query UART choices with `list-bindings --board <Board ID> --kind uart`.
+`console` is an application role and `uart1` a Board binding. The authored IRQ
+event form resolves to `irq-byte-event`. Use a maintained recipe, then check
+and explain the whole assembly; an editor's general schema cannot authorize a
+new hardware mode or pin route.
+
 核心板／V4.1 最小配置显式选择 SWD，保留 PA13／PA14；可选 NOR、SRAM、显示、触摸、
 网络等状态均由 TOML 明确表达。最小工程选择 absent/disconnected 只是使用前提，
 不是自动识别实物。ILI9341／XPT2046 型号不授权驱动共享接口或推断其他模块。

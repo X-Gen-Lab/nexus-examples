@@ -18,6 +18,32 @@ class StarterTemplateTests(unittest.TestCase):
     def test_template_changes_enter_the_behavior_gate(self):
         self.assertTrue(tdd_gate.relevant('templates/native/main.c'))
         self.assertTrue(tdd_gate.relevant('templates/manifest.json'))
+        self.assertTrue(tdd_gate.relevant('.taplo.toml'))
+
+    def test_copied_starters_keep_exact_schema_association(self):
+        lock = json.loads((ROOT / 'dependencies/nexus.lock.json').read_text())
+        schema = ('https://raw.githubusercontent.com/X-Gen-Lab/nexus/'
+                  + lock['commit'] + '/tools/configure/assembly.schema.json')
+        manifest = json.loads((ROOT / 'templates/manifest.json').read_text())
+        config = ROOT / '.taplo.toml'
+        self.assertTrue(config.is_file(), 'Checkout needs assembly associations')
+        settings = tomllib.loads(config.read_text())
+        self.assertEqual(settings, {
+            'include': ['configs/*.toml', 'templates/*/assembly.toml',
+                        'apps/*/assembly.toml'],
+            'schema': {'path': schema}})
+        with tempfile.TemporaryDirectory(prefix='editor copied product ') as value:
+            for name in manifest['templates']:
+                with self.subTest(template=name):
+                    project = Path(value) / name / 'owned product'
+                    shutil.copytree(ROOT / 'templates' / name, project)
+                    config = project / '.taplo.toml'
+                    self.assertTrue(config.is_file(),
+                                    'Copied starter needs its schema association')
+                    settings = tomllib.loads(config.read_text())
+                    self.assertEqual(settings['include'], ['assembly.toml'])
+                    self.assertEqual(settings['schema'], {'path': schema})
+                    self.assertEqual(set(settings), {'include', 'schema'})
 
 
     def test_manifest_binds_every_owned_template_file(self):
@@ -41,7 +67,7 @@ class StarterTemplateTests(unittest.TestCase):
                 self.assertEqual(entry['files'], actual)
                 self.assertEqual(set(actual),
                                  {'CMakeLists.txt', 'assembly.toml',
-                                  'main.c', 'README.md'})
+                                  'main.c', 'README.md', '.taplo.toml'})
                 self.assertEqual(entry['platform'],
                                  {'interface_epoch': policy['factory_abi_epoch'],
                                   'assembly_schema': 2})

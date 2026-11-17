@@ -18,7 +18,7 @@ from sdk_tools import ROOT, load, maintenance
 
 RELEVANT_PREFIXES = (".github/", "apps/", "configs/", "templates/", "tests/", "scripts/", "dependencies/")
 RELEVANT_FILES = {"CMakeLists.txt", "CMakePresets.json", ".pre-commit-config.yaml",
-                  ".gitmodules", "external/nexus", "external/googletest", "AGENTS.md"}
+                  ".gitmodules", ".taplo.toml", "external/nexus", "external/googletest", "AGENTS.md"}
 EXPECTED_CTEST_NAMES = (
     "uart_owner_shutdown", "platform_static_ports", "sensor_explicit_spi",
     "persistent_journal", "protocol_authorized_registers", "owner_lifecycle_google",

@@ -32,6 +32,57 @@ Presets own the build matrix and distinct build roots; TOML owns composition.
 Both ARM application targets receive independent resource checks. A developer
 build alone does not qualify the complete matrix.
 
+## 编写应用配置 / Authoring application configuration
+
+从对应 Board 的模板开始，不需要阅读 SoC 驱动来猜字段。`console` 是应用角色名，
+`binding = "uart1"` 来自板卡绑定；波特率、容量和优先级由应用显式选择，再由完整
+配置校验器检查。以已有启明 V3.1 配置为例，从仓库根执行：
+
+Start from the matching Board template. Application roles are authored names;
+bindings come from the Board. Select baud, capacity and priority explicitly,
+then validate the complete composition. This example uses the maintained V3.1:
+
+```sh
+python external/nexus/tools/configure/configure.py list-bindings \
+  --board stm32f407_qiming_v31 --kind uart
+python external/nexus/tools/configure/configure.py check \
+  --assembly configs/qiming-baremetal.toml
+python external/nexus/tools/configure/configure.py explain \
+  --assembly configs/qiming-baremetal.toml
+```
+
+查询给出候选 binding、规范模式和资源；它不替代完整配置接纳。模板中的
+`mode = "irq"` 与 `rx.format = "events"` 会解析为查询显示的 `irq-byte-event`。
+`explain` 展示最终接口、引脚、资源、容量和 factory 获取方式。TOML 的
+`uart.console` 对应 `nx_factory_uart_ref(NX_UART_REF_CONSOLE)`，业务组件接收该
+公共接口，不读取配置文件。不要修改 generated 目录。
+
+The binding query lists candidates. `mode = "irq"` plus `rx.format = "events"`
+resolves to the canonical `irq-byte-event` mode. `explain` shows effective
+interfaces, resources and factory access. Components receive the public port;
+they neither parse TOML nor depend on generated factory headers.
+
+仓库及五个独立模板提供 `.taplo.toml`，供支持 Taplo 的编辑器关联所锁定 SDK
+提交的 schema；只匹配应用装配 TOML，不把工具自身的 TOML 当作装配。首次远端
+schema 读取需要联网，后续缓存由编辑器管理。离线编辑可将 `schema.path` 改为
+本地所选 SDK 的 `tools/configure/assembly.schema.json`。切换 SDK 时同步更新
+关联；本地 `check`、构建和 CI 始终使用实际 SDK，不联网读取编辑器 schema。
+
+The checkout and copied starters include an optional Taplo association pinned
+to the locked SDK commit. The initial schema fetch needs network access; editor
+caching is optional. For offline editing, point `schema.path` at the selected
+local SDK's schema. Update it with the SDK. Local checks and builds use the
+actual SDK and never fetch this editor schema. The editor uses the documented
+[Taplo configuration format](https://taplo.tamasfe.dev/configuration/file.html).
+
+schema 补全只解释字段，不代表任一芯片或 Board 支持该模式。不存在的绑定需要
+维护正确的 Board 事实，不能凭 MCU 有该外设就自行填写引脚。32 项 UART event
+容量是 32 个事件；当前 ARM 布局每项 16 B，数组为 512 B，不是 32 字节。
+
+Schema completion describes fields, not hardware support. Missing bindings need
+reviewed Board facts. UART event capacity counts events: 32 entries occupy 512 B
+under the current ARM layout, independently of other state and alignment.
+
 ## 已安装 SDK / Installed SDK
 
 `tests/integration/installed_sdk` 使用 `find_package(Nexus)`，复用 `apps/` 中同一份
@@ -94,8 +145,8 @@ the same software entry point; local execution is labelled local.
 
 ## 工程模板 / Standalone starters
 
-五个模板均自带 CMake、TOML、C11 入口和 README。平台 create 工具从例库的完整
-提交读取清单与摘要，不联网获取 SDK，也不复制 `.git` 或平台树：
+五个模板均自带 CMake、TOML、C11 入口、README 和可选编辑器关联。平台 create
+工具从例库的完整提交读取清单与摘要，不联网获取 SDK，也不复制 `.git` 或平台树：
 
 Each starter is independently copyable. Creation reads committed template
 objects and records provenance; it does not acquire a platform checkout.

@@ -47,3 +47,31 @@ consumption are separate evidence levels. Verify both consumption paths for
 the SDK identity selected by the product lock; configuration alone is insufficient.
 实板 HIL 为 `not_executed`。配置检查、ARM 链接和安装 SDK 消费是不同证据；应按
 产品选定的 SDK 身份分别验证两条消费路径，不能只凭配置可解析声明交付资格。
+
+## 编写配置 / Authoring the assembly
+
+The copied `.taplo.toml` associates only `assembly.toml` with the exact SDK
+commit's schema in a Taplo-compatible editor. The first remote schema fetch
+needs network access; it is optional and never used by the build. For offline
+editing, set its `schema.path` to the selected local SDK's
+`tools/configure/assembly.schema.json`. Update the association when changing SDKs.
+随工程复制的 `.taplo.toml` 为支持 Taplo 的编辑器关联精确 SDK 提交的 schema，
+仅匹配 `assembly.toml`。首次远端读取需要联网；它是可选编辑辅助，不参与构建。
+离线编辑时将其中 `schema.path` 改为本地所选 SDK 的
+`tools/configure/assembly.schema.json`，切换 SDK 时同步更新。
+
+Set `NEXUS_SOURCE` to a checkout or an installed SDK's `share/nexus/src`, then run:
+将 `NEXUS_SOURCE` 指向源码检出或已安装 SDK 的 `share/nexus/src`，再运行：
+
+```sh
+python "$NEXUS_SOURCE/tools/configure/configure.py" check --assembly assembly.toml
+python "$NEXUS_SOURCE/tools/configure/configure.py" explain --assembly assembly.toml
+```
+
+`status` and `console` are application roles; bindings come from the selected
+Board. Change the TOML, inspect the effective interfaces/resources with `explain`,
+then build. `rx.capacity = 32` means 32 events, not 32 bytes; the current ARM
+layout uses 16 bytes per event (512 bytes for this selected array).
+`status`、`console` 是应用角色名，binding 来自所选 Board。修改 TOML 后先检查
+`explain` 给出的实际接口和资源，再构建。`rx.capacity = 32` 表示 32 个事件，
+不是 32 字节；当前 ARM 布局每事件 16 字节，该数组占 512 字节。
