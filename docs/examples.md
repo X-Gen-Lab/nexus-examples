@@ -118,11 +118,13 @@ main Native preset. It does not qualify hardware or expand installed acceptance.
 | `qiming-core` | 启明 STM32F407ZGT6 核心板 |
 | `qiming-v41` | 启明 STM32F407 高配版 V4.1 |
 
-每个模板有四份自包含文件，由 `templates/manifest.json` 绑定摘要。应用使用
+每个模板有五份自包含文件，由 `templates/manifest.json` 绑定摘要；`.taplo.toml`
+提供可选的精确版本编辑器 schema 关联。应用使用
 `status`、`console` 强类型角色；问候 TX 真正结清后才停止。复制后不依赖例库中
 其他目录。已知 ILI9341／XPT2046 型号不自动授权启用显示或触摸。
 
-Starters bind their own files and assembly; copied projects have no dependency
+Starters bind their own files, assembly and optional pinned editor association;
+copied projects have no dependency
 on sibling example directories. Strong roles map through TOML. The finite greeting
 settles before shutdown; known module identities do not enable peripherals.
 
