@@ -13,6 +13,33 @@ from tdd_gate import EXPECTED_CTEST_NAMES
 
 
 class ApplicationBuildContracts(unittest.TestCase):
+    def test_arm_preset_configures_without_a_source_environment_variable(self):
+        environment = os.environ.copy()
+        environment.pop('NEXUS_SOURCE', None)
+        with tempfile.TemporaryDirectory(prefix='direct ARM preset ') as value:
+            result = subprocess.run([
+                'cmake', '--preset', 'stm32-qiming-baremetal', '-B', value],
+                cwd=ROOT, env=environment, capture_output=True, text=True,
+                timeout=90)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            cache = (Path(value) / 'CMakeCache.txt').read_text()
+            system = next((Path(value) / 'CMakeFiles')
+                          .glob('*/CMakeSystem.cmake')).read_text()
+            self.assertIn('CMAKE_SYSTEM_NAME "Generic"', system)
+            self.assertIn(str(ROOT / 'external/nexus'), cache)
+
+    def test_conflicting_sdk_sources_reject_before_compiler_detection(self):
+        environment = dict(os.environ, NEXUS_SOURCE=str(sdk_root()))
+        with tempfile.TemporaryDirectory(prefix='conflicting SDK ') as value:
+            result = subprocess.run([
+                'cmake', '-S', str(ROOT), '-B', value, '-G', 'Ninja',
+                '-DNEXUS_SOURCE:PATH=' + str(Path(value) / 'other-sdk')],
+                cwd=ROOT, env=environment, capture_output=True, text=True,
+                timeout=30)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('NEXUS_SOURCE differs', result.stderr)
+            self.assertNotIn('compiler identification', result.stdout)
+
     def test_native_exports_all_applications_with_sanitizer_instrumentation(self):
         environment = os.environ.copy()
         environment['NEXUS_SOURCE'] = str(sdk_root())

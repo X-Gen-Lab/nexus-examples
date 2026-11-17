@@ -16,7 +16,7 @@
                 "NEXUS_BUILD_TESTS": "OFF",
                 "NEXUS_BUILD_WORKLOAD": "OFF"
             },
-            "toolchainFile": "$env{NEXUS_SOURCE}/cmake/toolchains/arm-gcc.cmake"
+            "toolchainFile": "${sourceDir}/cmake/arm-gcc.cmake"
         },
         {
             "name": "native-debug",

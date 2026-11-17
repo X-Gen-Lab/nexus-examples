@@ -3,7 +3,7 @@
 
 Git hooks use pre-commit's staged-file isolation; manual invocation checks the
 working tree. No command rewrites or stages files. --all selects tracked files.
-The SDK's formatter and mechanical comment API are the single C policy source.
+The SDK's formatters and mechanical comment API own the C/CMake policy.
 This check does not establish source identity or physical qualification.
 """
 
@@ -50,6 +50,7 @@ def select_files(root, names):
 def check(source, paths):
     formatter = load(source, "scripts/tools/format.py", "example_sdk_format")
     comments = load(source, "scripts/ci/comment_style.py", "example_sdk_comments")
+    cmake = load(source, "scripts/tools/cmake_format.py", "example_sdk_cmake")
     installer = load(source, "scripts/setup/install_dev_tools.py", "example_sdk_installer")
     pins = installer.read_lock(source / "dependencies/development-tools.txt")
     tool = formatter.default_tool(ROOT)
@@ -83,6 +84,9 @@ def check(source, paths):
                 issues.append(f"{name}: clang-format differs; use the SDK .clang-format")
             for item in comments.inspect_source(name, contents)["diagnostics"]:
                 issues.append(f"{name}:{item['line']}: {item['message']}")
+    issues.extend(cmake.check_files(source, [path for path in paths
+                                            if cmake.owned_file(
+                                                path.relative_to(ROOT).as_posix())]))
     return {"schema_version": 1, "kind": "example_style_check",
             "status": "failed" if issues else "passed", "formatter": version,
             "style_sha256": hashlib.sha256((source / ".clang-format").read_bytes()).hexdigest(),

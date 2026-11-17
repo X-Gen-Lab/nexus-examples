@@ -16,6 +16,13 @@ formal integration rejects dirty or candidate substitutes.
 Prepare dependencies explicitly as described in the root README. Use the SDK's
 locked host tools; ordinary build and verification commands never fetch inputs.
 
+格式检查复用所选 SDK 的 C／CMake 检查入口及配置；准备脚本和 hook 环境安装相同
+锁定版本的 gersemi，不在提交时下载或自动改写文件。
+
+Style checks reuse the selected SDK's C/CMake checkers and configuration. Setup
+and hook environments install the same locked gersemi version; commits neither
+download tools nor rewrite files.
+
 ```sh
 python scripts/verify_sdk.py
 python scripts/check_style.py --all
@@ -25,12 +32,40 @@ python scripts/build.py --preset stm32-qiming-core-freertos --parallel 2
 ```
 
 `CMakePresets.json` 是主矩阵权威，`configs/*.toml` 选择硬件、后端、组件与预算。
-每个 preset 使用独立的 `build/<preset>`。ARM 的两个主目标各生成 ELF、BIN、map
-和资源报告。开发构建成功不替代完整交付验证。
+维护预设默认使用独立的 `build/<preset>`；自定义预设以实际 `binaryDir` 为准。
+脚本复用所选 SDK 的预设解析器，按实际目录加锁、保存日志和 JUnit，不另猜目录。
+`--test` 在编译前检查对应 test preset 及其配置关联。ARM 的两个主目标各生成
+ELF、BIN、map 和资源报告。开发构建成功不替代完整交付验证。
 
-Presets own the build matrix and distinct build roots; TOML owns composition.
-Both ARM application targets receive independent resource checks. A developer
-build alone does not qualify the complete matrix.
+Presets own the build matrix and actual binary directories; TOML owns
+composition. The runner reuses the selected SDK's preset reader and keeps its
+lock, log and JUnit in that directory, including user presets and paths with
+spaces. Missing or mismatched test presets fail before compilation. Both ARM
+targets receive independent resource checks. A developer build does not qualify
+the complete matrix.
+
+已准备工具和依赖后，也可直接使用 CMake；默认 ARM 工具链来自 `external/nexus`，
+不需要先设置环境变量：
+
+After explicit tool and dependency preparation, CMake also works directly. ARM
+presets use the default `external/nexus` SDK without an environment variable:
+
+```sh
+cmake --preset stm32-qiming-baremetal
+cmake --build --preset stm32-qiming-baremetal --parallel 2
+```
+
+选择其他位置时，脚本使用 `--nexus-source /path/to/nexus`；直接 CMake 使用
+`-DNEXUS_SOURCE:PATH=/path/to/nexus`。源码在 `project()` 前确定，工具链和平台使用
+同一来源。环境变量与 CMake cache 指向不同 SDK 时明确拒绝；切换来源使用独立构建
+目录。直接 CMake 不取得脚本的构建锁，调用者须保证目录独占。
+
+Use `--nexus-source /path/to/nexus` with the runner or
+`-DNEXUS_SOURCE:PATH=/path/to/nexus` with CMake. Source selection precedes
+`project()`, so the toolchain and platform use the same SDK. Conflicting
+environment and cache sources fail explicitly; use separate build directories
+when switching SDKs. Direct CMake does not acquire the runner's build lock, so
+its caller must keep the directory exclusive.
 
 ## 编写应用配置 / Authoring application configuration
 

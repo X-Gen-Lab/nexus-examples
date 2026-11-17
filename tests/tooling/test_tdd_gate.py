@@ -13,6 +13,11 @@ import tdd_gate as gate
 from sdk_tools import load, sdk_root
 
 
+class ExampleSelectionTests(unittest.TestCase):
+    def test_cmake_toolchain_changes_enter_the_behavior_gate(self):
+        self.assertTrue(gate.relevant("cmake/arm-gcc.cmake"))
+
+
 class ExampleTddGateTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
