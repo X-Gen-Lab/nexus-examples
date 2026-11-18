@@ -62,8 +62,8 @@ def main(argv=None):
     # Resolve the same include/inheritance graph as the selected SDK. The
     # configure preset owns the directory; build/test presets must agree.
     try:
-        presets = load(source, "tools/dev/presets.py", "example_sdk_presets")
-        presets = presets.Presets(ROOT, environment)
+        preset_api = load(source, "tools/dev/presets.py", "example_sdk_presets")
+        presets = preset_api.Presets(ROOT, environment)
         selected = presets.selected("build", args.preset)
         configure_name = selected["configurePreset"]
         configure = presets.selected("configure", configure_name)
@@ -77,7 +77,6 @@ def main(argv=None):
         print("Build rejected: " + str(error), file=sys.stderr)
         return 1
     commands = [
-        ["cmake", "--preset", configure_name, f"-DNEXUS_SOURCE:PATH={source}"],
         ["cmake", "--build", "--preset", args.preset,
          "--parallel", str(args.parallel)],
     ]
@@ -96,6 +95,17 @@ def main(argv=None):
         with lock.build_lock(output):
             with (output / "build.log").open("w", encoding="utf-8") as log:
                 try:
+                    def configure_tree(options):
+                        return run(["cmake", "--preset", configure_name,
+                                    f"-DNEXUS_SOURCE:PATH={source}", *options],
+                                   environment, log)
+
+                    prepare = getattr(preset_api, "configure_if_needed", None)
+                    code = (prepare(ROOT, configure, environment,
+                                    configure_tree, sdk=source)
+                            if prepare else configure_tree([]))
+                    if code:
+                        return code
                     for command in commands:
                         if command[0] == "ctest":
                             (output / "ctest-results.xml").unlink(missing_ok=True)

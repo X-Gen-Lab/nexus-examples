@@ -3,6 +3,7 @@
 import io
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -52,6 +53,44 @@ class BuildOwnershipTests(unittest.TestCase):
                 self.assertEqual(log.read_text(), "retained earlier output\n")
             finally:
                 owner.communicate("", timeout=5)
+
+    def test_rebuild_reuses_real_ninja_tree_and_changed_preset_recovers(self):
+        with tempfile.TemporaryDirectory(prefix="example hot build ") as value:
+            root = Path(value)
+            self.presets(root)
+            (root / "CMakeLists.txt").write_text(
+                'cmake_minimum_required(VERSION 3.31)\n'
+                'project(sample LANGUAGES NONE)\n'
+                'if(BROKEN)\n  message(FATAL_ERROR "broken selection")\nendif()\n'
+                'file(APPEND "${CMAKE_BINARY_DIR}/configure-count" "one\\n")\n')
+            output = root / "build/native-debug"
+            args = ["--preset", "native-debug", "--nexus-source", str(sdk_root())]
+            with mock.patch.object(build, "ROOT", root):
+                self.assertEqual(build.main(args), 0)
+                self.assertEqual(build.main(args), 0)
+                self.assertEqual((output / "configure-count").read_text(), "one\n")
+                self.assertNotIn("+ cmake --preset ", (output / "build.log").read_text())
+                path = root / "CMakePresets.json"
+                original = path.read_text()
+                data = json.loads(original)
+                data["configurePresets"][0]["cacheVariables"] = {"BROKEN": "ON"}
+                path.write_text(json.dumps(data))
+                self.assertNotEqual(build.main(args), 0)
+                path.write_text(original)
+                self.assertEqual(build.main(args), 0)
+                self.assertEqual((output / "configure-count").read_text(),
+                                 "one\none\n")
+                second = root / "second sdk"
+                (second / "tools/dev").mkdir(parents=True)
+                (second / "CMakeLists.txt").touch()
+                shutil.copyfile(sdk_root() / "tools/dev/presets.py",
+                                second / "tools/dev/presets.py")
+                self.assertEqual(build.main([*args[:-1], str(second)]), 0)
+                cache = (output / "CMakeCache.txt").read_text()
+                self.assertIn(f"NEXUS_SOURCE:PATH={second}", cache)
+                self.assertEqual((output / "configure-count").read_text(),
+                                 "one\none\none\n")
+
 
     def test_managed_child_receives_the_real_parent_lease(self):
         with tempfile.TemporaryDirectory(prefix="delegated example build ") as value:
