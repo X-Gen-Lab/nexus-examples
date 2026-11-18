@@ -7,6 +7,11 @@ from pathlib import Path
 import sys
 
 
+# The SDK is source input, including imports made after these helpers return.
+# Keep bytecode disabled for the lifetime of this consumer process.
+sys.dont_write_bytecode = True
+
+
 ROOT = Path(__file__).resolve().parents[1]
 
 

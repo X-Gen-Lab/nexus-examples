@@ -4,7 +4,7 @@
   "templates": {
     "native": {
       "files": {
-        ".taplo.toml": "8bc4167ff58f53cd99137b92281c69c97ae3b022fa5e98ee4c4261b88ae8bae4",
+        ".taplo.toml": "d5314baf1aeac1794a9fc96f06dcdd84ac3122c10a5e134b31e7677f5f55af86",
         "CMakeLists.txt": "d29b4891730585d612b588a467789e80dd158a364d3217ef2439d6de58855e23",
         "README.md": "f7942068421fab2a8108997b79caf27913f461c14f1974b20dd7dcc3314f6593",
         "assembly.toml": "1c6763588ed7cb6b7163cdda7d01bd6a62200654ca58987bc8187e48f14eee70",
@@ -17,7 +17,7 @@
     },
     "qiming": {
       "files": {
-        ".taplo.toml": "8bc4167ff58f53cd99137b92281c69c97ae3b022fa5e98ee4c4261b88ae8bae4",
+        ".taplo.toml": "d5314baf1aeac1794a9fc96f06dcdd84ac3122c10a5e134b31e7677f5f55af86",
         "CMakeLists.txt": "97aea97ea6cf576d0ee334d15dcb4d0bd475201296b4e4a95cd2bf26b70020a6",
         "README.md": "291ac187661d2a7b57bed20c8943f1b0ef39025b63fd98e0cac87828449d6fbe",
         "assembly.toml": "4d6bfcdc179f1ae1d1716defb1f2993cab965664313c84a1932e42f312d87746",
@@ -30,7 +30,7 @@
     },
     "sky": {
       "files": {
-        ".taplo.toml": "8bc4167ff58f53cd99137b92281c69c97ae3b022fa5e98ee4c4261b88ae8bae4",
+        ".taplo.toml": "d5314baf1aeac1794a9fc96f06dcdd84ac3122c10a5e134b31e7677f5f55af86",
         "CMakeLists.txt": "97aea97ea6cf576d0ee334d15dcb4d0bd475201296b4e4a95cd2bf26b70020a6",
         "README.md": "62510a9d407ecb57a37081a1b99022b2e7fce8ac4ba6cf3671002148c4d6980d",
         "assembly.toml": "7d5cad636c163cc161c3bb310d1666cebaa0f02b155becf53cd953c7db553e07",
@@ -43,7 +43,7 @@
     },
     "qiming-core": {
       "files": {
-        ".taplo.toml": "8bc4167ff58f53cd99137b92281c69c97ae3b022fa5e98ee4c4261b88ae8bae4",
+        ".taplo.toml": "d5314baf1aeac1794a9fc96f06dcdd84ac3122c10a5e134b31e7677f5f55af86",
         "CMakeLists.txt": "97aea97ea6cf576d0ee334d15dcb4d0bd475201296b4e4a95cd2bf26b70020a6",
         "README.md": "9526af34002fd7d779ed016db5c2733ed6386d71feb7ca151d1d4cd464862cee",
         "assembly.toml": "b03fde63cba36dcf1ebd8f986993667accd1ce18417770dda0904ecf0702b8c7",
@@ -56,7 +56,7 @@
     },
     "qiming-v41": {
       "files": {
-        ".taplo.toml": "8bc4167ff58f53cd99137b92281c69c97ae3b022fa5e98ee4c4261b88ae8bae4",
+        ".taplo.toml": "d5314baf1aeac1794a9fc96f06dcdd84ac3122c10a5e134b31e7677f5f55af86",
         "CMakeLists.txt": "97aea97ea6cf576d0ee334d15dcb4d0bd475201296b4e4a95cd2bf26b70020a6",
         "README.md": "d25e1db83010669172e3ed2edf36ff43407425753ce0a5c11b724adb6a9e9646",
         "assembly.toml": "6043854ec400e8609033ec97e72c93f3dab14c14891176b0a42a83e86ed39a3d",
