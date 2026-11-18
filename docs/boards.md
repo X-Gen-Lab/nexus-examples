@@ -111,7 +111,7 @@ configuration exercise as a complete firmware application:
 ```sh
 cmake -S apps/shared_spi_runtime -B build/board-source -G Ninja \
   -DCMAKE_TOOLCHAIN_FILE="$NEXUS_SOURCE/cmake/toolchains/arm-gcc.cmake" \
-  -DNEXUS_SOURCE="$NEXUS_SOURCE" -DCMAKE_BUILD_TYPE=Release
+  -DNexus_DIR="$NEXUS_SOURCE/cmake" -DCMAKE_BUILD_TYPE=Release
 cmake --build build/board-source --target shared_spi_runtime --parallel 2
 ```
 

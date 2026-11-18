@@ -30,7 +30,7 @@ if(
         "select one SDK and use a separate build directory"
     )
 endif()
-if(NOT EXISTS "${NEXUS_SOURCE}/CMakeLists.txt")
+if(NOT EXISTS "${NEXUS_SOURCE}/cmake/NexusConfig.cmake")
     message(FATAL_ERROR "Initialize external/nexus recursively")
 endif()
 project(nexus_examples VERSION 1.0.0 LANGUAGES C ASM)
@@ -41,9 +41,19 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # The SDK owns reusable mechanisms. This repository owns every application,
 # entry point, task, domain mapping and recovery decision.
-set(NEXUS_BUILD_TESTS OFF CACHE BOOL "SDK host development tests" FORCE)
-set(NEXUS_BUILD_WORKLOAD OFF CACHE BOOL "SDK minimal workloads" FORCE)
-add_subdirectory("${NEXUS_SOURCE}" nexus EXCLUDE_FROM_ALL)
+find_package(
+    Nexus
+    0.2.1
+    EXACT
+    CONFIG
+    REQUIRED
+    PATHS "${NEXUS_SOURCE}/cmake"
+    NO_DEFAULT_PATH
+)
+if(NOT Nexus_SOURCE_DIR STREQUAL NEXUS_SOURCE)
+    message(FATAL_ERROR "Nexus_DIR differs from the selected NEXUS_SOURCE")
+endif()
+nexus_add_platform(ASSEMBLY "${NEXUS_ASSEMBLY_FILE}")
 get_target_property(soc_family Nexus::Platform NEXUS_SOC_FAMILY)
 
 nexus_add_firmware(platform_reference SOURCES apps/platform_reference/main.c

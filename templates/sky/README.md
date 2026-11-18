@@ -19,9 +19,9 @@ cmake -S . -B build -G Ninja \
 cmake --build build --parallel 2
 ```
 
-Explicit checkout development accepts `-DNEXUS_SOURCE=/absolute/path/to/nexus`
+Explicit checkout development accepts `-DNexus_DIR=/absolute/path/to/nexus/cmake`
 instead of `Nexus_DIR`, with that checkout's toolchain file.
-联合开发可改用 `-DNEXUS_SOURCE=/absolute/path/to/nexus` 及该检出的工具链文件；
+联合开发可改用 `-DNexus_DIR=/absolute/path/to/nexus/cmake` 及该检出的工具链文件；
 这不替代正式 SDK 身份验证。
 
 Read the selected Board README before connecting equipment. The UART and GPIO

@@ -93,7 +93,7 @@ class CandidateSDKIdentityTests(unittest.TestCase):
             "schema_version": 1,
             "repository": "https://github.com/X-Gen-Lab/nexus.git",
             "commit": self.pinned, "tree": self.pinned_tree,
-            "consumption": "source-add_subdirectory", "recursive_submodules": True,
+            "consumption": "source-find_package", "recursive_submodules": True,
         }))
         shutil.copyfile(HERE.parent / "CMakePresets.json", self.root / "CMakePresets.json")
         (self.root / ".gitmodules").write_text('[submodule "external/nexus"]\n\tpath = external/nexus\n\turl = https://github.com/X-Gen-Lab/nexus.git\n')
@@ -107,6 +107,17 @@ class CandidateSDKIdentityTests(unittest.TestCase):
         self.previous_root = repository.ROOT
         repository.ROOT = self.root
         self.addCleanup(setattr, repository, "ROOT", self.previous_root)
+
+    def test_source_package_lock_declares_the_explicit_consumption_contract(self):
+        path = self.root / "dependencies/nexus.lock.json"
+        identity = json.loads(path.read_text())
+        identity["consumption"] = "source-find_package"
+        path.write_text(json.dumps(identity))
+        self.assertEqual(repository.load_identity(), identity)
+        identity["consumption"] = "source-add_subdirectory"
+        path.write_text(json.dumps(identity))
+        with self.assertRaisesRegex(ValueError, "source SDK contract"):
+            repository.load_identity()
 
     def test_candidate_checks_real_source_without_changing_formal_pin(self):
         lock_before = (self.root / "dependencies/nexus.lock.json").read_bytes()

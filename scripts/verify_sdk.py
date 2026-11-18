@@ -48,7 +48,7 @@ def load_identity():
     if (url.scheme != "https" or not url.netloc or not url.path or
             url.username or url.password or url.query or url.fragment):
         raise ValueError("Nexus source lock requires an HTTPS repository URL without credentials")
-    if (identity["consumption"] != "source-add_subdirectory" or
+    if (identity["consumption"] != "source-find_package" or
             identity["recursive_submodules"] is not True):
         raise ValueError("Nexus source lock must select the recursive source SDK contract")
     return identity

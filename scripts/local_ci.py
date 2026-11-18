@@ -197,7 +197,6 @@ class LocalCI:
             f"-DNexus_DIR={prefix / 'lib/cmake/Nexus'}",
             "-DNEXUS_EXPECTED_SOURCE_REVISION=" + self.identity["nexus_revision"],
             f"-DNEXUS_ASSEMBLY_FILE={self.root / 'configs/native.toml'}",
-            "-DNEXUS_BUILD_TESTS=OFF", "-DNEXUS_BUILD_WORKLOAD=OFF",
             "-DNEXUS_TEST_SUPPORT=ON",
             "-DNEXUS_ENABLE_SANITIZERS=ON", "-DCMAKE_BUILD_TYPE=Debug"])
         self.command("installed-build", ["cmake", "--build", build,
@@ -249,7 +248,7 @@ class LocalCI:
             configure = ["cmake", "-S", self.root / relative, "-B", standalone,
                          "-G", "Ninja", "-DCMAKE_BUILD_TYPE=Release",
                          f"-DCMAKE_TOOLCHAIN_FILE={self.source / 'cmake/toolchains/arm-gcc.cmake'}",
-                         f"-DNEXUS_SOURCE={self.source}"]
+                         f"-DNexus_DIR={self.source / 'cmake'}"]
             if assembly:
                 configure.append(f"-DNEXUS_ASSEMBLY_FILE={self.source / assembly}")
             self.command(name + "-configure", configure)

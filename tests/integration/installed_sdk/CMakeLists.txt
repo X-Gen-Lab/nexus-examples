@@ -12,6 +12,7 @@ get_filename_component(
     ABSOLUTE
 )
 find_package(Nexus CONFIG REQUIRED)
+nexus_add_platform(ASSEMBLY "${NEXUS_ASSEMBLY_FILE}")
 nexus_add_firmware(nexus_firmware SOURCES
     "${examples_root}/apps/platform_reference/main.c"
     "${examples_root}/apps/platform_reference/rx_policy.c"
