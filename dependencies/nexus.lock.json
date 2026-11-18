@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "a06bb94af648c552b84a52a55f67955a48a7c5d4",
-  "tree": "d2041a44a379eddd0b89d7521cb2d38c216c18eb",
+  "commit": "e88431c783f07d067eccf1d564db12aee5138f0c",
+  "tree": "b32cd229db06d0e4d042e713868d895d845e7d34",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
-  "baseline_status": "Exact lean build workflow platform pin; validation retains its executed source and scope; physical HIL is not executed.",
+  "baseline_status": "Build graph delivery platform pin. Local verification records its exact source and scope; physical HIL is not executed.",
   "public_api": "Nexus::Platform / generated readonly typed factory faces / explicit OS and common component targets"
 }

@@ -67,6 +67,18 @@ environment and cache sources fail explicitly; use separate build directories
 when switching SDKs. Direct CMake does not acquire the runner's build lock, so
 its caller must keep the directory exclusive.
 
+脚本在构建锁内核对预设、SDK 和 CMake 缓存。首次运行先配置工程。随后修改
+应用 C 文件，直接重跑同一条构建命令即可，Ninja 只重建受影响的目标。
+预设或编译器发生变化时，脚本会重新配置。已安装的 Source SDK 每次都会验证
+包内容。旧 SDK 缺少增量配置接口时，脚本每次都会显式配置。
+
+The runner checks the preset, SDK and CMake cache under the build lock. The
+first build configures the project. After editing an application C file, run
+the same command again. Ninja rebuilds the affected targets. Changing the
+preset or compiler triggers configuration. An installed Source SDK receives
+its payload check on every invocation. Earlier SDKs without the incremental
+configuration API use explicit configure each time.
+
 ## 编写应用配置 / Authoring application configuration
 
 从对应 Board 的模板开始，不需要阅读 SoC 驱动来猜字段。`console` 是应用角色名，
