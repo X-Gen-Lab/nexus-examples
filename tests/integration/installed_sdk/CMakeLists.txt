@@ -21,6 +21,17 @@ if(soc_family STREQUAL "native")
     enable_testing()
     target_link_libraries(nexus_firmware PRIVATE Nexus::NativeModel)
     include("${examples_root}/apps/industrial_control/firmware.cmake")
+    # The test's sensor deadlines use model time while the two tasks run on POSIX.
+    target_sources(
+        industrial_control
+        PRIVATE "${CMAKE_CURRENT_LIST_DIR}/industrial_clock.c"
+    )
+    target_link_options(
+        industrial_control
+        PRIVATE
+            "LINKER:--wrap=example_industrial_model_clock"
+            "LINKER:--wrap=nx_native_notify_port"
+    )
     include("${examples_root}/apps/network_gateway/firmware.cmake")
     add_test(NAME installed_platform_reference COMMAND nexus_firmware)
     add_test(
