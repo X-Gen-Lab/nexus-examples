@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "e88431c783f07d067eccf1d564db12aee5138f0c",
-  "tree": "b32cd229db06d0e4d042e713868d895d845e7d34",
+  "commit": "8e4153d0e1a7fb9ff64c4421023e6146be7830bd",
+  "tree": "110d5ad7070abce30cdeb04c11c306eefe7f56d8",
   "consumption": "source-add_subdirectory",
   "recursive_submodules": true,
   "baseline_status": "Build graph delivery platform pin. Local verification records its exact source and scope; physical HIL is not executed.",
