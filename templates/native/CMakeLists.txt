@@ -4,8 +4,11 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 set(NEXUS_TEST_SUPPORT ON CACHE BOOL "Explicit Native host model scope" FORCE)
-set(NEXUS_ASSEMBLY_FILE "${CMAKE_CURRENT_SOURCE_DIR}/assembly.toml"
-    CACHE FILEPATH "This product owns its sole assembly")
+set(NEXUS_ASSEMBLY_FILE
+    "${CMAKE_CURRENT_SOURCE_DIR}/assembly.toml"
+    CACHE FILEPATH
+    "This product owns its sole assembly"
+)
 
 # Nexus_DIR selects a verified installed SDK. NEXUS_SOURCE is an explicit
 # development checkout; its outputs do not acquire release qualification.

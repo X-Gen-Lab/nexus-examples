@@ -11,6 +11,18 @@ from sdk_tools import ROOT, sdk_root
 
 
 class StyleIntegrationTest(unittest.TestCase):
+    def test_selected_sdk_cmake_formatter_rejects_unformatted_owned_files(self):
+        source = sdk_root()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            cmake = root / "CMakeLists.txt"
+            cmake.write_text('if(TRUE)\nset(value "a;b")\nendif()\n')
+            with patch.object(check_style, "ROOT", root):
+                report = check_style.check(source, [cmake])
+            self.assertEqual(report["status"], "failed")
+            self.assertTrue(any("CMake format" in issue
+                                for issue in report["issues"]))
+
     def test_real_formatter_and_comment_policy(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()

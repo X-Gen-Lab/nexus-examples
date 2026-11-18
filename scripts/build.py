@@ -9,7 +9,7 @@ import shlex
 import sys
 import time
 
-from sdk_tools import maintenance
+from sdk_tools import load, maintenance
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,7 +46,6 @@ def main(argv=None):
     parser.add_argument("--preset", required=True,
                         help="configure/build preset from this repository")
     parser.add_argument("--nexus-source", type=Path,
-                        default=ROOT / "external/nexus",
                         help="existing source SDK checkout; default: external/nexus")
     parser.add_argument("--parallel", type=positive_integer, default=4)
     parser.add_argument("--test", action="store_true",
@@ -54,17 +53,31 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", args.preset):
         parser.error("preset must be a name without path separators")
-    source = args.nexus_source.resolve()
+    source = Path(args.nexus_source or os.environ.get("NEXUS_SOURCE") or
+                  ROOT / "external/nexus").resolve()
     if not (source / "CMakeLists.txt").is_file():
         parser.error(f"Nexus checkout is missing: {source}; initialize its submodule first")
     environment = os.environ.copy()
     environment["NEXUS_SOURCE"] = str(source)
-    # Presets remain the only definition of the target and build directory.
-    # This environment variable resolves ARM toolchainFile before project().
-    output = ROOT / "build" / args.preset
-    output.mkdir(parents=True, exist_ok=True)
+    # Resolve the same include/inheritance graph as the selected SDK. The
+    # configure preset owns the directory; build/test presets must agree.
+    try:
+        presets = load(source, "tools/dev/presets.py", "example_sdk_presets")
+        presets = presets.Presets(ROOT, environment)
+        selected = presets.selected("build", args.preset)
+        configure_name = selected["configurePreset"]
+        configure = presets.selected("configure", configure_name)
+        if args.test:
+            test = presets.selected("test", args.preset)
+            if test["configurePreset"] != configure_name:
+                raise ValueError("Build and test presets require the same "
+                                 "configure preset")
+        output = Path(configure["binaryDir"])
+    except (OSError, ValueError) as error:
+        print("Build rejected: " + str(error), file=sys.stderr)
+        return 1
     commands = [
-        ["cmake", "--preset", args.preset, f"-DNEXUS_SOURCE:PATH={source}"],
+        ["cmake", "--preset", configure_name, f"-DNEXUS_SOURCE:PATH={source}"],
         ["cmake", "--build", "--preset", args.preset,
          "--parallel", str(args.parallel)],
     ]

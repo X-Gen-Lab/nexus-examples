@@ -30,11 +30,23 @@ static std::atomic<size_t> settings_closes{0U};
 static std::atomic<bool> inspect_owner_progress{false};
 static std::atomic<bool> force_owner_busy{false};
 static std::atomic<bool> fail_owner_transfer{false};
+static std::atomic<bool> delay_simulated_bytes{false};
 static std::atomic<size_t> owner_waits{0U};
 static std::atomic<size_t> waits_with_polling_result{0U};
 static std::atomic<size_t> maximum_service_steps{0U};
 static thread_local nx_bus_owner_t* observed_owner;
 static thread_local size_t service_steps;
+extern "C" nx_result_t
+__real_nx_native_uart_model_receive(const nx_uart_port_t* binding, uint8_t byte,
+                                    uint32_t flags);
+extern "C" nx_result_t
+__wrap_nx_native_uart_model_receive(const nx_uart_port_t* binding, uint8_t byte,
+                                    uint32_t flags) {
+    if (delay_simulated_bytes.load()) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+    return __real_nx_native_uart_model_receive(binding, byte, flags);
+}
 extern "C" nx_platform_start_result_t __real_nx_platform_start(void);
 extern "C" nx_platform_start_result_t __wrap_nx_platform_start(void) {
     if (inject_cold_failure.exchange(false)) {
@@ -466,6 +478,18 @@ TEST_F(IndustrialPersistence,
     EXPECT_TRUE(report.watchdog_retained);
     EXPECT_FALSE(report.storage_retained);
     EXPECT_GT(mutations, 0U);
+}
+
+TEST_F(IndustrialPersistence, HostSchedulingDoesNotSplitOneInjectedWireFrame) {
+    config.sample_limit = 1U;
+    example_industrial_report_t report{};
+    delay_simulated_bytes.store(true);
+    const auto result = example_industrial_run(&storage, &config, &report);
+    delay_simulated_bytes.store(false);
+    ASSERT_EQ(result, NX_SUCCESS);
+    EXPECT_EQ(report.modbus_replies, 3U);
+    EXPECT_TRUE(report.joined);
+    EXPECT_TRUE(report.platform_stopped);
 }
 
 TEST_F(IndustrialPersistence, CompletedPollingIoIsPublishedBeforeWorkerWait) {

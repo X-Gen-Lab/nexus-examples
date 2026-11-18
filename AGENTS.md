@@ -17,6 +17,12 @@ products, credentials and PCB data belong to separate product repositories.
   their local `assembly.toml`. Nine Native/F407 builds cover four exact F407
   Boards and both MCU backends. Retired SoC recipes remain in their historical Git snapshot. Separate
   build roots prevent stale effective configuration.
+- Presets own actual build directories. The build wrapper reuses the selected
+  SDK's preset reader, validates configure/build/test association before any
+  compilation, and holds the actual binary directory's lock through execution
+  and report validation. Do not reconstruct a directory from a preset name.
+  Select the source SDK before project() so direct ARM presets use its toolchain;
+  conflicting environment/cache sources reject instead of silently switching.
 - `nx_platform_start/stop` own selected infrastructure. Applications own workers,
   scheduler start, component composition, budgets and recovery. No implicit main.
 - Document task/ISR context, absolute clock-domain deadlines, admission, caller
@@ -26,6 +32,8 @@ products, credentials and PCB data belong to separate product repositories.
 - Fixed Board facts distinguish exact part/PCB/wiring from SoC capability. Do not
   infer unknown SPI/I2C/ADC/PWM/EXTI wiring or physical support from compilation.
 - Preserve SDK `.clang-format`/`.editorconfig` and backslash Doxygen headers.
+  CMake formatting uses the selected SDK's locked gersemi, `.gersemirc` and
+  shared checker; do not copy another formatter implementation into this repo.
   Public headers own full contracts; source omits duplicate param/return tags.
   Install `python scripts/setup_dev_tools.py` in every clone. Hooks check staged
   style/text, Conventional Commits and complete Native/Google contracts. The TDD

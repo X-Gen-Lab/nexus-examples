@@ -131,6 +131,19 @@ else:
         self.assertEqual(hook['language'], 'python')
         self.assertIn(pins[0], hook.get('additional_dependencies', []))
 
+    def test_python_hooks_install_the_selected_sdk_cmake_formatter(self):
+        source = sdk_root()
+        pins = [line for line in
+                (source / 'dependencies/development-tools.txt').read_text().splitlines()
+                if line.startswith('gersemi==')]
+        self.assertEqual(len(pins), 1)
+        document = yaml.load((ROOT / '.pre-commit-config.yaml').read_text(),
+                             Loader=yaml.BaseLoader)
+        hooks = {hook['id']: hook for repository in document['repos']
+                 for hook in repository['hooks']}
+        for name in ('nexus-example-style', 'nexus-example-tdd'):
+            self.assertIn(pins[0], hooks[name].get('additional_dependencies', []))
+
     def test_workflow_delegates_real_software_commands_to_local_ci(self):
         document = yaml.load((ROOT / '.github/workflows/ci.yml').read_text(),
                              Loader=yaml.BaseLoader)

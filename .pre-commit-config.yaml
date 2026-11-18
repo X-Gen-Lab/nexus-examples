@@ -7,6 +7,7 @@ repos:
         name: Nexus example format, comments and text
         entry: python scripts/check_style.py --report build/quality/style.json
         language: python
+        additional_dependencies: [PyYAML==6.0.3, gersemi==0.29.2]
         stages: [pre-commit]
         pass_filenames: true
         always_run: true
@@ -20,7 +21,7 @@ repos:
         name: Nexus pinned SDK and complete Native TDD contracts
         entry: python scripts/tdd_gate.py --staged
         language: python
-        additional_dependencies: [PyYAML==6.0.3]
+        additional_dependencies: [PyYAML==6.0.3, gersemi==0.29.2]
         stages: [pre-commit]
         pass_filenames: false
         always_run: true

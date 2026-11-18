@@ -1,6 +1,7 @@
 """Exercise actual kernel exclusion and bounded child withdrawal."""
 
 import io
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -15,11 +16,21 @@ from sdk_tools import sdk_root
 
 
 class BuildOwnershipTests(unittest.TestCase):
+    def presets(self, root, directory=None):
+        (root / "CMakePresets.json").write_text(json.dumps({
+            "version": 3,
+            "configurePresets": [{"name": "native-debug", "generator": "Ninja",
+                                  "binaryDir": str(directory or
+                                                   root / "build/native-debug")}],
+            "buildPresets": [{"name": "native-debug",
+                              "configurePreset": "native-debug"}]}))
+
     def test_competing_owner_rejects_before_replacing_the_build_log(self):
         with tempfile.TemporaryDirectory(prefix="competing example build ") as value:
             root = Path(value)
             sdk = sdk_root()
-            directory = root / "build/native-debug"
+            directory = root / "custom output/firmware"
+            self.presets(root, directory)
             directory.mkdir(parents=True)
             log = directory / "build.log"
             log.write_text("retained earlier output\n")
@@ -45,6 +56,7 @@ class BuildOwnershipTests(unittest.TestCase):
     def test_managed_child_receives_the_real_parent_lease(self):
         with tempfile.TemporaryDirectory(prefix="delegated example build ") as value:
             root = Path(value)
+            self.presets(root)
             sdk = sdk_root()
             directory = root / "build/native-debug"
             from sdk_tools import maintenance

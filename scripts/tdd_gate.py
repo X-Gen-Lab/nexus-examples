@@ -16,7 +16,8 @@ from run_google import identities
 from sdk_tools import ROOT, load, maintenance
 
 
-RELEVANT_PREFIXES = (".github/", "apps/", "configs/", "templates/", "tests/", "scripts/", "dependencies/")
+RELEVANT_PREFIXES = (".github/", "apps/", "cmake/", "configs/", "templates/",
+                     "tests/", "scripts/", "dependencies/")
 RELEVANT_FILES = {"CMakeLists.txt", "CMakePresets.json", ".pre-commit-config.yaml",
                   ".gitmodules", ".taplo.toml", "external/nexus", "external/googletest", "AGENTS.md"}
 EXPECTED_CTEST_NAMES = (

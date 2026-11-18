@@ -99,12 +99,14 @@ bool example_industrial_model_exchange(
         count != 8U) {
         return false;
     }
+    /* One injected frame has one capture time. Host scheduling between byte
+     * injections does not represent physical wire gaps. */
+    nx_time_us_t frame_time = now(NULL);
     for (size_t byte = 0U; byte < count; ++byte) {
         if (events[byte].flags != 0U ||
             !nx_modbus_rtu_feed(application->protocol, events[byte].byte,
-                                events[byte].timestamp_us)) {
-            nx_modbus_rtu_rx_error(application->protocol,
-                                   events[byte].timestamp_us);
+                                frame_time)) {
+            nx_modbus_rtu_rx_error(application->protocol, frame_time);
             return false;
         }
     }
