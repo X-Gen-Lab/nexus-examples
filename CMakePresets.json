@@ -12,9 +12,7 @@
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF"
+                "CMAKE_BUILD_TYPE": "Release"
             },
             "toolchainFile": "${sourceDir}/cmake/arm-gcc.cmake"
         },
@@ -25,8 +23,6 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/native.toml",
-                "NEXUS_BUILD_TESTS": "OFF",
-                "NEXUS_BUILD_WORKLOAD": "OFF",
                 "NEXUS_ENABLE_SANITIZERS": "ON",
                 "NEXUS_TEST_SUPPORT": "ON",
                 "NEXUS_EXAMPLES_FREERTOS_POSIX_TESTS": "OFF"

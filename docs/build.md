@@ -79,6 +79,36 @@ preset or compiler triggers configuration. An installed Source SDK receives
 its payload check on every invocation. Earlier SDKs without the incremental
 configuration API use explicit configure each time.
 
+## 显式平台装配 / Explicit platform assembly
+
+源码 checkout 和安装 SDK 使用同一公开 CMake API。`find_package` 检查所选 SDK
+并提供函数；`nexus_add_platform` 才解析唯一 TOML、创建静态实例及平台目标。
+每个镜像由 `nexus_add_firmware` 独立接入启动对象、链接布局和资源检查：
+
+Source checkouts and installed SDKs share the same public CMake API. Discovery
+checks the SDK and provides functions. Platform creation explicitly resolves one
+assembly. Each firmware owns its startup objects, link layout and resource check.
+
+```cmake
+cmake_minimum_required(VERSION 3.31)
+project(controller LANGUAGES C ASM)
+find_package(Nexus 0.2.1 EXACT CONFIG REQUIRED)
+nexus_add_platform(ASSEMBLY "${CMAKE_CURRENT_SOURCE_DIR}/assembly.toml")
+nexus_add_firmware(controller SOURCES main.c LIBRARIES Nexus::Log)
+```
+
+独立模板通过 `Nexus_DIR` 选 SDK：源码为 `/path/to/nexus/cmake`，安装版为
+`/path/to/sdk/lib/cmake/Nexus`。ARM 工具链须在 `project()` 前由 preset 或命令行
+选定。模板不配置平台开发测试或 workload，也不进入平台根开发工程。
+本仓根入口保留 `NEXUS_SOURCE` 供预设与构建脚本选择同一工具链和 SDK，并将
+`NEXUS_ASSEMBLY_FILE` 明确传给平台函数；它是本工程的输入，不是 SDK 的隐式开关。
+
+For copied starters, set `Nexus_DIR` to `/path/to/nexus/cmake` for source or
+`/path/to/sdk/lib/cmake/Nexus` for an installed SDK. Select the ARM toolchain
+before `project()` through the preset or command line. Starters do not configure
+SDK development tests or workloads. This repository keeps `NEXUS_SOURCE` for
+consistent source/toolchain selection and explicitly forwards its preset assembly.
+
 ## 编写应用配置 / Authoring application configuration
 
 从对应 Board 的模板开始，不需要阅读 SoC 驱动来猜字段。`console` 是应用角色名，

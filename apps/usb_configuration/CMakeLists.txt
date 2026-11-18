@@ -9,36 +9,21 @@ get_filename_component(
     "${CMAKE_CURRENT_SOURCE_DIR}/../.."
     ABSOLUTE
 )
-if(NOT NEXUS_SOURCE)
-    set(NEXUS_SOURCE "${usb_examples_root}/external/nexus")
-endif()
 if(CMAKE_CROSSCOMPILING)
-    set(NEXUS_ASSEMBLY_FILE
-        "${CMAKE_CURRENT_SOURCE_DIR}/assembly.toml"
-        CACHE FILEPATH
-        "Owned software-only USB pin and configuration recipe"
-    )
+    set(usb_assembly "${CMAKE_CURRENT_SOURCE_DIR}/assembly.toml")
 else()
-    set(NEXUS_TEST_SUPPORT
-        ON
-        CACHE BOOL
-        "Explicit Native public-port model"
-        FORCE
-    )
-    set(NEXUS_ASSEMBLY_FILE
-        "${usb_examples_root}/configs/native.toml"
-        CACHE FILEPATH
-        "Native public-port contract harness"
-    )
+    set(NEXUS_TEST_SUPPORT ON CACHE BOOL "Explicit Native public-port model")
+    set(usb_assembly "${usb_examples_root}/configs/native.toml")
 endif()
-set(NEXUS_BUILD_TESTS OFF CACHE BOOL "Host SDK gates are independent" FORCE)
-set(NEXUS_BUILD_WORKLOAD
-    OFF
-    CACHE BOOL
-    "Application owns the entry point"
-    FORCE
+find_package(
+    Nexus
+    0.2.1
+    EXACT
+    CONFIG
+    REQUIRED
+    PATHS "${usb_examples_root}/external/nexus/cmake"
 )
-add_subdirectory("${NEXUS_SOURCE}" nexus EXCLUDE_FROM_ALL)
+nexus_add_platform(ASSEMBLY "${usb_assembly}")
 if(CMAKE_CROSSCOMPILING)
     nexus_add_firmware(usb_configuration SOURCES main.c usb_configuration.c
         LIBRARIES Nexus::USBControl Nexus::USBDescriptors Nexus::Arch

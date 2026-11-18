@@ -36,10 +36,10 @@ cmake -S . -B build -G Ninja \
 cmake --build build --parallel 2
 ```
 
-Explicit source development instead uses `-DNEXUS_SOURCE=/absolute/nexus` and
+Explicit source development instead uses `-DNexus_DIR=/absolute/nexus/cmake` and
 that checkout's `cmake/toolchains/arm-gcc.cmake`. This changes the source location;
 it does not bypass the examples source lock or establish release qualification.
-联合开发可改用 `-DNEXUS_SOURCE=/absolute/nexus` 与该检出的工具链；这不替代示例
+联合开发可改用 `-DNexus_DIR=/absolute/nexus/cmake` 与该检出的工具链；这不替代示例
 仓库的源码锁、干净检出或正式验收。源码配置与安装 SDK 消费需在更新锁后分别验证。
 
 Physical HIL: `not_executed`. Configuration, ARM linking and installed SDK

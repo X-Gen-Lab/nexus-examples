@@ -20,9 +20,9 @@ cmake --build build --parallel 2
 ctest --test-dir build --output-on-failure --no-tests=error
 ```
 
-For explicit checkout development, replace `Nexus_DIR` with
-`-DNEXUS_SOURCE=/absolute/path/to/nexus`. This does not establish SDK qualification.
-需要源码联合开发时，可改用 `-DNEXUS_SOURCE=/absolute/path/to/nexus`；该路径不建立
+For checkout development, set
+`-DNexus_DIR=/absolute/path/to/nexus/cmake`. This does not establish SDK qualification.
+需要源码联合开发时，可改用 `-DNexus_DIR=/absolute/path/to/nexus/cmake`；该路径不建立
 SDK 发布资格。
 
 The executable prints `Nexus starter: transfer settled; platform stopped` and

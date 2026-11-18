@@ -84,6 +84,8 @@ class LocalCiContracts(unittest.TestCase):
             configure = next(argv for name, argv in commands if name == "installed-configure")
             self.assertIn("-DNEXUS_EXPECTED_SOURCE_REVISION=" + "a" * 40, configure)
             self.assertIn("-DNEXUS_TEST_SUPPORT=ON", configure)
+            self.assertNotIn("-DNEXUS_BUILD_TESTS=OFF", configure)
+            self.assertNotIn("-DNEXUS_BUILD_WORKLOAD=OFF", configure)
             self.assertNotIn("NEXUS_SOURCE", runner.environment)
             self.assertEqual(runner.environment.get("PYTHONDONTWRITEBYTECODE"), "1")
             for name, argv in commands:
@@ -263,6 +265,10 @@ class LocalCiContracts(unittest.TestCase):
             runner.command = lambda name, argv: commands.append((name, list(map(str, argv))))
             runner.arm_preset("stm32-qiming-baremetal", root / "build/arm", root / "toolchain")
             configure = [argv for name, argv in commands if name.endswith("-configure")]
+            for arguments in configure:
+                self.assertIn("-DNexus_DIR=" + str(sdk_root() / "cmake"), arguments)
+                self.assertFalse(any(argument.startswith("-DNEXUS_SOURCE=")
+                                     for argument in arguments))
             self.assertEqual({str(root / "templates/qiming"),
                               str(root / "apps/usb_configuration")},
                              {argv[argv.index("-S") + 1] for argv in configure})

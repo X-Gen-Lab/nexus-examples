@@ -183,7 +183,7 @@ class StarterTemplateTests(unittest.TestCase):
             build = directory / 'build'
             commands = [
                 ['cmake', '-S', str(project), '-B', str(build), '-G', 'Ninja',
-                 '-DNEXUS_SOURCE:PATH=' + str(source), '-DCMAKE_BUILD_TYPE=Debug'],
+                 '-DNexus_DIR:PATH=' + str(source / 'cmake'), '-DCMAKE_BUILD_TYPE=Debug'],
                 ['cmake', '--build', str(build), '--parallel', '1'],
                 ['ctest', '--test-dir', str(build), '--output-on-failure',
                  '--no-tests=error'],
@@ -205,7 +205,7 @@ class StarterTemplateTests(unittest.TestCase):
             build = Path(value) / 'build'
             result = subprocess.run([
                 'cmake', '-S', str(ROOT / 'templates/native'), '-B', str(build),
-                '-G', 'Ninja', '-DNEXUS_SOURCE:PATH=' + str(source),
+                '-G', 'Ninja', '-DNexus_DIR:PATH=' + str(source / 'cmake'),
                 '-DCMAKE_BUILD_TYPE=Debug'], capture_output=True, text=True,
                 timeout=60)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
