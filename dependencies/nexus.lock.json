@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "17c8c4c611d48280312add46c2d3a53314d357b4",
-  "tree": "afa1fd31d583f166970ef18d7a4b26b6913a7a09",
+  "commit": "a1ebe7a5b64231c2f1bd0a0c989918a59023c747",
+  "tree": "e2d6385d179aaf2c72861acd2652cc5d512f1a95",
   "consumption": "source-find_package",
   "recursive_submodules": true,
   "baseline_status": "Current documentation workflow source pin. Integration results retain their exact executed scope; physical HIL is not executed.",
