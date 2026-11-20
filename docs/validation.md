@@ -38,7 +38,7 @@ Complete local CI reuses maintained presets and checkers. Partial runs remain
 partial; local execution is not hosted CI. SDK profiles select dependencies, and
 source-based ABI requires rebuilding the selected configuration.
 
-## 输出与历史 / Output and history
+## 输出与身份 / Output and identity
 
 新执行选择 `build/` 下独立输出目录。保存实际命令、退出码、日志、fresh JUnit、
 source/SDK/配置摘要、ELF/BIN/MAP 和预算报告。缓存可复用，成功报告不能缓存为新
@@ -48,8 +48,8 @@ source/SDK/配置摘要、ELF/BIN/MAP 和预算报告。缓存可复用，成功
 Use a new ignored output directory for each run. Retain raw failures and source
 identity with reports and artifacts. Cache tools/build inputs, never successful
 test reports. Archive one recoverable evidence copy rather than committing
-repeated logs and before-images. Fixed historical material is indexed in
-[history](history.md) and does not qualify this checkout.
+repeated logs and before-images. Previous results retain their original source
+and execution scope; they do not qualify this checkout.
 
 完整交付需先冻结平台提交 P，再同步例库 gitlink/lock、执行例库普通门禁得到 E，
 最后关联 P、E、模板清单与实际软件证据。版本号、声明能力和软件验证均不等同于

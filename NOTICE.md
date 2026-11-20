@@ -2,7 +2,7 @@
 
 Historical application sources `apps/boot_blinky/main.c`,
 `apps/rtos_pipeline/main.c` and `apps/industrial_model/main.c`, retained in the
-fixed history linked from `docs/history.md`, originate from the MIT-licensed Nexus repository,
+[fixed source](https://github.com/X-Gen-Lab/nexus-examples/tree/98156b6b68a067628be725cf34d908463ac2b745), originate from the MIT-licensed Nexus repository,
 commit `069dcf14f9cb1cd6fc4a869d87bf9827b91ce306`, respectively:
 
 - `applications/blinky/main.c`

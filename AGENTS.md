@@ -56,6 +56,6 @@ uses this repository's pinned `external/googletest` GoogleTest/GoogleMock host
 framework; the target application remains C11 and contains no host test runtime.
 Installed SDK tests use its public JUnit validator, not platform development-test
 helpers. Python tooling tests under `tests/tooling` cover configuration, invocation and
-evidence boundaries. Historical execution records are retained at the fixed
-Git revision indexed in `docs/history.md`, outside the active source tree. A hook pass alone does
+evidence boundaries. Original execution records retain their source identity in Git history or the
+recorded artifact, outside the active source tree. A hook pass alone does
 not establish the historical order of edits or physical board qualification.

@@ -55,8 +55,6 @@ PCB revision、完整料号、晶振、供电、探针、串口路径、逻辑�
 
 Physical HIL remains **`not_executed`**. Prepared work plans do not establish
 observed UID, wiring, electrical timing, watchdog reset or power-loss behavior.
-Retired Board examples remain at the fixed source in [history](history.md) and
-never produce current station plans.
 
 ## 自有 Board 包 / Product-owned Board packages
 

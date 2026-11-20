@@ -19,7 +19,7 @@ credentials belong in separate product repositories.
 | `scripts/` | 构建、身份验证、开发门禁与本地 CI / Build and validation commands |
 | `dependencies/` | Nexus、GoogleTest 精确源码锁 / Exact source locks |
 | `external/` | 两个受锁定的 Git 子模块 / The two pinned Git submodules |
-| `docs/` | 当前构建、示例、板卡、验证及历史入口 / Current guides and history |
+| `docs/` | 当前构建、示例、板卡与验证 / Current development guides |
 
 ```mermaid
 flowchart LR
@@ -80,4 +80,3 @@ Factory lookup has no hardware effects; applications own execution and recovery.
 - [应用与起始工程 / Applications and starters](docs/examples.md)
 - [板卡与外部 Board / Boards and external packages](docs/boards.md)
 - [验证、交付与 HIL / Validation and delivery](docs/validation.md)
-- [固定历史资料 / Immutable history](docs/history.md)
