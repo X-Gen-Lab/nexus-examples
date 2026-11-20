@@ -10,9 +10,7 @@ release and restart. The finite receive fragment retains exact loan tokens on
 failed release and keeps storage through failed drain. These are distinct
 application contracts, not duplicate implementations.
 
-诊断仅解释已复制事实，不推断服务频率，也不授权释放数据。已退出的 H743/Cache
-工程仅在[固定历史](../../docs/history.md)恢复；当前目录没有这些固件入口。
+诊断仅解释已复制事实，不推断服务频率，也不授权释放数据。
 
-Diagnostics neither infer timing nor authorize reclamation. Retired SoC-specific
-projects remain historical. See the [application guide](../../docs/examples.md)
+Diagnostics neither infer timing nor authorize reclamation. See the [application guide](../../docs/examples.md)
 and [validation boundary](../../docs/validation.md). Physical HIL is `not_executed`.
