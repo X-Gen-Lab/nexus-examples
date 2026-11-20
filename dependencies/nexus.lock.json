@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "e12bd073a8152e7bcffe112d74757bd0849b86b9",
-  "tree": "3745fe924db80a88b6a2bc2abf35737aaa55d92d",
+  "commit": "7936743f9ad5752df3e1e09fc0bfa7835db16295",
+  "tree": "65ec6ff603ce038e338cddce79e7d26381b5418f",
   "consumption": "source-find_package",
   "recursive_submodules": true,
   "baseline_status": "Current bilingual documentation and minimal Native assembly preparation source pin. Local checks retain their exact scope; physical HIL is not executed.",
