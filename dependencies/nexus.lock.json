@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "7936743f9ad5752df3e1e09fc0bfa7835db16295",
-  "tree": "65ec6ff603ce038e338cddce79e7d26381b5418f",
+  "commit": "17c8c4c611d48280312add46c2d3a53314d357b4",
+  "tree": "afa1fd31d583f166970ef18d7a4b26b6913a7a09",
   "consumption": "source-find_package",
   "recursive_submodules": true,
-  "baseline_status": "Current bilingual documentation and minimal Native assembly preparation source pin. Local checks retain their exact scope; physical HIL is not executed.",
+  "baseline_status": "Current documentation workflow source pin. Integration results retain their exact executed scope; physical HIL is not executed.",
   "public_api": "find_package(Nexus) / nexus_add_platform / nexus_add_firmware / generated readonly typed factory faces / explicit OS and common component targets"
 }
