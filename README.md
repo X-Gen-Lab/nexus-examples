@@ -8,8 +8,8 @@
 
 | 你要完成什么 | 入口 |
 | --- | --- |
-| 创建自己的最小 Native 应用 | [平台首次运行教程](https://github.com/X-Gen-Lab/nexus/blob/8afc80668238df8129dd35d7d688f002bdb39a46/docs/tutorials/first-native.md) |
-| 创建自己的 F407 工程 | [平台首次构建教程](https://github.com/X-Gen-Lab/nexus/blob/8afc80668238df8129dd35d7d688f002bdb39a46/docs/tutorials/first-f407.md) |
+| 创建自己的最小 Native 应用 | [平台首次运行教程](https://github.com/X-Gen-Lab/nexus/blob/b056deb0606f74aca89b1d1263cc24fc499b5f6e/docs/tutorials/first-native.md) |
+| 创建自己的 F407 工程 | [平台首次构建教程](https://github.com/X-Gen-Lab/nexus/blob/b056deb0606f74aca89b1d1263cc24fc499b5f6e/docs/tutorials/first-f407.md) |
 | 选择应用组合、模板或软件参考 | [应用与起始工程](docs/examples.md) |
 | 编译或维护本仓库全部示例 | [下面的维护准备](#维护本仓库)与[构建指南](docs/build.md) |
 | 核对板卡、接线和验证范围 | [板卡说明](docs/boards.md)、[验证说明](docs/validation.md) |
@@ -22,6 +22,7 @@
 | 目录 | 责任 |
 | --- | --- |
 | `apps/` | C11 应用及明确标注的策略片段 |
+| `recipes/` | 控制、存储、诊断、更新与 USB 交接的[应用层组合片段](recipes/README.md) |
 | `configs/` | 主工程九份明确装配 |
 | `templates/` | 五个可独立复制的起始工程 |
 | `tests/` | 应用合同、工具回归、安装 SDK 消费和测试支撑 |
@@ -48,6 +49,9 @@ flowchart LR
 主工程维护九个 preset：一个 Native，加四个精确 STM32F407 Board 的裸机／
 FreeRTOS 两后端。五种模板为 Native、启明 V3.1、天空星青春版、启明核心板和
 启明 V4.1，由 `templates/manifest.json` 索引。
+
+常用组件的软件参考包括控制算法、触摸校准、FlashDB／Settings、运行诊断、更新
+准备和 USB MSC 交接。它们通过公开接口显式组合，具体范围与约束见 `recipes/`。
 
 精确 SDK commit/tree 由 `dependencies/nexus.lock.json` 与 `external/nexus`
 Gitlink 共同选定；每次更新须取得对应源码与安装 SDK 的实际集成结果。版本相同、
