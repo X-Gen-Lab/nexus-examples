@@ -57,10 +57,9 @@ ctest --test-dir build/native-debug -R '^diagnostics_reference_google$' \
   --output-on-failure --no-tests=error
 ```
 
-本次新组件联调使用显式 development Source SDK `/workspace/nexus` 和独立维护的
-`/dev/shm/nexus-common-network-build`；其源码尚未提交，与 examples 锁定 gitlink
-不同，结果仅为 **development fixture／nonpublishable**，不更新锁，也不作为发布
-证据。完整 Native 执行建立软件组合行为；ARM 链接资源、物理时序、RTT host 负载、
+正式集成由 `external/nexus` 的 Gitlink 与 `dependencies/nexus.lock.json` 共同
+锁定平台源码；安装 SDK 消费核对相同 commit／tree 和包身份。完整 Native 执行
+验证软件组合行为；ARM 链接资源、物理时序、RTT host 负载、
 异常入口、断电和实际复位保留均需独立验证，本站物理状态为 `not_executed`。
 
 已有 [stream recovery 应用](../../apps/stream_recovery/README.md) 继续展示
