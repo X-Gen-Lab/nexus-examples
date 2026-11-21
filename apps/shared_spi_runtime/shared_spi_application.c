@@ -10,6 +10,8 @@
 #include "nexus/arch/arch.h"
 #include "nexus/arch/atomic.h"
 #include "nexus/components/spi_owner.h"
+#include "nexus/core/fault.h"
+#include "nexus/os/storage.h"
 #include "nexus_bindings.h"
 #include "nexus_config.h"
 #include "nexus_factory_strong.h"
@@ -19,21 +21,17 @@
 static uint8_t s_registers[2][2] = {{0x31U, 0U}, {0x72U, 0U}};
 #endif
 #if defined(NEXUS_BACKEND_FREERTOS) || defined(EXAMPLE_FREERTOS_HOST)
-#include "nexus/os/freertos.h"
-typedef nx_freertos_task_t product_task_t;
+typedef nx_task_t product_task_t;
 #define PRODUCT_STACK_WORDS configMINIMAL_STACK_SIZE
-static _Alignas(16) StackType_t s_stacks[3][PRODUCT_STACK_WORDS];
+static _Alignas(16) nx_os_stack_word_t s_stacks[3][PRODUCT_STACK_WORDS];
 static product_task_t s_executor_task;
 #else
-#include "nexus/os/native.h"
-#include <sched.h>
-typedef nx_native_task_t product_task_t;
+typedef nx_task_t product_task_t;
 static _Alignas(16) uint8_t s_stacks[2][65536];
 #endif
 
 /** \brief Each producer owns persistent descriptor and payload storage. */
 typedef struct {
-    product_task_t task;
     nx_request_t request;
     nx_spi_owner_operation_t operation;
     nx_owner_ticket_t ticket;
@@ -48,6 +46,7 @@ static nx_bus_owner_t s_owner;
 static nx_owner_slot_t s_slots[2];
 static nx_spi_owner_executor_t s_executor;
 static product_producer_t s_producers[2];
+static product_task_t s_producer_tasks[2];
 static nx_request_t s_rejected_request;
 static nx_owner_ticket_t s_rejected_ticket;
 static example_spi_report_t s_report;
@@ -69,11 +68,7 @@ static nx_time_us_t now(void* context) {
 
 /** \brief Explicit cooperative progress; waiting never services the bus. */
 static void pause_task(void) {
-#if defined(NEXUS_BACKEND_FREERTOS) || defined(EXAMPLE_FREERTOS_HOST)
-    vTaskDelay(1U);
-#else
-    (void)sched_yield();
-#endif
+    (void)nx_sleep_until(nx_deadline_after(nx_os_now_us(), 1000U));
 }
 
 /** \brief Publish one admission and retain payload until final settlement. */
@@ -97,25 +92,17 @@ static void producer(void* context) {
 static nx_result_t start_producer(size_t index) {
     product_producer_t* item = &s_producers[index];
     nx_atomic_u32_store_release(&item->submitted, 0U);
-#if defined(NEXUS_BACKEND_FREERTOS) || defined(EXAMPLE_FREERTOS_HOST)
+    uint32_t priority = NX_OS_PRIORITY_LEVELS > 3U ? 3U : 0U;
     nx_result_t result =
-        nx_freertos_task_start(&item->task, "spi-producer", s_stacks[index],
-                               PRODUCT_STACK_WORDS, 3U, producer, item);
-#else
-    nx_result_t result = nx_native_task_start(
-        &item->task, s_stacks[index], sizeof(s_stacks[index]), producer, item);
-#endif
+        nx_task_start(&s_producer_tasks[index], "spi-producer", s_stacks[index],
+                      sizeof(s_stacks[index]), priority, producer, item);
     item->started = result == NX_SUCCESS;
     return result;
 }
 
 /** \brief A successful join is the final access to producer task storage. */
-static nx_result_t join_producer(product_producer_t* item) {
-#if defined(NEXUS_BACKEND_FREERTOS) || defined(EXAMPLE_FREERTOS_HOST)
-    return nx_freertos_task_join(&item->task, NX_DEADLINE_NEVER);
-#else
-    return nx_native_task_join(&item->task);
-#endif
+static nx_result_t join_producer(size_t index) {
+    return nx_task_join_until(&s_producer_tasks[index], NX_DEADLINE_NEVER);
 }
 
 /** \brief Complete one real round, including full-queue rejection or cancel. */
@@ -170,7 +157,7 @@ static int run_round(bool cancel_second) {
         if (!item->started) {
             continue;
         }
-        if (join_producer(item) != NX_SUCCESS) {
+        if (join_producer(index) != NX_SUCCESS) {
             return 5;
         }
         item->started = false;
@@ -220,7 +207,7 @@ static void coordinator(void* context) {
         s_result = 8;
     }
     for (;;) {
-        vTaskDelay(1U);
+        pause_task();
     }
 #else
     s_report.stopped = s_report.joined && nx_platform_stop() == NX_SUCCESS;
@@ -232,6 +219,28 @@ static void coordinator(void* context) {
     vTaskEndScheduler();
 #endif
 }
+
+#if defined(NEXUS_BACKEND_FREERTOS)
+/** \brief Create kernel objects only after the common cold-entry checks. */
+static void kernel_startup(void* context) {
+    (void)context;
+    nx_result_t result =
+        nx_task_start(&s_executor_task, "spi-owner", s_stacks[2],
+                      sizeof(s_stacks[2]), 2U, coordinator, NULL);
+    if (result != NX_SUCCESS) {
+        s_result = 4;
+        nx_bus_owner_stop(&s_owner);
+        s_report.stopped = nx_platform_stop() == NX_SUCCESS;
+        s_report.platform_retained = !s_report.stopped;
+        nx_fault_observe(NX_FAULT_PLATFORM, result, __FILE__, __LINE__);
+        /* A void bootstrap cannot return an application failure to the
+         * kernel. Keep all static storage alive after attempted rollback.
+         */
+        for (;;) {
+        }
+    }
+}
+#endif
 
 /** \brief Static application state remains valid even on retained failure. */
 int example_shared_spi_run(example_spi_report_t* report) {
@@ -276,22 +285,24 @@ int example_shared_spi_run(example_spi_report_t* report) {
     }
 #endif
     nx_request_initialize(&s_rejected_request);
-#if defined(NEXUS_BACKEND_FREERTOS) || defined(EXAMPLE_FREERTOS_HOST)
-    if (nx_freertos_task_start(&s_executor_task, "spi-owner", s_stacks[2],
-                               PRODUCT_STACK_WORDS, 2U, coordinator,
-                               NULL) != NX_SUCCESS) {
+#if defined(EXAMPLE_FREERTOS_HOST)
+    if (nx_task_start(&s_executor_task, "spi-owner", s_stacks[2],
+                      sizeof(s_stacks[0]), 2U, coordinator,
+                      NULL) != NX_SUCCESS) {
         (void)nx_platform_stop();
         return 4;
     }
+    /* Only the reviewed POSIX test port supports returning scheduler teardown.
+     */
     vTaskStartScheduler();
-#if defined(NEXUS_BACKEND_FREERTOS)
+#elif defined(NEXUS_BACKEND_FREERTOS)
+    (void)nx_os_run(kernel_startup, NULL);
     /* Unexpected return is not proof of scheduler teardown; retain all state.
      */
     s_result = 10;
     s_report.platform_retained = true;
     for (;;) {
     }
-#endif
 #else
     coordinator(NULL);
 #endif

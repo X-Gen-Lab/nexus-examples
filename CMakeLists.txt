@@ -82,7 +82,7 @@ if(soc_family STREQUAL "native")
     )
     nexus_add_firmware(shared_spi_runtime SOURCES
         apps/shared_spi_runtime/main.c apps/shared_spi_runtime/shared_spi_application.c
-        LIBRARIES Nexus::SpiOwner Nexus::OSNative Nexus::Arch
+        LIBRARIES Nexus::SpiOwner Nexus::OS Nexus::Arch
     )
     nexus_add_firmware(stream_recovery SOURCES
         apps/stream_recovery/main.c apps/stream_recovery/stream_application.c

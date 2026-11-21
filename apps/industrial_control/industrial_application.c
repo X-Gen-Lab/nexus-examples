@@ -12,7 +12,7 @@
 #include "nexus/arch/arch.h"
 #include "nexus/components/modbus_rtu.h"
 #include "nexus/components/settings.h"
-#include "nexus/os/native.h"
+#include "nexus/os/storage.h"
 #include "nexus_bindings.h"
 #include "nexus_factory_strong.h"
 #include <string.h>
@@ -32,9 +32,9 @@ typedef struct {
     nx_bus_owner_t owner;
     nx_owner_slot_t slot;
     nx_spi_owner_executor_t executor;
-    nx_native_notify_t changed;
-    nx_native_notify_t owner_event;
-    nx_native_task_t worker;
+    nx_notify_t changed;
+    nx_notify_t owner_event;
+    nx_task_t worker;
     uint32_t worker_exit;
     uint32_t worker_done;
     nx_modbus_rtu_t modbus;
@@ -47,6 +47,7 @@ typedef struct {
     bool changed_open;
     bool owner_event_open;
     bool owner_open;
+    bool worker_started;
     bool platform_open;
     bool modbus_open;
 } application_t;
@@ -96,7 +97,7 @@ static bool worker_done(void* context) {
 /** \brief One executor progresses SPI, including all cooperative drain work. */
 static void owner_entry(void* context) {
     application_t* app = context;
-    nx_wait_port_t wake = nx_native_notify_port(&app->owner_event);
+    nx_wait_port_t wake = nx_notify_port(&app->owner_event);
     for (;;) {
         uint32_t sequence = wake.arm(wake.context);
         (void)nx_bus_owner_service(&app->owner);
@@ -113,7 +114,7 @@ static void owner_entry(void* context) {
                         nx_deadline_after(now(NULL), PRODUCT_PUMP_US));
     }
     nx_atomic_u32_store_release(&app->worker_done, 1U);
-    nx_wait_port_t changed = nx_native_notify_port(&app->changed);
+    nx_wait_port_t changed = nx_notify_port(&app->changed);
     (void)changed.wake(changed.context);
 }
 
@@ -250,7 +251,7 @@ static nx_result_t run_control(application_t* app) {
     bool due = true;
     uint32_t protocol_step = 0U;
     const nx_wait_source_t sources[] = {{stopping, app}, {sample_due, app}};
-    nx_wait_port_t port = nx_native_notify_port(&app->changed);
+    nx_wait_port_t port = nx_notify_port(&app->changed);
     const example_industrial_protocol_model_t protocol = {
         &app->modbus, port, app->values, &app->transmitting,
         &app->direction_tx};
@@ -361,16 +362,18 @@ static nx_result_t shutdown(application_t* app) {
         if (result != NX_SUCCESS) {
             return result;
         }
-        if (app->worker.started) {
+        if (app->worker_started) {
             nx_atomic_u32_store_release(&app->worker_exit, 1U);
-            nx_wait_port_t wake = nx_native_notify_port(&app->owner_event);
+            nx_wait_port_t wake = nx_notify_port(&app->owner_event);
             (void)wake.wake(wake.context);
-            nx_wait_port_t changed = nx_native_notify_port(&app->changed);
+            nx_wait_port_t changed = nx_notify_port(&app->changed);
             result = nx_wait_until(&changed, worker_done, app, deadline);
             if (result != NX_SUCCESS ||
-                nx_native_task_join(&app->worker) != NX_SUCCESS) {
+                nx_task_join_until(&app->worker, NX_DEADLINE_NEVER) !=
+                    NX_SUCCESS) {
                 return result == NX_SUCCESS ? NX_ERROR_IO : result;
             }
+            app->worker_started = false;
         }
         if (!nx_bus_owner_idle(&app->owner)) {
             return NX_ERROR_STATE;
@@ -461,11 +464,11 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
         result = example_industrial_model_clock();
     }
     if (result == NX_SUCCESS) {
-        result = nx_native_notify_init(&app->changed);
+        result = nx_notify_init(&app->changed);
         app->changed_open = result == NX_SUCCESS;
     }
     if (result == NX_SUCCESS) {
-        result = nx_native_notify_init(&app->owner_event);
+        result = nx_notify_init(&app->owner_event);
         app->owner_event_open = result == NX_SUCCESS;
     }
     if (result == NX_SUCCESS) {
@@ -473,7 +476,7 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
             &app->model, nx_factory_spi_device_ref(NX_SPI_DEVICE_REF_SENSOR0));
     }
     if (result == NX_SUCCESS) {
-        nx_wait_port_t wake = nx_native_notify_port(&app->owner_event);
+        nx_wait_port_t wake = nx_notify_port(&app->owner_event);
         nx_owner_executor_port_t executor = nx_spi_owner_executor_port(
             &app->executor, nx_factory_spi_ref(NX_SPI_REF_SPI0));
         result = nx_bus_owner_init(&app->owner, &app->slot, 1U,
@@ -485,12 +488,13 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
         result = example_industrial_spi_open(
             &app->bridge, &app->owner,
             nx_factory_spi_device_ref(NX_SPI_DEVICE_REF_SENSOR0),
-            nx_native_notify_port(&app->changed), (nx_clock_t){now, NULL},
+            nx_notify_port(&app->changed), (nx_clock_t){now, NULL},
             app->period_us);
     }
     if (result == NX_SUCCESS) {
-        result = nx_native_task_start(&app->worker, s_owner_stack,
-                                      sizeof(s_owner_stack), owner_entry, app);
+        result = nx_task_start(&app->worker, "application", s_owner_stack,
+                               sizeof(s_owner_stack), 0U, owner_entry, app);
+        app->worker_started = result == NX_SUCCESS;
     }
     if (result == NX_SUCCESS) {
         result = nx_bmp280_init(
@@ -553,11 +557,10 @@ nx_result_t example_industrial_run(nx_storage_t* storage,
     }
     nx_settings_close(&app->settings);
     if (app->owner_event_open &&
-        nx_native_notify_destroy(&app->owner_event) != NX_SUCCESS) {
+        nx_notify_destroy(&app->owner_event) != NX_SUCCESS) {
         cleanup = NX_ERROR_BUSY;
     }
-    if (app->changed_open &&
-        nx_native_notify_destroy(&app->changed) != NX_SUCCESS) {
+    if (app->changed_open && nx_notify_destroy(&app->changed) != NX_SUCCESS) {
         cleanup = NX_ERROR_BUSY;
     }
     if (app->platform_open && cleanup == NX_SUCCESS) {

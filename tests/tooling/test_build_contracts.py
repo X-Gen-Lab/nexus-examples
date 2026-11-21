@@ -66,7 +66,8 @@ class ApplicationBuildContracts(unittest.TestCase):
             self.assertEqual(set(applications), {
                 'platform_reference', 'sensor_spi', 'journal', 'modbus_registers',
                 'uart_owner_runtime', 'shared_spi_runtime', 'stream_recovery',
-                'industrial_control', 'network_gateway'})
+                'industrial_control', 'network_gateway',
+                'reference_bootstrap_main', 'uart_bootstrap_main'})
             application_targets = set(applications)
             for relative, targets in (
                     ('apps/flash_maintenance/flash_application.c',

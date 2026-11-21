@@ -11,7 +11,7 @@
 #include "nexus_factory_strong.h"
 #include "rx_policy.h"
 #if defined(NEXUS_BACKEND_FREERTOS)
-#include "nexus/os/freertos.h"
+#include "nexus/os/storage.h"
 #endif
 #if defined(NEXUS_BACKEND_NATIVE)
 #include "nexus/io/native/model.h"
@@ -91,8 +91,8 @@ static nx_result_t iteration(void) {
 }
 
 #if defined(NEXUS_BACKEND_FREERTOS)
-static nx_freertos_task_t s_application;
-static StackType_t s_stack[256];
+static nx_task_t s_application;
+NX_OS_STACK_DEFINE(s_stack, 1024U);
 
 /** \brief The external application creates and owns this sole worker. */
 static void application(void* context) {
@@ -105,7 +105,18 @@ static void application(void* context) {
         if (iteration() != NX_SUCCESS) {
             return;
         }
-        vTaskDelay(pdMS_TO_TICKS(100U));
+        (void)nx_sleep_until(nx_deadline_after(nx_os_now_us(), 100000U));
+    }
+}
+
+/** \brief Create kernel objects inside the explicit OS bootstrap boundary. */
+static void kernel_startup(void* context) {
+    (void)context;
+    if (nx_task_start(&s_application, "reference", s_stack, sizeof(s_stack), 2U,
+                      application, NULL) != NX_SUCCESS) {
+        /* Failure retains the platform and all static task references. */
+        for (;;) {
+        }
     }
 }
 #endif
@@ -128,11 +139,7 @@ int main(void) {
     }
     nx_request_initialize(&s_transmit.base);
 #if defined(NEXUS_BACKEND_FREERTOS)
-    if (nx_freertos_task_start(&s_application, "reference", s_stack, 256U, 2U,
-                               application, NULL) != NX_SUCCESS) {
-        return 2;
-    }
-    vTaskStartScheduler();
+    (void)nx_os_run(kernel_startup, NULL);
     return 3;
 #elif defined(NEXUS_BACKEND_NATIVE)
     static const uint8_t ping[] = {'p', 'i', 'n', 'g'};

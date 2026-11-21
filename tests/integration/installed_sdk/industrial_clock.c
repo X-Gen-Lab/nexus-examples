@@ -8,10 +8,10 @@
  */
 #include "nexus/core/time.h"
 #include "nexus/io/native/model.h"
-#include "nexus/os/native.h"
+#include "nexus/os/storage.h"
 #include <pthread.h>
 
-nx_wait_port_t __real_nx_native_notify_port(nx_native_notify_t* notification);
+nx_wait_port_t __real_nx_notify_port(nx_notify_t* notification);
 
 typedef struct {
     void* context;
@@ -28,7 +28,7 @@ nx_result_t __wrap_example_industrial_model_clock(void) {
 }
 
 static uint32_t sequence(void* context) {
-    return __real_nx_native_notify_port(context).arm(context);
+    return __real_nx_notify_port(context).arm(context);
 }
 
 /** \brief Advance to the first timer only when both real tasks are asleep. */
@@ -80,14 +80,14 @@ static nx_result_t model_wait(void* context, uint32_t armed,
 
 static nx_result_t model_wake(void* context) {
     pthread_mutex_lock(&s_lock);
-    nx_result_t result = __real_nx_native_notify_port(context).wake(context);
+    nx_result_t result = __real_nx_notify_port(context).wake(context);
     pthread_cond_broadcast(&s_changed);
     pthread_mutex_unlock(&s_lock);
     return result;
 }
 
-nx_wait_port_t __wrap_nx_native_notify_port(nx_native_notify_t* notification) {
-    nx_wait_port_t port = __real_nx_native_notify_port(notification);
+nx_wait_port_t __wrap_nx_notify_port(nx_notify_t* notification) {
+    nx_wait_port_t port = __real_nx_notify_port(notification);
     port.wait = model_wait;
     port.wake = model_wake;
     return port;

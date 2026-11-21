@@ -20,7 +20,7 @@ target_link_libraries(
     owner_lifecycle_test
     PRIVATE
         Nexus::BusOwner
-        Nexus::OSNative
+        Nexus::OS
         Nexus::Arch
         GTest::gmock_main
         nexus_owned_warnings
@@ -98,3 +98,5 @@ set_tests_properties(
     product_fault_policy_google
     PROPERTIES TIMEOUT 30 LABELS "native;example;GoogleTest"
 )
+
+include("${CMAKE_CURRENT_LIST_DIR}/uart_bootstrap.cmake")

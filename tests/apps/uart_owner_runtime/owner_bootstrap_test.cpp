@@ -7,7 +7,7 @@
  * \copyright       Copyright (c) 2026 Nexus Team
  */
 #include "bootstrap.h"
-#include "nexus/os/native.h"
+#include "nexus/os/storage.h"
 #include <atomic>
 #include <chrono>
 #include <gmock/gmock.h>
@@ -200,10 +200,10 @@ TEST_F(Bootstrap, InvalidOrInconsistentRecordCannotInvokeExternalActions) {
 struct RunningWorkers {
     nx_bus_owner_t owner{};
     nx_owner_slot_t slot{};
-    nx_native_task_t executor{};
-    nx_native_task_t producer{};
-    nx_native_task_t failed{};
-    nx_native_notify_t completed{};
+    nx_task_t executor{};
+    nx_task_t producer{};
+    nx_task_t failed{};
+    nx_notify_t completed{};
     nx_wait_port_t completion{};
     nx_request_t request{};
     nx_owner_ticket_t ticket{};
@@ -256,12 +256,12 @@ nx_result_t retire_threads(void* context, example_owner_workers_t mode,
     auto* live = static_cast<RunningWorkers*>(context);
     EXPECT_EQ(mode, EXAMPLE_WORKERS_NATIVE_RUNNING);
     EXPECT_EQ(count, 2U);
-    nx_result_t result = nx_native_task_join(&live->producer);
+    nx_result_t result = nx_task_join_until(&live->producer, NX_DEADLINE_NEVER);
     if (result != NX_SUCCESS) {
         return result;
     }
     live->stop.store(true);
-    return nx_native_task_join(&live->executor);
+    return nx_task_join_until(&live->executor, NX_DEADLINE_NEVER);
 }
 nx_result_t quiesce_threads(void* context) {
     auto* live = static_cast<RunningWorkers*>(context);
@@ -276,7 +276,7 @@ nx_result_t destroy_threads(void* context, size_t index) {
     EXPECT_EQ(index, 0U);
     EXPECT_EQ(live->quiesced, 1U);
     ++live->destroyed;
-    return nx_native_notify_destroy(&live->completed);
+    return nx_notify_destroy(&live->completed);
 }
 nx_result_t no_platform(void*) {
     return NX_SUCCESS;
@@ -285,8 +285,8 @@ nx_result_t no_platform(void*) {
 TEST(BootstrapNative, FailedNextCreationDrainsAndJoinsActualRunningThreads) {
     /* Host instrumentation storage is deliberately larger than MCU stacks. */
     RunningWorkers live;
-    ASSERT_EQ(nx_native_notify_init(&live.completed), NX_SUCCESS);
-    live.completion = nx_native_notify_port(&live.completed);
+    ASSERT_EQ(nx_notify_init(&live.completed), NX_SUCCESS);
+    live.completion = nx_notify_port(&live.completed);
     ASSERT_EQ(nx_bus_owner_init(&live.owner, &live.slot, 1,
                                 {&live, threads_enter, threads_leave},
                                 {nullptr, start, service, cancel, false},
@@ -294,21 +294,21 @@ TEST(BootstrapNative, FailedNextCreationDrainsAndJoinsActualRunningThreads) {
               NX_SUCCESS);
     nx_request_initialize(&live.request);
     ASSERT_EQ(nx_request_prepare(&live.request, NX_DEADLINE_NEVER), NX_SUCCESS);
-    ASSERT_EQ(nx_native_task_start(&live.executor, live.executor_stack,
-                                   sizeof(live.executor_stack), execute_owner,
-                                   &live),
+    ASSERT_EQ(nx_task_start(&live.executor, "application", live.executor_stack,
+                            sizeof(live.executor_stack), 0U, execute_owner,
+                            &live),
               NX_SUCCESS);
-    ASSERT_EQ(nx_native_task_start(&live.producer, live.producer_stack,
-                                   sizeof(live.producer_stack),
-                                   execute_producer, &live),
+    ASSERT_EQ(nx_task_start(&live.producer, "application", live.producer_stack,
+                            sizeof(live.producer_stack), 0U, execute_producer,
+                            &live),
               NX_SUCCESS);
     while (!live.submitted.load()) {
         std::this_thread::yield();
     }
     EXPECT_EQ(nx_request_state(&live.request), NX_REQUEST_QUEUED);
-    EXPECT_EQ(
-        nx_native_task_start(&live.failed, nullptr, 0, execute_producer, &live),
-        NX_ERROR_INVALID);
+    EXPECT_EQ(nx_task_start(&live.failed, "application", nullptr, 0, 0U,
+                            execute_producer, &live),
+              NX_ERROR_INVALID);
     EXPECT_FALSE(live.failed.started);
     example_owner_bootstrap_t effects = {
         1, 2, true, true, false, false, EXAMPLE_WORKERS_NATIVE_RUNNING};

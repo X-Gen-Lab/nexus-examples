@@ -11,7 +11,7 @@
 #include "nexus/arch/arch.h"
 #include "nexus/components/settings.h"
 #include "nexus/io/native/model.h"
-#include "nexus/os/native.h"
+#include "nexus/os/storage.h"
 #include "nexus_bindings.h"
 #include "nexus_factory_strong.h"
 #include <array>
@@ -59,9 +59,11 @@ extern "C" void __wrap_nx_settings_close(nx_settings_t* settings) {
     settings_closes.fetch_add(1U);
     __real_nx_settings_close(settings);
 }
-extern "C" nx_result_t __real_nx_native_task_join(nx_native_task_t* task);
-extern "C" nx_result_t __wrap_nx_native_task_join(nx_native_task_t* task) {
-    const auto result = __real_nx_native_task_join(task);
+extern "C" nx_result_t __real_nx_task_join_until(nx_task_t* task,
+                                                 nx_time_us_t deadline);
+extern "C" nx_result_t __wrap_nx_task_join_until(nx_task_t* task,
+                                                 nx_time_us_t deadline) {
+    const auto result = __real_nx_task_join_until(task, deadline);
     if (result == NX_SUCCESS && force_owner_busy.exchange(false)) {
         nx_native_spi_model_fault(nx_factory_spi_ref(NX_SPI_REF_SPI0), SIZE_MAX,
                                   false);
@@ -84,8 +86,7 @@ extern "C" nx_result_t __wrap_nx_bus_owner_service(nx_bus_owner_t* owner) {
     }
     return __real_nx_bus_owner_service(owner);
 }
-extern "C" nx_wait_port_t
-__real_nx_native_notify_port(nx_native_notify_t* notification);
+extern "C" nx_wait_port_t __real_nx_notify_port(nx_notify_t* notification);
 
 /* Observe the real worker's wait boundary, without progressing its owner. */
 static nx_result_t observed_wait(void* context, uint32_t sequence,
@@ -103,13 +104,11 @@ static nx_result_t observed_wait(void* context, uint32_t sequence,
         }
         service_steps = 0U;
     }
-    const auto real =
-        __real_nx_native_notify_port(static_cast<nx_native_notify_t*>(context));
+    const auto real = __real_nx_notify_port(static_cast<nx_notify_t*>(context));
     return real.wait(real.context, sequence, deadline);
 }
-extern "C" nx_wait_port_t
-__wrap_nx_native_notify_port(nx_native_notify_t* notification) {
-    auto port = __real_nx_native_notify_port(notification);
+extern "C" nx_wait_port_t __wrap_nx_notify_port(nx_notify_t* notification) {
+    auto port = __real_nx_notify_port(notification);
     if (inspect_owner_progress.load()) {
         port.wait = observed_wait;
     }
@@ -132,7 +131,7 @@ class IndustrialCompletion : public testing::Test {
     nx_bus_owner_t owner{};
     nx_owner_slot_t slot{};
     nx_spi_owner_executor_t executor{};
-    nx_native_notify_t notification{};
+    nx_notify_t notification{};
     example_industrial_spi_t bridge{};
     std::array<uint8_t, 128> registers{};
     std::atomic<bool> progress{false};
@@ -156,7 +155,7 @@ class IndustrialCompletion : public testing::Test {
                       nx_factory_spi_device_ref(NX_SPI_DEVICE_REF_SENSOR0),
                       registers.data(), registers.size()),
                   NX_SUCCESS);
-        ASSERT_EQ(nx_native_notify_init(&notification), NX_SUCCESS);
+        ASSERT_EQ(nx_notify_init(&notification), NX_SUCCESS);
         notification_open = true;
         const auto port = nx_spi_owner_executor_port(
             &executor, nx_factory_spi_ref(NX_SPI_REF_SPI0));
@@ -192,7 +191,7 @@ class IndustrialCompletion : public testing::Test {
             worker.join();
         }
         if (notification_open) {
-            EXPECT_EQ(nx_native_notify_destroy(&notification), NX_SUCCESS);
+            EXPECT_EQ(nx_notify_destroy(&notification), NX_SUCCESS);
         }
         if (platform_open) {
             EXPECT_EQ(nx_platform_stop(), NX_SUCCESS);
@@ -207,18 +206,18 @@ class IndustrialCompletion : public testing::Test {
         if (self.bridge.cancel_requested) {
             self.cancel_observed.store(true, std::memory_order_release);
         }
-        const auto underlying = nx_native_notify_port(&self.notification);
+        const auto underlying = nx_notify_port(&self.notification);
         return underlying.arm(underlying.context);
     }
     static nx_result_t wait(void* context, uint32_t sequence,
                             nx_time_us_t deadline) {
         auto& self = *static_cast<IndustrialCompletion*>(context);
-        const auto underlying = nx_native_notify_port(&self.notification);
+        const auto underlying = nx_notify_port(&self.notification);
         return underlying.wait(underlying.context, sequence, deadline);
     }
     static nx_result_t signal(void* context) {
         auto& self = *static_cast<IndustrialCompletion*>(context);
-        const auto underlying = nx_native_notify_port(&self.notification);
+        const auto underlying = nx_notify_port(&self.notification);
         return underlying.wake(underlying.context);
     }
     nx_result_t open(uint32_t period = 2000U) {

@@ -21,7 +21,7 @@ target_link_libraries(
         Nexus::Settings
         Nexus::ModbusRTU
         Nexus::BMP280
-        Nexus::OSNative
+        Nexus::OS
         Nexus::Arch
         GTest::gmock_main
         nexus_owned_warnings
@@ -32,9 +32,9 @@ target_link_options(
     PRIVATE
         "LINKER:--wrap=nx_platform_start"
         "LINKER:--wrap=nx_settings_close"
-        "LINKER:--wrap=nx_native_task_join"
+        "LINKER:--wrap=nx_task_join_until"
         "LINKER:--wrap=nx_bus_owner_service"
-        "LINKER:--wrap=nx_native_notify_port"
+        "LINKER:--wrap=nx_notify_port"
         "LINKER:--wrap=nx_native_uart_model_receive"
 )
 add_test(
