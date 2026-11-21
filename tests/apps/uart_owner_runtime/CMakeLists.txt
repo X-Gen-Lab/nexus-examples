@@ -98,3 +98,5 @@ set_tests_properties(
     product_fault_policy_google
     PROPERTIES TIMEOUT 30 LABELS "native;example;GoogleTest"
 )
+
+include("${CMAKE_CURRENT_LIST_DIR}/uart_bootstrap.cmake")

@@ -10,6 +10,7 @@
 #include "nexus/arch/arch.h"
 #include "nexus/arch/atomic.h"
 #include "nexus/components/spi_owner.h"
+#include "nexus/core/fault.h"
 #include "nexus/os/storage.h"
 #include "nexus_bindings.h"
 #include "nexus_config.h"
@@ -220,9 +221,24 @@ static void coordinator(void* context) {
 }
 
 #if defined(NEXUS_BACKEND_FREERTOS)
-/** \brief This MCU composition has already prepared its static task storage. */
+/** \brief Create kernel objects only after the common cold-entry checks. */
 static void kernel_startup(void* context) {
     (void)context;
+    nx_result_t result =
+        nx_task_start(&s_executor_task, "spi-owner", s_stacks[2],
+                      sizeof(s_stacks[2]), 2U, coordinator, NULL);
+    if (result != NX_SUCCESS) {
+        s_result = 4;
+        nx_bus_owner_stop(&s_owner);
+        s_report.stopped = nx_platform_stop() == NX_SUCCESS;
+        s_report.platform_retained = !s_report.stopped;
+        nx_fault_observe(NX_FAULT_PLATFORM, result, __FILE__, __LINE__);
+        /* A void bootstrap cannot return an application failure to the
+         * kernel. Keep all static storage alive after attempted rollback.
+         */
+        for (;;) {
+        }
+    }
 }
 #endif
 
@@ -269,28 +285,24 @@ int example_shared_spi_run(example_spi_report_t* report) {
     }
 #endif
     nx_request_initialize(&s_rejected_request);
-#if defined(NEXUS_BACKEND_FREERTOS) || defined(EXAMPLE_FREERTOS_HOST)
+#if defined(EXAMPLE_FREERTOS_HOST)
     if (nx_task_start(&s_executor_task, "spi-owner", s_stacks[2],
                       sizeof(s_stacks[0]), 2U, coordinator,
                       NULL) != NX_SUCCESS) {
         (void)nx_platform_stop();
         return 4;
     }
-#if defined(EXAMPLE_FREERTOS_HOST)
     /* Only the reviewed POSIX test port supports returning scheduler teardown.
      */
     vTaskStartScheduler();
-#else
+#elif defined(NEXUS_BACKEND_FREERTOS)
     (void)nx_os_run(kernel_startup, NULL);
-#endif
-#if defined(NEXUS_BACKEND_FREERTOS)
     /* Unexpected return is not proof of scheduler teardown; retain all state.
      */
     s_result = 10;
     s_report.platform_retained = true;
     for (;;) {
     }
-#endif
 #else
     coordinator(NULL);
 #endif

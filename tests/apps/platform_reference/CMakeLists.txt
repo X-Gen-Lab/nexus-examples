@@ -55,3 +55,5 @@ set_tests_properties(
     reference_lifecycle_google
     PROPERTIES TIMEOUT 30 LABELS "native;example;GoogleTest"
 )
+
+include("${CMAKE_CURRENT_LIST_DIR}/reference_bootstrap.cmake")

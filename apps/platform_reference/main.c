@@ -91,13 +91,8 @@ static nx_result_t iteration(void) {
 }
 
 #if defined(NEXUS_BACKEND_FREERTOS)
-/** \brief Tasks and their storage are explicit before kernel entry. */
-static void kernel_startup(void* context) {
-    (void)context;
-}
-
 static nx_task_t s_application;
-static nx_os_stack_word_t s_stack[256];
+NX_OS_STACK_DEFINE(s_stack, 1024U);
 
 /** \brief The external application creates and owns this sole worker. */
 static void application(void* context) {
@@ -111,6 +106,17 @@ static void application(void* context) {
             return;
         }
         (void)nx_sleep_until(nx_deadline_after(nx_os_now_us(), 100000U));
+    }
+}
+
+/** \brief Create kernel objects inside the explicit OS bootstrap boundary. */
+static void kernel_startup(void* context) {
+    (void)context;
+    if (nx_task_start(&s_application, "reference", s_stack, sizeof(s_stack), 2U,
+                      application, NULL) != NX_SUCCESS) {
+        /* Failure retains the platform and all static task references. */
+        for (;;) {
+        }
     }
 }
 #endif
@@ -133,10 +139,6 @@ int main(void) {
     }
     nx_request_initialize(&s_transmit.base);
 #if defined(NEXUS_BACKEND_FREERTOS)
-    if (nx_task_start(&s_application, "reference", s_stack, sizeof(s_stack), 2U,
-                      application, NULL) != NX_SUCCESS) {
-        return 2;
-    }
     (void)nx_os_run(kernel_startup, NULL);
     return 3;
 #elif defined(NEXUS_BACKEND_NATIVE)

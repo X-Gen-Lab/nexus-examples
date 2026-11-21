@@ -516,9 +516,47 @@ static _Noreturn void scheduler_failure_sink(void* context) {
 #endif
 
 #if defined(NEXUS_BACKEND_FREERTOS)
-/** \brief Bootstrap borrows only application-owned static state. */
+/** \brief A failed void bootstrap rolls back before retaining terminal state.
+ */
+static _Noreturn void bootstrap_failed(application_t* app, int code) {
+    (void)startup_failed(app, code);
+    scheduler_failure_sink(app);
+}
+
+/** \brief Construct all kernel objects after the common cold-entry checks. */
 static void kernel_startup(void* context) {
-    (void)context;
+    application_t* app = context;
+    app->bootstrap.execution = EXAMPLE_WORKERS_FREERTOS_UNSTARTED;
+    app->bootstrap.publishers_live = true;
+    if (initialize(app) != NX_SUCCESS) {
+        bootstrap_failed(app, 1);
+    }
+    if (nx_task_start(&app->owner_task, "owner", s_mcu_stacks[0],
+                      sizeof(s_mcu_stacks[0]), 2U, owner_entry,
+                      app) != NX_SUCCESS) {
+        bootstrap_failed(app, 5);
+    }
+    app->owner_started = true;
+    ++app->bootstrap.workers;
+    for (size_t i = 0U; i < PRODUCERS; ++i) {
+        if (nx_task_start(&app->producer[i].task, "producer",
+                          s_mcu_stacks[i + 1U], sizeof(s_mcu_stacks[i + 1U]),
+                          3U, producer_entry,
+                          &app->producer[i]) != NX_SUCCESS) {
+            bootstrap_failed(app, 6);
+        }
+        app->producer[i].task_started = true;
+        ++app->bootstrap.workers;
+    }
+    if (nx_task_start(&app->coordinator_task, "stop",
+                      s_mcu_stacks[PRODUCERS + 1U],
+                      sizeof(s_mcu_stacks[PRODUCERS + 1U]), 1U,
+                      coordinator_entry, app) != NX_SUCCESS) {
+        bootstrap_failed(app, 7);
+    }
+    app->coordinator_started = true;
+    ++app->bootstrap.workers;
+    app->bootstrap.scheduler_started = true;
 }
 #endif
 
@@ -550,10 +588,12 @@ int main(void) {
         startup.remaining_effects != 0U) {
         return startup_failed(&s_application, 1);
     }
+#if !defined(NEXUS_BACKEND_FREERTOS)
     s_application.bootstrap.publishers_live = true;
     if (initialize(&s_application) != NX_SUCCESS) {
         return startup_failed(&s_application, 1);
     }
+#endif
 #if defined(NEXUS_BACKEND_NATIVE)
     s_application.bootstrap.execution = EXAMPLE_WORKERS_NATIVE_RUNNING;
     if (nx_task_start(&s_application.owner_task, "application",
@@ -592,32 +632,6 @@ int main(void) {
     puts("UARTOwner: two producers, active cancel/drain, joined publishers");
     return 0;
 #elif defined(NEXUS_BACKEND_FREERTOS)
-    s_application.bootstrap.execution = EXAMPLE_WORKERS_FREERTOS_UNSTARTED;
-    if (nx_task_start(&s_application.owner_task, "owner", s_mcu_stacks[0],
-                      sizeof(s_mcu_stacks[0]), 2U, owner_entry,
-                      &s_application) != NX_SUCCESS) {
-        return startup_failed(&s_application, 5);
-    }
-    s_application.owner_started = true;
-    ++s_application.bootstrap.workers;
-    for (size_t i = 0; i < PRODUCERS; ++i) {
-        if (nx_task_start(&s_application.producer[i].task, "producer",
-                          s_mcu_stacks[i + 1U], sizeof(s_mcu_stacks[0]), 3U,
-                          producer_entry,
-                          &s_application.producer[i]) != NX_SUCCESS) {
-            return startup_failed(&s_application, 6);
-        }
-        s_application.producer[i].task_started = true;
-        ++s_application.bootstrap.workers;
-    }
-    if (nx_task_start(&s_application.coordinator_task, "stop",
-                      s_mcu_stacks[PRODUCERS + 1U], sizeof(s_mcu_stacks[0]), 1U,
-                      coordinator_entry, &s_application) != NX_SUCCESS) {
-        return startup_failed(&s_application, 7);
-    }
-    s_application.coordinator_started = true;
-    ++s_application.bootstrap.workers;
-    s_application.bootstrap.scheduler_started = true;
     (void)nx_os_run(kernel_startup, &s_application);
     example_owner_scheduler_returned(
         &s_application.bootstrap, &s_application.status,
