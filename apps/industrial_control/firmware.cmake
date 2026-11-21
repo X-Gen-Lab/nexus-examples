@@ -6,7 +6,7 @@ nexus_add_firmware(industrial_control SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/industrial_spi.c"
     "${CMAKE_CURRENT_LIST_DIR}/native/model.c"
     LIBRARIES Nexus::SpiOwner Nexus::Settings Nexus::ModbusRTU
-        Nexus::BMP280 Nexus::FileFlash Nexus::OSNative Nexus::Arch
+        Nexus::BMP280 Nexus::FileFlash Nexus::OS Nexus::Arch
 )
 
 # Native controls belong only to this explicit software reference.

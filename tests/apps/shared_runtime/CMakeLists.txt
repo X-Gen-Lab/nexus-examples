@@ -19,7 +19,7 @@ target_link_libraries(
         Nexus::Platform
         Nexus::NativeModel
         Nexus::SpiOwner
-        Nexus::OSNative
+        Nexus::OS
         Nexus::Arch
         GTest::gmock_main
         nexus_owned_warnings

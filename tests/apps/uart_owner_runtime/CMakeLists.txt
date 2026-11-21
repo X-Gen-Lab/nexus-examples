@@ -20,7 +20,7 @@ target_link_libraries(
     owner_lifecycle_test
     PRIVATE
         Nexus::BusOwner
-        Nexus::OSNative
+        Nexus::OS
         Nexus::Arch
         GTest::gmock_main
         nexus_owned_warnings

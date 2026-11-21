@@ -31,7 +31,7 @@ if(soc_family STREQUAL "native")
         industrial_control
         PRIVATE
             "LINKER:--wrap=example_industrial_model_clock"
-            "LINKER:--wrap=nx_native_notify_port"
+            "LINKER:--wrap=nx_notify_port"
     )
     include("${examples_root}/apps/network_gateway/firmware.cmake")
     add_test(NAME installed_platform_reference COMMAND nexus_firmware)

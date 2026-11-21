@@ -21,10 +21,10 @@
 #include "scheduler_return.h"
 #if defined(NEXUS_BACKEND_NATIVE)
 #include "nexus/io/native/model.h"
-#include "nexus/os/native.h"
+#include "nexus/os/storage.h"
 #include <stdio.h>
 #elif defined(NEXUS_BACKEND_FREERTOS)
-#include "nexus/os/freertos.h"
+#include "nexus/os/storage.h"
 #else
 #include "nexus/os/baremetal.h"
 #endif
@@ -33,13 +33,14 @@
 #define TASK_STACK_WORDS 256U
 
 #if defined(NEXUS_BACKEND_NATIVE)
-typedef nx_native_notify_t notification_t;
-typedef nx_native_task_t application_task_t;
+typedef nx_notify_t notification_t;
+typedef nx_task_t application_task_t;
 static _Alignas(16) uint8_t s_host_stacks[PRODUCERS + 1U][65536];
 #elif defined(NEXUS_BACKEND_FREERTOS)
-typedef nx_freertos_notify_t notification_t;
-typedef nx_freertos_task_t application_task_t;
-static _Alignas(8) StackType_t s_mcu_stacks[PRODUCERS + 2U][TASK_STACK_WORDS];
+typedef nx_notify_t notification_t;
+typedef nx_task_t application_task_t;
+static _Alignas(8)
+    nx_os_stack_word_t s_mcu_stacks[PRODUCERS + 2U][TASK_STACK_WORDS];
 #else
 typedef nx_baremetal_notify_t notification_t;
 #endif
@@ -56,6 +57,7 @@ typedef struct {
     nx_result_t result;
 #if !defined(NEXUS_BACKEND_BAREMETAL)
     application_task_t task;
+    bool task_started;
 #endif
 } producer_t;
 
@@ -81,9 +83,11 @@ typedef struct {
     example_owner_bootstrap_t bootstrap;
 #if !defined(NEXUS_BACKEND_BAREMETAL)
     application_task_t owner_task;
+    bool owner_started;
 #endif
 #if defined(NEXUS_BACKEND_FREERTOS)
     application_task_t coordinator_task;
+    bool coordinator_started;
 #endif
 } application_t;
 static application_t s_application;
@@ -125,28 +129,22 @@ static void recovery_fault(void* context, example_recovery_stage_t stage,
 
 /** \brief Initialize exact per-object storage without hidden workers. */
 static nx_result_t notification_init(notification_t* notification) {
-#if defined(NEXUS_BACKEND_NATIVE)
-    return nx_native_notify_init(notification);
-#elif defined(NEXUS_BACKEND_FREERTOS)
-    return nx_freertos_notify_init(notification);
+#if !defined(NEXUS_BACKEND_BAREMETAL)
+    return nx_notify_init(notification);
 #else
     return nx_baremetal_notify_init(notification, now, NULL);
 #endif
 }
 static nx_wait_port_t notification_port(notification_t* notification) {
-#if defined(NEXUS_BACKEND_NATIVE)
-    return nx_native_notify_port(notification);
-#elif defined(NEXUS_BACKEND_FREERTOS)
-    return nx_freertos_notify_port(notification);
+#if !defined(NEXUS_BACKEND_BAREMETAL)
+    return nx_notify_port(notification);
 #else
     return nx_baremetal_notify_port(notification);
 #endif
 }
 static nx_result_t notification_destroy(notification_t* notification) {
-#if defined(NEXUS_BACKEND_NATIVE)
-    return nx_native_notify_destroy(notification);
-#elif defined(NEXUS_BACKEND_FREERTOS)
-    return nx_freertos_notify_destroy(notification);
+#if !defined(NEXUS_BACKEND_BAREMETAL)
+    return nx_notify_destroy(notification);
 #else
     (void)notification;
     return NX_SUCCESS;
@@ -231,15 +229,14 @@ static nx_result_t join_producers(void* context) {
     application_t* app = context;
     for (size_t i = 0; i < PRODUCERS; ++i) {
         producer_t* producer = &app->producer[i];
-#if defined(NEXUS_BACKEND_NATIVE)
-        nx_result_t result = producer->task.started
-                                 ? nx_native_task_join(&producer->task)
-                                 : NX_SUCCESS;
-#elif defined(NEXUS_BACKEND_FREERTOS)
+#if !defined(NEXUS_BACKEND_BAREMETAL)
         nx_result_t result =
-            producer->task.handle != NULL
-                ? nx_freertos_task_join(&producer->task, NX_DEADLINE_NEVER)
+            producer->task_started
+                ? nx_task_join_until(&producer->task, NX_DEADLINE_NEVER)
                 : NX_SUCCESS;
+        if (result == NX_SUCCESS) {
+            producer->task_started = false;
+        }
 #else
         while (producer->result == NX_SUCCESS && !settled(producer)) {
             (void)example_owner_recovery_progress(&app->recovery,
@@ -257,13 +254,15 @@ static nx_result_t join_owner(void* context) {
     application_t* app = context;
     nx_atomic_u32_store_release(&app->owner_stop, 1U);
     (void)app->owner_wake.wake(app->owner_wake.context);
-#if defined(NEXUS_BACKEND_NATIVE)
-    return app->owner_task.started ? nx_native_task_join(&app->owner_task)
-                                   : NX_SUCCESS;
-#elif defined(NEXUS_BACKEND_FREERTOS)
-    return app->owner_task.handle != NULL
-               ? nx_freertos_task_join(&app->owner_task, NX_DEADLINE_NEVER)
-               : NX_SUCCESS;
+#if !defined(NEXUS_BACKEND_BAREMETAL)
+    nx_result_t result =
+        app->owner_started
+            ? nx_task_join_until(&app->owner_task, NX_DEADLINE_NEVER)
+            : NX_SUCCESS;
+    if (result == NX_SUCCESS) {
+        app->owner_started = false;
+    }
+    return result;
 #else
     while (!nx_bus_owner_idle(&app->owner)) {
         (void)example_owner_recovery_progress(&app->recovery, nx_time_now_us());
@@ -410,13 +409,17 @@ static nx_result_t retire_startup_workers(void* context,
     application_task_t* tasks[PRODUCERS + 2U] = {
         &app->owner_task, &app->producer[0].task, &app->producer[1].task,
         &app->coordinator_task};
+    bool* live[PRODUCERS + 2U] = {
+        &app->owner_started, &app->producer[0].task_started,
+        &app->producer[1].task_started, &app->coordinator_started};
     for (size_t i = PRODUCERS + 2U; i != 0U; --i) {
-        if (tasks[i - 1U]->handle != NULL) {
+        if (*live[i - 1U]) {
             nx_result_t result =
-                nx_freertos_task_discard_before_scheduler(tasks[i - 1U]);
+                nx_task_discard_before_scheduler(tasks[i - 1U]);
             if (result != NX_SUCCESS) {
                 return result;
             }
+            *live[i - 1U] = false;
         }
     }
     return NX_SUCCESS;
@@ -512,6 +515,13 @@ static _Noreturn void scheduler_failure_sink(void* context) {
 }
 #endif
 
+#if defined(NEXUS_BACKEND_FREERTOS)
+/** \brief Bootstrap borrows only application-owned static state. */
+static void kernel_startup(void* context) {
+    (void)context;
+}
+#endif
+
 /** \brief No board-specific output action is inferred by this reference app. */
 static nx_result_t unbound_safe_outputs(void* context, nx_fault_domain_t domain,
                                         nx_result_t reason) {
@@ -546,19 +556,21 @@ int main(void) {
     }
 #if defined(NEXUS_BACKEND_NATIVE)
     s_application.bootstrap.execution = EXAMPLE_WORKERS_NATIVE_RUNNING;
-    if (nx_native_task_start(&s_application.owner_task, s_host_stacks[0],
-                             sizeof(s_host_stacks[0]), owner_entry,
-                             &s_application) != NX_SUCCESS) {
+    if (nx_task_start(&s_application.owner_task, "application",
+                      s_host_stacks[0], sizeof(s_host_stacks[0]), 0U,
+                      owner_entry, &s_application) != NX_SUCCESS) {
         return startup_failed(&s_application, 2);
     }
+    s_application.owner_started = true;
     ++s_application.bootstrap.workers;
     for (size_t i = 0; i < PRODUCERS; ++i) {
-        if (nx_native_task_start(&s_application.producer[i].task,
-                                 s_host_stacks[i + 1U],
-                                 sizeof(s_host_stacks[i + 1U]), producer_entry,
-                                 &s_application.producer[i]) != NX_SUCCESS) {
+        if (nx_task_start(&s_application.producer[i].task, "application",
+                          s_host_stacks[i + 1U], sizeof(s_host_stacks[i + 1U]),
+                          0U, producer_entry,
+                          &s_application.producer[i]) != NX_SUCCESS) {
             return startup_failed(&s_application, 3);
         }
+        s_application.producer[i].task_started = true;
         ++s_application.bootstrap.workers;
     }
     nx_time_us_t deadline = nx_deadline_after(nx_time_now_us(), 1000000U);
@@ -581,30 +593,32 @@ int main(void) {
     return 0;
 #elif defined(NEXUS_BACKEND_FREERTOS)
     s_application.bootstrap.execution = EXAMPLE_WORKERS_FREERTOS_UNSTARTED;
-    if (nx_freertos_task_start(&s_application.owner_task, "owner",
-                               s_mcu_stacks[0], TASK_STACK_WORDS, 2U,
-                               owner_entry, &s_application) != NX_SUCCESS) {
+    if (nx_task_start(&s_application.owner_task, "owner", s_mcu_stacks[0],
+                      sizeof(s_mcu_stacks[0]), 2U, owner_entry,
+                      &s_application) != NX_SUCCESS) {
         return startup_failed(&s_application, 5);
     }
+    s_application.owner_started = true;
     ++s_application.bootstrap.workers;
     for (size_t i = 0; i < PRODUCERS; ++i) {
-        if (nx_freertos_task_start(&s_application.producer[i].task, "producer",
-                                   s_mcu_stacks[i + 1U], TASK_STACK_WORDS, 3U,
-                                   producer_entry,
-                                   &s_application.producer[i]) != NX_SUCCESS) {
+        if (nx_task_start(&s_application.producer[i].task, "producer",
+                          s_mcu_stacks[i + 1U], sizeof(s_mcu_stacks[0]), 3U,
+                          producer_entry,
+                          &s_application.producer[i]) != NX_SUCCESS) {
             return startup_failed(&s_application, 6);
         }
+        s_application.producer[i].task_started = true;
         ++s_application.bootstrap.workers;
     }
-    if (nx_freertos_task_start(&s_application.coordinator_task, "stop",
-                               s_mcu_stacks[PRODUCERS + 1U], TASK_STACK_WORDS,
-                               1U, coordinator_entry,
-                               &s_application) != NX_SUCCESS) {
+    if (nx_task_start(&s_application.coordinator_task, "stop",
+                      s_mcu_stacks[PRODUCERS + 1U], sizeof(s_mcu_stacks[0]), 1U,
+                      coordinator_entry, &s_application) != NX_SUCCESS) {
         return startup_failed(&s_application, 7);
     }
+    s_application.coordinator_started = true;
     ++s_application.bootstrap.workers;
     s_application.bootstrap.scheduler_started = true;
-    vTaskStartScheduler();
+    (void)nx_os_run(kernel_startup, &s_application);
     example_owner_scheduler_returned(
         &s_application.bootstrap, &s_application.status,
         &s_application.scheduler_return_stage,

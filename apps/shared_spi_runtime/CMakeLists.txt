@@ -12,6 +12,6 @@ endif()
 find_package(Nexus 0.2.1 EXACT CONFIG REQUIRED)
 nexus_add_platform(ASSEMBLY "${CMAKE_CURRENT_SOURCE_DIR}/assembly.toml")
 nexus_add_firmware(shared_spi_runtime SOURCES main.c shared_spi_application.c
-    LIBRARIES Nexus::SpiOwner Nexus::OSFreeRTOS Nexus::Arch
+    LIBRARIES Nexus::SpiOwner Nexus::OS Nexus::Arch
 )
 nexus_target_warnings(shared_spi_runtime STRICT)
