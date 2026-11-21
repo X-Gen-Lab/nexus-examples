@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "8afc80668238df8129dd35d7d688f002bdb39a46",
-  "tree": "7d5f145a5009eb9f223b43428a1fcabc98cc071b",
+  "commit": "73dbf584fb9d92fc9216a7188d57f70716080b2f",
+  "tree": "1f5c393b3ce5c265e0eacc503c1ccdfdd08f044b",
   "consumption": "source-find_package",
   "recursive_submodules": true,
-  "baseline_status": "Portable OS common API functional source pin. Integration reports retain their exact executed scope; physical HIL is not executed.",
+  "baseline_status": "Statically composed common storage, diagnostics, algorithms and protocol profiles. Integration reports retain their exact executed scope; physical HIL is not executed.",
   "public_api": "find_package(Nexus) / nexus_add_platform / nexus_add_firmware / generated readonly typed factory faces / explicit OS and common component targets"
 }

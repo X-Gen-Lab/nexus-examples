@@ -29,6 +29,23 @@ Per-application READMEs define execution and ownership. Native fixtures model
 external input; host peers and POSIX lifecycle are not MCU drivers or physical
 network qualification. Software Board routes do not establish fitted wiring.
 
+## 应用层组合片段
+
+[recipes 导航](../recipes/README.md) 按业务任务链接可复用片段，与独立应用共用
+公开 SDK 合同，不新增 provider、默认板级路由或后台执行者。
+
+| 任务 | 入口与范围 |
+| --- | --- |
+| 触摸与控制算法 | [触摸校准](../recipes/control/README.md)；[control_loop](../apps/industrial_control/control_loop.md) 组合真实 ADC stream、EMA、PID、PWM 与控制故障状态 |
+| 数据库与快照 | [storage](../recipes/storage/README.md) 对比 KV/TS 的立即写入与 Settings 暂存／提交 |
+| 运行与故障诊断 | [diagnostics](../recipes/diagnostics/README.md) 说明复制式观测、日志与故障处理的组合边界 |
+| 更新与 USB 存储 | [network](../recipes/network/README.md) 说明更新准备和本地文件系统／MSC 独占交接 |
+
+`control_loop` 是独立 C11 片段，不改变现有 `industrial_control` 的 BMP280/SPI/
+Modbus 入口，也不为当前 Native Board 补造 ADC/PWM 连接。应用提供采集周期、
+系数、接口和存储，并负责停止、排空与 join。各片段的局部开发测试不能代替正式
+SDK 集成；实物校准、时序、掉电和 HIL 仍为 `not_executed`。
+
 ## 一致的应用合同 / Common application contract
 
 1. 应用绑定稳定的公开端口和静态存储，显式调用 Platform start。

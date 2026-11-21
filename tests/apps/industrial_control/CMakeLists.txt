@@ -1,4 +1,5 @@
 # The product consumer uses the same real SPI owner and POSIX wait backend.
+include("${CMAKE_CURRENT_LIST_DIR}/control_loop.cmake")
 add_executable(
     industrial_control_test
     "${CMAKE_CURRENT_LIST_DIR}/industrial_control_test.cpp"

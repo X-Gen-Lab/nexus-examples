@@ -16,7 +16,7 @@ from run_google import identities
 from sdk_tools import ROOT, load, maintenance
 
 
-RELEVANT_PREFIXES = (".github/", "apps/", "cmake/", "configs/", "templates/",
+RELEVANT_PREFIXES = (".github/", "apps/", "cmake/", "configs/", "templates/", "recipes/",
                      "tests/", "scripts/", "dependencies/")
 RELEVANT_FILES = {"CMakeLists.txt", "CMakePresets.json", ".pre-commit-config.yaml",
                   ".gitmodules", ".taplo.toml", "external/nexus", "external/googletest", "AGENTS.md"}
@@ -33,6 +33,9 @@ EXPECTED_CTEST_NAMES = (
     "network_gateway_application_google", "network_gateway_peer_google",
     "network_gateway_main_google", "usb_configuration_google",
     "flash_maintenance_google",
+    "industrial_control_loop_google", "touch_reference_google",
+    "storage_reference_google", "diagnostics_reference_google",
+    "network_reference_google", "st_msc_reference_google",
 )
 
 
