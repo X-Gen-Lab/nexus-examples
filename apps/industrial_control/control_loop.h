@@ -65,6 +65,8 @@ typedef struct {
     nx_stream_block_t borrowed_block;
     uint32_t samples;
     bool borrowed;
+    bool output_stop_pending;
+    nx_result_t output_stop_result;
 } example_control_loop_t;
 /**
  * \brief           Initialize unused independent consumer/control storage.
@@ -85,10 +87,12 @@ example_control_loop_initialize(example_control_loop_t* loop,
  * acquisition/control/PWM error. \note            Calls actual ADC service,
  * stream acquire/release, EMA, PID and PWM set. BUSY service can coexist with a
  * ready block. Loss/error blocks and invalid counts fault the control. A fault
+ * requests PWM withdrawal and records any failed stop for explicit retry. It
  * never authorizes reclaiming the live ADC session; the existing owner must
- * stop PWM/ADC and join. Every block is released before return when possible;
- * failed release retains its exact loan in loop until finish succeeds. A staged
- * PWM update may precede a subsequent release failure.
+ * stop ADC, verify PWM withdrawal and join. Every block is released before
+ * return when possible; failed release retains its exact loan in loop until
+ * finish succeeds. A staged PWM update may precede a subsequent release
+ * failure.
  */
 nx_result_t example_control_loop_step(example_control_loop_t* loop,
                                       example_control_observation_t* out);
@@ -96,9 +100,9 @@ nx_result_t example_control_loop_step(example_control_loop_t* loop,
  * \brief           Finish control after the existing owner stops and joins I/O.
  * \param[in,out]   loop: Initialized caller state, with no future step calls.
  * \return          SUCCESS or actual retained-consumer release failure.
- * \note            Retries only an outstanding consumer release, then marks
- *                  STOPPED. It does not stop ADC/PWM, revoke producer borrows,
- *                  destroy the stream, join tasks or implement app shutdown.
+ * \note            Retries a failed PWM stop and outstanding consumer release,
+ *                  then marks STOPPED. It does not stop ADC, revoke producer
+ * borrows, destroy the stream, join tasks or implement app shutdown.
  */
 nx_result_t example_control_loop_finish(example_control_loop_t* loop);
 #ifdef __cplusplus

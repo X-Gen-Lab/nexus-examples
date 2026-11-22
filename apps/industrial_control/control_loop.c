@@ -30,6 +30,8 @@ static nx_result_t fault_control(example_control_loop_t* loop,
                                  nx_result_t result) {
     const nx_fsm_event_t event = {CONTROL_EVENT_FAULT, NULL, 0};
     (void)nx_fsm_dispatch(&loop->machine, &event);
+    loop->output_stop_result = nx_pwm_port_stop(loop->config.pwm);
+    loop->output_stop_pending = loop->output_stop_result != NX_SUCCESS;
     return result;
 }
 
@@ -143,6 +145,13 @@ nx_result_t example_control_loop_finish(example_control_loop_t* loop) {
     }
     if (loop->machine.config != &control_machine) {
         return NX_ERROR_STATE;
+    }
+    if (loop->output_stop_pending) {
+        loop->output_stop_result = nx_pwm_port_stop(loop->config.pwm);
+        if (loop->output_stop_result != NX_SUCCESS) {
+            return loop->output_stop_result;
+        }
+        loop->output_stop_pending = false;
     }
     if (loop->borrowed) {
         const nx_result_t result =

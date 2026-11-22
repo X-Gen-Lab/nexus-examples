@@ -39,8 +39,9 @@
 EMPTY 不推进算法状态或重放旧样本；service 返回 BUSY 时仍可能处理已有完成 block。
 成功输出复制测量值、命令、占空计数和饱和递增的样本数，不证明电气 PWM 已更新。
 
-loss、错误 block、非法计数、数值错误或 PWM 失败只把控制状态置为 FAULT，不停止
-ADC/PWM、撤销生产者借用或保证安全输出。取得的 block 尽可能在返回前归还；归还
+loss、错误 block、非法计数、数值错误或 PWM 失败会锁存 FAULT 并请求停止 PWM。
+停止失败保留 `output_stop_pending` 与实际结果，供 finish 重试；ADC 停止、生产者
+借用和应用退出仍由原 owner 负责，软件结果不证明功率级断能。取得的 block 尽可能在返回前归还；归还
 失败时保留原始借用，且 PWM 更新可能已暂存。实际 I/O owner 停止并 join 后，调用
 `example_control_loop_finish` 重试遗留归还并进入 STOPPED；应用仍需排空 READY
 block、完成 stream 生命周期，再回收存储。片段不包装整套应用停机流程。
@@ -62,3 +63,10 @@ stream、EMA、PID 和 FSM，仅外部 ADC/PWM provider 操作使用 mock。
 未提交的开发 SDK 只用于局部、不可发布的反馈，不能代替所锁定 SDK 的正式集成与
 安装消费验收。物理校准精度、ADC 采样孔径、延迟、PWM 时序、对象调参及实板 HIL
 均为 `not_executed`。其他器件仍为 `not_selected`，不添加通用空壳或默认替代料号。
+
+## 单轴目标、参数与遥测
+
+[axis_control](../../apps/axis_control/README.md)提供完整的 Thread 模式软件组合：
+递增目标序号、epoch 和有效期校验，编码器标定／展开，梯形轨迹、PID、PWM 组更新，
+参数整组切换以及明确的保存／恢复。遥测只复制到一个固定 slot，满载覆盖计数可见，
+控制不调用网络或持久化。精确功率板、采样拓扑和 IRQ 快环没有从软件参考推定。

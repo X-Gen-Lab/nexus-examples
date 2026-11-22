@@ -38,17 +38,19 @@ prove the PWM's electrical update has occurred. An empty stream advances no
 algorithm state and does not replay an old sample. ADC service BUSY may coexist
 with a previously completed block, which is still eligible for processing.
 
-Loss/error blocks, invalid counts, numeric errors and PWM failures move only the
-control FSM into FAULT. Faulting does not stop the ADC session, revoke producer
-borrows, join a task or establish a safe physical output. The existing owner
-applies its explicit shutdown policy and retains every live port and buffer.
+Loss/error blocks, invalid counts, numeric errors and PWM failures move the
+control FSM into FAULT and request PWM source withdrawal. A failed stop is
+retained as `output_stop_pending` and `output_stop_result`; faulting does not
+stop the ADC session, revoke producer borrows or join a task. The existing owner
+verifies output withdrawal, stops ADC and retains every live port and buffer.
+The stop result does not certify external power circuitry or braking.
 Each acquired block is released even after a processing/PWM error when possible;
 a failed release retains the exact consumer loan in the loop. A staged PWM update
 may already exist when a later release fails.
 
 After the caller stops and joins the actual I/O owners,
-`example_control_loop_finish` retries only an outstanding consumer release and
-marks the control STOPPED. The caller separately drains READY blocks and finishes
+`example_control_loop_finish` retries failed PWM withdrawal and an outstanding
+consumer release, then marks the control STOPPED. The caller separately drains READY blocks and finishes
 the stream's producer/consumer lifecycle before reclaiming storage. This fragment
 does not wrap or replace the application's full lifecycle.
 
@@ -64,3 +66,8 @@ must not be reported as pinned SDK qualification. After the final SDK pin update
 run the normal examples gate and installed SDK consumer separately. Physical
 ADC aperture, delivery latency, PWM timing, actual plant tuning and Board HIL
 remain `not_executed` until measured on the selected hardware.
+
+For complete versioned parameters, finite point-to-point commands and copied
+latest telemetry, see the [single-axis software reference](../axis_control/README.md).
+Its Thread-only profile keeps command admission, control and storage ownership
+explicit; hardware fast-loop and motor power-stage qualification are separate.

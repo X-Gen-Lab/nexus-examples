@@ -65,3 +65,41 @@ ctest --test-dir build/native-debug -R '^diagnostics_reference_google$' \
 已有 [stream recovery 应用](../../apps/stream_recovery/README.md) 继续展示
 `nx_io_diagnose` 的 request／stream／lifecycle 事实与 LOSS／BUSY stop，它不被本
 维护入口替代。本组合仅消费由业务 owner 已复制、稳定的诊断事实。
+
+## 故障持久化与分片导出
+
+[fault_export.c](fault_export.c) 补齐正常启动后的消费链：异常入口仅调用已有固定
+capture；Storage 就绪、产品允许维护写入后，由普通任务调用
+`example_fault_export_begin`。它调用真实 `nx_fault_record_persist`，先 durable save，
+再 acknowledge retained capture。失败保留 retained 数据；含糊的失败提交要求按
+Storage 合同 reopen，不能盲目重放。没有新 retained capture 时可重新导出已保存记录。
+
+begin 检查完整 160 字节、CRC／版本和调用方明确选择的 16 字节 ELF build ID，然后
+形成调用者对象中的固定快照。错误 ID 不清除 retained 或 persistent 数据。导出
+不安装 fault handler、不初始化介质，也不选择 Flash region、自动格式化或擦除。
+
+每次 `example_fault_export_step` 最多复制调用方指定的 1～160 字节，共用传入的有限
+绝对 deadline。sink 返回精确 copied prefix，任何返回都结束源借用；BUSY、满载和
+错误保留快照与位置，不忙等。offset 仅表示本地同步 sink 已接纳，未证明 host 接收
+或持久保存。导出完成仍保留 persistent record，重启允许再次导出；序号和 build ID
+用于业务去重，不将本地 flush 当作远端确认。
+
+接收端在公开资料允许的范围内保存准确的 160 raw bytes，然后使用对应 SDK 的工具：
+
+```sh
+python external/nexus/tools/dev/fault_decode.py fault.bin \
+  --elf exact-firmware.elf --addr2line arm-none-eabi-addr2line
+```
+
+decoder 检查 captured build ID 与实际 ELF 常量，错误身份不能解析为可信符号。
+代码、凭据、私有 PCB 和故障内存资料应按所属产品仓库的公开边界处理。
+
+`terminal_reference_google` 使用真实两 bank Storage 与 Fault C，实现 save-before-ack、
+损坏／身份拒绝、断续导出、满载和重启后重读。RAM 介质模型不建立物理掉电资格。
+
+## 调参与诊断入口
+
+现有 letter-shell profile 保持固定只读命令表。参数写入由产品的有限类型化命令入口
+完成范围、版本、有效期和授权检查，再交给控制参数快照；不能直接把 live PID 字段
+暴露为可写 Shell 变量。RTT／UART 只提供所选有界传输。多个协议共享物理通道时，
+应用提供一个明确 owner 和 framing／分流，不能让两个 parser 争抢同一 RX 字节流。

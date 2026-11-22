@@ -35,3 +35,8 @@ set_tests_properties(
 
 include("${CMAKE_CURRENT_LIST_DIR}/st_msc_reference.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/diagnostics_reference.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/network_delivery.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/network_route.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/terminal_reference.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/imu_reference.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/inference_reference.cmake")
