@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "6a57d0af12c89a51c2aa31a9463690c981305c63",
-  "tree": "7eb01b938a9615f7b239fdae40c434650dff9f36",
+  "commit": "67f8e5f2b0f59c3bdc0ffb70d7b1c5b95c26f51c",
+  "tree": "a5d7d72267c4d33760a99daefc2572dcb9546a94",
   "consumption": "source-find_package",
   "recursive_submodules": true,
   "baseline_status": "Statically composed common storage, diagnostics, algorithms and protocol profiles. Integration reports retain their exact executed scope; physical HIL is not executed.",
