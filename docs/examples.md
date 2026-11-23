@@ -147,3 +147,28 @@ settles before shutdown; known module identities do not enable peripherals.
 
 构建与 create 命令见[构建指南](build.md)；四板和软件 fixture 边界见[板卡指南](boards.md)。
 Build/create commands and hardware prerequisites are maintained in the linked guides.
+
+## 五条完整 I/O 使用路径 / Five complete I/O paths
+
+以下复用现有应用目录，不创建另一套 provider、隐式任务或全局实例。先阅读平台的
+[I/O 执行合同](https://github.com/X-Gen-Lab/nexus/blob/6a57d0af12c89a51c2aa31a9463690c981305c63/docs/guides/io-execution.md)，再选择实际模式。
+
+| 用例 / Use case | 真实源码与配置 / Source and assembly | 退出责任 / Withdrawal |
+| --- | --- | --- |
+| 同步 GPIO / Synchronous GPIO | `apps/platform_reference/main.c`、九份 `configs/`、五份 starter | 逻辑 signal 显式极性；写入者退出后停止基础设施 |
+| 有限 UART DMA / Finite UART DMA | `apps/platform_reference/finite_uart.c`、`apps/platform_reference/dma.toml` | 单步 service；取消不释放；结清后 finish，BUSY 保留 |
+| 有限 SPI DMA / Finite SPI DMA | `apps/shared_spi_runtime/finite_dma.c`、`finite_dma_main.c`、`dma.toml` | controller/endpoint 独立；TX/RX、CS 和 wire 完成后结清 |
+| 连续 ADC / Continuous ADC | `apps/stream_recovery/adc_acquisition.c` | 完整 scan；归还原 loan，停止 source 并排空 READY/BORROWED |
+| 连续音频 / Continuous audio | `apps/stream_recovery/audio_acquisition.c` | 按实际布局处理完整 frame，独立归还方向存储，完整停止后释放 |
+
+请求预算用 `nx_deadline_finite_after`，拒绝溢出到无限等待。所有应用状态由调用者
+持有；失败 release 保留原 token，QUARANTINED、BUSY、通知与诊断都不授权提前回收。
+同一对象由一个执行者推进；需要多 producer 时才使用已有 owner。原九个 preset
+保持主参考范围，独立 DMA 装配的命令在各应用 README；它们不自动加入实板支持。
+
+Each application advances a bounded step. Payloads remain disjoint from the full
+application control object and live through settlement. Continuous blocks use
+explicit pools and caller-owned scheduling; no automatic silence, sample replay,
+reset or worker is introduced. The standalone DMA paths establish ARM linking;
+application GoogleTests execute real C with external hardware ports controlled.
+They do not establish physical DMA timing, audio continuity or analog accuracy.

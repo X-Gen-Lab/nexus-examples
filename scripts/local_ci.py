@@ -61,7 +61,16 @@ def standalones(preset):
     }
     selected = [(*recipes[preset], None)] if preset in recipes else []
     if preset == "stm32-qiming-baremetal":
-        selected.append(("apps/usb_configuration", "usb_configuration", None))
+        selected.extend([
+            ("apps/usb_configuration", "usb_configuration", None),
+            (".", "platform_reference", "apps/platform_reference/dma.toml"),
+            ("apps/shared_spi_runtime", "finite_spi_dma",
+             "apps/shared_spi_runtime/dma.toml"),
+            ("apps/stream_recovery", "adc_window",
+             "apps/stream_recovery/adc-window.toml"),
+            ("apps/stream_recovery", "audio_window",
+             "apps/stream_recovery/audio-window.toml"),
+        ])
     return selected
 
 
@@ -250,7 +259,7 @@ class LocalCI:
                          f"-DCMAKE_TOOLCHAIN_FILE={self.source / 'cmake/toolchains/arm-gcc.cmake'}",
                          f"-DNexus_DIR={self.source / 'cmake'}"]
             if assembly:
-                configure.append(f"-DNEXUS_ASSEMBLY_FILE={self.source / assembly}")
+                configure.append(f"-DNEXUS_ASSEMBLY_FILE={self.root / assembly}")
             self.command(name + "-configure", configure)
             self.command(name + "-build", ["cmake", "--build", standalone,
                          "--target", target, "--parallel", str(self.jobs)])

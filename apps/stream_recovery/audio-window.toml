@@ -1,0 +1,29 @@
+# Caller pattern and buffers are C application policy, not hidden hardware data.
+schema = 2
+board_package = "software-board"
+backend = "baremetal"
+clock = "hse8-pll168"
+optimization = "Os"
+
+[memory]
+main_stack_bytes = 4096
+libc_heap_bytes = 0
+static_ram_limit_bytes = 32768
+flash_load_limit_bytes = 65536
+
+[audio.sound]
+binding = "sound3duplex"
+mode = "master-duplex-blocks"
+standard = "philips"
+sample_bits = 16
+slot_bits = 16
+mclk = true
+cpol_high = false
+poll_limit = 4096
+irq = { priority = 5 }
+sample_rate_hz = 46875
+pll_n = 192
+pll_r = 2
+max_error_ppm = 0
+max_sample_rate_hz = 96000
+max_service_gap_us = 20

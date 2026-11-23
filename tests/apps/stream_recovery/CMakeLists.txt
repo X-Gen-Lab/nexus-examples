@@ -39,3 +39,5 @@ set_tests_properties(
     continuous_rx_google
     PROPERTIES TIMEOUT 30 LABELS "native;example;GoogleTest"
 )
+
+include("${CMAKE_CURRENT_LIST_DIR}/block_acquisition.cmake")

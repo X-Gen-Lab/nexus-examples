@@ -43,6 +43,7 @@ add_executable(
     reference_bootstrap_test
     "${CMAKE_CURRENT_LIST_DIR}/reference_bootstrap_test.cpp"
     "${PROJECT_SOURCE_DIR}/apps/platform_reference/rx_policy.c"
+    "${PROJECT_SOURCE_DIR}/apps/platform_reference/finite_uart.c"
     $<TARGET_OBJECTS:reference_bootstrap_main>
 )
 foreach(target IN ITEMS reference_bootstrap_main reference_bootstrap_test)

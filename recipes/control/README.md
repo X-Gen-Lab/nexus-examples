@@ -46,6 +46,13 @@ loss、错误 block、非法计数、数值错误或 PWM 失败会锁存 FAULT �
 `example_control_loop_finish` 重试遗留归还并进入 STOPPED；应用仍需排空 READY
 block、完成 stream 生命周期，再回收存储。片段不包装整套应用停机流程。
 
+完整的有限窗口 ADC source／stream 退出可组合
+[stream_recovery 的 ADC 应用](../../apps/stream_recovery/README.md)，由同一已有
+执行者逐步推进；它没有默认 Board、采样任务或物理验收声明。
+For a complete finite-window source/stream lifecycle, compose the linked ADC
+application under the same explicit executor; this control fragment retains its
+separate PWM and algorithm responsibility.
+
 ## 软件验证入口
 
 完成根工程构建后，精确测试入口为：
