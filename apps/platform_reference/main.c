@@ -6,6 +6,7 @@
  * \date            2026-10-09
  * \copyright       Copyright (c) 2026 Nexus Team
  */
+#include "finite_uart.h"
 #include "nexus_bindings.h"
 #include "nexus_config.h"
 #include "nexus_factory_strong.h"
@@ -18,7 +19,10 @@
 #include <stdio.h>
 #endif
 
-static nx_uart_tx_request_t s_transmit;
+static example_finite_uart_t s_transmit;
+static uint8_t s_echo[8];
+static bool s_status_active;
+static nx_time_us_t s_next_iteration;
 
 #if defined(NEXUS_BACKEND_NATIVE)
 /** \brief Print host diagnostics without turning metadata into release rights.
@@ -43,51 +47,41 @@ static const nx_uart_port_t* console(void) {
     return nx_factory_uart_ref(NX_UART_REF_CONSOLE);
 }
 
-/** \brief Keep all caller bytes alive until the provider releases its borrow.
- */
+/** \brief Admit a finite transfer; the outer application advances it. */
 static nx_result_t send_bytes(const uint8_t* bytes, size_t length) {
-    nx_time_us_t deadline = nx_deadline_after(nx_time_now_us(), 100000U);
-    nx_result_t status =
-        nx_uart_tx_prepare(&s_transmit, bytes, length, deadline);
-    if (status != NX_SUCCESS) {
-        return status;
-    }
-    status = nx_uart_port_submit(console(), &s_transmit);
-    if (status != NX_SUCCESS) {
-        return status;
-    }
-    while (nx_request_state(&s_transmit.base) != NX_REQUEST_SETTLED) {
-        nx_uart_port_service(console());
-        /* QUARANTINED retains bytes and request; the product must recover the
-         * controller or restart. A transfer deadline does not revoke borrowing.
-         */
-    }
-    nx_result_t result;
-    size_t transferred;
-    status = nx_request_result(&s_transmit.base, &result, &transferred);
-    if (status != NX_SUCCESS) {
-        return status;
-    }
-    return result == NX_SUCCESS && transferred != length ? NX_ERROR_IO : result;
+    return example_finite_uart_start(&s_transmit, console(), bytes, length,
+                                     nx_time_now_us(), 100000U);
 }
 
 /** \brief Execute a serialized iteration with explicit RX error decisions. */
 static nx_result_t iteration(void) {
-    nx_result_t result = nx_gpio_port_toggle(
-        nx_factory_gpio_ref(NX_GPIO_REF_STATUS), NEXUS_STATUS_MASK);
+    if (s_transmit.pending) {
+        return example_finite_uart_step(&s_transmit);
+    }
+    nx_time_us_t now = nx_time_now_us();
+    if (now < s_next_iteration) {
+        return NX_SUCCESS;
+    }
+    nx_result_t timing =
+        nx_deadline_finite_after(now, 100000U, &s_next_iteration);
+    if (timing != NX_SUCCESS) {
+        return timing;
+    }
+    s_status_active = !s_status_active;
+    nx_result_t result = nx_gpio_signal_write(
+        nx_factory_gpio_signal_ref(NX_GPIO_REF_STATUS), s_status_active);
     if (result != NX_SUCCESS) {
         return result;
     }
-    uint8_t echo[8];
     size_t count = 0U;
-    result = example_reference_read(console(), echo, sizeof(echo), &count);
+    result = example_reference_read(console(), s_echo, sizeof(s_echo), &count);
     if (result == NX_ERROR_EMPTY) {
         return NX_SUCCESS;
     }
     if (result != NX_SUCCESS) {
         return result;
     }
-    return count == 0U ? NX_SUCCESS : send_bytes(echo, count);
+    return count == 0U ? NX_SUCCESS : send_bytes(s_echo, count);
 }
 
 #if defined(NEXUS_BACKEND_FREERTOS)
@@ -102,10 +96,18 @@ static void application(void* context) {
         return;
     }
     for (;;) {
-        if (iteration() != NX_SUCCESS) {
+        nx_result_t result = iteration();
+        if (result != NX_SUCCESS && result != NX_ERROR_BUSY) {
             return;
         }
-        (void)nx_sleep_until(nx_deadline_after(nx_os_now_us(), 100000U));
+        nx_time_us_t wake;
+        if (nx_deadline_finite_after(nx_os_now_us(),
+                                     s_transmit.pending ? 1000U : 100000U,
+                                     &wake) != NX_SUCCESS) {
+            /* Static transfer storage and infrastructure remain retained. */
+            return;
+        }
+        (void)nx_sleep_until(wake);
     }
 }
 
@@ -137,7 +139,6 @@ int main(void) {
          */
         return 1;
     }
-    nx_request_initialize(&s_transmit.base);
 #if defined(NEXUS_BACKEND_FREERTOS)
     (void)nx_os_run(kernel_startup, NULL);
     return 3;
@@ -151,7 +152,15 @@ int main(void) {
             break;
         }
     }
-    if (exit_code == 0 && (iteration() != NX_SUCCESS ||
+    nx_result_t iteration_result = iteration();
+    for (unsigned step = 0U; s_transmit.pending && step < 64U; ++step) {
+        iteration_result = example_finite_uart_step(&s_transmit);
+    }
+    if (s_transmit.pending) {
+        /* Host failure retains every static loan and does not stop Platform. */
+        return 9;
+    }
+    if (exit_code == 0 && (iteration_result != NX_SUCCESS ||
                            nx_native_gpio_model_output(nx_factory_gpio_ref(
                                NX_GPIO_REF_STATUS)) != NEXUS_STATUS_MASK)) {
         exit_code = 5;
@@ -171,13 +180,13 @@ int main(void) {
         return 7;
     }
     for (;;) {
-        if (iteration() != NX_SUCCESS) {
+        nx_result_t result = iteration();
+        if (result != NX_SUCCESS && result != NX_ERROR_BUSY) {
             return 8;
         }
-        nx_time_us_t next = nx_deadline_after(nx_time_now_us(), 100000U);
-        while (!nx_deadline_expired(next, nx_time_now_us())) {
-            nx_uart_port_service(console());
-        }
+        /* One bounded pass leaves room for the product's other cooperative
+         * work. A quarantined transfer keeps its static storage and owner.
+         */
     }
 #endif
 }

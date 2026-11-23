@@ -57,3 +57,31 @@ set_tests_properties(
 )
 
 include("${CMAKE_CURRENT_LIST_DIR}/reference_bootstrap.cmake")
+
+add_executable(
+    finite_uart_test
+    "${CMAKE_CURRENT_LIST_DIR}/finite_uart_test.cpp"
+    "${PROJECT_SOURCE_DIR}/apps/platform_reference/finite_uart.c"
+)
+target_include_directories(
+    finite_uart_test
+    PRIVATE "${PROJECT_SOURCE_DIR}/apps/platform_reference"
+)
+target_compile_features(finite_uart_test PRIVATE cxx_std_17)
+set_target_properties(finite_uart_test PROPERTIES CXX_EXTENSIONS OFF)
+target_link_libraries(
+    finite_uart_test
+    PRIVATE Nexus::IO GTest::gmock_main nexus_owned_warnings nexus_build_options
+)
+add_test(
+    NAME finite_uart_google
+    COMMAND
+        "${Python3_EXECUTABLE}" -B "${PROJECT_SOURCE_DIR}/scripts/run_google.py"
+        --nexus-source "${NEXUS_SOURCE}" --binary
+        "$<TARGET_FILE:finite_uart_test>" --output
+        "${CMAKE_CURRENT_BINARY_DIR}/finite-uart-execution"
+)
+set_tests_properties(
+    finite_uart_google
+    PROPERTIES TIMEOUT 30 LABELS "native;example;GoogleTest"
+)

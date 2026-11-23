@@ -16,31 +16,39 @@
 #endif
 
 static nx_uart_tx_request_t s_request;
+static bool s_pending;
 static const uint8_t s_message[] = "Nexus starter ready\r\n";
 
 /** \brief Retain the request and payload through any timeout or drain. */
 static nx_result_t send_greeting(const nx_uart_port_t* console) {
     nx_request_initialize(&s_request.base);
+    nx_time_us_t deadline;
     nx_result_t result =
-        nx_uart_tx_prepare(&s_request, s_message, sizeof(s_message) - 1U,
-                           nx_deadline_after(nx_time_now_us(), 100000U));
+        nx_deadline_finite_after(nx_time_now_us(), 100000U, &deadline);
+    if (result != NX_SUCCESS) {
+        return result;
+    }
+    result = nx_uart_tx_prepare(&s_request, s_message, sizeof(s_message) - 1U,
+                                deadline);
     if (result != NX_SUCCESS) {
         return result;
     }
     result = nx_uart_port_submit(console, &s_request);
-    if (result != NX_SUCCESS) {
-        return result;
+    s_pending = result == NX_SUCCESS;
+    return result;
+}
+
+/** \brief Make one bounded pass; callers own scheduling and recovery. */
+static nx_result_t greeting_step(const nx_uart_port_t* console) {
+    nx_uart_port_service(console);
+    if (nx_request_state(&s_request.base) != NX_REQUEST_SETTLED) {
+        return NX_ERROR_BUSY;
     }
-    while (nx_request_state(&s_request.base) != NX_REQUEST_SETTLED) {
-        nx_uart_port_service(console);
-        /* A deadline requests termination; it never ends the memory borrow.
-         * QUARANTINED storage remains static while this owner keeps servicing.
-         * A product supplies its reviewed recovery policy for a stuck device.
-         */
-    }
+    s_pending = false;
     nx_result_t transfer_result;
     size_t transferred;
-    result = nx_request_result(&s_request.base, &transfer_result, &transferred);
+    nx_result_t result =
+        nx_request_result(&s_request.base, &transfer_result, &transferred);
     if (result != NX_SUCCESS) {
         return result;
     }
@@ -57,13 +65,24 @@ int main(void) {
         started.remaining_effects != 0U) {
         return 1;
     }
-    const nx_gpio_port_t* status = nx_factory_gpio_ref(NX_GPIO_REF_STATUS);
+    const nx_gpio_signal_t* status =
+        nx_factory_gpio_signal_ref(NX_GPIO_REF_STATUS);
     const nx_uart_port_t* console = nx_factory_uart_ref(NX_UART_REF_CONSOLE);
-    nx_result_t result = nx_gpio_port_toggle(status, NEXUS_STATUS_MASK);
+    nx_result_t result = nx_gpio_signal_write(status, true);
     if (result == NX_SUCCESS) {
         result = send_greeting(console);
     }
-    /* send_greeting only returns after rejection or actual settlement. */
+    while (s_pending) {
+        result = greeting_step(console);
+        if (result == NX_ERROR_BUSY &&
+            nx_request_state(&s_request.base) == NX_REQUEST_QUARANTINED) {
+            /* The product takes over recovery here. Static request, payload
+             * and Platform remain retained; no cleanup is claimed.
+             */
+            return 3;
+        }
+    }
+    /* Only rejection or observed settlement permits platform withdrawal. */
     nx_result_t stopped = nx_platform_stop();
     if (result != NX_SUCCESS || stopped != NX_SUCCESS) {
         return 2;

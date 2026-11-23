@@ -174,6 +174,13 @@ class LocalCiContracts(unittest.TestCase):
         self.assertEqual({
             ("apps/shared_spi_runtime", "shared_spi_runtime", None),
             ("apps/usb_configuration", "usb_configuration", None),
+            (".", "platform_reference", "apps/platform_reference/dma.toml"),
+            ("apps/shared_spi_runtime", "finite_spi_dma",
+             "apps/shared_spi_runtime/dma.toml"),
+            ("apps/stream_recovery", "adc_window",
+             "apps/stream_recovery/adc-window.toml"),
+            ("apps/stream_recovery", "audio_window",
+             "apps/stream_recovery/audio-window.toml"),
             *(("templates/" + name, "nexus_starter", None)
               for name in ("qiming", "sky", "qiming-core", "qiming-v41")),
         }, set(rows))
@@ -270,8 +277,19 @@ class LocalCiContracts(unittest.TestCase):
                 self.assertFalse(any(argument.startswith("-DNEXUS_SOURCE=")
                                      for argument in arguments))
             self.assertEqual({str(root / "templates/qiming"),
-                              str(root / "apps/usb_configuration")},
+                              str(root / "apps/usb_configuration"), str(root),
+                              str(root / "apps/shared_spi_runtime"),
+                              str(root / "apps/stream_recovery")},
                              {argv[argv.index("-S") + 1] for argv in configure})
+            for target, assembly in (
+                    ("platform_reference", "apps/platform_reference/dma.toml"),
+                    ("finite_spi_dma", "apps/shared_spi_runtime/dma.toml"),
+                    ("adc_window", "apps/stream_recovery/adc-window.toml"),
+                    ("audio_window", "apps/stream_recovery/audio-window.toml")):
+                command = next(argv for name, argv in commands if name ==
+                               "stm32-qiming-baremetal-" + target + "-configure")
+                self.assertIn("-DNEXUS_ASSEMBLY_FILE=" + str(root / assembly),
+                              command)
             build = next(argv for name, argv in commands
                          if name == "stm32-qiming-baremetal-usb_configuration-build")
             self.assertIn("usb_configuration", build)

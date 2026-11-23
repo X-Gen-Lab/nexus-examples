@@ -16,6 +16,7 @@ nexus_add_platform(ASSEMBLY "${NEXUS_ASSEMBLY_FILE}")
 nexus_add_firmware(nexus_firmware SOURCES
     "${examples_root}/apps/platform_reference/main.c"
     "${examples_root}/apps/platform_reference/rx_policy.c"
+    "${examples_root}/apps/platform_reference/finite_uart.c"
 )
 get_target_property(soc_family Nexus::Platform NEXUS_SOC_FAMILY)
 if(soc_family STREQUAL "native")

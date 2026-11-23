@@ -12,6 +12,7 @@ static_ram_limit_bytes = 262144
 libc_heap_bytes = 0
 
 [gpio.status]
+active_high = true
 binding = "led0"
 mode = "output"
 

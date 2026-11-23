@@ -75,6 +75,19 @@ class ActiveReference : public testing::Test {
     }
 };
 
+TEST_F(ActiveReference, StatusRoleUsesAnAuthoredLogicalSignal) {
+    const nx_gpio_signal_t* signal =
+        nx_factory_gpio_signal_ref(NX_GPIO_REF_STATUS);
+    ASSERT_NE(signal, nullptr);
+    EXPECT_EQ(signal->port, nx_factory_gpio_ref(NX_GPIO_REF_STATUS));
+    EXPECT_TRUE(signal->active_high);
+    EXPECT_EQ(nx_gpio_signal_write(signal, true), NX_SUCCESS);
+    EXPECT_EQ(nx_native_gpio_model_output(signal->port) & signal->mask,
+              signal->mask);
+    EXPECT_EQ(nx_gpio_signal_write(signal, false), NX_SUCCESS);
+    EXPECT_EQ(nx_native_gpio_model_output(signal->port) & signal->mask, 0U);
+}
+
 TEST_F(ActiveReference, RepeatedStartDoesNotReleaseTheOriginalOwner) {
     nx_platform_diagnostic_t diagnostic = stale_diagnostic();
     nx_platform_start_result_t startup =
