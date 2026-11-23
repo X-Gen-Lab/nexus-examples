@@ -2,4 +2,4 @@
 include = ["assembly.toml"]
 
 [schema]
-path = "https://raw.githubusercontent.com/X-Gen-Lab/nexus/73dbf584fb9d92fc9216a7188d57f70716080b2f/tools/configure/assembly.schema.json"
+path = "https://raw.githubusercontent.com/X-Gen-Lab/nexus/6a57d0af12c89a51c2aa31a9463690c981305c63/tools/configure/assembly.schema.json"

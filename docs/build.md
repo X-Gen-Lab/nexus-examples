@@ -205,7 +205,20 @@ SDK's own toolchain file and a separate build directory.
 The locked ARM installer verifies archive and installed members. Use a new output
 directory for each run; the runner retains failures and actual command results.
 
+完整 Native 工具回归也配置默认 ARM preset，因此先准备锁定编译器并将其加入
+`PATH`。托管 Native 作业执行同一步骤；后续 ARM 矩阵复用相同锁定归档缓存，
+安装器仍校验归档与安装成员。
+
+The complete Native tool suite also configures the default ARM preset. Prepare
+the locked compiler and add it to `PATH` first. Hosted Native CI does the same;
+the subsequent ARM matrix reuses the same locked archive cache, with archive
+and installed-member verification on every use.
+
 ```sh
+python external/nexus/scripts/ci/install_arm_toolchain.py \
+  --install-dir "$PWD/.tools/arm" \
+  --cache-dir "$PWD/.tools/arm-archives"
+export PATH="$PWD/.tools/arm/bin:$PATH"
 python scripts/local_ci.py --parallel 2 \
   --arm-toolchain "$PWD/.tools/arm" \
   --toolchain-cache "$PWD/.tools/arm-archives" \

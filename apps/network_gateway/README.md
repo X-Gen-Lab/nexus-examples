@@ -204,6 +204,11 @@ under `native/`. None of these host mechanisms is an MCU network driver.
 
 ## Native composition / Native 组合
 
+可选 `gateway_delivery.c` 把同一工作流与外部单槽持久 outbox 组合，保留复制的 wire
+和业务 ID，局部用户 join 后才持久化已观察到的 ACK。候选凭据辅助函数只在实际
+认证工作成功后选择已保留的 profile。参见[网络片段](../../recipes/network/README.md)
+中的 wire 限额、Flash 维护、独立预算与恢复合同；默认 Native 主程序保持原组合。
+
 The command is `network_gateway <broker-port> <case> <credential-directory>`.
 Cases are `clean`, `backpressure`, `fault`, `deadline` and `missing-client`.
 The directory supplies public DER inputs `ca.der`, `client.der` and

@@ -36,6 +36,10 @@ EXPECTED_CTEST_NAMES = (
     "industrial_control_loop_google", "touch_reference_google",
     "storage_reference_google", "diagnostics_reference_google",
     "network_reference_google", "st_msc_reference_google",
+    "axis_control_google", "connected_terminal_google",
+    "network_gateway_delivery_google", "imu_reference_google",
+    "inference_reference_google", "network_delivery_google",
+    "network_route_google", "terminal_reference_google", "power_reference_google",
 )
 
 

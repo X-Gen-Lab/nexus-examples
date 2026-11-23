@@ -128,6 +128,7 @@ TEST_F(ControlLoop, EmptyStreamDoesNotReuseAnOldMeasurementOrAdvancePid) {
 }
 
 TEST_F(ControlLoop, PwmFailureFaultsControlAndReleasesTheActualConsumerLoan) {
+    EXPECT_CALL(hardware, PwmStop()).WillOnce(testing::Return(NX_SUCCESS));
     publish(0);
     EXPECT_CALL(hardware, AdcService()).WillOnce(testing::Return(NX_SUCCESS));
     EXPECT_CALL(hardware, PwmSet(1000, 1000))
@@ -144,6 +145,7 @@ TEST_F(ControlLoop, PwmFailureFaultsControlAndReleasesTheActualConsumerLoan) {
 }
 
 TEST_F(ControlLoop, LostAcquisitionBlockNeverUpdatesTheActuator) {
+    EXPECT_CALL(hardware, PwmStop()).WillOnce(testing::Return(NX_SUCCESS));
     publish(1000, NX_STREAM_BOUNDARY_LOSS);
     EXPECT_CALL(hardware, AdcService()).WillOnce(testing::Return(NX_SUCCESS));
     example_control_observation_t observation = {};
@@ -163,5 +165,27 @@ TEST_F(ControlLoop, InvalidNormalizedProfileRejectsBeforePortsOrStorageChange) {
     EXPECT_EQ(unused.machine.config, nullptr);
     EXPECT_EQ(stream.outstanding, 0U);
     stop_and_join();
+}
+
+TEST_F(ControlLoop, FaultRequestsOutputWithdrawalAndFailedStopRemainsRetained) {
+    publish(1000, NX_STREAM_BOUNDARY_LOSS);
+    EXPECT_CALL(hardware, AdcService()).WillOnce(testing::Return(NX_SUCCESS));
+    EXPECT_CALL(hardware, PwmStop())
+        .WillOnce(testing::Return(NX_ERROR_BUSY))
+        .WillOnce(testing::Return(NX_ERROR_IO))
+        .WillOnce(testing::Return(NX_SUCCESS));
+    example_control_observation_t observation{};
+    EXPECT_EQ(example_control_loop_step(&loop, &observation), NX_ERROR_IO);
+    EXPECT_TRUE(loop.output_stop_pending);
+    EXPECT_EQ(loop.output_stop_result, NX_ERROR_BUSY);
+    EXPECT_EQ(example_control_loop_finish(&loop), NX_ERROR_IO);
+    EXPECT_TRUE(loop.output_stop_pending);
+    EXPECT_EQ(loop.machine.current, EXAMPLE_CONTROL_FAULT);
+    EXPECT_EQ(example_control_loop_finish(&loop), NX_SUCCESS);
+    EXPECT_FALSE(loop.output_stop_pending);
+    EXPECT_EQ(loop.machine.current, EXAMPLE_CONTROL_STOPPED);
+    EXPECT_CALL(hardware, AdcStop()).WillOnce(testing::Return(NX_SUCCESS));
+    EXPECT_EQ(nx_adc_port_stream_stop(&adc), NX_SUCCESS);
+    EXPECT_EQ(nx_stream_stop(&stream), NX_SUCCESS);
 }
 } /* namespace */
