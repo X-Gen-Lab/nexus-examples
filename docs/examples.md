@@ -151,7 +151,7 @@ Build/create commands and hardware prerequisites are maintained in the linked gu
 ## 五条完整 I/O 使用路径 / Five complete I/O paths
 
 以下复用现有应用目录，不创建另一套 provider、隐式任务或全局实例。先阅读平台的
-[I/O 执行合同](https://github.com/X-Gen-Lab/nexus/blob/67f8e5f2b0f59c3bdc0ffb70d7b1c5b95c26f51c/docs/guides/io-execution.md)，再选择实际模式。
+[I/O 执行合同](https://github.com/X-Gen-Lab/nexus/blob/694c026501e443096d43468b62cf5497d05fe0f7/docs/guides/io-execution.md)，再选择实际模式。
 
 | 用例 / Use case | 真实源码与配置 / Source and assembly | 退出责任 / Withdrawal |
 | --- | --- | --- |
