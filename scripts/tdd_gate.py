@@ -41,6 +41,8 @@ EXPECTED_CTEST_NAMES = (
     "network_gateway_delivery_google", "imu_reference_google",
     "inference_reference_google", "network_delivery_google",
     "network_route_google", "terminal_reference_google", "power_reference_google",
+    "differential_drive_google", "motor_drive_google", "servo_axis_google",
+    "lift_axis_google", "drive_host_reference",
 )
 
 

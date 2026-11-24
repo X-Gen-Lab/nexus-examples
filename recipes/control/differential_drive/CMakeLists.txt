@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.31)
+project(nexus_differential_drive LANGUAGES C ASM)
+set(NEXUS_TEST_SUPPORT ON CACHE BOOL "Explicit Native software-model scope")
+find_package(Nexus 0.2.1 EXACT CONFIG REQUIRED)
+nexus_add_platform(ASSEMBLY "${CMAKE_CURRENT_LIST_DIR}/assembly.toml")
+get_target_property(_drive_soc Nexus::Platform NEXUS_SOC_FAMILY)
+if(NOT _drive_soc STREQUAL "native")
+    message(FATAL_ERROR "The DC plant experiment is a Native software model")
+endif()
+include("${CMAKE_CURRENT_LIST_DIR}/firmware.cmake")
+nexus_add_firmware(differential_drive_reference SOURCES main.c
+    LIBRARIES example_differential_drive
+)
+enable_testing()
+add_test(NAME differential_drive_software COMMAND differential_drive_reference)
+set_tests_properties(differential_drive_software PROPERTIES TIMEOUT 10)
