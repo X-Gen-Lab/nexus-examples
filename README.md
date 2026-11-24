@@ -8,8 +8,8 @@
 
 | 你要完成什么 | 入口 |
 | --- | --- |
-| 创建自己的最小 Native 应用 | [平台首次运行教程](https://github.com/X-Gen-Lab/nexus/blob/694c026501e443096d43468b62cf5497d05fe0f7/docs/tutorials/first-native.md) |
-| 创建自己的 F407 工程 | [平台首次构建教程](https://github.com/X-Gen-Lab/nexus/blob/694c026501e443096d43468b62cf5497d05fe0f7/docs/tutorials/first-f407.md) |
+| 创建自己的最小 Native 应用 | [平台首次运行教程](https://github.com/X-Gen-Lab/nexus/blob/7d893faa33705ac3bd0df51804185d01754c4fe9/docs/tutorials/first-native.md) |
+| 创建自己的 F407 工程 | [平台首次构建教程](https://github.com/X-Gen-Lab/nexus/blob/7d893faa33705ac3bd0df51804185d01754c4fe9/docs/tutorials/first-f407.md) |
 | 选择应用组合、模板或软件参考 | [应用与起始工程](docs/examples.md) |
 | 编译或维护本仓库全部示例 | [下面的维护准备](#维护本仓库)与[构建指南](docs/build.md) |
 | 核对板卡、接线和验证范围 | [板卡说明](docs/boards.md)、[验证说明](docs/validation.md) |

@@ -70,6 +70,7 @@ def standalones(preset):
              "apps/stream_recovery/adc-window.toml"),
             ("apps/stream_recovery", "audio_window",
              "apps/stream_recovery/audio-window.toml"),
+            ("recipes/control/motor_drive", "motor_drive_reference", None),
         ])
     return selected
 
@@ -173,7 +174,7 @@ class LocalCI:
                          self.source / "cmake/package/package_source_sdk.py",
                          "--source", self.source, "--output", prefix, "--host-support",
                          "--component", "network", "--component", "tls",
-                         "--component", "mqtt"])
+                         "--component", "mqtt", "--component", "cia402"])
         self.installed(prefix)
 
     def retain_native(self):
@@ -217,6 +218,26 @@ class LocalCI:
                      "--output-on-failure", "--no-tests=error", "--parallel", str(self.jobs),
                      "--output-junit", report])
         self.report["installed_ctest"] = validate_junit(self.source, report, started)
+        self.report["installed_references"] = {}
+        for recipe in ("differential_drive", "servo_axis", "lift_axis"):
+            name = "installed-" + recipe
+            build = self.output / name
+            build.mkdir()
+            self.command(name + "-configure", [
+                "cmake", "-S", self.root / "recipes/control" / recipe,
+                "-B", build, "-G", "Ninja",
+                f"-DNexus_DIR={prefix / 'lib/cmake/Nexus'}",
+                "-DNEXUS_ENABLE_SANITIZERS=ON", "-DCMAKE_BUILD_TYPE=Debug"])
+            self.command(name + "-build", ["cmake", "--build", build,
+                         "--target", recipe + "_reference",
+                         "--parallel", str(self.jobs)])
+            report = build / "ctest-results.xml"
+            started = validator.prepare_report(report)
+            self.command(name + "-ctest", ["ctest", "--test-dir", build,
+                         "--output-on-failure", "--no-tests=error",
+                         "--parallel", str(self.jobs), "--output-junit", report])
+            self.report["installed_references"][recipe] = validate_junit(
+                self.source, report, started)
         self.command("installed-sdk-after", [sys.executable,
                      self.source / "cmake/package/package_source_sdk.py",
                      "--verify", prefix / "share/nexus/src"])

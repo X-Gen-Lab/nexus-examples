@@ -4,6 +4,14 @@
 本地文件系统与 USB MSC 的单写入者交接，以及 ST 官方 MSC 单设备/单 LUN profile。
 平台公共机制继续由 Nexus 提供；分区、信任根、版本政策、USB 身份和恢复动作由产品给定。
 
+## 电驱主机参考
+
+[drive_host](drive_host/README.md) 是 Python 3 标准库实现的有限 CiA 402 PV 会话，
+匹配平台当前七字节 PDO 映射。它确认驱动回报的 PDS 状态与实际模式，在原始授权
+期限内发送速度请求，结束时请求 Quick Stop，并分别报告状态、零速回报与停止未确认。
+默认 CLI 只运行编码演示；只有显式 `--interface` 和完整参数才打开 Linux SocketCAN。
+当前验证使用注入 CAN 端口，没有执行实物 CAN，也不包含 ROS 2 运行时或物理停机证明。
+
 ## 地址、连接与可信时间
 
 `route_reference` 通过实际 `nx_lwip_adapter_service`、DHCP 和 DNS 公共接口准备

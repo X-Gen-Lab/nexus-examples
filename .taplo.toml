@@ -1,5 +1,10 @@
 # Editor schema only; check uses the selected local SDK.
-include = ["configs/*.toml", "templates/*/assembly.toml", "apps/*/assembly.toml"]
+include = [
+    "configs/*.toml",
+    "templates/*/assembly.toml",
+    "apps/*/assembly.toml",
+    "recipes/*/*/assembly.toml",
+]
 
 [schema]
-path = "https://raw.githubusercontent.com/X-Gen-Lab/nexus/694c026501e443096d43468b62cf5497d05fe0f7/tools/configure/assembly.schema.json"
+path = "https://raw.githubusercontent.com/X-Gen-Lab/nexus/7d893faa33705ac3bd0df51804185d01754c4fe9/tools/configure/assembly.schema.json"

@@ -92,6 +92,24 @@ class LocalCiContracts(unittest.TestCase):
                 if name == "installed-build":
                     self.assertEqual(argv[-2:], ["--parallel", "1"])
             self.assertFalse(any(arg.startswith("-DNEXUS_SOURCE=") for arg in configure))
+            for recipe in ("differential_drive", "servo_axis", "lift_axis"):
+                name = "installed-" + recipe
+                configure = next(argv for step, argv in commands
+                                 if step == name + "-configure")
+                self.assertIn(str(ROOT / "recipes/control" / recipe), configure)
+                self.assertIn("-DNexus_DIR=" + str(output / "SDK with spaces/lib/cmake/Nexus"),
+                              configure)
+                self.assertIn("-DNEXUS_ENABLE_SANITIZERS=ON", configure)
+                self.assertIn(str(output / name), configure)
+                self.assertFalse(any(arg.startswith("-DNEXUS_SOURCE=") for arg in configure))
+                build = next(argv for step, argv in commands if step == name + "-build")
+                self.assertIn(recipe + "_reference", build)
+                ctest = next(argv for step, argv in commands if step == name + "-ctest")
+                self.assertIn("--no-tests=error", ctest)
+                self.assertIn(str(output / name / "ctest-results.xml"), ctest)
+            self.assertEqual(set(runner.report["installed_references"]),
+                             {"differential_drive", "servo_axis", "lift_axis"})
+            self.assertEqual(commands[-1][0], "installed-sdk-after")
 
     def test_installed_payload_rejection_after_ctest_cannot_qualify_the_run(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -125,6 +143,19 @@ class LocalCiContracts(unittest.TestCase):
             verify = next(argv for name, argv in calls if name == "sdk-verify")
             self.assertEqual(verify[verify.index("--verify") + 1],
                              str(prefix / "share/nexus/src"))
+
+    def test_formal_packaging_explicitly_includes_the_drive_profile(self):
+        with tempfile.TemporaryDirectory() as directory:
+            runner = local_ci.LocalCI(Path(directory), sdk_root(), Path(directory), 1)
+            calls = []
+            runner.command = lambda name, argv, *args: calls.append((name, list(map(str, argv))))
+            runner.installed = lambda prefix: None
+            with mock.patch.object(runner, "retain_native"):
+                runner.native(None)
+            package = next(argv for name, argv in calls if name == "sdk-package")
+            selected = [package[index + 1] for index, value in enumerate(package)
+                        if value == "--component"]
+            self.assertEqual(selected, ["network", "tls", "mqtt", "cia402"])
 
     def test_wrong_reused_sdk_fails_before_expensive_native_execution(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -181,6 +212,7 @@ class LocalCiContracts(unittest.TestCase):
              "apps/stream_recovery/adc-window.toml"),
             ("apps/stream_recovery", "audio_window",
              "apps/stream_recovery/audio-window.toml"),
+            ("recipes/control/motor_drive", "motor_drive_reference", None),
             *(("templates/" + name, "nexus_starter", None)
               for name in ("qiming", "sky", "qiming-core", "qiming-v41")),
         }, set(rows))
@@ -279,7 +311,8 @@ class LocalCiContracts(unittest.TestCase):
             self.assertEqual({str(root / "templates/qiming"),
                               str(root / "apps/usb_configuration"), str(root),
                               str(root / "apps/shared_spi_runtime"),
-                              str(root / "apps/stream_recovery")},
+                              str(root / "apps/stream_recovery"),
+                              str(root / "recipes/control/motor_drive")},
                              {argv[argv.index("-S") + 1] for argv in configure})
             for target, assembly in (
                     ("platform_reference", "apps/platform_reference/dma.toml"),
@@ -297,6 +330,10 @@ class LocalCiContracts(unittest.TestCase):
                              if name == "stm32-qiming-baremetal-usb_configuration-resources")
             self.assertEqual(resources[resources.index("--elf") + 1],
                              str(output / "stm32-qiming-baremetal-usb_configuration/bin/usb_configuration.elf"))
+            resources = next(argv for name, argv in commands
+                             if name == "stm32-qiming-baremetal-motor_drive_reference-resources")
+            self.assertEqual(resources[resources.index("--elf") + 1],
+                             str(output / "stm32-qiming-baremetal-motor_drive_reference/bin/motor_drive_reference.elf"))
 
 
 if __name__ == "__main__":

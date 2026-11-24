@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "694c026501e443096d43468b62cf5497d05fe0f7",
-  "tree": "0b07eaa6843130659a5ee532313ea82a323bd566",
+  "commit": "7d893faa33705ac3bd0df51804185d01754c4fe9",
+  "tree": "d94addbc9fa341e00cc0c7a4b08b2e15d16a6427",
   "consumption": "source-find_package",
   "recursive_submodules": true,
-  "baseline_status": "Statically composed common storage, diagnostics, algorithms and protocol profiles. Integration reports retain their exact executed scope; physical HIL is not executed.",
+  "baseline_status": "Owned C11 motor and axis control, selected F407 power-stage and CiA402 profiles, and statically composed common components. Integration reports retain their exact executed scope; physical HIL is not executed.",
   "public_api": "find_package(Nexus) / nexus_add_platform / nexus_add_firmware / generated readonly typed factory faces / explicit OS and common component targets"
 }
