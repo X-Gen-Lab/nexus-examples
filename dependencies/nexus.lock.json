@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "7d893faa33705ac3bd0df51804185d01754c4fe9",
-  "tree": "d94addbc9fa341e00cc0c7a4b08b2e15d16a6427",
+  "commit": "3a60abfb914fe05309cfedf1bf238a174b8eef8b",
+  "tree": "38ed8269bfe3fd09381dc164653a87d39bbae4ee",
   "consumption": "source-find_package",
   "recursive_submodules": true,
-  "baseline_status": "Owned C11 motor and axis control, selected F407 power-stage and CiA402 profiles, and statically composed common components. Integration reports retain their exact executed scope; physical HIL is not executed.",
+  "baseline_status": "Optional allocation-free C11 Motor/Axis/Current/Modulation/Drive control; selected F407 phase, simultaneous ADC, fixed-slot shared ADC and unshifted single-shunt software profiles. Exact software and SDK results retain their executed scope; physical HIL is not executed.",
   "public_api": "find_package(Nexus) / nexus_add_platform / nexus_add_firmware / generated readonly typed factory faces / explicit OS and common component targets"
 }

@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.31)
+project(nexus_cia402_motor_reference LANGUAGES C ASM)
+set(NEXUS_TEST_SUPPORT ON CACHE BOOL "Explicit Native wire-model scope")
+find_package(Nexus 0.2.1 EXACT CONFIG REQUIRED)
+nexus_add_platform(ASSEMBLY "${CMAKE_CURRENT_LIST_DIR}/assembly.toml")
+get_target_property(_cia_motor_soc Nexus::Platform NEXUS_SOC_FAMILY)
+if(NOT _cia_motor_soc STREQUAL "native")
+    message(FATAL_ERROR "The standalone CAN wire/drive model is Native only")
+endif()
+include("${CMAKE_CURRENT_LIST_DIR}/firmware.cmake")
+enable_testing()
+include("${CMAKE_CURRENT_LIST_DIR}/../../../tests/cmake/GoogleTest.cmake")
+examples_host_google_test()
+include(
+    "${CMAKE_CURRENT_LIST_DIR}/../../../tests/apps/motor_control/cia402_motor.cmake"
+)

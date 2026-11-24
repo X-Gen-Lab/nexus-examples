@@ -27,10 +27,12 @@ void example_motor_observation_publish(
         }
         return;
     }
-    const example_motor_observation_t record = {
-        .sample = *sample,
-        .plan = result == NX_SUCCESS ? *plan : (nx_power_stage_plan_t){{0}},
-        .result = result};
+    example_motor_observation_t record = {0};
+    record.sample = *sample;
+    if (result == NX_SUCCESS) {
+        record.plan = *plan;
+    }
+    record.result = result;
     observations->records[head % EXAMPLE_MOTOR_OBSERVATION_DEPTH] = record;
     nx_atomic_u32_store_release(&observations->published, head + 1U);
 }

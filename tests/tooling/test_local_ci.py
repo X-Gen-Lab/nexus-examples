@@ -92,7 +92,8 @@ class LocalCiContracts(unittest.TestCase):
                 if name == "installed-build":
                     self.assertEqual(argv[-2:], ["--parallel", "1"])
             self.assertFalse(any(arg.startswith("-DNEXUS_SOURCE=") for arg in configure))
-            for recipe in ("differential_drive", "servo_axis", "lift_axis"):
+            for recipe in ("differential_drive", "servo_axis", "lift_axis",
+                           "dual_motor_drive"):
                 name = "installed-" + recipe
                 configure = next(argv for step, argv in commands
                                  if step == name + "-configure")
@@ -108,7 +109,8 @@ class LocalCiContracts(unittest.TestCase):
                 self.assertIn("--no-tests=error", ctest)
                 self.assertIn(str(output / name / "ctest-results.xml"), ctest)
             self.assertEqual(set(runner.report["installed_references"]),
-                             {"differential_drive", "servo_axis", "lift_axis"})
+                             {"differential_drive", "servo_axis", "lift_axis",
+                              "dual_motor_drive"})
             self.assertEqual(commands[-1][0], "installed-sdk-after")
 
     def test_installed_payload_rejection_after_ctest_cannot_qualify_the_run(self):
@@ -213,6 +215,8 @@ class LocalCiContracts(unittest.TestCase):
             ("apps/stream_recovery", "audio_window",
              "apps/stream_recovery/audio-window.toml"),
             ("recipes/control/motor_drive", "motor_drive_reference", None),
+            ("recipes/control/motor_drive", "motor_drive_single_reference",
+             "recipes/control/motor_drive/single.toml"),
             *(("templates/" + name, "nexus_starter", None)
               for name in ("qiming", "sky", "qiming-core", "qiming-v41")),
         }, set(rows))
@@ -334,6 +338,15 @@ class LocalCiContracts(unittest.TestCase):
                              if name == "stm32-qiming-baremetal-motor_drive_reference-resources")
             self.assertEqual(resources[resources.index("--elf") + 1],
                              str(output / "stm32-qiming-baremetal-motor_drive_reference/bin/motor_drive_reference.elf"))
+            single = next(argv for name, argv in commands if name ==
+                          "stm32-qiming-baremetal-motor_drive_single_reference-configure")
+            self.assertIn("-DEXAMPLE_MOTOR_CURRENT_PATH=single", single)
+            self.assertIn("-DNEXUS_ASSEMBLY_FILE=" +
+                          str(root / "recipes/control/motor_drive/single.toml"), single)
+            resources = next(argv for name, argv in commands if name ==
+                             "stm32-qiming-baremetal-motor_drive_single_reference-resources")
+            self.assertEqual(resources[resources.index("--elf") + 1],
+                             str(output / "stm32-qiming-baremetal-motor_drive_single_reference/bin/motor_drive_single_reference.elf"))
 
 
 if __name__ == "__main__":

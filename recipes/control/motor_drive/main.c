@@ -26,18 +26,20 @@ static nx_result_t capture(void* context,
 int main(void) {
     /* These constants exercise software composition. They are not measured
      * power-board calibration or proof of an initial rotor reference. */
-    const example_motor_drive_config_t selected = {
-        .motor = {7,   1, 0, 1000, 1100, 100, 1100, 0,    2,     100, 2,
-                  100, 3, 5, 0.2F, 12,   10,  30,   0.9F, 0.05F, 100},
-        .current_zero_code = {2048, 2048, 2048},
-        .current_a_per_code = {0.01F, 0.01F, 0.01F},
-        .bus_v_per_code = 0.01F,
-        .encoder_counts_per_turn = 4096,
-        .maximum_encoder_delta = 100,
-        .maximum_scan_span_us = 4,
-        .run_duration_us = 100000,
-        .startup_budget_us = 10000,
-        .commissioned = false};
+    example_motor_drive_config_t selected = example_motor_drive_reference();
+#if defined(EXAMPLE_SINGLE_SHUNT)
+    selected.topology = NX_MODULATION_SINGLE_SHUNT;
+    selected.phase_samples = 1;
+    selected.bootstrap_voltage_ab = (nx_motor_ab_t){2, 1};
+    selected.bootstrap_bus_voltage_v = 24;
+    selected.maximum_scan_span_us = 500;
+    for (size_t phase = 1; phase < 3; ++phase) {
+        selected.current_zero_code[phase] = 0;
+        selected.current_a_per_code[phase] = 0;
+    }
+    /* This route has no bus/rotor ranks. A commissioned product must bind
+     * qualified external observation queues before enabling the session. */
+#endif
     if (nx_platform_start().primary != NX_SUCCESS) {
         return 1;
     }
