@@ -6,12 +6,13 @@
 
 | 入口 | 实际组合 | 软件边界 |
 | --- | --- | --- |
-| [motor_drive](motor_drive/README.md) | 强类型 PowerStage、MotorControl、标定与量化回算、会话退出 | F407 软件 Board，四 rank 顺序 ADC；默认 commissioning 拒绝激励 |
+| [motor_drive](motor_drive/README.md) | Axis、Drive/Current/Motor/Modulation、强类型 PowerStage、有限参考与连续反馈 | F407 phase 或显式 single 软件路线；默认 commissioning 拒绝激励 |
+| [dual_motor_drive](dual_motor_drive/README.md) | 两个完整 PMSM dq／速度／位置链、独立电气机械模型与共母线预算 | Native 平均模型；量化 ADC／编码器是真实控制入口，模型真值只用于评价 |
 | [differential_drive](differential_drive/README.md) | 两个 Axis、电流 PI、运动学与有限命令 | Native DC 模型，分别评价轮速、里程计与独立地面真值 |
 | [servo_axis](servo_axis/README.md) | 位置／速度／电流闭环、整组参数切换与停止 | Native 带载 DC 模型，采用、轨迹完成和实测到位分别记录 |
 | [lift_axis](lift_axis/README.md) | 承重交接、闸状态确认、受控停车与有限回零 | Native 重力与机械闸模型，电流请求不代表实际承重 |
 
-三个 Native 模型入口中的电机数值均由各自示例显式给定，不是平台调参默认。
+四个 Native 模型入口中的电机数值均由各自示例显式给定，不是平台调参默认。
 独立模型只建立选定软件合同；这些参考均未完成实板、机械安全或实时性能验收。
 各目录 README 提供独立构建与精确测试入口，公共机制继续链接平台组件。
 

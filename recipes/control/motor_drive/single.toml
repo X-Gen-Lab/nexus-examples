@@ -1,0 +1,29 @@
+# Selected one-rank DC-link mode; external qualified bus and rotor required.
+schema = 2
+board_package = "board"
+backend = "baremetal"
+clock = "hse8-pll168"
+
+[memory]
+main_stack_bytes = 2048
+libc_heap_bytes = 0
+
+[pwm_adc.drive]
+binding = "single"
+domain = "current"
+mode = "injected-power-stage"
+tick_hz = 1000000
+period_ticks = 1000
+trigger_ticks = 600
+deadtime_ticks = 84
+minimum_duty_ticks = 50
+maximum_duty_ticks = 900
+settling_ticks = 2
+commit_before_ticks = 990
+compute_budget_us = 50
+max_irq_delay_us = 10
+channels = [0]
+sample_times = [0]
+reference_mv = 3300
+exclusive = true
+irq = { priority = 5, calls_os = false }

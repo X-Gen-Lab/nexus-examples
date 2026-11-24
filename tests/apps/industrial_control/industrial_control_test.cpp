@@ -367,6 +367,7 @@ class IndustrialPersistence : public testing::Test {
     std::array<uint8_t, NX_STORAGE_HEADER_SIZE> workspace{};
     nx_storage_t storage{};
     size_t mutations = 0U;
+    size_t injected_program_failures = 0U;
     bool fail_program = false;
     std::chrono::milliseconds program_delay{0};
     example_industrial_config_t config{100000U, 2U, 30000U, 500000U, 1000000U};
@@ -390,6 +391,7 @@ class IndustrialPersistence : public testing::Test {
             std::this_thread::sleep_for(delay);
         }
         if (self.fail_program) {
+            ++self.injected_program_failures;
             return NX_STORAGE_IO;
         }
         if (offset % 4U != 0U || count % 4U != 0U ||
@@ -578,11 +580,17 @@ TEST_F(IndustrialPersistence, UnknownSchemaNeverBecomesAnEmptyWritableStore) {
 
 TEST_F(IndustrialPersistence,
        FailedCommitJoinsIoAndRequiresExplicitStorageReopen) {
+    /* This checks a storage fault, not the 30 ms worker deadline. Use a valid
+     * functional profile with host scheduling headroom; expiry is exercised
+     * independently by the SPI, overall-deadline and watchdog contracts. */
+    config.operation_budget_us = 100000U;
+    config.period_us = 200000U;
     ASSERT_NO_FATAL_FAILURE(seed(EXAMPLE_INDUSTRIAL_SCHEMA, config.period_us));
     fail_program = true;
     config.sample_limit = 1U;
     example_industrial_report_t report{};
     EXPECT_EQ(example_industrial_run(&storage, &config, &report), NX_ERROR_IO);
+    EXPECT_GT(injected_program_failures, 0U);
     EXPECT_EQ(report.storage_status, NX_STORAGE_IO);
     EXPECT_FALSE(storage.opened);
     EXPECT_FALSE(report.committed_in_maintenance);

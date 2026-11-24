@@ -71,6 +71,8 @@ def standalones(preset):
             ("apps/stream_recovery", "audio_window",
              "apps/stream_recovery/audio-window.toml"),
             ("recipes/control/motor_drive", "motor_drive_reference", None),
+            ("recipes/control/motor_drive", "motor_drive_single_reference",
+             "recipes/control/motor_drive/single.toml"),
         ])
     return selected
 
@@ -219,7 +221,8 @@ class LocalCI:
                      "--output-junit", report])
         self.report["installed_ctest"] = validate_junit(self.source, report, started)
         self.report["installed_references"] = {}
-        for recipe in ("differential_drive", "servo_axis", "lift_axis"):
+        for recipe in ("differential_drive", "servo_axis", "lift_axis",
+                       "dual_motor_drive"):
             name = "installed-" + recipe
             build = self.output / name
             build.mkdir()
@@ -281,6 +284,8 @@ class LocalCI:
                          f"-DNexus_DIR={self.source / 'cmake'}"]
             if assembly:
                 configure.append(f"-DNEXUS_ASSEMBLY_FILE={self.root / assembly}")
+            if target == "motor_drive_single_reference":
+                configure.append("-DEXAMPLE_MOTOR_CURRENT_PATH=single")
             self.command(name + "-configure", configure)
             self.command(name + "-build", ["cmake", "--build", standalone,
                          "--target", target, "--parallel", str(self.jobs)])

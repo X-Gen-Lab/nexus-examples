@@ -109,6 +109,16 @@ class ApplicationBuildContracts(unittest.TestCase):
             self.assertEqual({test['name'] for test in
                               json.loads(catalogue.stdout)['tests']},
                              set(EXPECTED_CTEST_NAMES))
+            for test in json.loads(catalogue.stdout)['tests']:
+                properties = {item['name']: item['value']
+                              for item in test.get('properties', [])}
+                if 'GoogleTest' not in properties.get('LABELS', []):
+                    continue
+                with self.subTest(google_program=test['name']):
+                    command = test.get('command', [])
+                    self.assertIn(str(ROOT / 'scripts/run_google.py'), command)
+                    source = command.index('--nexus-source') + 1
+                    self.assertEqual(Path(command[source]).resolve(), sdk_root())
 
 
 if __name__ == '__main__':

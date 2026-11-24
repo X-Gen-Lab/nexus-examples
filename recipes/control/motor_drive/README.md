@@ -1,124 +1,131 @@
-# F407 有感电驱完整消费参考
+# PMSM 电流与轴控制组合
 
-本工程将生成的强类型 PowerStage factory、真实 MotorControl、编码器展开、ADC
-标定、PWM 量化回算和会话退出连成一条 C11 应用路径。它不包含厂商 Handle、私有
-寄存器操作、隐藏 worker 或第二个控制器 owner。
+本配方通过强类型 factory 获取 PowerStage，显式连接实际 Axis、DriveControl、
+CurrentControl、MotorControl 和 ModulationControl。应用拥有参数、参考与反馈存储、
+外环执行和退出；平台 provider 独占选定 PWM、ADC、触发和 IRQ。
 
-默认 `commissioned=false`。主程序完成平台冷态启动和参数校验后，在 PowerStage
-准入之前拒绝激励并关闭平台。现有数字只是软件组合参数，不能代替电流校准、功率板
-审核和初始转子相位。完整已授权路径由明确的主机 fixture 执行；这不授予实物资格。
+默认 `example_motor_drive_reference()` 返回 `commissioned=false`。主程序完成平台
+冷态启动与配置检查后，在 PowerStage 会话准入前拒绝激励。数值示例不是功率板
+标定、相序或电角对齐证明。
 
 ```mermaid
 flowchart LR
-    Task[调用者 Task：准入与退出] --> Session[原始静态会话]
-    Factory[强类型 PowerStage factory] --> Owner[唯一 F4 owner]
-    Session --> Owner
-    Owner --> Raw[顺序 ADC 和编码器观察]
-    Raw --> Bridge[标定、计数与时间事实]
-    Bridge --> Motor[实际有感电流计算]
-    Motor --> Encode[整组 common-mode 与量化]
-    Encode --> Owner
-    Encode --> Track[同周期最终计划电压回算]
-    Track --> Motor
+    A[Task Axis] --> R[有限 dq 参考 SPSC]
+    R --> D[IRQ Drive/Motor]
+    O[PowerStage 捕获] --> C[标定与重构]
+    C --> D
+    E[带时间的角度] --> D
+    D --> M[联合调制/采样规划]
+    M --> P[完整 PWM/触发/周期计划]
+    P --> O
+    D --> F[连续控制反馈 SPSC]
+    F --> A
+    D --> T[独立可丢遥测]
 ```
 
-## 精确软件范围
+## 单一配置与执行者
 
-本地 `assembly.toml` 与 `board/board.json` 选择 STM32F407ZGT6、TIM8 三对互补输出、
-ADC1 的 IN0／1／2／3 四个 injected ranks（前三相电流、第四母线），以及 TIM4
-PD12／PD13 的 16-bit x4 计数。完整硅片路线和资料来源在 Board JSON 中。
+`example_motor_drive_config_t` 保存不变的电机、Axis、调制、标定、角度与期限配置。
+配置位于 IRQ 借用 context 外；Task 和 IRQ 只读它，运行期间不得逐字段修改。
+初始化后的 owner、port、配置关联队列与其存储不得搬移；全部存活到会话结清。
+算法、编码器与 feedback sampler 由 IRQ 独占；Task 只操作自己拥有的 Axis、队列、
+`last_feedback` 和 `axis_output`，不会读取 IRQ 算法状态。
 
-该 Board **没有已审核的物理 PCB**。当前模式是 1 kHz、边沿对齐、四 rank 顺序采集；
-不能描述为中心对齐、同步多 ADC、20 kHz 电流环或真实采样精度验证。顺序转换跨度
-由 provider 声明，并受应用显式的误差预算限制。
+启动先取得 PowerStage 的真实 `clock_epoch`，初始化静态参考／反馈队列，再接纳
+会话。第一个编码器样本只建立观察；真实 Drive 输出建立反馈锚点，完整区间到达
+Task 后才 enable Axis。下一条连续反馈运行外环，发布目标供后续 IRQ 明确采用。
+启动等待有期限，不用合成速度或伪造反馈序号完成预热。
 
-`sample_at` 是计划触发代理，`observed_at` 是完整读完的观察，`angle_at` 是计数读取
-观察，`planned_apply_at` 是下一次计划更新。应用原样传递这些事实，允许角度在
-采样之后但在计算可知时有界回投影；不会把时间字段改写成虚构的硬件锁存时刻。
+`example_motor_drive_accept()` 接纳完整有限 Axis 命令，保留原始 receipt、sequence
+和 valid-until。它在首个连续反馈前返回 BUSY；接纳不是 IRQ 采用或物理运动。
+初始 CURRENT／VELOCITY／POSITION 由配置选择，外部新命令经过同一实际 Axis。
+模式切换遵守 Axis 的 READY 条件。
 
-## 接入与运行
+## 测量、规划和时效
 
-外部应用提供完整 `example_motor_drive_config_t`：
+- 原始 phase mask 与 count 决定独立测量相位，两相时由 CurrentControl 重构第三相。
+  三相和诊断只用于三路独立测量，不能由重构恒等式证明传感一致性。
+- 顺序采样跨度与标定偏斜预算显式保留，不描述为同时采样孔径。
+- 调制使用 provider 的完整载波、duty 范围、alignment 和 capture 槽；生成 pulse
+  start/width、触发、phase mask 和周期序号，随后做一次最终计划电压 tracking。
+- 当前普通消费者选择 phase-shunt 规划，不将单分流计划静默映射到不支持的硬件。
+- 缺少母线来源会拒绝。角度可由选定 provider 的有效编码器观察，或显式配置的
+  `example_rotor_queue_t` 提供；`encoder_valid=false` 不会被解释成零角度。
+- 绝对角度的 Task reader 使用独立 `as5047p_rotor.h` 与
+  `example_as5047p_rotor`。IRQ 只从有界 handoff 取得或复用未过期快照，不执行 SPI。
+- 没有母线 ADC 路线时，可显式提供 `bus.h` 的带来源、epoch 和原始期限的快照。
+  普通 `example_motor_bus` 无 I2C 依赖；可选 `bus_ina226.h` 仅在 Task 执行真实
+  one-shot begin/poll，转换起点是保守来源时间，不是实测孔径。轮询不刷新期限，
+  快照必须覆盖 planned-apply。每个快环使用自己的 SPSC，不能共享消费游标。
 
-- 三相零点、增益、相序、方向与母线比例。
-- 精确编码器 counts-per-turn、安装方向、最大单步位移。
-- 已知初始机械相位与电角偏置，以及其有效参考条件。
-- 电流、母线、调制、scan 跨度、计算周期与角度年龄限制。
-- 显式运行期限、启动预算和 commissioning 授权。
+`last_feedback` 是 Task 从连续队列实际取得的记录。控制反馈与可丢遥测具有不同
+合同；不能用最新遥测重编连续序号。反馈中的参考 generation 对应真实快环采用，
+最终 PWM 的 staged/applied 事实仍属于 provider。
 
-配置中的运行 epoch 不作猜测；首个真实 provider sample 将实际非零 epoch 绑定到
-MotorControl。首个计数观察仅建立参考，输出实际 duty 窗口中心的零线电压计划。
-第二个有界观察建立速度之后才执行完整电流计算；无效跨度、丢期、角度或 epoch
-变化会返回错误并由唯一 owner 抑制输出。
+## 授权与退出
 
-计数先以精确整圈数取模，再转成浮点机械相位，避免长期累计计数转换后丢失细分辨率。
-速度来自原始观察间隔，不把软件采样时间解释成编码器边沿 aperture。
+运动命令期限、快环参考期限、启动预算和会话借用分别维护。Task 每次只发布有限
+参考；过期的原始命令不会被排队刷新。正常停车由 Axis 在本地有限会话内计算；
+Task 失联或快环参考过期由快环拒绝并交由 provider 抑制、撤回。
+普通 RUNNING 参考不超过原命令截止；外环提前保留最大 Task 间隔及一个快周期
+进入真实 STOPPING。只有本地停车参考使用独立有限停车授权。默认快环参考
+期限 4 ms，不意味着已经实测 MCU 最坏执行时间。
 
-数学调制的对称窗口按 provider 可用跨度进一步约束，然后将整组三相共同平移到实际
-非对称 duty 窗口。必要时只作共同矢量缩放，不逐相截断。整组量化后使用同一周期
-输出角重建计划 dq 电压，并调用一次 `nx_motor_track_voltage`。这是计划估计，
-不是相电压实测，也不证明硬件已采用。
+`example_motor_drive_set_limits()` 在 Task 接纳完整有限电流范围，先进入实际 Axis
+计算与抗饱和，再发布参考。新预算截止必须覆盖已发布非 bootstrap 参考的截止
+高水位；不清空活 FIFO。收紧有有界采用延迟，不能作为瞬时硬件能量保护。
+预算到期即使没有新反馈也停止准入，后续参考不能延长原预算。
 
-## 连续观测与有界丢失
+本地编码器位移采用明确有限运行窗口；最坏累计 count 超过保守 f32 精度范围时
+初始化拒绝。电角换相先对每转计数取模，不能以失去多圈精度的绝对浮点位移替代。
 
-`drive.observations` 是借用 context 以外的固定四项 SPSC 通道。唯一 ADC IRQ
-producer 在完成计算后仅复制原始 sample、完整下一组 tick 计划和计算结果；失败记录
-的计划无效并清零。原始 sequence、64-bit epoch 和各时间字段原样保留，计划不是
-硬件采用回执。通道满时丢弃本条观测、累加饱和 drop 计数，控制计算和停机不等待
-观察者。单条记录不是无损控制历史。
+同一 Task 调用 start、accept、step 和 stop。`step` 先观察 provider 故障，再处理
+外环反馈，保留最先发生的实际错误。输出关闭不结束借用；失败保留原 session 和
+context，继续推进退出。只有 acquire 观察 SETTLED，才解除本层借用。
 
-实现复用公共 `nexus/arch/atomic.h` 的 32-bit acquire/release load/store，并在
-编译期要求这些字长始终 lock-free。写完整 slot 后 release 发布 head；Task acquire
-head、复制后完成 sink，再 release tail。计数器按无符号模数回绕，距离始终不超过
-四；drop 到达 `UINT32_MAX` 表示至少该数量。无 heap、锁循环或隐藏线程。
+独立四项遥测通道满时丢新记录并累计 dropped，不影响控制。consumer 的 BUSY
+保留整条记录；跨设备编码由 Task 适配器负责，结构 padding 不是稳定协议。
+重新初始化要求会话结清、遥测排空、双方执行者与外部观察者全部 join。
 
-同一个 Task 调用 `example_motor_observation_drain`，每次最多执行显式 budget
-次 sink；空返回 `EMPTY`，累计 dropped 即使在最终没有新记录时也可取得。sink
-成功必须完整接受一个记录；`BUSY` 或错误保留该条，下一轮重试，不自动丢弃。
-若连接 RTT/UART 的字节接口，Task adapter 自行保存短写偏移，完整写完才返回
-SUCCESS；不得把短写当作完整记录，不得保留临时 record 指针。这是本地 C 类型，
-跨设备传输应由 Task adapter 显式编码字段，不能把结构 padding 当作稳定协议。
+## 精确范围与验证
 
-`main.c` 给出实际固定二进制快照 sink：每次接收完整记录到独立 `s_latest`，并保存
-累计 `s_dropped`；运行期间每轮有限 drain，SETTLED 后再完整排空。默认没有 RTT
-依赖或打印。需要调试传输时可在 Task 组合现有 diagnostics 配方和
-`nx_rtt_log_sink`，IRQ 路径不变；调试链路忙只影响观测丢失。
+本地 `assembly.toml` 仍是 STM32F407ZGT6、TIM8、ADC1 与 TIM4 的 1 kHz 边沿对齐
+软件路线，没有已审核的物理功率 PCB。它不建立 20 kHz、采样精度或真实电机运行资格。
 
-即使通道暂时为空，provider 尚未 SETTLED 时也不能 reset/reinitialize。只有借用
-解除、通道完整 drain，且唯一外部 consumer 已 join，才能重新初始化；初始化会
-检查未借用和空通道，外部 consumer join 仍是调用者责任。
+`motor_drive_google` 执行真实公共组合，覆盖动态 Axis 目标、标定身份、完整计划、
+有限期限、停机失败借用、遥测拥堵与退出。相邻 `dual_motor_drive` 配方用两个独立
+PMSM 模型执行完整电流／速度／位置链；这是软件模型证据。
 
-## 停止、故障与回收
+真实电气、控制稳定性、WCET、死区与保护测试保持 `not_executed`。
 
-同一个 privileged Task 调用 initialize、start、step 和 stop。算法与编码器 context
-在准入后由 IRQ 独占借用；Task 不读取或改写其字段。运行目标期限与启动 deadline
-分开，PowerStage 会话本身保留到明确退出。
+## 显式单分流软件路线
 
-`step` 在固定目标期限之前一个 PWM 周期或 provider 错误时开始撤回，避免正常退出
-碰到最后一个计划作用边界。它不会延长目标授权；Task 迟到仍由内核期限拒绝后续输出。
-失败保留原 session、context 和
-`borrowed` 标志，继续使用同一个对象重试；不能重新初始化消除借用。只有 acquire
-观察 SETTLED 后才消费结果并解除本层借用。已经结清的真实结果不会被后续无意义的
-stop 错误覆盖。外部观察者 join 和 Platform 冷态关闭仍需分别完成。
-
-清理长期失败时，主程序保留静态存储，不在 callback 仍可访问时返回 main。它不选择
-机械制动、抱闸或自动重新使能策略。
-
-## 编译与测试
-
-先准备包含 MotorControl／IOPowerStage 的已验证 SDK，再选择其 ARM 工具链：
+默认入口静态链接 `phase_path.c`，不会引用 bus-shunt planner。配置独立构建目录并
+传 `-DEXAMPLE_MOTOR_CURRENT_PATH=single`，会选择本目录唯一 `single.toml`、
+`single_shunt.c` 和显式 bootstrap 软件参考。未知选择直接报错；不会同时装入两个
+实现相同符号的叶。`example_motor_drive_single` 可由外部应用单独消费。
 
 ```sh
-cmake -S recipes/control/motor_drive -B build/motor-drive -G Ninja \
+cmake -S recipes/control/motor_drive -B build/motor-single -G Ninja \
+  -DNexus_DIR=/path/to/sdk/lib/cmake/Nexus \
   -DCMAKE_TOOLCHAIN_FILE=/path/to/sdk/share/nexus/src/cmake/toolchains/arm-gcc.cmake \
-  -DNexus_DIR=/path/to/sdk/lib/cmake/Nexus
-cmake --build build/motor-drive --parallel 2
+  -DEXAMPLE_MOTOR_CURRENT_PATH=single
+cmake --build build/motor-single --target motor_drive_single_reference
 ```
 
-根 Native 测试入口 `motor_drive_google` 执行实际控制桥、MotorControl 和公共
-PowerStage API，仅替代外部硬件 port。覆盖 commissioning 拒绝、预热、时间事实、
-量化回算、窄窗口、长期相位、失效扫描、停止隔离与重试，以及满通道下真实控制
-仍推进、最终丢失、时间保真、回绕、忙 sink 和结清后排空。fixture 明确提供软件校准，
-不能把这些数字复制到未经核验的电机。
+如显式传入 `NEXUS_ASSEMBLY_FILE`，必须精确匹配所选模式；冲突直接拒绝。
+更细的来源与限制见 [单分流合同](single_shunt.md)。
 
-实板电气、控制稳定性、实际 WCET、死区、break 反应及保护保持 `not_executed`。
+此路线只有 DC-link ADC，必须显式提供合格的母线和转子观察；没有这些来源或
+commissioning 资格时不会准入。初始 bus 电压是产品事先确认的投入配置，不能
+冒充后续真实母线测量。default main 仍为 `commissioned=false`。
+
+单分流需要两个独立 active-vector 窗口。产品必须明确授权有限 bootstrap 的非零
+alpha/beta 电压；只有 bootstrap generation 可使用该显式电压，后续最终平均电压
+仍进入实际 Motor tracking。当前 F4 edge mapper 不移动脉冲、不暗中注入电压；
+正常运行的零电压或扇区退化没有两个窗口时返回 `UNSUPPORTED` 并撤回。
+它不是任意零速、全电压范围的单分流闭环支持。
+
+两个相电流不能当作同时孔径：DC descriptor 保留触发、向量和计划序号，重构保留
+两个触发及转换范围的偏斜上界。descriptor 位于完整借用 context 内，当前 ARM
+ABI 为 12 字节；该全拓扑示例的 owner 存储另含队列与控制对象，不代表整机 RAM。
