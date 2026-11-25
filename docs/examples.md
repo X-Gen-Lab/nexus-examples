@@ -53,7 +53,7 @@ SDK 集成；实物校准、时序、掉电和 HIL 仍为 `not_executed`。
 3. 应用创建任务、启动 scheduler 并推进 service；平台不隐式创建 worker。
 4. 停止时关闭准入，继续取消与排空，acquire 观察最终 SETTLED。
 5. join producer、owner 和观察者，撤回 IRQ/通知等引用后才回收存储。
-6. 只在相应后端允许时停止 Platform；运行中的 FreeRTOS 仍保留内核时钟/Tick。
+6. 只在相应后端允许时停止 Platform；运行中的 FreeRTOS／ThreadX 仍保留内核时钟/Tick。
 
 Applications explicitly own startup, tasks, service progress and shutdown. Factory
 lookup allocates nothing and does not start hardware. Accepted descriptors and
@@ -64,19 +64,28 @@ not release them. Failed withdrawal retains storage and recovery responsibility.
 
 UART 例中每个 producer 持有自己的 request、operation、payload 和通知，owner
 独占 UART start/service/cancel。通知是提示，request predicate 才是完成依据。
-Native 运行真实线程；FreeRTOS 任务由应用启动；裸机使用显式协作推进。
+Native 运行真实线程；FreeRTOS／显式 ThreadX 任务由应用启动；裸机使用显式协作推进。
 
 Each producer retains independent storage. Only the owner services hardware;
 notifications are hints and the settled predicate is authoritative. Native threads,
-FreeRTOS tasks and cooperative baremetal progress are distinct execution owners.
+FreeRTOS/ThreadX tasks and cooperative baremetal progress are distinct execution
+owners. The [UART owner README](../apps/uart_owner_runtime/README.md) provides the
+independent F407 ThreadX build and real Linux-kernel lifecycle test; the nine main
+presets keep their existing scope.
 
-启动只记录已成功创建的资源。Native 线程创建后立即运行，后续失败须先关闭准入，
-在 owner 继续排空时 join 已创建 producer。FreeRTOS scheduler 尝试启动之前，
+启动分别记录成功创建的通知、已运行的 Native 线程，以及每个内核任务启动候选。
+启动返回错误也可能保留任务控制；只有候选撤回成功后才继续销毁通知或平台。
+撤回返回 INVALID 或其他错误都保留责任并进入终止策略，不推断“没有资源”。
+Native 线程创建后立即运行，后续失败须先关闭准入，
+在 owner 继续排空时 join 已创建 producer。FreeRTOS／ThreadX scheduler 尝试启动之前，
 未运行的静态任务可按创建逆序显式 discard；一旦尝试 scheduler 启动，不能再按
 “从未运行”回滚。scheduler 意外返回进入终止策略并保留全部任务和平台状态。
 
-Partial-startup rollback records successful creations. Running Native threads need
-joined drain; unstarted FreeRTOS tasks use the pre-scheduler discard protocol.
+Partial startup records successful notifications, running Native threads and each
+kernel task-start candidate. A failed start can retain control; successful discard
+must precede notification or Platform reclamation. INVALID does not prove absent
+resources and retains the terminal responsibility. Running Native threads need
+joined drain; unstarted kernel tasks use the pre-scheduler discard protocol.
 After scheduler startup is attempted, its return cannot prove rollback is safe.
 The terminal path retains storage and reports the first fault.
 
@@ -151,15 +160,15 @@ Build/create commands and hardware prerequisites are maintained in the linked gu
 ## 五条完整 I/O 使用路径 / Five complete I/O paths
 
 以下复用现有应用目录，不创建另一套 provider、隐式任务或全局实例。先阅读平台的
-[I/O 执行合同](https://github.com/X-Gen-Lab/nexus/blob/7d893faa33705ac3bd0df51804185d01754c4fe9/docs/guides/io-execution.md)，再选择实际模式。
+[固定源码的 I/O 执行合同](../external/nexus/docs/guides/io-execution.md)，再选择实际模式。
 
 | 用例 / Use case | 真实源码与配置 / Source and assembly | 退出责任 / Withdrawal |
 | --- | --- | --- |
-| 同步 GPIO / Synchronous GPIO | `apps/platform_reference/main.c`、九份 `configs/`、五份 starter | 逻辑 signal 显式极性；写入者退出后停止基础设施 |
-| 有限 UART DMA / Finite UART DMA | `apps/platform_reference/finite_uart.c`、`apps/platform_reference/dma.toml` | 单步 service；取消不释放；结清后 finish，BUSY 保留 |
-| 有限 SPI DMA / Finite SPI DMA | `apps/shared_spi_runtime/finite_dma.c`、`finite_dma_main.c`、`dma.toml` | controller/endpoint 独立；TX/RX、CS 和 wire 完成后结清 |
-| 连续 ADC / Continuous ADC | `apps/stream_recovery/adc_acquisition.c` | 完整 scan；归还原 loan，停止 source 并排空 READY/BORROWED |
-| 连续音频 / Continuous audio | `apps/stream_recovery/audio_acquisition.c` | 按实际布局处理完整 frame，独立归还方向存储，完整停止后释放 |
+| 同步 GPIO / Synchronous GPIO | [main.c](../apps/platform_reference/main.c)、[Native TOML](../configs/native.toml)及四板配置 | 逻辑 signal 显式极性；写入者退出后停止基础设施 |
+| 有限 UART DMA / Finite UART DMA | [finite_uart.c](../apps/platform_reference/finite_uart.c)、[配置与命令](../apps/platform_reference/README.md) | 单步 service；取消不释放；结清后 finish，BUSY 保留 |
+| 有限 SPI DMA / Finite SPI DMA | [finite_dma.c](../apps/shared_spi_runtime/finite_dma.c)、[配置与命令](../apps/shared_spi_runtime/README.md) | controller/endpoint 独立；TX/RX、CS 和 wire 完成后结清 |
+| 连续 ADC / Continuous ADC | [adc_acquisition.c](../apps/stream_recovery/adc_acquisition.c)、[完整调用顺序](../apps/stream_recovery/README.md) | 完整 scan；归还原 loan，停止 source 并排空 READY/BORROWED |
+| 连续音频 / Continuous audio | [audio_acquisition.c](../apps/stream_recovery/audio_acquisition.c)、[TX／RX／duplex 调用顺序](../apps/stream_recovery/README.md) | 按实际布局处理完整 frame，独立归还方向存储，完整停止后释放 |
 
 请求预算用 `nx_deadline_finite_after`，拒绝溢出到无限等待。所有应用状态由调用者
 持有；失败 release 保留原 token，QUARANTINED、BUSY、通知与诊断都不授权提前回收。

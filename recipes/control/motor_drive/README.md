@@ -129,3 +129,73 @@ alpha/beta 电压；只有 bootstrap generation 可使用该显式电压，后�
 两个相电流不能当作同时孔径：DC descriptor 保留触发、向量和计划序号，重构保留
 两个触发及转换范围的偏斜上界。descriptor 位于完整借用 context 内，当前 ARM
 ABI 为 12 字节；该全拓扑示例的 owner 存储另含队列与控制对象，不代表整机 RAM。
+
+## Task 遥测与显式 RTT
+
+`observation.c` 在 IRQ 只发布四项有界值快照。`sample.dc` 和 `plan.dc` 不跨 IRQ
+保存；选定 single 库通过公开编译要求 `EXAMPLE_MOTOR_DC_OBSERVATION` 为各槽保留
+独立 DC capture／plan 值。普通 phase 库没有这份扩展存储，两库继续按镜像互斥选择。
+两叶公开不同的 `EXAMPLE_MOTOR_CURRENT_PATH` compatible-interface 值；CMake 在同一
+消费者链接两叶时拒绝生成，不能依靠静态 archive 的同名符号检查布局冲突。
+观察可以按值复制，不能在 Task 解引用原始 callback 或算法 context 的指针。
+
+本轮 ARM ABI 的 phase record 为 152 B、single record 为 192 B：只有 single 的
+四槽 channel 增加 160 B，main 最近快照再增加 40 B。phase 应用状态保持 3072 B；
+single 为 3232 B。可选 telemetry 状态为 160 B，未引用该叶时不进入镜像。完整
+上述对象布局不含栈和 RTT 上游存储；完整资源报告 `bin/*.resources.json` 已包含
+所选镜像的栈预留和实际链接存储，以报告总数为准，不能重复加 MSP。静态布局不是
+栈峰值、MCU WCET 或物理性能测量。
+
+默认 main 仍只保留最近观察，不激励未 commissioning 的功率级。显式配置
+`-DEXAMPLE_MOTOR_RTT=ON` 才链接并初始化 SEGGER RTT 通道 1：512 B uplink、16 B
+downlink，名称与 ring 均为 image-lifetime 静态存储。没有 debugger 时不等待，
+RTT SKIP 拒绝完整帧，观察通道满则丢新记录并累计损失；快环继续遵守自己的合同。
+
+`telemetry.c` 的 Task sink 每次最多调用一次同步 copy port。短写／BUSY／错误保留
+已提交 offset 和原 channel head，重试不重放前缀；整个 frame 被接受后才释放记录。
+port 不得保留 bytes；异步 UART／DMA 必须先由自己的 settled 适配器结束借用。
+RTT adapter 通过既有 `nx_rtt_log_sink` 写入，SUCCESS 才报告整帧长度。诊断背压
+不延长运动参考，不使 Task 或 IRQ 等待输出。
+
+wire version 1 固定为 116 字节，各整数按 little-endian 独立编码，不传输 C struct
+或 padding。它是诊断摘要，不是完整控制命令、机械状态证明或认证协议。
+
+| offset／字节数 | 字段与单位 |
+| --- | --- |
+| 0／4，4／1，5／1，6／2 | `NXMT`、version、flags、总长度 |
+| 8／4，12／4 | 同版本 Nexus result 数值；Task 最近观察到的累计 dropped，饱和值表示至少这么多 |
+| 16／8，24／8 | 采样 sequence、Core clock epoch |
+| 32／8，40／8，48／8 | 计划采样参考、软件观察、计划输出边界，单位 µs；均不是实测物理孔径／采用回执 |
+| 56／4，60／6，66／2 | 原始 encoder count、A／B／C ADC codes、母线 ADC code |
+| 68／12，80／4，84／8 | 计划 A／B／C duty ticks、trigger ticks、plan sequence |
+| 92／4，96／4，100／8，108／2 | scan span µs、两路 DC codes、两次计划采集 ticks、两个开关矢量 |
+| 110／1，111／1，112／4 | 实测相数、phase mask、所选 carrier tick Hz |
+
+flags bit 0 表示计划有效，bit 1／2 分别授权母线／encoder 字段，bit 3 授权 DC
+字段；其他 bit 为零。phase mask 只授权真正测量相；原始 code 仍需产品标定。
+失败记录不编码有效计划；无效可选字段编码零。dropped 在一个 pending frame 中
+冻结，新观察值只进入下一帧。消费、传输接纳、debugger 收到和持久化是不同事实。
+
+## 真实 provider C 的软件集成
+
+`tests/apps/motor_control/provider.cmake` 只在显式
+`EXAMPLE_MOTOR_PROVIDER_MODEL=ON` 时接入源码 checkout 的生产 F407 provider C。
+模型只替换 MMIO、IRQ、CPU 和时间叶，不复制控制算法，不进入 SDK 或 ARM image。
+业务 `control.c` 继续只使用公共接口，测试组合才可以引用 package 私有类型。
+
+```sh
+cmake -S . -B build/motor-provider -G Ninja \
+  -DNEXUS_SOURCE=/path/to/nexus-checkout \
+  -DNEXUS_ASSEMBLY_FILE="$PWD/configs/native.toml" \
+  -DNEXUS_TEST_SUPPORT=ON -DNEXUS_ENABLE_SANITIZERS=OFF \
+  -DEXAMPLE_MOTOR_PROVIDER_MODEL=ON
+cmake --build build/motor-provider --target motor_provider_test
+ctest --test-dir build/motor-provider -R '^motor_provider_google$' \
+  --output-on-failure --no-tests=error
+```
+
+该场景执行六个有限周期：真实 ADC 取数、Current／Motor／Modulation、Axis 参考交接、
+完整 CCR 提交及最终撤回；另验证非法电流和拒绝输出撤回后的 QUARANTINED／重试。
+模型必须产生载波 wrap 的真实 UEV 证据，不能跳过 provider 的相位检查。主动 stop
+结束的 session 结果为 CANCELLED，SETTLED 才归还原借用；这和停止操作本身成功不同。
+该源码开发测试不授予封存 SDK、真实采样孔径、MCU WCET 或实板资格。

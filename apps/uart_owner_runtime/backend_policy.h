@@ -8,15 +8,17 @@
 #include <stdbool.h>
 
 #if (defined(NEXUS_BACKEND_NATIVE) + defined(NEXUS_BACKEND_BAREMETAL) +        \
-     defined(NEXUS_BACKEND_FREERTOS)) != 1
+     defined(NEXUS_BACKEND_FREERTOS) + defined(NEXUS_BACKEND_THREADX)) != 1
 #error "Select exactly one generated OS backend before application policy"
 #endif
 
-/** \brief A live FreeRTOS scheduler retains clocks/Tick until explicit reset.
+/** \brief Kernel startup and terminal policy stay in application assembly.
  */
-#if defined(NEXUS_BACKEND_FREERTOS)
+#if defined(NEXUS_BACKEND_FREERTOS) || defined(NEXUS_BACKEND_THREADX)
+#define EXAMPLE_KERNEL_BACKEND        1
 #define EXAMPLE_KEEP_PLATFORM_RUNNING true
 #else
+#define EXAMPLE_KERNEL_BACKEND        0
 #define EXAMPLE_KEEP_PLATFORM_RUNNING false
 #endif
 #endif /* NEXUS_EXAMPLE_BACKEND_POLICY_H */

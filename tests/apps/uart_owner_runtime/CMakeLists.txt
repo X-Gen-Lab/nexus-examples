@@ -26,7 +26,7 @@ target_link_libraries(
         nexus_owned_warnings
         nexus_build_options
 )
-foreach(backend IN ITEMS native baremetal freertos)
+foreach(backend IN ITEMS native baremetal freertos threadx)
     string(TOUPPER "${backend}" backend_upper)
     add_library(
         example_policy_${backend}

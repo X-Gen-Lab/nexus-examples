@@ -15,19 +15,21 @@ extern "C" {
 typedef enum {
     EXAMPLE_WORKERS_INLINE,
     EXAMPLE_WORKERS_NATIVE_RUNNING,
-    EXAMPLE_WORKERS_FREERTOS_UNSTARTED
+    EXAMPLE_WORKERS_KERNEL_UNSTARTED
 } example_owner_workers_t;
 
 /**
- * \brief           Exact successful startup effects owned by one coordinator
- * \note            Record effects only after successful creation. Notifications
- *                  use creation-order indices. Retain this record, all objects
- *                  and borrowed bytes after any rollback failure. Native
- * workers may already have submitted requests; unstarted FreeRTOS tasks have
- * never executed. scheduler_started marks the scheduler-start attempt, not a
- * proved current kernel state. Once attempted, never use prestart rollback:
- * running tasks use cooperative shutdown; an unexpected scheduler return
- * retains effects through the terminal scheduler_return policy.
+ * \brief           Startup effects and attempted controls owned by a
+ * coordinator \note            Notifications record successful creation-order
+ * indices. Workers include each candidate before its start attempt; failure may
+ * still retain its control and context. Only a successful withdrawal releases
+ * that candidate. Retain this record, all objects and borrowed bytes after any
+ * rollback failure. Native workers may already have submitted requests;
+ * unstarted kernel tasks have never executed. scheduler_started marks the
+ * scheduler-start attempt, not a proved current kernel state. Once attempted,
+ * never use prestart rollback: running tasks use cooperative shutdown; an
+ * unexpected scheduler return retains effects through the terminal
+ * scheduler_return policy.
  */
 typedef struct {
     size_t notifications;
@@ -42,7 +44,7 @@ typedef struct {
 /**
  * \brief           External rollback actions; no implicit task or reset
  * \note            retire_workers joins actual Native threads while the owner
- *                  still drains, or discards never-executed FreeRTOS tasks
+ *                  still drains, or discards never-executed kernel tasks
  * before scheduler startup. It tracks partial progress and does not treat a
  * rejected producer submission as a retained borrow. quiesce_publishers
  * detaches IRQ sinks and stops selected I/O. destroy_notification accepts a

@@ -10,6 +10,48 @@ from sdk_tools import ROOT
 
 
 class ExplicitPlatformEntryTests(unittest.TestCase):
+    def test_motor_observation_layouts_cannot_share_one_consumer(self):
+        with tempfile.TemporaryDirectory(prefix="motor layout consumer ") as value:
+            directory = Path(value)
+            leaf = ROOT / "recipes/control/motor_drive"
+            (directory / "main.c").write_text("int main(void) { return 0; }\n")
+            (directory / "CMakeLists.txt").write_text(
+                'cmake_minimum_required(VERSION 3.31)\n'
+                'project(motor_layout_contract LANGUAGES C)\n'
+                'foreach(name Core Arch DriveControl CurrentControl ModulationControl '
+                'IOPowerStage Algorithms AS5047P INA226)\n'
+                '  add_library(Nexus::${name} INTERFACE IMPORTED)\n'
+                'endforeach()\n'
+                'add_library(nexus_owned_warnings INTERFACE)\n'
+                'add_library(nexus_build_options INTERFACE)\n'
+                'function(nexus_apply_target_policy target)\n'
+                'endfunction()\n'
+                f'include("{leaf.as_posix()}/firmware.cmake")\n'
+                f'include("{leaf.as_posix()}/single_shunt.cmake")\n'
+                'add_executable(consumer main.c)\n'
+                'if(SELECTED STREQUAL "phase")\n'
+                '  target_link_libraries(consumer PRIVATE example_motor_drive)\n'
+                'elseif(SELECTED STREQUAL "single")\n'
+                '  target_link_libraries(consumer PRIVATE example_motor_drive_single)\n'
+                'else()\n'
+                '  target_link_libraries(consumer PRIVATE example_motor_drive '
+                'example_motor_drive_single)\n'
+                'endif()\n')
+            for selected in ("phase", "single", "both"):
+                with self.subTest(selected=selected):
+                    result = subprocess.run([
+                        "cmake", "-S", str(directory), "-B",
+                        str(directory / selected), "-G", "Ninja",
+                        "-DSELECTED=" + selected], capture_output=True,
+                        text=True, timeout=30)
+                    if selected == "both":
+                        self.assertNotEqual(result.returncode, 0,
+                                            result.stdout + result.stderr)
+                        self.assertIn("EXAMPLE_MOTOR_CURRENT_PATH", result.stderr)
+                    else:
+                        self.assertEqual(result.returncode, 0,
+                                         result.stdout + result.stderr)
+
     def test_every_consumer_creates_its_assembly_before_adding_images(self):
         with tempfile.TemporaryDirectory(prefix="example explicit assembly ") as value:
             directory = Path(value)

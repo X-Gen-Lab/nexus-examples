@@ -691,6 +691,27 @@ struct ObservationSink {
     }
 };
 
+TEST(MotorObservation, PublicationNeverRetainsCallbackOrAlgorithmPointers) {
+    example_motor_observations_t channel = {};
+    nx_power_stage_dc_capture_t captured = {{2000, 2100}, {10, 20}, {3, 1}, 7};
+    nx_power_stage_dc_plan_t descriptor = {{30, 40}, {3, 1}};
+    nx_power_stage_sample_t sample = {};
+    nx_power_stage_plan_t plan = {};
+    sample.dc = &captured;
+    plan.dc = &descriptor;
+    example_motor_observation_publish(&channel, &sample, &plan, NX_SUCCESS);
+    captured.code[0] = 0;
+    descriptor.sample_ticks[0] = 0;
+    ObservationSink sink;
+    uint32_t delivered = 0, dropped = 0;
+    ASSERT_EQ(example_motor_observation_drain(&channel, ObservationSink::accept,
+                                              &sink, 1, &delivered, &dropped),
+              NX_SUCCESS);
+    ASSERT_EQ(sink.records.size(), 1U);
+    EXPECT_EQ(sink.records[0].sample.dc, nullptr);
+    EXPECT_EQ(sink.records[0].plan.dc, nullptr);
+}
+
 TEST(MotorObservation, FullChannelNeverOverwritesAndExposesFinalLoss) {
     example_motor_observations_t channel = {};
     nx_power_stage_sample_t sample = {};

@@ -13,6 +13,7 @@
 extern "C" bool example_native_keeps_platform(void);
 extern "C" bool example_baremetal_keeps_platform(void);
 extern "C" bool example_freertos_keeps_platform(void);
+extern "C" bool example_threadx_keeps_platform(void);
 
 namespace {
 using ::testing::InSequence;
@@ -203,9 +204,10 @@ TEST_F(Lifecycle, PlatformStopRejectsCallsBeforeQuiescenceOrInvalidInputs) {
     EXPECT_EQ(example_owner_finish(&phase, false, nullptr, &shutdown),
               NX_ERROR_INVALID);
 }
-TEST(BackendPolicy, OnlyFreeRTOSPreservesPlatformForItsLiveScheduler) {
+TEST(BackendPolicy, LiveKernelSchedulersRetainPlatformInfrastructure) {
     EXPECT_FALSE(example_native_keeps_platform());
     EXPECT_FALSE(example_baremetal_keeps_platform());
     EXPECT_TRUE(example_freertos_keeps_platform());
+    EXPECT_TRUE(example_threadx_keeps_platform());
 }
 } /* namespace */

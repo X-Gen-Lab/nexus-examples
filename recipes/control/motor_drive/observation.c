@@ -29,8 +29,22 @@ void example_motor_observation_publish(
     }
     example_motor_observation_t record = {0};
     record.sample = *sample;
+    record.sample.dc = NULL;
+#if defined(EXAMPLE_MOTOR_DC_OBSERVATION)
+    if (sample->dc != NULL) {
+        record.dc_capture = *sample->dc;
+        record.dc_capture_valid = true;
+    }
+#endif
     if (result == NX_SUCCESS) {
         record.plan = *plan;
+        record.plan.dc = NULL;
+#if defined(EXAMPLE_MOTOR_DC_OBSERVATION)
+        if (plan->dc != NULL) {
+            record.dc_plan = *plan->dc;
+            record.dc_plan_valid = true;
+        }
+#endif
     }
     record.result = result;
     observations->records[head % EXAMPLE_MOTOR_OBSERVATION_DEPTH] = record;
