@@ -14,7 +14,7 @@ nx_result_t example_owner_bootstrap_abort(example_owner_bootstrap_t* effects,
     if (effects == NULL || port.retire_workers == NULL ||
         port.quiesce_publishers == NULL || port.destroy_notification == NULL ||
         port.stop_platform == NULL ||
-        effects->execution > EXAMPLE_WORKERS_FREERTOS_UNSTARTED ||
+        effects->execution > EXAMPLE_WORKERS_KERNEL_UNSTARTED ||
         (effects->owner_initialized && owner == NULL) ||
         (effects->workers != 0U &&
          (!effects->owner_initialized ||

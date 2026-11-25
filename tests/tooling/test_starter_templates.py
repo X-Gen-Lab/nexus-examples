@@ -30,7 +30,9 @@ class StarterTemplateTests(unittest.TestCase):
         settings = tomllib.loads(config.read_text())
         self.assertEqual(settings, {
             'include': ['configs/*.toml', 'templates/*/assembly.toml',
-                        'apps/*/assembly.toml', 'recipes/*/*/assembly.toml'],
+                        'apps/*/assembly.toml',
+                        'apps/uart_owner_runtime/threadx.toml',
+                        'recipes/*/*/assembly.toml'],
             'schema': {'path': schema}})
         with tempfile.TemporaryDirectory(prefix='editor copied product ') as value:
             for name in manifest['templates']:

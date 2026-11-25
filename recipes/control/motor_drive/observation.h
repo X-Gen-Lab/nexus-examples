@@ -10,11 +10,22 @@
 extern "C" {
 #endif
 #define EXAMPLE_MOTOR_OBSERVATION_DEPTH 4U
-/** \brief Source facts and next plan; never a physical application receipt. */
+/** \brief Independent source/plan snapshot, never a physical output receipt.
+ * \note sample.dc and plan.dc are always NULL. Optional DC descriptors are
+ *       copied only by the explicitly selected single-shunt library. Phase
+ *       observations do not reserve DC extension storage. Task consumers never
+ *       retain IRQ-local or borrowed algorithm pointers; value copies are safe.
+ */
 typedef struct {
     nx_power_stage_sample_t sample;
     nx_power_stage_plan_t plan;
     nx_result_t result;
+#if defined(EXAMPLE_MOTOR_DC_OBSERVATION)
+    nx_power_stage_dc_capture_t dc_capture;
+    nx_power_stage_dc_plan_t dc_plan;
+    bool dc_capture_valid;
+    bool dc_plan_valid;
+#endif
 } example_motor_observation_t;
 /** \brief One IRQ producer, one Task consumer; zero before publication.
  * \note Naturally aligned words use public acquire/release atomics. Never

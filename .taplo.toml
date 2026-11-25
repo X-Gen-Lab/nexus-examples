@@ -3,8 +3,9 @@ include = [
     "configs/*.toml",
     "templates/*/assembly.toml",
     "apps/*/assembly.toml",
+    "apps/uart_owner_runtime/threadx.toml",
     "recipes/*/*/assembly.toml",
 ]
 
 [schema]
-path = "https://raw.githubusercontent.com/X-Gen-Lab/nexus/3a60abfb914fe05309cfedf1bf238a174b8eef8b/tools/configure/assembly.schema.json"
+path = "https://raw.githubusercontent.com/X-Gen-Lab/nexus/62ebb9afe93f7f2730544939bb48462ae1e9e372/tools/configure/assembly.schema.json"

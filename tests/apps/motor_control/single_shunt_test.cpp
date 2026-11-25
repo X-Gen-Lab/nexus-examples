@@ -7,10 +7,67 @@
  * \copyright       Copyright (c) 2026 Nexus Team
  */
 #include "current_path.h"
+#include "telemetry.h"
+#include <array>
 #include <cstring>
 #include <gtest/gtest.h>
 
 namespace {
+TEST(SingleShuntObservation,
+     DcDescriptorsAreOwnedValuesAndEncodeWithoutPointers) {
+    struct Sink {
+        example_motor_observation_t record = {};
+        static nx_result_t capture(void* context,
+                                   const example_motor_observation_t* value) {
+            static_cast<Sink*>(context)->record = *value;
+            return NX_SUCCESS;
+        }
+        static nx_result_t write(void* context, const uint8_t* bytes,
+                                 size_t length, size_t* written) {
+            auto* frame = static_cast<
+                std::array<uint8_t, EXAMPLE_MOTOR_TELEMETRY_BYTES>*>(context);
+            if (length != frame->size()) {
+                return NX_ERROR_INVALID;
+            }
+            std::memcpy(frame->data(), bytes, length);
+            *written = length;
+            return NX_SUCCESS;
+        }
+    } sink;
+    example_motor_observations_t channel = {};
+    nx_power_stage_dc_capture_t captured = {{2000, 2100}, {10, 20}, {3, 1}, 7};
+    nx_power_stage_dc_plan_t descriptor = {{30, 40}, {3, 1}};
+    nx_power_stage_sample_t sample = {};
+    nx_power_stage_plan_t plan = {};
+    sample.dc = &captured;
+    plan.dc = &descriptor;
+    example_motor_observation_publish(&channel, &sample, &plan, NX_SUCCESS);
+    captured.code[0] = 0;
+    descriptor.sample_ticks[0] = 0;
+    uint32_t delivered = 0, dropped = 0;
+    ASSERT_EQ(example_motor_observation_drain(&channel, Sink::capture, &sink, 1,
+                                              &delivered, &dropped),
+              NX_SUCCESS);
+    EXPECT_EQ(sink.record.sample.dc, nullptr);
+    EXPECT_EQ(sink.record.plan.dc, nullptr);
+    EXPECT_TRUE(sink.record.dc_capture_valid);
+    EXPECT_TRUE(sink.record.dc_plan_valid);
+    EXPECT_EQ(sink.record.dc_capture.code[0], 2000U);
+    EXPECT_EQ(sink.record.dc_capture.sequence, 7U);
+    EXPECT_EQ(sink.record.dc_plan.sample_ticks[0], 30U);
+    std::array<uint8_t, EXAMPLE_MOTOR_TELEMETRY_BYTES> frame{};
+    example_motor_telemetry_t telemetry = {};
+    ASSERT_EQ(example_motor_telemetry_initialize(&telemetry, Sink::write,
+                                                 &frame, 1000000),
+              NX_SUCCESS);
+    ASSERT_EQ(example_motor_telemetry_sink(&telemetry, &sink.record),
+              NX_SUCCESS);
+    EXPECT_EQ(frame[5], 9U);
+    EXPECT_EQ(frame[96], 0xD0U);
+    EXPECT_EQ(frame[97], 0x07U);
+    EXPECT_EQ(frame[108], 3U);
+}
+
 struct DcPort {
     nx_power_stage_state_t facts{};
     nx_power_stage_session_t* session = nullptr;

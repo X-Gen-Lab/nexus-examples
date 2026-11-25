@@ -34,6 +34,7 @@ include("${PROJECT_SOURCE_DIR}/recipes/control/motor_drive/firmware.cmake")
 add_executable(
     motor_drive_test
     "${CMAKE_CURRENT_LIST_DIR}/motor_drive_test.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/telemetry_test.cpp"
 )
 target_compile_features(motor_drive_test PRIVATE cxx_std_17)
 set_target_properties(motor_drive_test PROPERTIES CXX_EXTENSIONS OFF)
@@ -109,3 +110,4 @@ set_tests_properties(
 )
 include("${CMAKE_CURRENT_LIST_DIR}/cia402_motor.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/single_shunt.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/provider.cmake")

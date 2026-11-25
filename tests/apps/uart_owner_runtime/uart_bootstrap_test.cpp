@@ -10,6 +10,7 @@
 #include "nexus/io/uart.h"
 #include "nexus/os/storage.h"
 #include "nexus_bindings.h"
+#include "nexus_config.h"
 #include "uart_bootstrap.h"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -133,6 +134,7 @@ TEST_F(UartBootstrap,
     EXPECT_EXIT(
         {
             nx_task_t* created = nullptr;
+            nx_task_t* attempted = nullptr;
             nx_notify_t* notifications[4]{};
             size_t index = 0U;
             InSequence order;
@@ -155,7 +157,16 @@ TEST_F(UartBootstrap,
                         return NX_SUCCESS;
                     }));
             EXPECT_CALL(ports, create(_, _, _, 3U))
-                .WillOnce(Return(NX_ERROR_IO));
+                .WillOnce(
+                    Invoke([&](nx_task_t* value, void*, size_t, uint32_t) {
+                        attempted = value;
+                        return NX_ERROR_IO;
+                    }));
+            EXPECT_CALL(ports, discard(_))
+                .WillOnce(Invoke([&](nx_task_t* value) {
+                    EXPECT_EQ(value, attempted);
+                    return NX_SUCCESS;
+                }));
             EXPECT_CALL(ports, discard(_))
                 .WillOnce(Invoke([&](nx_task_t* value) {
                     EXPECT_EQ(value, created);
@@ -181,6 +192,106 @@ TEST_F(UartBootstrap,
         },
         ::testing::ExitedWithCode(0), "");
 }
+
+#if defined(NEXUS_BACKEND_THREADX)
+struct RetainedFailure {
+    size_t failed_index;
+    nx_result_t discard_result;
+};
+
+/** \brief A failed resume can retain the actual candidate control and loan. */
+class RetainedWorkerFailure
+    : public UartBootstrap,
+      public ::testing::WithParamInterface<RetainedFailure> {};
+
+TEST_P(RetainedWorkerFailure, CandidateMustWithdrawBeforeEarlierEffects) {
+    const auto selected = GetParam();
+    EXPECT_EXIT(
+        {
+            nx_task_t* candidates[4]{};
+            nx_notify_t* notifications[4]{};
+            size_t created = 0U;
+            size_t notified = 0U;
+            size_t withdrawing = selected.failed_index + 1U;
+            InSequence order;
+            EXPECT_CALL(ports, platform_start())
+                .WillOnce(Return(
+                    nx_platform_start_result_t{NX_SUCCESS, NX_SUCCESS, 0}));
+            EXPECT_CALL(ports, run());
+            EXPECT_CALL(ports, notify(_))
+                .Times(4)
+                .WillRepeatedly(Invoke([&](nx_notify_t* value) {
+                    notifications[notified++] = value;
+                    return NX_SUCCESS;
+                }));
+            EXPECT_CALL(ports, attach(::testing::NotNull()))
+                .WillOnce(Return(NX_SUCCESS));
+            EXPECT_CALL(ports, create(_, _, _, _))
+                .Times(static_cast<int>(selected.failed_index + 1U))
+                .WillRepeatedly(
+                    Invoke([&](nx_task_t* value, void*, size_t, uint32_t) {
+                        candidates[created] = value;
+                        value->live = true;
+                        return created++ == selected.failed_index ? NX_ERROR_IO
+                                                                  : NX_SUCCESS;
+                    }));
+            EXPECT_CALL(ports, discard(_))
+                .Times(static_cast<int>(selected.discard_result == NX_SUCCESS
+                                            ? selected.failed_index + 1U
+                                            : 1U))
+                .WillRepeatedly(Invoke([&](nx_task_t* value) {
+                    EXPECT_EQ(value, candidates[withdrawing - 1U]);
+                    if (value != candidates[withdrawing - 1U]) {
+                        /* Bound the pre-fix failure without entering its park
+                         * loop after it skipped the failed candidate. */
+                        throw Parked{};
+                    }
+                    EXPECT_TRUE(value->live);
+                    if (selected.discard_result == NX_SUCCESS) {
+                        value->live = false;
+                        --withdrawing;
+                    }
+                    return selected.discard_result;
+                }));
+            if (selected.discard_result == NX_SUCCESS) {
+                EXPECT_CALL(ports, attach(nullptr))
+                    .WillOnce(Return(NX_SUCCESS));
+                EXPECT_CALL(ports, uart_stop()).WillOnce(Return(NX_SUCCESS));
+                EXPECT_CALL(ports, destroy(_))
+                    .Times(4)
+                    .WillRepeatedly(Invoke([&](nx_notify_t* value) {
+                        EXPECT_EQ(value, notifications[--notified]);
+                        return NX_SUCCESS;
+                    }));
+                EXPECT_CALL(ports, platform_stop())
+                    .WillOnce(Return(NX_SUCCESS));
+            }
+            EXPECT_CALL(ports, fault()).WillOnce(Invoke([&] {
+                for (size_t i = 0U; i < created; ++i) {
+                    EXPECT_EQ(candidates[i]->live,
+                              selected.discard_result != NX_SUCCESS);
+                }
+                throw Parked{};
+            }));
+            EXPECT_THROW((void)example_uart_mcu_main(), Parked);
+            _exit(::testing::Mock::VerifyAndClearExpectations(&ports) &&
+                          !::testing::Test::HasFailure()
+                      ? 0
+                      : 90);
+        },
+        ::testing::ExitedWithCode(0), "");
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    ThreadXResumeFailure, RetainedWorkerFailure,
+    ::testing::Values(
+        RetainedFailure{0U, NX_SUCCESS}, RetainedFailure{1U, NX_SUCCESS},
+        RetainedFailure{3U, NX_SUCCESS}, RetainedFailure{0U, NX_ERROR_IO},
+        RetainedFailure{1U, NX_ERROR_IO}, RetainedFailure{3U, NX_ERROR_IO},
+        RetainedFailure{0U, NX_ERROR_INVALID},
+        RetainedFailure{1U, NX_ERROR_INVALID},
+        RetainedFailure{3U, NX_ERROR_INVALID}));
+#endif
 } /* namespace */
 
 extern "C" nx_platform_start_result_t __wrap_nx_platform_start(void) {
@@ -234,6 +345,12 @@ extern "C" void __wrap_nx_fault_observe(nx_fault_domain_t, nx_result_t,
                                         const char*, unsigned) {
     s_ports->fault();
 }
+#if defined(NEXUS_BACKEND_THREADX)
+extern "C" void __wrap_nx_threadx_fail_stop(nx_result_t) {
+    throw Parked{};
+}
+#else
 extern "C" void __wrap_nx_freertos_assert_failed(const char*, unsigned) {
     throw Parked{};
 }
+#endif

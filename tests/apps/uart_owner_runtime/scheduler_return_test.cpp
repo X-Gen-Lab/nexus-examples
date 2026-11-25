@@ -34,7 +34,7 @@ void fail_stop(void* context) {
 TEST(SchedulerReturn, PublishesStageAndFailureBeforeCallingItsTerminalSink) {
     StrictMock<Sink> sink;
     example_owner_bootstrap_t effects = {
-        4, 4, true, true, true, true, EXAMPLE_WORKERS_FREERTOS_UNSTARTED};
+        4, 4, true, true, true, true, EXAMPLE_WORKERS_KERNEL_UNSTARTED};
     uint32_t status = NX_SUCCESS;
     uint32_t stage = 0;
     EXPECT_CALL(sink, fail_stop()).WillOnce(Invoke([&]() {
@@ -58,7 +58,7 @@ TEST(SchedulerReturn,
      DoesNotTreatAnUncertainSchedulerFlagAsNeverExecutedTasks) {
     StrictMock<Sink> sink;
     example_owner_bootstrap_t effects = {
-        3, 2, true, true, true, false, EXAMPLE_WORKERS_FREERTOS_UNSTARTED};
+        3, 2, true, true, true, false, EXAMPLE_WORKERS_KERNEL_UNSTARTED};
     uint32_t status = NX_SUCCESS;
     uint32_t stage = 0;
     EXPECT_CALL(sink, fail_stop()).WillOnce(Invoke([&]() {
@@ -72,7 +72,7 @@ TEST(SchedulerReturn,
     EXPECT_THROW(example_owner_scheduler_returned(&effects, &status, &stage,
                                                   {&sink, fail_stop}),
                  Terminal);
-    EXPECT_EQ(effects.execution, EXAMPLE_WORKERS_FREERTOS_UNSTARTED);
+    EXPECT_EQ(effects.execution, EXAMPLE_WORKERS_KERNEL_UNSTARTED);
     EXPECT_TRUE(effects.scheduler_started);
 }
 } /* namespace */

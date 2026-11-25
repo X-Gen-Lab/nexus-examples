@@ -119,8 +119,8 @@ TEST_F(Bootstrap,
 TEST_F(Bootstrap, FreeRTOSUnstartedTasksUseDiscardActionAndNeverJoin) {
     effects.workers = 3;
     effects.owner_initialized = true;
-    effects.execution = EXAMPLE_WORKERS_FREERTOS_UNSTARTED;
-    EXPECT_CALL(actions, workers(EXAMPLE_WORKERS_FREERTOS_UNSTARTED, 3))
+    effects.execution = EXAMPLE_WORKERS_KERNEL_UNSTARTED;
+    EXPECT_CALL(actions, workers(EXAMPLE_WORKERS_KERNEL_UNSTARTED, 3))
         .WillOnce(Return(NX_SUCCESS));
     EXPECT_EQ(example_owner_bootstrap_abort(&effects, &owner, port),
               NX_SUCCESS);
@@ -130,7 +130,7 @@ TEST_F(Bootstrap, FreeRTOSUnstartedTasksUseDiscardActionAndNeverJoin) {
 TEST_F(Bootstrap, RunningSchedulerRejectsPrestartRollbackWithoutSideEffects) {
     effects.scheduler_started = true;
     effects.owner_initialized = true;
-    effects.execution = EXAMPLE_WORKERS_FREERTOS_UNSTARTED;
+    effects.execution = EXAMPLE_WORKERS_KERNEL_UNSTARTED;
     effects.workers = 3;
     EXPECT_EQ(example_owner_bootstrap_abort(&effects, &owner, port),
               NX_ERROR_CONTEXT);

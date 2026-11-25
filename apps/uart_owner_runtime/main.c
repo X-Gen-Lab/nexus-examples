@@ -19,12 +19,18 @@
 #include "nexus_bindings.h"
 #include "nexus_factory_strong.h"
 #include "scheduler_return.h"
-#if defined(NEXUS_BACKEND_NATIVE)
+#if defined(NEXUS_BACKEND_NATIVE) ||                                           \
+    (defined(NEXUS_OS_HOST_TICK) && NEXUS_OS_HOST_TICK)
 #include "nexus/io/native/model.h"
+#endif
+#if defined(NEXUS_BACKEND_NATIVE)
 #include "nexus/os/storage.h"
 #include <stdio.h>
-#elif defined(NEXUS_BACKEND_FREERTOS)
+#elif EXAMPLE_KERNEL_BACKEND
 #include "nexus/os/storage.h"
+#if defined(NEXUS_BACKEND_THREADX)
+#include "nexus/os/threadx.h"
+#endif
 #else
 #include "nexus/os/baremetal.h"
 #endif
@@ -36,7 +42,7 @@
 typedef nx_notify_t notification_t;
 typedef nx_task_t application_task_t;
 static _Alignas(16) uint8_t s_host_stacks[PRODUCERS + 1U][65536];
-#elif defined(NEXUS_BACKEND_FREERTOS)
+#elif EXAMPLE_KERNEL_BACKEND
 typedef nx_notify_t notification_t;
 typedef nx_task_t application_task_t;
 static _Alignas(8)
@@ -55,10 +61,6 @@ typedef struct {
     nx_wait_port_t completion;
     uint32_t submitted;
     nx_result_t result;
-#if !defined(NEXUS_BACKEND_BAREMETAL)
-    application_task_t task;
-    bool task_started;
-#endif
 } producer_t;
 
 /** \brief The external application supplies every queue slot and OS object. */
@@ -81,16 +83,22 @@ typedef struct {
     example_fault_policy_t fault_policy;
     size_t reclaimed_notifications;
     example_owner_bootstrap_t bootstrap;
-#if !defined(NEXUS_BACKEND_BAREMETAL)
-    application_task_t owner_task;
-    bool owner_started;
-#endif
-#if defined(NEXUS_BACKEND_FREERTOS)
-    application_task_t coordinator_task;
-    bool coordinator_started;
-#endif
 } application_t;
 static application_t s_application;
+#if !defined(NEXUS_BACKEND_BAREMETAL)
+/** \brief Kernel-written controls remain outside every borrowed entry context.
+ */
+static struct {
+    application_task_t owner;
+    application_task_t producer[PRODUCERS];
+    bool owner_retained;
+    bool producer_retained[PRODUCERS];
+#if EXAMPLE_KERNEL_BACKEND
+    application_task_t coordinator;
+    bool coordinator_retained;
+#endif
+} s_execution;
+#endif
 static const uint8_t s_payload[PRODUCERS][8] = {
     {'p', 'r', 'o', 'd', 'u', 'c', 'e', '0'},
     {'p', 'r', 'o', 'd', 'u', 'c', 'e', '1'}};
@@ -226,18 +234,22 @@ static void owner_entry(void* context) {
 /** \brief Keep the execution owner running while observers finish their loans.
  */
 static nx_result_t join_producers(void* context) {
+#if defined(NEXUS_BACKEND_BAREMETAL)
     application_t* app = context;
+#else
+    (void)context;
+#endif
     for (size_t i = 0; i < PRODUCERS; ++i) {
-        producer_t* producer = &app->producer[i];
 #if !defined(NEXUS_BACKEND_BAREMETAL)
-        nx_result_t result =
-            producer->task_started
-                ? nx_task_join_until(&producer->task, NX_DEADLINE_NEVER)
-                : NX_SUCCESS;
+        nx_result_t result = s_execution.producer_retained[i]
+                                 ? nx_task_join_until(&s_execution.producer[i],
+                                                      NX_DEADLINE_NEVER)
+                                 : NX_SUCCESS;
         if (result == NX_SUCCESS) {
-            producer->task_started = false;
+            s_execution.producer_retained[i] = false;
         }
 #else
+        producer_t* producer = &app->producer[i];
         while (producer->result == NX_SUCCESS && !settled(producer)) {
             (void)example_owner_recovery_progress(&app->recovery,
                                                   nx_time_now_us());
@@ -256,11 +268,11 @@ static nx_result_t join_owner(void* context) {
     (void)app->owner_wake.wake(app->owner_wake.context);
 #if !defined(NEXUS_BACKEND_BAREMETAL)
     nx_result_t result =
-        app->owner_started
-            ? nx_task_join_until(&app->owner_task, NX_DEADLINE_NEVER)
+        s_execution.owner_retained
+            ? nx_task_join_until(&s_execution.owner, NX_DEADLINE_NEVER)
             : NX_SUCCESS;
     if (result == NX_SUCCESS) {
-        app->owner_started = false;
+        s_execution.owner_retained = false;
     }
     return result;
 #else
@@ -301,7 +313,8 @@ static nx_result_t reclaim(void* context) {
 
 /** \brief Native holds TX completion to exercise real active cancellation. */
 static nx_result_t configure_model(void) {
-#if defined(NEXUS_BACKEND_NATIVE)
+#if defined(NEXUS_BACKEND_NATIVE) ||                                           \
+    (defined(NEXUS_OS_HOST_TICK) && NEXUS_OS_HOST_TICK)
     static nx_uart_rx_event_t receive[8];
     static uint8_t wire[32];
     const nx_native_uart_config_t config = {
@@ -366,7 +379,7 @@ static nx_result_t initialize(application_t* app) {
     }
     app->irq_wake = (nx_irq_wake_t) {
         &app->owner_wake, irq_hint,
-#if defined(NEXUS_BACKEND_FREERTOS)
+#if EXAMPLE_KERNEL_BACKEND
             true
 #else
             false
@@ -375,6 +388,8 @@ static nx_result_t initialize(application_t* app) {
     return nx_uart_port_attach_wake(console(), &app->irq_wake,
 #if defined(NEXUS_BACKEND_FREERTOS)
                                     configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY
+#elif defined(NEXUS_BACKEND_THREADX)
+                                    NEXUS_IRQ_SYSCALL_PRIORITY
 #else
                                     0U
 #endif
@@ -400,18 +415,19 @@ static nx_result_t retire_startup_workers(void* context,
     }
     nx_result_t result = join_producers(app);
     return result == NX_SUCCESS ? join_owner(app) : result;
-#elif defined(NEXUS_BACKEND_FREERTOS)
-    if (execution != EXAMPLE_WORKERS_FREERTOS_UNSTARTED) {
+#elif EXAMPLE_KERNEL_BACKEND
+    (void)app;
+    if (execution != EXAMPLE_WORKERS_KERNEL_UNSTARTED) {
         return NX_ERROR_CONTEXT;
     }
     /* These tasks have not executed their entries. No request can be borrowed,
      * and scheduler-not-started discard must not wait for entry completion. */
     application_task_t* tasks[PRODUCERS + 2U] = {
-        &app->owner_task, &app->producer[0].task, &app->producer[1].task,
-        &app->coordinator_task};
+        &s_execution.owner, &s_execution.producer[0], &s_execution.producer[1],
+        &s_execution.coordinator};
     bool* live[PRODUCERS + 2U] = {
-        &app->owner_started, &app->producer[0].task_started,
-        &app->producer[1].task_started, &app->coordinator_started};
+        &s_execution.owner_retained, &s_execution.producer_retained[0],
+        &s_execution.producer_retained[1], &s_execution.coordinator_retained};
     for (size_t i = PRODUCERS + 2U; i != 0U; --i) {
         if (*live[i - 1U]) {
             nx_result_t result =
@@ -443,6 +459,10 @@ static nx_result_t destroy_startup_notification(void* context, size_t index) {
     return notification_destroy(notification);
 }
 
+#if EXAMPLE_KERNEL_BACKEND
+static _Noreturn void scheduler_failure_sink(void* context);
+#endif
+
 /** \brief Record a boot failure and roll back only established effects. */
 static int startup_failed(application_t* app, int code) {
     example_owner_bootstrap_port_t port = {
@@ -456,8 +476,12 @@ static int startup_failed(application_t* app, int code) {
         /* A product supplies recovery or reset. Keep callbacks, IRQ sinks,
          * caller stacks and any quarantined bytes alive without claiming stop.
          */
+#if EXAMPLE_KERNEL_BACKEND
+        scheduler_failure_sink(app);
+#else
         for (;;) {
         }
+#endif
     }
     return code;
 }
@@ -485,7 +509,7 @@ static nx_result_t shutdown_application(application_t* app) {
                                 stop_platform, app);
 }
 
-#if defined(NEXUS_BACKEND_FREERTOS)
+#if EXAMPLE_KERNEL_BACKEND
 /** \brief This external task owns the entire product stop policy. */
 static void coordinator_entry(void* context) {
     application_t* app = context;
@@ -500,7 +524,7 @@ static void coordinator_entry(void* context) {
 }
 #endif
 
-#if defined(NEXUS_BACKEND_FREERTOS)
+#if EXAMPLE_KERNEL_BACKEND
 /** \brief Retain all startup effects through a product-owned terminal hook. */
 static _Noreturn void scheduler_failure_sink(void* context) {
     (void)context;
@@ -509,13 +533,17 @@ static _Noreturn void scheduler_failure_sink(void* context) {
      * Only a product reset or proved whole-port teardown may reclaim them.
      */
     (void)nx_arch_irq_save();
+#if defined(NEXUS_BACKEND_FREERTOS)
     nx_freertos_assert_failed(__FILE__, __LINE__);
+#else
+    nx_threadx_fail_stop(NX_ERROR_IO);
+#endif
     for (;;) {
     }
 }
 #endif
 
-#if defined(NEXUS_BACKEND_FREERTOS)
+#if EXAMPLE_KERNEL_BACKEND
 /** \brief A failed void bootstrap rolls back before retaining terminal state.
  */
 static _Noreturn void bootstrap_failed(application_t* app, int code) {
@@ -526,36 +554,39 @@ static _Noreturn void bootstrap_failed(application_t* app, int code) {
 /** \brief Construct all kernel objects after the common cold-entry checks. */
 static void kernel_startup(void* context) {
     application_t* app = context;
-    app->bootstrap.execution = EXAMPLE_WORKERS_FREERTOS_UNSTARTED;
+    app->bootstrap.execution = EXAMPLE_WORKERS_KERNEL_UNSTARTED;
     app->bootstrap.publishers_live = true;
     if (initialize(app) != NX_SUCCESS) {
         bootstrap_failed(app, 1);
     }
-    if (nx_task_start(&app->owner_task, "owner", s_mcu_stacks[0],
+    /* A failed start may retain a resumed control. Record the candidate before
+     * crossing the kernel boundary; only proved discard releases its effects.
+     */
+    s_execution.owner_retained = true;
+    ++app->bootstrap.workers;
+    if (nx_task_start(&s_execution.owner, "owner", s_mcu_stacks[0],
                       sizeof(s_mcu_stacks[0]), 2U, owner_entry,
                       app) != NX_SUCCESS) {
         bootstrap_failed(app, 5);
     }
-    app->owner_started = true;
-    ++app->bootstrap.workers;
     for (size_t i = 0U; i < PRODUCERS; ++i) {
-        if (nx_task_start(&app->producer[i].task, "producer",
+        s_execution.producer_retained[i] = true;
+        ++app->bootstrap.workers;
+        if (nx_task_start(&s_execution.producer[i], "producer",
                           s_mcu_stacks[i + 1U], sizeof(s_mcu_stacks[i + 1U]),
                           3U, producer_entry,
                           &app->producer[i]) != NX_SUCCESS) {
             bootstrap_failed(app, 6);
         }
-        app->producer[i].task_started = true;
-        ++app->bootstrap.workers;
     }
-    if (nx_task_start(&app->coordinator_task, "stop",
+    s_execution.coordinator_retained = true;
+    ++app->bootstrap.workers;
+    if (nx_task_start(&s_execution.coordinator, "stop",
                       s_mcu_stacks[PRODUCERS + 1U],
                       sizeof(s_mcu_stacks[PRODUCERS + 1U]), 1U,
                       coordinator_entry, app) != NX_SUCCESS) {
         bootstrap_failed(app, 7);
     }
-    app->coordinator_started = true;
-    ++app->bootstrap.workers;
     app->bootstrap.scheduler_started = true;
 }
 #endif
@@ -588,7 +619,7 @@ int main(void) {
         startup.remaining_effects != 0U) {
         return startup_failed(&s_application, 1);
     }
-#if !defined(NEXUS_BACKEND_FREERTOS)
+#if !EXAMPLE_KERNEL_BACKEND
     s_application.bootstrap.publishers_live = true;
     if (initialize(&s_application) != NX_SUCCESS) {
         return startup_failed(&s_application, 1);
@@ -596,21 +627,21 @@ int main(void) {
 #endif
 #if defined(NEXUS_BACKEND_NATIVE)
     s_application.bootstrap.execution = EXAMPLE_WORKERS_NATIVE_RUNNING;
-    if (nx_task_start(&s_application.owner_task, "application",
-                      s_host_stacks[0], sizeof(s_host_stacks[0]), 0U,
-                      owner_entry, &s_application) != NX_SUCCESS) {
+    if (nx_task_start(&s_execution.owner, "application", s_host_stacks[0],
+                      sizeof(s_host_stacks[0]), 0U, owner_entry,
+                      &s_application) != NX_SUCCESS) {
         return startup_failed(&s_application, 2);
     }
-    s_application.owner_started = true;
+    s_execution.owner_retained = true;
     ++s_application.bootstrap.workers;
     for (size_t i = 0; i < PRODUCERS; ++i) {
-        if (nx_task_start(&s_application.producer[i].task, "application",
+        if (nx_task_start(&s_execution.producer[i], "application",
                           s_host_stacks[i + 1U], sizeof(s_host_stacks[i + 1U]),
                           0U, producer_entry,
                           &s_application.producer[i]) != NX_SUCCESS) {
             return startup_failed(&s_application, 3);
         }
-        s_application.producer[i].task_started = true;
+        s_execution.producer_retained[i] = true;
         ++s_application.bootstrap.workers;
     }
     nx_time_us_t deadline = nx_deadline_after(nx_time_now_us(), 1000000U);
@@ -631,7 +662,7 @@ int main(void) {
     }
     puts("UARTOwner: two producers, active cancel/drain, joined publishers");
     return 0;
-#elif defined(NEXUS_BACKEND_FREERTOS)
+#elif EXAMPLE_KERNEL_BACKEND
     (void)nx_os_run(kernel_startup, &s_application);
     example_owner_scheduler_returned(
         &s_application.bootstrap, &s_application.status,
