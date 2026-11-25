@@ -26,6 +26,7 @@
 /* Narrow host-only fault seams delegate every ordinary call to the real API. */
 static std::atomic<bool> inject_cold_failure{false};
 static std::atomic<bool> inject_join_failure{false};
+static std::atomic<nx_time_us_t> injected_join_deadline{NX_DEADLINE_NEVER};
 static std::atomic<size_t> settings_closes{0U};
 static std::atomic<bool> inspect_owner_progress{false};
 static std::atomic<bool> force_owner_busy{false};
@@ -68,9 +69,11 @@ extern "C" nx_result_t __wrap_nx_task_join_until(nx_task_t* task,
         nx_native_spi_model_fault(nx_factory_spi_ref(NX_SPI_REF_SPI0), SIZE_MAX,
                                   false);
     }
-    return result == NX_SUCCESS && inject_join_failure.exchange(false)
-               ? NX_ERROR_IO
-               : result;
+    if (result == NX_SUCCESS && inject_join_failure.exchange(false)) {
+        injected_join_deadline.store(deadline);
+        return NX_ERROR_TIMEOUT;
+    }
+    return result;
 }
 extern "C" nx_result_t __real_nx_bus_owner_service(nx_bus_owner_t* owner);
 extern "C" nx_result_t __wrap_nx_bus_owner_service(nx_bus_owner_t* owner) {
@@ -665,19 +668,29 @@ TEST_F(IndustrialPersistence,
 }
 
 TEST_F(IndustrialPersistence,
-       UnconfirmedJoinRetainsIoButReleasesSettingsMetadata) {
+       BoundedJoinTimeoutRetainsIoButReleasesSettingsMetadata) {
     ASSERT_EXIT(
         {
             settings_closes.store(0U);
             inject_join_failure.store(true);
+            const auto before = nx_os_now_us();
             example_industrial_report_t report{};
             const auto result =
                 example_industrial_run(&storage, &config, &report);
-            std::_Exit(result == NX_ERROR_IO && report.storage_retained &&
-                               !report.platform_stopped &&
-                               settings_closes.load() == 1U
-                           ? 0
-                           : 1);
+            const auto deadline = injected_join_deadline.load();
+            EXPECT_GE(deadline, before + config.shutdown_budget_us);
+            EXPECT_LE(deadline, nx_os_now_us() + config.shutdown_budget_us);
+            EXPECT_EQ(result, NX_ERROR_TIMEOUT);
+            EXPECT_TRUE(report.storage_retained);
+            EXPECT_FALSE(report.joined);
+            EXPECT_FALSE(report.committed_in_maintenance);
+            EXPECT_FALSE(report.platform_stopped);
+            EXPECT_EQ(settings_closes.load(), 1U);
+            example_industrial_report_t retry{};
+            EXPECT_EQ(example_industrial_run(&storage, &config, &retry),
+                      NX_ERROR_STATE);
+            EXPECT_TRUE(retry.storage_retained);
+            std::_Exit(testing::Test::HasFailure() ? 1 : 0);
         },
         testing::ExitedWithCode(0), "");
 }

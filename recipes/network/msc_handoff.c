@@ -41,6 +41,7 @@ nx_result_t example_msc_request_usb(example_msc_handoff_t* h,
     nx_result_t result = NX_SUCCESS;
     if (h->owner == EXAMPLE_MEDIA_LOCAL ||
         h->owner == EXAMPLE_MEDIA_LOCAL_CLEANUP) {
+        h->owner = EXAMPLE_MEDIA_LOCAL_CLEANUP;
         result = h->ports.local_unmount(h->ports.context, deadline);
         if (result == NX_SUCCESS) {
             h->owner = EXAMPLE_MEDIA_NONE;
@@ -77,6 +78,7 @@ nx_result_t example_msc_request_local(example_msc_handoff_t* h,
     nx_result_t result = NX_SUCCESS;
     if (h->owner == EXAMPLE_MEDIA_USB ||
         h->owner == EXAMPLE_MEDIA_USB_CLEANUP) {
+        h->owner = EXAMPLE_MEDIA_USB_CLEANUP;
         result = h->ports.usb_stop(h->ports.context, deadline);
     } else if (h->owner == EXAMPLE_MEDIA_LOCAL_CLEANUP) {
         result = h->ports.local_unmount(h->ports.context, deadline);

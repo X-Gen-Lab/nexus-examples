@@ -75,13 +75,29 @@ Settings、已附着的托管网络适配器，以及冷态 DHCP、DNS、UDP 对
 ## 接入和验证边界
 
 `application.cmake` 可被源码工程及 Source SDK 消费工程共同 include；
-同一套 C 源码适用于已提供相同公共接口的目标。具体 Board 必须分别批准
-显示、触摸、网络、时钟及存储区域，不能把独立 recipe 的 pin 表简单合并。
-本例没有推断未审核的以太网、音频、摄像头接线，也不声明 FreeRTOS STOP
-桥接或板上 AV 已验证。LVGL、WM8978、OV2640 是其他可选组件，不进入此
-默认小缓冲组合。
+同一套 C 源码适用于提供所选公共接口的目标。整机内存预算按所选镜像核对。
+
+| 数据 | 当前参考的预算依据 |
+| --- | --- |
+| 显示与 UDP | 两行 RGB565 tile 共 960 B，加 16 B 常驻 RX。每次发送暂用 16 B 栈缓冲，由 UDP 复制 |
+| Settings／Storage | 单个 12 B value，另计 Settings image、Storage workspace、对齐和实际保留 Flash 区域 |
+| lwIP | 当前默认复制配置声明 16 KiB lwIP heap 和 24 个 512 B payload 的 pbuf pool。另计对齐、元数据、其他池和 MAC buffers |
+| 其余 SRAM | 按 `*_storage.h` 查询记录网络对象大小，并计入应用、显示、触摸、时钟与任务栈。整机以链接 map 和资源报告为准 |
+
+Qiming Core 与 V4.1 的软件 Board 均声明 ILI9341 FSMC NE4 及 XPT2046 GPIO
+触摸路线，需要明确选择相应模块。Core 没有本组合的网络路径。V4.1 的 P5
+有 Ethernet 选项，但尚未准入 Ethernet binding。接线审查需确认 DP83848
+时钟、PHY 地址和模式、MDIO 连通及 RX_DV／CRS_DV 兼容性。随后对同一 Board
+核对显示、触摸、时钟、网络与独占 Settings Flash 区域，并验证实际链路与掉电。
+LVGL、WM8978、OV2640 及 FreeRTOS STOP 桥接须另有产品需求和对应验收记录。
 
 `tests/apps/connected_terminal` 使用真实应用 C、UI/路由 helper 和
 Settings/Storage；在公开显示、触摸、lwIP 边界注入返回值，Flash 使用 RAM
 介质模型。它证明组合与失败退出规则，不能证明真实网络报文、电气、显示
 时序或掉电行为。物理 HIL 为 `not_executed`。
+
+```sh
+cmake --build build/native-debug --target connected_terminal_test
+ctest --test-dir build/native-debug -R '^connected_terminal_google$' \
+  --output-on-failure --no-tests=error
+```

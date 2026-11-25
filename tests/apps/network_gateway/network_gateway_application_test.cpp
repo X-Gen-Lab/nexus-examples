@@ -366,6 +366,58 @@ TEST_F(GatewayApplication, StopBeforeAdmissionNeverTouchesNetworkOrCrypto) {
     EXPECT_TRUE(report.local_sessions_released);
 }
 
+TEST_F(GatewayApplication, InvalidRoutePreventsProtocolAdmission) {
+    config.route_check = [](void*, nx_time_us_t) -> nx_result_t {
+        return NX_ERROR_IO;
+    };
+    EXPECT_CALL(mock, TcpStart(_, _, _)).Times(0);
+    EXPECT_CALL(mock, TlsInit(_, _, _)).Times(0);
+    EXPECT_EQ(example_gateway_run(&application, &config, &report), NX_ERROR_IO);
+    EXPECT_EQ(report.attempts, 0U);
+    EXPECT_TRUE(report.local_sessions_released);
+}
+
+TEST_F(GatewayApplication, RouteLossAfterTcpProgressAbortsBeforeTls) {
+    bool valid = true;
+    config.route_context = &valid;
+    config.route_check = [](void* context, nx_time_us_t) -> nx_result_t {
+        return *static_cast<bool*>(context) ? NX_SUCCESS : NX_ERROR_IO;
+    };
+    EXPECT_CALL(mock, TcpService(_)).WillOnce(Invoke([&](nx_lwip_tcp_t*) {
+        valid = false;
+        return NX_SUCCESS;
+    }));
+    EXPECT_CALL(mock, TlsInit(_, _, _)).Times(0);
+    EXPECT_CALL(mock, TcpAbort(_)).Times(1);
+    EXPECT_EQ(example_gateway_run(&application, &config, &report), NX_ERROR_IO);
+    EXPECT_TRUE(report.local_sessions_released);
+}
+
+TEST_F(GatewayApplication, GracefulRouteFailureSurvivesBusyAbortAndRetry) {
+    config.route_context = &broker;
+    config.route_check = [](void* context, nx_time_us_t) -> nx_result_t {
+        return static_cast<BrokerBytes*>(context)->disconnected ? NX_ERROR_IO
+                                                                : NX_SUCCESS;
+    };
+    EXPECT_CALL(mock, TlsAbort(_))
+        .WillOnce(Return(NX_ERROR_BUSY))
+        .WillOnce(Return(NX_SUCCESS));
+    EXPECT_CALL(mock, TcpAbort(_)).Times(1);
+    EXPECT_EQ(example_gateway_run(&application, &config, &report),
+              NX_ERROR_BUSY);
+    EXPECT_EQ(report.primary, NX_SUCCESS);
+    EXPECT_TRUE(report.delivered);
+    EXPECT_EQ(report.cleanup, NX_ERROR_BUSY);
+    EXPECT_EQ(report.graceful_failure, NX_ERROR_IO);
+    EXPECT_FALSE(report.local_sessions_released);
+    EXPECT_EQ(
+        example_gateway_cleanup(&application, mqtt_clock + 1000U, &report),
+        NX_SUCCESS);
+    EXPECT_EQ(report.cleanup, NX_SUCCESS);
+    EXPECT_EQ(report.graceful_failure, NX_ERROR_IO);
+    EXPECT_TRUE(report.local_sessions_released);
+}
+
 TEST_F(GatewayApplication, BusyUpperCleanupRetainsEveryLowerTransport) {
     broker.refusal = 5U;
     config.policy.attempts_limit = 1U;

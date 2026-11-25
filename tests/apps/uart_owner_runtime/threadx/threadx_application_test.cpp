@@ -26,6 +26,7 @@ extern "C" nx_result_t __real_nx_uart_port_attach_wake(const nx_uart_port_t*,
                                                        const nx_irq_wake_t*,
                                                        uint8_t);
 extern "C" nx_result_t __real_nx_uart_port_stop(const nx_uart_port_t*);
+extern "C" void __real_nx_uart_port_service(const nx_uart_port_t*);
 
 namespace {
 TX_THREAD observer{};
@@ -36,20 +37,24 @@ std::atomic<size_t> joined;
 std::atomic<size_t> notifications_destroyed;
 std::atomic<size_t> platform_stops;
 std::atomic<bool> early_reclamation;
-std::atomic<bool> publisher_detached;
+std::atomic<size_t> publisher_detachments;
+std::atomic<size_t> uart_stop_attempts;
+std::atomic<bool> serviced_after_busy_stop;
 std::atomic<bool> uart_stopped;
 bool completed;
 void (*application_startup)(void*);
 void* application_context;
 
-TEST(UartOwnerThreadX, ActualWorkersAreJoinedBeforeNotificationsAreReclaimed) {
-    ASSERT_TRUE(completed);
+TEST(UartOwnerThreadX, BusyUartStopRetriesBeforeNotificationReclamation) {
+    EXPECT_TRUE(completed);
     ASSERT_EQ(task_count, 4U);
     EXPECT_EQ(joined, 3U);
     EXPECT_EQ(notifications_destroyed, 4U);
     EXPECT_EQ(platform_stops, 0U);
     EXPECT_FALSE(early_reclamation);
-    EXPECT_TRUE(publisher_detached);
+    EXPECT_EQ(publisher_detachments, 1U);
+    EXPECT_EQ(uart_stop_attempts, 2U);
+    EXPECT_TRUE(serviced_after_busy_stop);
     EXPECT_TRUE(uart_stopped);
     for (size_t i = 0U; i < 3U; ++i) {
         EXPECT_FALSE(tasks[i]->live);
@@ -113,7 +118,7 @@ extern "C" nx_result_t __wrap_nx_task_join_until(nx_task_t* task,
 }
 
 extern "C" nx_result_t __wrap_nx_notify_destroy(nx_notify_t* notification) {
-    if (joined != 3U || !publisher_detached || !uart_stopped) {
+    if (joined != 3U || publisher_detachments != 1U || !uart_stopped) {
         early_reclamation = true;
     }
     const auto result = __real_nx_notify_destroy(notification);
@@ -128,17 +133,31 @@ __wrap_nx_uart_port_attach_wake(const nx_uart_port_t* port,
                                 const nx_irq_wake_t* wake, uint8_t priority) {
     const auto result = __real_nx_uart_port_attach_wake(port, wake, priority);
     if (result == NX_SUCCESS && wake == nullptr) {
-        publisher_detached = true;
+        ++publisher_detachments;
     }
     return result;
 }
 
 extern "C" nx_result_t __wrap_nx_uart_port_stop(const nx_uart_port_t* port) {
+    if (joined != 3U || publisher_detachments != 1U ||
+        notifications_destroyed != 0U) {
+        early_reclamation = true;
+    }
+    if (++uart_stop_attempts == 1U) {
+        return NX_ERROR_BUSY;
+    }
     const auto result = __real_nx_uart_port_stop(port);
     if (result == NX_SUCCESS) {
         uart_stopped = true;
     }
     return result;
+}
+
+extern "C" void __wrap_nx_uart_port_service(const nx_uart_port_t* port) {
+    if (uart_stop_attempts == 1U && notifications_destroyed == 0U) {
+        serviced_after_busy_stop = true;
+    }
+    __real_nx_uart_port_service(port);
 }
 
 extern "C" nx_result_t __wrap_nx_platform_stop(void) {

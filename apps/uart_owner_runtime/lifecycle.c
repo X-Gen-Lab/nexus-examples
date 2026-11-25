@@ -56,6 +56,7 @@ nx_result_t example_owner_shutdown(example_owner_phase_t* phase,
 
 nx_result_t example_owner_finish(example_owner_phase_t* phase,
                                  bool scheduler_running,
+                                 nx_result_t request_outcome,
                                  nx_result_t (*platform_stop)(void*),
                                  void* context) {
     if (phase == NULL || platform_stop == NULL ||
@@ -66,11 +67,12 @@ nx_result_t example_owner_finish(example_owner_phase_t* phase,
         return NX_ERROR_STATE;
     }
     if (scheduler_running || *phase == EXAMPLE_OWNER_PLATFORM_STOPPED) {
-        return NX_SUCCESS;
+        return request_outcome;
     }
-    nx_result_t result = platform_stop(context);
-    if (result == NX_SUCCESS) {
-        *phase = EXAMPLE_OWNER_PLATFORM_STOPPED;
+    const nx_result_t result = platform_stop(context);
+    if (result != NX_SUCCESS) {
+        return result;
     }
-    return result;
+    *phase = EXAMPLE_OWNER_PLATFORM_STOPPED;
+    return request_outcome;
 }

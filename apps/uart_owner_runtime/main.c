@@ -35,8 +35,10 @@
 #include "nexus/os/baremetal.h"
 #endif
 
-#define PRODUCERS        2U
-#define TASK_STACK_WORDS 256U
+#define PRODUCERS               2U
+#define TASK_STACK_WORDS        256U
+#define UART_STOP_SERVICE_LIMIT 100U
+#define UART_STOP_BUDGET_US     100000U
 
 #if defined(NEXUS_BACKEND_NATIVE)
 typedef nx_notify_t notification_t;
@@ -75,6 +77,7 @@ typedef struct {
     nx_wait_port_t owner_wake;
     nx_wait_port_t coordinator_wake;
     nx_irq_wake_t irq_wake;
+    bool irq_wake_detached;
     producer_t producer[PRODUCERS];
     example_owner_phase_t phase;
     uint32_t owner_stop;
@@ -285,12 +288,36 @@ static nx_result_t join_owner(void* context) {
 
 /** \brief Hardware stop/detachment precede destruction of borrowed IRQ sink. */
 static nx_result_t quiesce_publishers(void* context) {
-    (void)context;
-    nx_result_t result = nx_uart_port_attach_wake(console(), NULL, 0U);
-    if (result != NX_SUCCESS) {
+    application_t* app = context;
+    const nx_uart_port_t* port = console();
+    if (!app->irq_wake_detached) {
+        nx_result_t result = nx_uart_port_attach_wake(port, NULL, 0U);
+        if (result != NX_SUCCESS) {
+            return result;
+        }
+        app->irq_wake_detached = true;
+    }
+    nx_result_t result = nx_uart_port_stop(port);
+    if (result != NX_ERROR_BUSY) {
         return result;
     }
-    return nx_uart_port_stop(console());
+    /* The coordinator now owns progress while the SDK retains an incomplete
+     * stop. Keep notification storage live until actual withdrawal succeeds. */
+    nx_time_us_t deadline;
+    if (nx_deadline_finite_after(nx_time_now_us(), UART_STOP_BUDGET_US,
+                                 &deadline) != NX_SUCCESS) {
+        return result;
+    }
+    for (size_t step = 0U;
+         step < UART_STOP_SERVICE_LIMIT && nx_time_now_us() < deadline;
+         ++step) {
+        nx_uart_port_service(port);
+        result = nx_uart_port_stop(port);
+        if (result != NX_ERROR_BUSY) {
+            break;
+        }
+    }
+    return result;
 }
 
 /** \brief Destroy only after publisher, owner and producer quiescence. */
@@ -495,6 +522,7 @@ static nx_result_t shutdown_application(application_t* app) {
     if (result != NX_SUCCESS) {
         return result;
     }
+    nx_result_t request_outcome = NX_SUCCESS;
     for (size_t i = 0; i < PRODUCERS; ++i) {
         nx_result_t operation_result;
         size_t transferred;
@@ -502,11 +530,11 @@ static nx_result_t shutdown_application(application_t* app) {
                                    &transferred);
         if (result != NX_SUCCESS || (operation_result != NX_SUCCESS &&
                                      operation_result != NX_ERROR_CANCELLED)) {
-            return NX_ERROR_IO;
+            request_outcome = NX_ERROR_IO;
         }
     }
     return example_owner_finish(&app->phase, EXAMPLE_KEEP_PLATFORM_RUNNING,
-                                stop_platform, app);
+                                request_outcome, stop_platform, app);
 }
 
 #if EXAMPLE_KERNEL_BACKEND
@@ -654,6 +682,9 @@ int main(void) {
     nx_result_t result = shutdown_application(&s_application);
     if (result != NX_SUCCESS) {
         nx_atomic_u32_store_release(&s_application.status, (uint32_t)result);
+        if (s_application.phase == EXAMPLE_OWNER_PLATFORM_STOPPED) {
+            return 9;
+        }
         /* Normal shutdown has its own completed milestones. A failed drain
          * cannot reuse the startup record to destroy already reclaimed objects.
          */

@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "62ebb9afe93f7f2730544939bb48462ae1e9e372",
-  "tree": "86ebe9d45af47b3a071f6ef4fd5045913b06d722",
+  "commit": "cf4350a92fef7fc33e7731b0ebf40e7baa6334a5",
+  "tree": "82192a6996e2a3ca1015f021d05c212f8021881d",
   "consumption": "source-find_package",
   "recursive_submodules": true,
-  "baseline_status": "Selected STM32F4 C11 platform with exact GPIO bank admission, static typed interfaces and optional OS/components. F407/F479 same-source GPIO and selected F407 FOC software references are maintained; execution and SDK qualification remain bound to their actual inputs, and physical HIL is not executed.",
+  "baseline_status": "Selected STM32F4 C11 platform with declarative static assembly, exact installed SDK evidence, image-bound fault diagnostics and bounded FreeRTOS STOP rejection recovery. Physical HIL is not executed.",
   "public_api": "find_package(Nexus) / nexus_add_platform / nexus_add_firmware / generated readonly typed factory faces / explicit OS and common component targets"
 }

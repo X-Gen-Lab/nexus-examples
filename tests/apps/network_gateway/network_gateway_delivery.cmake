@@ -8,7 +8,9 @@ add_executable(
     network_gateway_delivery_test
     "${CMAKE_CURRENT_LIST_DIR}/network_gateway_delivery_test.cpp"
     "${PROJECT_SOURCE_DIR}/apps/network_gateway/gateway_delivery.c"
+    "${PROJECT_SOURCE_DIR}/apps/network_gateway/gateway_managed.c"
     "${PROJECT_SOURCE_DIR}/recipes/network/delivery_reference.c"
+    "${PROJECT_SOURCE_DIR}/recipes/network/route_reference.c"
 )
 target_include_directories(
     network_gateway_delivery_test
@@ -26,7 +28,9 @@ target_link_libraries(
     PRIVATE
         Nexus::FlashDB
         Nexus::Algorithms
-        Nexus::LwIPTCP
+        Nexus::LwIPManagedTCP
+        Nexus::LwIPManagedServices
+        Nexus::WallClock
         Nexus::TLS
         Nexus::CoreMQTT
         GTest::gmock_main

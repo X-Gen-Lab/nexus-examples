@@ -20,6 +20,7 @@ struct CanWire {
     std::vector<nx_can_frame_t> transmitted;
     nx_can_tx_request_t* pending = nullptr;
     bool drain = true;
+    bool bus_off = false;
     static nx_time_us_t clock(void* context) {
         return static_cast<CanWire*>(context)->now;
     }
@@ -64,9 +65,10 @@ struct CanWire {
         }
         return NX_SUCCESS;
     }
-    static nx_result_t state(void*, nx_can_state_t* out) {
+    static nx_result_t state(void* context, nx_can_state_t* out) {
         *out = {};
         out->started = true;
+        out->bus_off = static_cast<const CanWire*>(context)->bus_off;
         return NX_SUCCESS;
     }
     const nx_can_ops_t operations = {submit, cancel,  service, read,
@@ -503,6 +505,38 @@ TEST_F(CiaMotor, PositionHardwareFaultDoesNotWaitForAnotherMotionSample) {
     stage.facts.running = false;
     EXPECT_EQ(step(false), NX_SUCCESS);
     EXPECT_EQ(position.core.state, NX_CIA402_FAULT);
+    EXPECT_FALSE(motor.borrowed);
+}
+TEST_F(CiaMotor, BusOffWithdrawsVelocityAndKeepsTheOriginalFault) {
+    initialize();
+    ASSERT_EQ(bind(), NX_SUCCESS);
+    enable();
+    const auto starts = stage.starts;
+    const auto samples = stage.cycles;
+    wire.bus_off = true;
+    EXPECT_EQ(step(false), NX_ERROR_IO);
+    EXPECT_EQ(velocity.core.state, NX_CIA402_FAULT);
+    EXPECT_FALSE(adapter.receive_operational);
+    EXPECT_FALSE(motor.borrowed);
+    wire.bus_off = false;
+    EXPECT_EQ(step(false), NX_ERROR_STATE);
+    EXPECT_EQ(adapter.fault, NX_ERROR_IO);
+    EXPECT_EQ(stage.starts, starts);
+    EXPECT_EQ(stage.cycles, samples);
+}
+TEST_F(CiaMotor, BusOffClearsPositionAcknowledgementWithoutAnotherSample) {
+    initialize(true);
+    ASSERT_EQ(bind(), NX_SUCCESS);
+    enable();
+    target(0x003f, 1000);
+    ASSERT_EQ(step(), NX_SUCCESS);
+    for (unsigned cycle = 0; cycle != 4; ++cycle)
+        ASSERT_EQ(step(), NX_SUCCESS);
+    ASSERT_NE(position.core.statusword & 0x1000U, 0U);
+    wire.bus_off = true;
+    EXPECT_EQ(step(false), NX_ERROR_IO);
+    EXPECT_EQ(position.core.state, NX_CIA402_FAULT);
+    EXPECT_EQ(position.core.statusword & 0x1400U, 0U);
     EXPECT_FALSE(motor.borrowed);
 }
 TEST_F(CiaMotor, PreoperationalIgnoredPdoCannotBeRevivedBySdoStaging) {

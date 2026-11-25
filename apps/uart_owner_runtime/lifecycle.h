@@ -62,17 +62,21 @@ nx_result_t example_owner_shutdown(example_owner_phase_t* phase,
  * \brief           Apply explicit product policy after complete I/O quiescence
  * \param[in,out]   phase: Single coordinator milestone, at least RECLAIMABLE
  * \param[in]       scheduler_running: True retains clocks/Tick for the kernel
+ * \param[in]       request_outcome: Application result of request observation
  * \param[in]       platform_stop: External platform stop action
  * \param[in]       context: Stop action context retained for this call
- * \return          SUCCESS, STATE before quiescence, INVALID or stop error
+ * \return          Stop error in preference to request_outcome, or
+ *                  STATE before quiescence or INVALID for invalid inputs
  * \note            Task context. A running FreeRTOS kernel has no maintained
  *                  scheduler-stop contract; preserve platform infrastructure.
  *                  Products need an explicit reset or complete scheduler-stop
  *                  port before disabling kernel clocks/Tick. Failure retains
- *                  phase; successful stop is never repeated.
+ *                  phase; successful stop is never repeated. A request error
+ *                  leaves the fully quiesced platform eligible for stop.
  */
 nx_result_t example_owner_finish(example_owner_phase_t* phase,
                                  bool scheduler_running,
+                                 nx_result_t request_outcome,
                                  nx_result_t (*platform_stop)(void*),
                                  void* context);
 

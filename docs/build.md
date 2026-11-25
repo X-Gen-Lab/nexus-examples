@@ -240,19 +240,67 @@ the same software entry point; local execution is labelled local.
 
 Each starter is independently copyable. Creation reads committed template
 objects and records provenance; it does not acquire a platform checkout.
+Select the template checkout's exact revision. The Native starter explicitly
+admits the software model via `--test-support`.
 
 ```sh
+examples_revision=$(git rev-parse HEAD)
 python external/nexus/tools/dev/dev.py create \
-  --templates "$PWD" --revision <full-examples-commit> \
-  --template native --output /path/to/new-product
-cmake -S /path/to/new-product -B /path/to/product-build -G Ninja \
-  -DNexus_DIR=/path/to/native-sdk/lib/cmake/Nexus
-cmake --build /path/to/product-build --parallel 2
-ctest --test-dir /path/to/product-build --output-on-failure --no-tests=error
+  --templates "$PWD" --revision "$examples_revision" \
+  --source "$PWD/external/nexus" --template native --test-support \
+  --output /path/to/new-native-product
 ```
+
+依次执行输出中的 Configure、Build、Test。Native 测试结清 UART 发送并停止平台，
+程序输出 `Nexus starter: transfer settled; platform stopped`。已安装 SDK 改用
+`--sdk-prefix /path/to/native-sdk`，并选择新的输出目录。
+
+Run the printed Configure, Build and Test commands in order. The Native program
+reports `Nexus starter: transfer settled; platform stopped`. To consume an
+installed Source SDK, replace `--source` with `--sdk-prefix /path/to/native-sdk`
+and select a fresh output directory. The generated `.nexus-template.json`
+records the template and SDK identities and the corresponding command arguments.
 
 MCU 模板另选对应 Board 并传 SDK ARM toolchain。硬件装配、驱动支持、ARM 链接和
 实板结果是不同事实，见[板卡指南](boards.md)与[验证规则](validation.md)。
 
-Choose an exact Board and ARM toolchain for an MCU starter. Board fitting,
-software support, linking and physical results are separate facts.
+With the locked ARM compiler on `PATH`, create a separate Qiming V3.1 project
+from an installed SDK that includes the F407 baremetal profile.
+
+```sh
+python external/nexus/tools/dev/dev.py create \
+  --templates "$PWD" --revision "$examples_revision" \
+  --sdk-prefix /path/to/f407-sdk --template qiming \
+  --output /path/to/new-qiming-product
+sdk_source=/path/to/f407-sdk/share/nexus/src
+assembly=/path/to/new-qiming-product/assembly.toml
+python "$sdk_source/tools/configure/configure.py" list-bindings \
+  --board stm32f407_qiming_v31 --kind gpio
+```
+
+在复制的 `assembly.toml` 内，将 `[gpio.status]` 的绑定从 `led0` 改为 `led1`，再用
+`check`、`explain` 检查 `PE4` 与原有的 `NX_GPIO_REF_STATUS`。若再新增一个使用
+`led1` 的 GPIO 角色，`check` 会报告 `pin:PE4` 和两个资源拥有者。
+
+In the copied `assembly.toml`, change `[gpio.status]` from `binding = "led0"`
+to `binding = "led1"`. Check the complete assembly, then confirm that the
+`status` role resolves to `PE4` and still uses `NX_GPIO_REF_STATUS`.
+
+```sh
+python "$sdk_source/tools/configure/configure.py" check --assembly "$assembly"
+python "$sdk_source/tools/configure/configure.py" explain --assembly "$assembly"
+```
+
+To see a resource conflict, add a second output role to the copied TOML and run
+`check` again.
+
+```toml
+[gpio.conflicting_status]
+binding = "led1"
+mode = "output"
+```
+
+The diagnostic names `pin:PE4`, `status` and `conflicting_status`. Remove the
+duplicate role, then run the printed ARM Configure and Build commands. The
+resulting `build/bin/nexus_starter.elf` demonstrates linking for the edited
+assembly. Board fitting and electrical operation require physical verification.

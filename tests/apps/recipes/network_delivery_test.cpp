@@ -9,6 +9,7 @@
 #include "boot_audit_reference.h"
 #include "delivery_reference.h"
 #include "nexus/components/persistent_record.h"
+#include "trial_update_reference.h"
 #include <algorithm>
 #include <array>
 #include <cstring>
@@ -17,6 +18,12 @@
 
 namespace {
 const nx_flashdb_operation_t* operation = nullptr;
+struct SwapPorts {
+    nx_mcuboot_action_t action = NX_MCUBOOT_ACTION_NONE;
+    bool confirmed = false;
+    unsigned requests = 0U;
+    unsigned confirmations = 0U;
+} swap;
 
 class Delivery : public testing::Test {
   protected:
@@ -70,6 +77,7 @@ class Delivery : public testing::Test {
     }
     static const nx_flash_ops_t flash_ops;
     void SetUp() override {
+        swap = {};
         port = {&flash_ops, this};
         ASSERT_EQ(nx_fal_bind(&fal, {&port, 0U, 8192U, true}, {clock, this}),
                   NX_SUCCESS);
@@ -276,6 +284,99 @@ TEST_F(Delivery, FailedBootReportPersistenceNeverClaimsDurableResult) {
     EXPECT_FALSE(report.persisted);
 }
 
+class TrialBoot : public Delivery {
+  protected:
+    BootImage image;
+    example_trial_boot_report_t report{};
+    nx_time_us_t now = 10U;
+    nx_result_t health_result = NX_SUCCESS;
+    unsigned health_checks = 0U;
+    bool expire_in_health = false;
+
+    nx_result_t evaluate() {
+        const nx_clock_t clock{
+            [](void* p) { return static_cast<TrialBoot*>(p)->now; }, this};
+        return example_update_confirm_trial(
+            &scope, &image.ports, &clock,
+            [](void* p, nx_time_us_t deadline) {
+                auto& self = *static_cast<TrialBoot*>(p);
+                ++self.health_checks;
+                if (self.expire_in_health) {
+                    self.now = deadline;
+                }
+                return self.health_result;
+            },
+            this, &report);
+    }
+};
+
+TEST_F(TrialBoot, FailedIntentPersistencePreventsTestRequest) {
+    fail_program = true;
+    EXPECT_EQ(example_update_request_trial(&scope, 9U), NX_ERROR_IO);
+    EXPECT_EQ(swap.requests, 0U);
+    EXPECT_EQ(swap.action, NX_MCUBOOT_ACTION_NONE);
+}
+
+TEST_F(TrialBoot, RetainedTrialCannotHaveItsExpectedIdentityReplaced) {
+    ASSERT_EQ(example_update_request_trial(&scope, 9U), NX_SUCCESS);
+    swap.action = NX_MCUBOOT_ACTION_REVERT;
+    EXPECT_EQ(example_update_request_trial(&scope, 8U), NX_ERROR_STATE);
+    EXPECT_EQ(swap.requests, 1U);
+    EXPECT_EQ(swap.action, NX_MCUBOOT_ACTION_REVERT);
+    ASSERT_EQ(evaluate(), NX_SUCCESS);
+    EXPECT_EQ(report.image.expected, 9U);
+}
+
+TEST_F(TrialBoot, MatchingHealthyImageConfirmsOnceAfterRealIntentAndAudit) {
+    ASSERT_EQ(example_update_request_trial(&scope, 9U), NX_SUCCESS);
+    EXPECT_EQ(swap.requests, 1U);
+    EXPECT_EQ(swap.action, NX_MCUBOOT_ACTION_TEST);
+    EXPECT_EQ(evaluate(), NX_ERROR_STATE);
+    EXPECT_EQ(swap.confirmations, 0U);
+    swap.action = NX_MCUBOOT_ACTION_REVERT;
+    ASSERT_EQ(evaluate(), NX_SUCCESS);
+    EXPECT_TRUE(report.image.persisted);
+    EXPECT_TRUE(report.image.matches);
+    EXPECT_TRUE(report.health_checked);
+    EXPECT_TRUE(report.confirm_attempted);
+    EXPECT_TRUE(report.confirmed);
+    EXPECT_EQ(swap.confirmations, 1U);
+    ASSERT_EQ(evaluate(), NX_SUCCESS);
+    EXPECT_FALSE(report.confirm_attempted);
+    EXPECT_TRUE(report.confirmed);
+    EXPECT_EQ(swap.confirmations, 1U);
+    EXPECT_EQ(health_checks, 1U);
+}
+
+TEST_F(TrialBoot, FailedHealthLeavesRevertAndOldImageIsAuditedWithoutConfirm) {
+    ASSERT_EQ(example_update_request_trial(&scope, 9U), NX_SUCCESS);
+    swap.action = NX_MCUBOOT_ACTION_REVERT;
+    health_result = NX_ERROR_IO;
+    EXPECT_EQ(evaluate(), NX_ERROR_IO);
+    EXPECT_TRUE(report.health_checked);
+    EXPECT_EQ(swap.action, NX_MCUBOOT_ACTION_REVERT);
+    EXPECT_EQ(swap.confirmations, 0U);
+    image.identifier = 8U;
+    swap.action = NX_MCUBOOT_ACTION_NONE;
+    swap.confirmed = true;
+    EXPECT_EQ(evaluate(), NX_ERROR_PERMISSION);
+    EXPECT_TRUE(report.image.persisted);
+    EXPECT_EQ(report.image.observed, 8U);
+    EXPECT_EQ(report.image.expected, 9U);
+    EXPECT_FALSE(report.confirmed);
+    EXPECT_EQ(swap.confirmations, 0U);
+}
+
+TEST_F(TrialBoot, HealthCannotRenewDeadlineBeforeConfirming) {
+    ASSERT_EQ(example_update_request_trial(&scope, 9U), NX_SUCCESS);
+    swap.action = NX_MCUBOOT_ACTION_REVERT;
+    expire_in_health = true;
+    EXPECT_EQ(evaluate(), NX_ERROR_TIMEOUT);
+    EXPECT_TRUE(report.health_checked);
+    EXPECT_FALSE(report.confirm_attempted);
+    EXPECT_EQ(swap.confirmations, 0U);
+}
+
 TEST(RemoteCommand, InvalidOrStaleCommandsNeverAdvanceTheAcceptedSequence) {
     example_command_gate_t gate{};
     ASSERT_EQ(example_command_gate_init(&gate, 7U, 32U), NX_SUCCESS);
@@ -310,4 +411,25 @@ TEST(RemoteCommand, ClockRegressionAndWrappingInputsRejectBeforeAdmission) {
 
 extern "C" const nx_flashdb_operation_t* nx_flashdb_operation_get(void) {
     return operation;
+}
+
+extern "C" nx_result_t nx_mcuboot_swap_request(nx_mcuboot_request_t request) {
+    EXPECT_EQ(request, NX_MCUBOOT_REQUEST_TEST);
+    ++swap.requests;
+    swap.action = NX_MCUBOOT_ACTION_TEST;
+    return NX_SUCCESS;
+}
+extern "C" nx_result_t nx_mcuboot_swap_query(nx_mcuboot_action_t* action) {
+    *action = swap.action;
+    return NX_SUCCESS;
+}
+extern "C" nx_result_t nx_mcuboot_swap_confirmed(bool* confirmed) {
+    *confirmed = swap.confirmed;
+    return NX_SUCCESS;
+}
+extern "C" nx_result_t nx_mcuboot_swap_confirm(void) {
+    ++swap.confirmations;
+    swap.action = NX_MCUBOOT_ACTION_NONE;
+    swap.confirmed = true;
+    return NX_SUCCESS;
 }

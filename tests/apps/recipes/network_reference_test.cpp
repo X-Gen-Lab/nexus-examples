@@ -126,10 +126,12 @@ struct Media {
     std::vector<unsigned> calls;
     nx_result_t start_result{NX_SUCCESS};
     nx_result_t stop_result{NX_SUCCESS};
+    nx_result_t unmount_result{NX_SUCCESS};
     static nx_result_t unmount(void* p, nx_time_us_t d) {
         EXPECT_EQ(d, 100U);
-        static_cast<Media*>(p)->calls.push_back(1);
-        return NX_SUCCESS;
+        auto& self = *static_cast<Media*>(p);
+        self.calls.push_back(1);
+        return self.unmount_result;
     }
     static nx_result_t mount(void* p, nx_time_us_t d) {
         EXPECT_EQ(d, 100U);
@@ -165,7 +167,8 @@ TEST(NetworkRecipe, MscHandoffNeverMountsLocalBeforeUsbJoin) {
     EXPECT_EQ(h.calls, (std::vector<unsigned>{1, 5, 3}));
     h.stop_result = NX_ERROR_TIMEOUT;
     EXPECT_EQ(example_msc_request_local(&h.handoff, 100), NX_ERROR_TIMEOUT);
-    EXPECT_EQ(h.handoff.owner, EXAMPLE_MEDIA_USB);
+    EXPECT_EQ(h.handoff.owner, EXAMPLE_MEDIA_USB_CLEANUP);
+    EXPECT_EQ(example_msc_request_usb(&h.handoff, 100), NX_ERROR_STATE);
     EXPECT_EQ(h.calls.back(), 4U);
     h.stop_result = NX_SUCCESS;
     EXPECT_EQ(example_msc_request_local(&h.handoff, 100), NX_SUCCESS);
@@ -180,5 +183,16 @@ TEST(NetworkRecipe, FailedUsbStartRetainsCleanupAndCannotBlindlyStartAgain) {
     EXPECT_EQ(example_msc_request_usb(&h.handoff, 100), NX_ERROR_STATE);
     EXPECT_EQ(example_msc_request_local(&h.handoff, 100), NX_SUCCESS);
     EXPECT_EQ(h.calls, (std::vector<unsigned>{1, 5, 3, 4, 5, 2}));
+}
+TEST(NetworkRecipe, FailedUnmountRequiresJoinBeforeLocalFilesCanReopen) {
+    Media h;
+    h.bind();
+    h.unmount_result = NX_ERROR_IO;
+    EXPECT_EQ(example_msc_request_usb(&h.handoff, 100), NX_ERROR_IO);
+    EXPECT_EQ(h.handoff.owner, EXAMPLE_MEDIA_LOCAL_CLEANUP);
+    EXPECT_EQ(example_msc_request_local(&h.handoff, 100), NX_ERROR_IO);
+    h.unmount_result = NX_SUCCESS;
+    EXPECT_EQ(example_msc_request_local(&h.handoff, 100), NX_SUCCESS);
+    EXPECT_EQ(h.calls, (std::vector<unsigned>{1, 1, 1, 5, 2}));
 }
 } /* namespace */

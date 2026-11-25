@@ -91,6 +91,7 @@ context，继续推进退出。只有 acquire 观察 SETTLED，才解除本层�
 
 本地 `assembly.toml` 仍是 STM32F407ZGT6、TIM8、ADC1 与 TIM4 的 1 kHz 边沿对齐
 软件路线，没有已审核的物理功率 PCB。它不建立 20 kHz、采样精度或真实电机运行资格。
+相分流与单分流的选定引脚、校准身份、BKIN 和活动链路验收记录见 [工装清单](station.md)。
 
 `motor_drive_google` 执行真实公共组合，覆盖动态 Axis 目标、标定身份、完整计划、
 有限期限、停机失败借用、遥测拥堵与退出。相邻 `dual_motor_drive` 配方用两个独立

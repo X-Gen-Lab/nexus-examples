@@ -92,13 +92,17 @@ Schema 1, key 1 stores the period in four little-endian bytes. Only missing data
 uses defaults; unknown schemas and corruption fail closed. Commit follows
 protocol stop, request settlement and executor join. Failed commit requires
 reopening Storage/Settings to discover the surviving generation. Unconfirmed I/O
-join retains static I/O storage and rejects another invocation. Platform stop
-does not disable the irreversible watchdog; the model explicitly starts a new
-boot only after the previous invocation quiesces.
+join retains static I/O storage and rejects another invocation. Shutdown starts
+one configured budget for device drain in platform time and for kernel join in
+host monotonic time. An unsuccessful join returns its original status. The
+irreversible watchdog stays active through Platform stop. The model explicitly
+starts a new boot only after the previous invocation quiesces.
 
 schema 1、key 1 使用四字节小端周期值；只有数据缺失才采用默认值，未知 schema 或
 损坏记录失败关闭。协议停止、请求 settled、executor join 后才 commit。提交失败需
 重开 Storage/Settings 确认存活版本。I/O join 未确认时保留静态存储并拒绝再次运行。
+关闭开始时，用同一配置时长分别在平台时钟域和宿主单调时钟域计算排空与 join 的
+绝对时限。join 失败返回原始状态。
 平台停止不关闭不可逆 watchdog；模型只在前次静默后显式模拟下一次 boot。
 
 [Google contracts](../../tests/apps/industrial_control/industrial_control_test.cpp)
