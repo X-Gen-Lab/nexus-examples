@@ -32,6 +32,7 @@ class StarterTemplateTests(unittest.TestCase):
         self.assertEqual(settings, {
             'include': ['configs/*.toml', 'templates/*/assembly.toml',
                         'apps/*/assembly.toml',
+                        'apps/*/*/assembly.toml',
                         'apps/uart_owner_runtime/threadx.toml',
                         'recipes/*/*/assembly.toml'],
             'schema': {'path': schema}})

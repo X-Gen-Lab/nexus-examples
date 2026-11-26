@@ -82,6 +82,23 @@ class ExternalBoardContracts(unittest.TestCase):
         self.assertIn("nx_factory_usb_profile(", extensions)
         self.assertIn("nx_factory_usb_activation(", extensions)
 
+    def test_managed_gateway_resolves_its_owned_software_reference(self):
+        output = self.product / "managed gateway bundle"
+        assembly = ROOT / "apps/network_gateway/managed-f407/assembly.toml"
+        self.run_cli("--assembly", assembly, "--output", output)
+        resolved = json.loads((output / "resolved.json").read_text())
+        self.assertEqual(resolved["board"],
+                         "qiming-f407zg-managed-software-reference")
+        self.assertEqual(resolved["part"], "STM32F407ZGT6")
+        self.assertEqual(resolved["soc_family"], "stm32f4")
+        self.assertIsNone(resolved["physical_pcb_revision"])
+        self.assertFalse(resolved["physical_qualified"])
+        self.assertEqual({item["id"]: item["controller"]
+                          for item in resolved["controllers"]},
+                         {"mac": "ETH", "random": "RNG"})
+        self.assertIn("external/board.json",
+                      {item["path"] for item in resolved["inputs"]})
+
 
 if __name__ == "__main__":
     unittest.main()

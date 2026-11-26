@@ -292,14 +292,18 @@ storage 仅用于静态装配。先启用 managed adapter 并选定 DNS 来源�
 BUSY 时保持借用。持久 ACK 写入不确定时先恢复介质并重读。新路由窗口由产品根据
 独立退避策略显式开始。
 
-The opt-in F407 link consumer reads the Qiming v3.1 software Board and assembly
-from the pinned Nexus checkout. Use `external/nexus` for this command because
-the installed SDK omits that contract fixture. The consumer links the managed
-route, secure gateway and outbox paths. Its cold
-entry rejects PHY and UTC admission and leaves the platform inactive. Read the
-generated resource report for this exact ELF. The complete static-address
-reference separately retains PHY/MAC attachment, the lwIP initialization
-arena and active packet buffers.
+The opt-in F407 link consumer owns its reviewed Qiming v3.1 software Board,
+assembly and synthetic public CA under `managed-f407`. It consumes the pinned
+checkout or a matching installed Source SDK with the network, TLS, MQTT and
+FlashDB components. The consumer links the managed route, secure gateway and
+outbox paths. Its cold entry rejects PHY and UTC admission and leaves the
+platform inactive. Read the generated resource report for this exact ELF. The
+complete static-address reference separately retains PHY/MAC attachment, the
+lwIP initialization arena and active packet buffers.
+
+独立 ARM 工程的 Board、TOML 和公开合成 CA 由本示例维护，来源和软件验证边界见
+[本地参考说明](managed-f407/README.md)。`NEXUS_SOURCE` 指向精确源码检出，或安装包
+内的 `share/nexus/src`。公开组件目标负责驱动和中间件依赖。
 
 ```sh
 cmake -S apps/network_gateway/managed-f407 -B build/gateway-managed-f407 -G Ninja \

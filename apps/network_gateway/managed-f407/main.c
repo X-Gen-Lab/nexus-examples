@@ -14,7 +14,7 @@
 #include "nexus/tls/storage.h"
 #include "nexus_bindings.h"
 #include "nexus_factory.h"
-#include "public_ca.h"
+#include "software_ca.h"
 #include <stdalign.h>
 
 static nx_lwip_adapter_t network;
@@ -117,8 +117,8 @@ int main(void) {
                        .receive_budget = 2U,
                        .port = 8883U},
         .tls_config = {.runtime = &runtime,
-                       .trust_der = test_ca,
-                       .trust_bytes = sizeof(test_ca),
+                       .trust_der = example_gateway_test_ca,
+                       .trust_bytes = sizeof(example_gateway_test_ca),
                        .tx_stage = tls_stage,
                        .tx_stage_bytes = sizeof(tls_stage)},
         .identity = {.client_id = "cold-gateway", .client_id_size = 12U},

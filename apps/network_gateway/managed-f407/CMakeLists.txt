@@ -27,7 +27,7 @@ if(NOT Nexus_SOURCE_DIR STREQUAL NEXUS_SOURCE)
     message(FATAL_ERROR "Nexus_DIR differs from the selected SDK")
 endif()
 nexus_add_platform(
-    ASSEMBLY "${NEXUS_SOURCE}/tests/contracts/f407_qiming_network/assembly.toml"
+    ASSEMBLY "${CMAKE_CURRENT_LIST_DIR}/assembly.toml"
 )
 nexus_add_lwip()
 nexus_add_tls()
@@ -35,7 +35,6 @@ nexus_add_coremqtt()
 nexus_add_flashdb()
 set(gateway "${CMAKE_CURRENT_LIST_DIR}/..")
 set(network "${CMAKE_CURRENT_LIST_DIR}/../../../recipes/network")
-set(secure "${NEXUS_SOURCE}/cmake/package/verification/secure_services")
 nexus_add_firmware(managed_gateway_f407 SOURCES
     main.c "${gateway}/gateway_application.c" "${gateway}/gateway_policy.c"
     "${gateway}/gateway_delivery.c" "${gateway}/gateway_managed.c"
@@ -46,6 +45,6 @@ nexus_add_firmware(managed_gateway_f407 SOURCES
 )
 target_include_directories(
     managed_gateway_f407
-    PRIVATE "${gateway}" "${network}" "${secure}"
+    PRIVATE "${gateway}" "${network}"
 )
 nexus_target_warnings(managed_gateway_f407 STRICT)

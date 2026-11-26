@@ -48,7 +48,7 @@ class ExampleTddGateTests(unittest.TestCase):
         self.git("add", "external/nexus")
         self.git("commit", "-qm", "test: pin fixture SDK")
         self.source = sdk_root()
-        self.sdk_gate = load(self.source, "scripts/ci/tdd_gate.py",
+        self.sdk_gate = load(self.source, "scripts/validation/junit.py",
                              "example_gate_fixture_validator")
         self.commands = []
         self.mode = "pass"
