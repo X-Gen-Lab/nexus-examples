@@ -73,7 +73,6 @@ static nx_result_t can_read(void* argument, nx_can_event_t* events,
         if (event->timestamp_us == NX_DEADLINE_NEVER ||
             event->timestamp_us > now || now == NX_DEADLINE_NEVER ||
             adapter->wire_generation == UINT32_MAX) {
-            adapter->fault = NX_ERROR_STATE;
             return NX_ERROR_STATE;
         }
         /* CANopen's selected asynchronous RPDO adopts its latest complete
@@ -394,22 +393,26 @@ nx_result_t example_cia402_motor_step(example_cia402_motor_t* adapter,
         return NX_ERROR_TIMEOUT;
     if (adapter->motor->borrowed) {
         nx_result_t progress = example_motor_drive_step(adapter->motor, now);
-        if (progress != NX_SUCCESS && progress != NX_ERROR_BUSY)
+        if (progress != NX_SUCCESS && progress != NX_ERROR_BUSY &&
+            adapter->fault == NX_SUCCESS)
             adapter->fault = progress;
     }
-    nx_result_t result =
+    const nx_result_t protocol_result =
         nx_canopen_step(adapter->node, tx_deadline, &adapter->protocol);
-    if (result != NX_SUCCESS ||
+    const bool transport_closed =
+        protocol_result != NX_SUCCESS ||
         adapter->protocol.reset != NX_CANOPEN_RESET_NONE ||
-        adapter->protocol.closing) {
+        adapter->protocol.closing;
+    if (transport_closed) {
         adapter->reset_requested |=
             adapter->protocol.reset != NX_CANOPEN_RESET_NONE;
-        adapter->fault = result == NX_SUCCESS ? NX_ERROR_CANCELLED : result;
+        if (adapter->fault == NX_SUCCESS)
+            adapter->fault = protocol_result == NX_SUCCESS ? NX_ERROR_CANCELLED
+                                                           : protocol_result;
         withdraw(adapter);
-        return result;
     }
     adapter->receive_operational =
-        adapter->protocol.nmt == NX_CANOPEN_OPERATIONAL &&
+        !transport_closed && adapter->protocol.nmt == NX_CANOPEN_OPERATIONAL &&
         adapter->protocol.peer != NX_CANOPEN_PEER_TIMEOUT &&
         adapter->protocol.error == NX_SUCCESS;
     if (!adapter->receive_operational) {
@@ -441,6 +444,7 @@ nx_result_t example_cia402_motor_step(example_cia402_motor_t* adapter,
         actual.valid = false;
     nx_cia402_action_t action;
     nx_cia402_position_action_t point = {0};
+    nx_result_t result;
     if (adapter->velocity != NULL) {
         result = nx_cia402_update(adapter->velocity, &adapter->protocol,
                                   &actual, &action);
@@ -463,6 +467,8 @@ nx_result_t example_cia402_motor_step(example_cia402_motor_t* adapter,
         action = point.axis;
     }
     adapter->observed_sequence = record->mechanical.sequence;
+    if (transport_closed)
+        return protocol_result;
     if (result != NX_SUCCESS)
         return result;
     if (action.reset_fault) {

@@ -28,6 +28,25 @@ def identities(discovery):
     return cases
 
 
+def validate_google_report(validator, report, expected, *, not_before_ns):
+    """Require every discovered case to have actually completed in fresh XML."""
+    if not expected:
+        raise ValueError("GoogleTest discovery contains no test cases")
+    try:
+        result = validator.validate_junit(report, not_before_ns=not_before_ns)
+        cases = list(ET.parse(report).getroot().iter("testcase"))
+        if (result["skipped"] or result["passed"] != len(expected) or any(
+                case.get("status") != "run" or case.get("result") != "completed"
+                for case in cases)):
+            raise ValueError("GoogleTest report contains unexecuted cases")
+        actual = {(case.get("classname"), case.get("name")) for case in cases}
+    except (OSError, ET.ParseError) as error:
+        raise ValueError("Missing or invalid fresh GoogleTest report") from error
+    if actual != expected:
+        raise ValueError("GoogleTest executed identities differ from discovery")
+    return result
+
+
 def run_google(source, binary, output, *, environment=None):
     paths = [Path(path).absolute() for path in (source, binary, output)]
     if any(part.is_symlink() for path in paths for part in (path, *path.parents)):
@@ -73,18 +92,8 @@ def run_google(source, binary, output, *, environment=None):
         raise ValueError("GoogleTest discovery contains no test cases")
     started = validator.prepare_report(report)
     execute([str(binary), "--gtest_output=xml:" + str(report)], "execution")
-    try:
-        result = validator.validate_junit(report, not_before_ns=started)
-        cases = list(ET.parse(report).getroot().iter("testcase"))
-        if (result["skipped"] or result["passed"] != count or any(
-                case.get("status") != "run" or case.get("result") != "completed"
-                for case in cases)):
-            raise ValueError("GoogleTest report contains unexecuted cases")
-        actual = {(case.get("classname"), case.get("name")) for case in cases}
-    except (OSError, ET.ParseError) as error:
-        raise ValueError("Missing or invalid fresh GoogleTest report") from error
-    if actual != expected:
-        raise ValueError("GoogleTest executed identities differ from discovery")
+    result = validate_google_report(validator, report, expected,
+                                    not_before_ns=started)
     result = {**result, "schema_version": 1,
               "kind": "example_google_execution", "discovered": count,
               "binary": str(binary), "commands": commands,

@@ -36,7 +36,6 @@ typedef struct {
     nx_notify_t owner_event;
     nx_task_t worker;
     uint32_t worker_exit;
-    uint32_t worker_done;
     nx_modbus_rtu_t modbus;
     nx_uart_tx_request_t transmit;
     uint16_t values[8];
@@ -89,11 +88,6 @@ static nx_storage_status_t stage_period(application_t* app, uint32_t period) {
     return nx_settings_set(&app->settings, EXAMPLE_INDUSTRIAL_PERIOD_KEY, value,
                            sizeof(value));
 }
-static bool worker_done(void* context) {
-    application_t* app = context;
-    return nx_atomic_u32_load_acquire(&app->worker_done) != 0U;
-}
-
 /** \brief One executor progresses SPI, including all cooperative drain work. */
 static void owner_entry(void* context) {
     application_t* app = context;
@@ -113,9 +107,6 @@ static void owner_entry(void* context) {
         (void)wake.wait(wake.context, sequence,
                         nx_deadline_after(now(NULL), PRODUCT_PUMP_US));
     }
-    nx_atomic_u32_store_release(&app->worker_done, 1U);
-    nx_wait_port_t changed = nx_notify_port(&app->changed);
-    (void)changed.wake(changed.context);
 }
 
 static bool direction(void* context, bool transmit) {
@@ -347,8 +338,20 @@ static nx_result_t run_control(application_t* app) {
 
 /** \brief Quiescence precedes maintenance and every OS object reclamation. */
 static nx_result_t shutdown(application_t* app) {
-    nx_time_us_t deadline =
-        nx_deadline_after(now(NULL), app->config.shutdown_budget_us);
+    /* The installed Native fixture can advance model I/O time independently
+     * from the host monotonic clock used by the kernel join. */
+    nx_time_us_t drain_deadline;
+    nx_time_us_t join_deadline;
+    nx_result_t result = nx_deadline_finite_after(
+        now(NULL), app->config.shutdown_budget_us, &drain_deadline);
+    if (result != NX_SUCCESS) {
+        return result;
+    }
+    result = nx_deadline_finite_after(
+        nx_os_now_us(), app->config.shutdown_budget_us, &join_deadline);
+    if (result != NX_SUCCESS) {
+        return result;
+    }
     if (app->modbus_open && !nx_modbus_rtu_stop(&app->modbus)) {
         return NX_ERROR_BUSY;
     }
@@ -357,8 +360,7 @@ static nx_result_t shutdown(application_t* app) {
     if (app->owner_open) {
         example_industrial_spi_stop(&app->bridge);
         nx_bus_owner_stop(&app->owner);
-        nx_result_t result =
-            example_industrial_spi_join(&app->bridge, deadline);
+        result = example_industrial_spi_join(&app->bridge, drain_deadline);
         if (result != NX_SUCCESS) {
             return result;
         }
@@ -366,12 +368,9 @@ static nx_result_t shutdown(application_t* app) {
             nx_atomic_u32_store_release(&app->worker_exit, 1U);
             nx_wait_port_t wake = nx_notify_port(&app->owner_event);
             (void)wake.wake(wake.context);
-            nx_wait_port_t changed = nx_notify_port(&app->changed);
-            result = nx_wait_until(&changed, worker_done, app, deadline);
-            if (result != NX_SUCCESS ||
-                nx_task_join_until(&app->worker, NX_DEADLINE_NEVER) !=
-                    NX_SUCCESS) {
-                return result == NX_SUCCESS ? NX_ERROR_IO : result;
+            result = nx_task_join_until(&app->worker, join_deadline);
+            if (result != NX_SUCCESS) {
+                return result;
             }
             app->worker_started = false;
         }

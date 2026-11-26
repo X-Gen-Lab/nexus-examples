@@ -49,7 +49,8 @@ nx_result_t example_msc_handoff_init(example_msc_handoff_t* handoff,
  * \param[in]       deadline: Finite same-domain deadline forwarded unchanged.
  * \return          SUCCESS or actual failure, retaining cleanup responsibility.
  * \note            Failure never authorizes concurrent local and USB access.
- *                  Failed USB start requires request_local to stop/join it.
+ *                  Failed USB start/stop requires request_local to stop/join
+ *                  it. Failed local unmount retains LOCAL_CLEANUP.
  */
 nx_result_t example_msc_request_usb(example_msc_handoff_t* handoff,
                                     nx_time_us_t deadline);

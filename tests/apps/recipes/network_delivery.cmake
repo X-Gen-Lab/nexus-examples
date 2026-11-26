@@ -1,11 +1,13 @@
 # Product-owned durable delivery and bounded command admission.
 # Author: Nexus Team
 nexus_add_flashdb()
+nexus_add_mcuboot_swap_control()
 add_executable(
     network_delivery_test
     "${CMAKE_CURRENT_LIST_DIR}/network_delivery_test.cpp"
     "${PROJECT_SOURCE_DIR}/recipes/network/delivery_reference.c"
     "${PROJECT_SOURCE_DIR}/recipes/network/boot_audit_reference.c"
+    "${PROJECT_SOURCE_DIR}/recipes/network/trial_update_reference.c"
 )
 target_include_directories(
     network_delivery_test
@@ -19,6 +21,7 @@ target_link_libraries(
         Nexus::FlashDB
         Nexus::Algorithms
         Nexus::NativeModel
+        Nexus::MCUBootSwapControl
         GTest::gmock_main
         nexus_owned_warnings
         nexus_build_options

@@ -170,39 +170,66 @@ TEST_F(Lifecycle, InvalidInputHasNoSchedulingOrHardwareEffects) {
 
 TEST_F(Lifecycle, RunningSchedulerRetainsPlatformClocksAndTickAfterIOReclaim) {
     phase = EXAMPLE_OWNER_RECLAIMABLE;
-    EXPECT_EQ(example_owner_finish(&phase, true, platform_stop, &shutdown),
+    EXPECT_EQ(example_owner_finish(&phase, true, NX_SUCCESS, platform_stop,
+                                   &shutdown),
               NX_SUCCESS);
+    EXPECT_EQ(phase, EXAMPLE_OWNER_RECLAIMABLE);
+    EXPECT_EQ(example_owner_finish(&phase, true, NX_ERROR_IO, platform_stop,
+                                   &shutdown),
+              NX_ERROR_IO);
     EXPECT_EQ(phase, EXAMPLE_OWNER_RECLAIMABLE);
 }
 
 TEST_F(Lifecycle, StoppedSchedulerMayStopPlatformOnlyOnceAfterReclaim) {
     phase = EXAMPLE_OWNER_RECLAIMABLE;
     EXPECT_CALL(shutdown, platform()).WillOnce(Return(NX_SUCCESS));
-    EXPECT_EQ(example_owner_finish(&phase, false, platform_stop, &shutdown),
+    EXPECT_EQ(example_owner_finish(&phase, false, NX_SUCCESS, platform_stop,
+                                   &shutdown),
               NX_SUCCESS);
     EXPECT_EQ(phase, EXAMPLE_OWNER_PLATFORM_STOPPED);
-    EXPECT_EQ(example_owner_finish(&phase, false, platform_stop, &shutdown),
+    EXPECT_EQ(example_owner_finish(&phase, false, NX_SUCCESS, platform_stop,
+                                   &shutdown),
               NX_SUCCESS);
 }
 
 TEST_F(Lifecycle, PlatformStopFailureRetainsReclaimMilestoneAndCanRetry) {
     phase = EXAMPLE_OWNER_RECLAIMABLE;
     EXPECT_CALL(shutdown, platform()).WillOnce(Return(NX_ERROR_BUSY));
-    EXPECT_EQ(example_owner_finish(&phase, false, platform_stop, &shutdown),
+    EXPECT_EQ(example_owner_finish(&phase, false, NX_SUCCESS, platform_stop,
+                                   &shutdown),
               NX_ERROR_BUSY);
     EXPECT_EQ(phase, EXAMPLE_OWNER_RECLAIMABLE);
     EXPECT_CALL(shutdown, platform()).WillOnce(Return(NX_SUCCESS));
-    EXPECT_EQ(example_owner_finish(&phase, false, platform_stop, &shutdown),
+    EXPECT_EQ(example_owner_finish(&phase, false, NX_SUCCESS, platform_stop,
+                                   &shutdown),
               NX_SUCCESS);
 }
 
+TEST_F(Lifecycle, SettledRequestFailureStillStopsPlatformAfterReclaim) {
+    phase = EXAMPLE_OWNER_RECLAIMABLE;
+    InSequence order;
+    EXPECT_CALL(shutdown, platform()).WillOnce(Return(NX_ERROR_BUSY));
+    EXPECT_EQ(example_owner_finish(&phase, false, NX_ERROR_IO, platform_stop,
+                                   &shutdown),
+              NX_ERROR_BUSY);
+    EXPECT_EQ(phase, EXAMPLE_OWNER_RECLAIMABLE);
+    EXPECT_CALL(shutdown, platform()).WillOnce(Return(NX_SUCCESS));
+    EXPECT_EQ(example_owner_finish(&phase, false, NX_ERROR_IO, platform_stop,
+                                   &shutdown),
+              NX_ERROR_IO);
+    EXPECT_EQ(phase, EXAMPLE_OWNER_PLATFORM_STOPPED);
+}
+
 TEST_F(Lifecycle, PlatformStopRejectsCallsBeforeQuiescenceOrInvalidInputs) {
-    EXPECT_EQ(example_owner_finish(&phase, false, platform_stop, &shutdown),
+    EXPECT_EQ(example_owner_finish(&phase, false, NX_SUCCESS, platform_stop,
+                                   &shutdown),
               NX_ERROR_STATE);
-    EXPECT_EQ(example_owner_finish(nullptr, false, platform_stop, &shutdown),
+    EXPECT_EQ(example_owner_finish(nullptr, false, NX_SUCCESS, platform_stop,
+                                   &shutdown),
               NX_ERROR_INVALID);
-    EXPECT_EQ(example_owner_finish(&phase, false, nullptr, &shutdown),
-              NX_ERROR_INVALID);
+    EXPECT_EQ(
+        example_owner_finish(&phase, false, NX_SUCCESS, nullptr, &shutdown),
+        NX_ERROR_INVALID);
 }
 TEST(BackendPolicy, LiveKernelSchedulersRetainPlatformInfrastructure) {
     EXPECT_FALSE(example_native_keeps_platform());

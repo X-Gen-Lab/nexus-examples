@@ -261,3 +261,64 @@ or authentication. Keep local execution output outside tracked source.
 执行，保留每次普通进程退出。公共 fixture 负责固定 Mosquitto 镜像、CA 生成与
 退出；单独的 external-client 收据不评估本应用的 transport 或认证。执行输出
 保存在未跟踪的本地目录。
+
+## Managed IPv4 and durable telemetry / 动态地址与持久遥测
+
+Select `Nexus::LwIPManagedTCP` and `Nexus::LwIPManagedServices` for one existing
+NO_SYS owner. Keep the corresponding storage targets in static composition.
+Start the managed adapter, select its DNS source and start the TLS runtime with
+the product's explicit UTC and entropy. Load the outbox from its own FlashDB KV
+region before opening a route window. Give `example_gateway_managed_start` the
+DHCP, DNS and PHY observation port. The PHY callback applies the observed link
+to the adapter before returning it. `example_gateway_managed_run` advances the
+route, copies the resolved address to TCP and uses the same DNS name for TLS.
+When a route is ready, the transport publishes the original business ID and
+persists an observed PUBACK after the local session joins.
+
+`example_gateway_managed_stop` closes admission, retries retained local session
+cleanup, then retires DNS and stops DHCP. BUSY or failed cleanup keeps the
+relevant storage alive. After successful retirement, the product can open a
+new bounded route window and retry an unacknowledged record. An uncertain ACK
+write requires media recovery and outbox reload. The shared adapter, global
+lwIP timers, crypto runtime and clock remain with their original owners. A
+product supplies its PHY route, broker, identity, UTC and maintenance policy.
+
+由一个现有 NO_SYS 执行者选择 `LwIPManagedTCP` 和 `LwIPManagedServices`，精确
+storage 仅用于静态装配。先启用 managed adapter 并选定 DNS 来源，建立可信 UTC
+及熵，打开独立 FlashDB KV 区并加载待发送记录。`example_gateway_managed_start`
+准入一个有限路由窗口，PHY callback 先应用真实 link 观察。`run` 通过 DHCP/DNS
+取得目的地址，TCP 使用解析出的地址，TLS 使用同一主机名。路由异常阻断后续协议
+步骤，待发送记录沿用原业务 ID。`stop` 先会合 TCP/TLS/MQTT，再撤回 DNS/DHCP。
+BUSY 时保持借用。持久 ACK 写入不确定时先恢复介质并重读。新路由窗口由产品根据
+独立退避策略显式开始。
+
+The opt-in F407 link consumer owns its reviewed Qiming v3.1 software Board,
+assembly and synthetic public CA under `managed-f407`. It consumes the pinned
+checkout or a matching installed Source SDK with the network, TLS, MQTT and
+FlashDB components. The consumer links the managed route, secure gateway and
+outbox paths. Its cold entry rejects PHY and UTC admission and leaves the
+platform inactive. Read the generated resource report for this exact ELF. The
+complete static-address reference separately retains PHY/MAC attachment, the
+lwIP initialization arena and active packet buffers.
+
+独立 ARM 工程的 Board、TOML 和公开合成 CA 由本示例维护，来源和软件验证边界见
+[本地参考说明](managed-f407/README.md)。`NEXUS_SOURCE` 指向精确源码检出，或安装包
+内的 `share/nexus/src`。公开组件目标负责驱动和中间件依赖。
+
+```sh
+cmake -S apps/network_gateway/managed-f407 -B build/gateway-managed-f407 -G Ninja \
+  -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$PWD/cmake/arm-gcc.cmake"
+cmake --build build/gateway-managed-f407 --parallel 1
+ctest --test-dir build/native-debug \
+  -R '^(network_gateway_application_google|network_gateway_delivery_google|network_route_google)$' \
+  --output-on-failure --no-tests=error
+```
+
+Gateway application tests use real coreMQTT parsing with TCP and TLS ports
+substituted. Managed delivery tests exercise the same production recipe and
+outbox boundary with lease loss, pending DNS and retained local cleanup under
+fixture control. The existing real-broker test runs the static-address Native
+path. Product-broker authorization, memory high-water, mounted-board link and
+physical HIL remain unexecuted. The selected TLS profile accepts its existing
+DER credentials. ATECC608B opaque-key binding requires a separate product
+mTLS policy and is absent here.

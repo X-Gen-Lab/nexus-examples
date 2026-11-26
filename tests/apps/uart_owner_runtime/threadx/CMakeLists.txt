@@ -72,6 +72,7 @@ foreach(
     nx_notify_destroy
     nx_platform_stop
     nx_uart_port_attach_wake
+    nx_uart_port_service
     nx_uart_port_stop
 )
     target_link_options(

@@ -22,7 +22,7 @@ typedef struct {
     nx_result_t (*quiesce)(void* context, nx_time_us_t deadline);
     void* context;
 } example_update_ports_t;
-/** \brief No rollback promise; errors may follow persistent modification. */
+/** \brief Staging lifecycle; errors may follow persistent modification. */
 typedef enum {
     EXAMPLE_UPDATE_COLD,
     EXAMPLE_UPDATE_RECEIVING,
@@ -67,13 +67,13 @@ nx_result_t example_update_begin(example_update_t* update,
 nx_result_t example_update_write(example_update_t* update, const void* bytes,
                                  size_t count);
 /**
- * \brief           Authenticate complete bytes, then request a permanent
+ * \brief           Authenticate complete bytes, then request the selected
  * upgrade. \param[in,out]   update: Fully staged serialized RECEIVING state.
  * \return          SUCCESS or latched failure; authorize runs before request.
  * \note            authorize must authenticate actual staged bytes and enforce
  *                  product version/target policy. CRC/download success alone
- *                  cannot satisfy it. request_upgrade binds MCUboot's existing
- *                  permanent API and its exact Flash operation deadline.
+ *                  cannot satisfy it. request_upgrade binds the selected
+ *                  MCUboot profile and its exact Flash operation deadline.
  */
 nx_result_t example_update_request(example_update_t* update);
 /**

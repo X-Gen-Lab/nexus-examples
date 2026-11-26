@@ -29,6 +29,8 @@ extern "C" {
  *       Wait is bounded, nonreentrant and uses the same monotonic clock; it
  *       cannot extend the supplied deadline. Stop is an optional bounded
  *       product predicate, not a cross-task storage-reclamation permission.
+ *       An optional route check runs between protocol operations; its failure
+ *       closes new protocol admission without preventing local withdrawal.
  *       The optional watchdog is already enabled and exclusively handed off;
  *       its reported minimum must cover this entire run and cleanup budget.
  */
@@ -53,12 +55,19 @@ typedef struct {
     nx_time_us_t cleanup_budget_us;
     uint32_t mqtt_io_budget;
     uint32_t progress_turns;
+    nx_result_t (*route_check)(void* context, nx_time_us_t deadline);
+    void* route_context;
 } example_gateway_config_t;
 
-/** \brief Copied observations; publication and eventual delivery differ. */
+/**
+ * \brief Copied observations; publication and eventual delivery differ.
+ * \note Cleanup reports the latest withdrawal attempt. graceful_failure
+ *       retains the first failed graceful-close step through later aborts.
+ */
 typedef struct {
     nx_result_t primary;
     nx_result_t cleanup;
+    nx_result_t graceful_failure;
     nx_result_t first_attempt_failure;
     uint32_t attempts;
     uint32_t turns;

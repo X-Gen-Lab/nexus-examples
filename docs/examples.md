@@ -157,6 +157,14 @@ settles before shutdown; known module identities do not enable peripherals.
 构建与 create 命令见[构建指南](build.md)；四板和软件 fixture 边界见[板卡指南](boards.md)。
 Build/create commands and hardware prerequisites are maintained in the linked guides.
 
+按应用所有权选择入口 / Choose the starting point by ownership needs.
+
+| 阶段 / Stage | 应用路径 / Application path |
+| --- | --- |
+| 简单 GPIO／UART / GPIO and UART | [独立起始工程 / Standalone starter](build.md#工程模板--standalone-starters) 写入一个 GPIO 并发送问候；应用在结清后停平台 / Write one GPIO and send a greeting before Platform stop |
+| 有限异步单 owner / Finite asynchronous I/O with one owner | [Finite UART](../apps/platform_reference/README.md) 显式推进、取消及结清 / Drive service, cancellation, and settlement |
+| 共享 owner 或连续流 / Shared owner or continuous stream | [UART owner](../apps/uart_owner_runtime/README.md) 管理多个 producer 的停止与 join；[stream recovery](../apps/stream_recovery/README.md) 管理消费借用、背压及重启 / Join competing producers or manage consumer loans and backpressure |
+
 ## 五条完整 I/O 使用路径 / Five complete I/O paths
 
 以下复用现有应用目录，不创建另一套 provider、隐式任务或全局实例。先阅读平台的

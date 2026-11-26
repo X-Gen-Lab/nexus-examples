@@ -127,6 +127,22 @@ authenticate 端口读取、认证实际 running region，并持久保存 expect
 试运行、不增加回退能力，也不代替应用自检。运行 image、数据库、slot 与 trailer 的
 区域和版本身份继续由产品唯一布局确定。
 
+### 独立 scratch 试运行
+
+选择 `Nexus::MCUBootSwapControl` 和三 area 的 `Nexus::MCUBootSwapPort`，用一份
+产品布局生成 boot、primary、secondary、scratch 几何。`trial_update_reference`
+复用前面的 staging 和审计。鉴权回调从实际 staged 字节取得内容 ID，选定的
+`request_upgrade` callback 调用 `example_update_request_trial`。它先观察 MCUboot
+当前动作，保留已请求更新或待回退的试运行，再持久化预期 ID 并通过官方 API
+申请 TEST。随后复用 staging 的 quiesce，复位由产品另行执行。
+
+下一次启动后，`example_update_confirm_trial` 鉴权并记录真实运行字节。在预期
+内容匹配且官方动作是 REVERT 时，推进有界产品自检。自检成功、期限仍有效，才
+调用官方 confirm 并观察读回。旧镜像、鉴权或持久化失败、自检未通过和过期各自
+保留事实。确认错误可能已有持久作用，先按介质合同恢复和核对状态。未确认的
+试运行由 MCUboot 在下一次启动处理。已确认且匹配的镜像重读时只发布现有事实。
+独占 Flash、供电、密钥、版本、防回滚及健康政策由产品审定。
+
 ## 本地文件系统与 MSC 的独占交接
 
 `msc_handoff` 的 callback 是产品实际生命周期边界，不是“已停止”布尔标志：
@@ -143,8 +159,9 @@ flowchart LR
     N --> L
 ```
 
-unmount 或 USB stop 失败保留原 owner。start/mount 部分失败分别保留 USB_CLEANUP
-和 LOCAL_CLEANUP，必须先实际 stop/unmount 再交给另一个写入者。文件系统与主机绝不
+unmount 或 USB stop 开始时进入原 owner 的 CLEANUP，失败时保留该状态。
+start/mount 部分失败分别保留 USB_CLEANUP 和 LOCAL_CLEANUP。只有实际完成
+stop/unmount、sync 才允许交给下一写入者，反向请求也必须经过清理。文件系统与主机绝不
 同时修改同一块设备；descriptor、buffer 和底层 provider 活到其各自 join 完成。
 
 ## ST 官方 MSC profile
@@ -190,3 +207,6 @@ mock 仅位于产品认证/生命周期和物理 Flash/Block 边界。它们验�
 新增 delivery 合同执行真实 recipe、FlashDB 上游、FAL 与 Flash 包装，模型位于物理
 介质边界。gateway delivery 合同替代既有 gateway 与数据库依赖，验证业务 ID、ACK
 持久化顺序和退出责任；现有 gateway parser/peer 合同分别验证其真实协议实现。
+`network_delivery_google` 同时验证 scratch 应用策略，使用真实 FlashDB 持久层与
+可控 MCUboot API 端口。Nexus 的 `nexus_mcuboot_swap_test` 独立执行官方 bootutil、
+签名夹具、存储中断和重新引导模型。

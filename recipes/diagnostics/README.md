@@ -91,8 +91,24 @@ python external/nexus/tools/dev/fault_decode.py fault.bin \
   --elf exact-firmware.elf --addr2line arm-none-eabi-addr2line
 ```
 
-decoder 检查 captured build ID 与实际 ELF 常量，错误身份不能解析为可信符号。
-代码、凭据、私有 PCB 和故障内存资料应按所属产品仓库的公开边界处理。
+decoder 在符号解析前检查 captured build ID。应用为每次构建分配唯一、非零的
+16 字节标识，保留 ELF 的 `const uint8_t nx_fault_build_id[16]` 符号及只读加载
+字节，并在 capture 中使用相同标识。保留未剥离的对应 ELF、构建清单和 resolved
+配置。
+
+在 SDK 的 `fault_decode.py --help` 列出 `--provenance` 和 `--redact` 后，可以
+附上已有的精确构建清单核对 ELF 与配置的文件摘要，或只为发布审批生成固定四字段
+摘要。命令退出非零时不使用输出作为已验证报告。
+
+```sh
+python external/nexus/tools/dev/fault_decode.py fault.bin \
+  --elf exact-firmware.elf --provenance build-provenance.json
+python external/nexus/tools/dev/fault_decode.py fault.bin \
+  --elf exact-firmware.elf --provenance build-provenance.json --redact
+```
+
+摘要只保留 `version`、`sequence`、`flags` 和 `build_id`。原始记录、完整 JSON、
+ELF、构建清单和诊断日志遵循所属产品的披露规则。
 
 `terminal_reference_google` 使用真实两 bank Storage 与 Fault C，实现 save-before-ack、
 损坏／身份拒绝、断续导出、满载和重启后重读。RAM 介质模型不建立物理掉电资格。

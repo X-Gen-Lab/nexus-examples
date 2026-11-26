@@ -19,6 +19,24 @@ Shutdown keeps the owner alive while producers settle and join. Only actual
 withdrawal allows notification and application storage reclamation. A running
 scheduler retains infrastructure; failed drain retains all loans.
 
+请求结果异常或未取得时，完成回收后仍按后端策略尝试停止平台。停止失败优先报告
+实际清理错误。允许停止的平台成功退出后，再报告请求失败。
+
+A request or result observation failure still permits eligible Platform stop
+after reclamation.
+The application reports a Platform stop error first. After a successful stop it
+reports the request failure.
+
+owner join 后，协调者先撤回 IRQ wake。若 UART stop 返回 `BUSY`，协调者在以下
+任一预算耗尽前推进并重试：100 次 service 或单调时钟的 100 ms。随后仍未停止则保留
+通知与平台；已撤回的 wake 不重复撤回。重新尝试前由产品确认恢复条件。
+
+After the owner joins, the coordinator detaches the IRQ wake and services a
+UART stop that returns `BUSY`. It retries the incomplete stop for up to 100
+service passes within a 100 ms monotonic budget. Reclamation starts only when
+stop succeeds. An exhausted budget retains the notifications and platform;
+the product owns any further recovery.
+
 `bootstrap.c` 记录已创建的通知、内核任务启动候选和已运行的 Native 线程。即使任务
 启动返回错误，也先证明候选已撤回，再销毁通知或平台。scheduler 尝试启动后意外
 返回时，`scheduler_return.c` 保留任务、
@@ -63,7 +81,8 @@ cmake --build build/uart-owner-threadx --target uart_owner_runtime --parallel 2
 ```
 
 独立 Linux 软件合同执行真实 ThreadX 内核、同一业务 C 和公开 Native UART 模型，
-检查三个实际 worker join/delete、IRQ 发布源撤回、四个通知销毁及 Tick 继续运行。
+检查三个实际 worker join/delete、IRQ 发布源撤回、一次 UART stop BUSY 后的实际
+service 与重试、四个通知销毁及 Tick 继续运行。
 同一入口还执行通知／任务部分创建失败的逆序回滚测试。需要 Linux GNU 端口、
 宿主 GoogleTest 依赖和显式 host-test support：
 
@@ -78,7 +97,8 @@ ctest --test-dir build/uart-owner-threadx-host \
 
 The standalone host contract runs the real Linux kernel and production application
 with an explicitly selected UART model. Bootstrap failures mock external ports;
-the normal lifecycle uses actual task joins/deletions and notifications. The
+the lifecycle injects one stop `BUSY` and executes the real provider on retry
+after task joins/deletions and before notification destruction. The
 coordinator control remains retained after entry return, and a live kernel keeps
 its Platform clock/Tick. Neither host execution nor the ARM link proves MCU timing,
 physical IRQ priorities, stack peaks or electrical output behavior.

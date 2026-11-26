@@ -126,6 +126,8 @@ nx_result_t example_cia402_motor_bind_position(
  *       use the selected Axis stop. No physical stop guarantee is inferred.
  *       Faults and authority/operation withdrawal do not wait for a new
  *       position sample; repeated observations never become fresh samples.
+ *       Transport closure clears the local profile's operation and setpoint
+ *       status immediately. The first adapter fault survives later steps.
  */
 nx_result_t example_cia402_motor_step(example_cia402_motor_t* adapter,
                                       nx_time_us_t tx_deadline,

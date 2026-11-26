@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import tomllib
 import unittest
@@ -31,6 +32,7 @@ class StarterTemplateTests(unittest.TestCase):
         self.assertEqual(settings, {
             'include': ['configs/*.toml', 'templates/*/assembly.toml',
                         'apps/*/assembly.toml',
+                        'apps/*/*/assembly.toml',
                         'apps/uart_owner_runtime/threadx.toml',
                         'recipes/*/*/assembly.toml'],
             'schema': {'path': schema}})
@@ -200,6 +202,42 @@ class StarterTemplateTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn('Nexus starter: transfer settled; platform stopped',
                           result.stdout)
+
+    def test_relocated_qiming_binding_change_and_conflict(self):
+        source = sdk_root()
+        resolver = [sys.executable, '-B', str(source / 'tools/configure/configure.py')]
+        with tempfile.TemporaryDirectory(prefix='board binding starter ') as value:
+            project = Path(value) / 'owned product'
+            shutil.copytree(ROOT / 'templates/qiming', project)
+            application = (project / 'main.c').read_bytes()
+            assembly = project / 'assembly.toml'
+            bindings = subprocess.run(
+                [*resolver, 'list-bindings', '--board', 'stm32f407_qiming_v31',
+                 '--kind', 'gpio'], capture_output=True, text=True, timeout=30)
+            self.assertEqual(bindings.returncode, 0, bindings.stderr)
+            self.assertIn('led1: gpio GPIOE', bindings.stdout)
+
+            edited = assembly.read_text().replace('binding = "led0"',
+                                                   'binding = "led1"')
+            assembly.write_text(edited)
+            for action in ('check', 'explain'):
+                result = subprocess.run([*resolver, action, '--assembly', str(assembly)],
+                                        capture_output=True, text=True, timeout=30)
+                self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn('gpio.status: GPIOE / output (binding led1)', result.stdout)
+            self.assertIn('Pins: PE4:output', result.stdout)
+            self.assertIn('NX_GPIO_REF_STATUS', result.stdout)
+
+            assembly.write_text(edited + '\n[gpio.conflicting_status]\n'
+                                'binding = "led1"\nmode = "output"\n')
+            rejected = subprocess.run(
+                [*resolver, 'check', '--assembly', str(assembly)],
+                capture_output=True, text=True, timeout=30)
+            self.assertNotEqual(rejected.returncode, 0)
+            self.assertIn('Resource conflict pin:PE4', rejected.stderr)
+            self.assertIn('status (source gpio-pe4) versus conflicting_status',
+                          rejected.stderr)
+            self.assertEqual((project / 'main.c').read_bytes(), application)
 
     def test_native_starter_explicitly_admits_the_host_model(self):
         source = sdk_root()

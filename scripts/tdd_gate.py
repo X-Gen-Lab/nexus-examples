@@ -12,7 +12,7 @@ import time
 import xml.etree.ElementTree as ET
 
 from build import positive_integer
-from run_google import identities
+from run_google import identities, validate_google_report
 from sdk_tools import ROOT, load, maintenance
 
 
@@ -155,7 +155,11 @@ def collect_google_programs(root, build, catalogue, validator, started):
                 raise ValueError("GoogleTest wrapper argument is missing: " + option)
             path = Path(command[index])
             arguments[option] = path if path.is_absolute() else working / path
-        binary = validator.checked_binary(arguments["--binary"], build).resolve()
+        binary = arguments["--binary"].absolute()
+        if (any(part.is_symlink() for part in (binary, *binary.parents)) or
+                not binary.is_file() or not binary.resolve().is_relative_to(build)):
+            raise ValueError("GoogleTest binary must be a regular build input")
+        binary = binary.resolve()
         output = arguments["--output"]
         discovery, report = output / "discovery.log", output / "google-results.xml"
         for path in (output, discovery, report):
@@ -171,14 +175,8 @@ def collect_google_programs(root, build, catalogue, validator, started):
         if not discovery.is_file() or discovery.stat().st_mtime_ns < started:
             raise ValueError("GoogleTest discovery is missing or stale: " + entry["name"])
         listing = discovery.read_text(encoding="utf-8")
-        count = validator.discovered_count(listing)
-        google = validator.validate_google_report(report, not_before_ns=started,
-                                                  expected_cases=count)
-        actual = {(case.get("classname"), case.get("name"))
-                  for case in ET.parse(report).getroot().iter("testcase")}
-        if actual != identities(listing):
-            raise ValueError("GoogleTest identities differ from complete discovery: " +
-                             entry["name"])
+        google = validate_google_report(validator, report, identities(listing),
+                                        not_before_ns=started)
         programs.append({"ctest_name": entry["name"], "binary": str(binary),
                          "output": str(output), "google": google})
     if not programs:
@@ -232,7 +230,7 @@ def _run_gate(root, *, paths=(), staged=False, force=False, environ=None):
             identity.get("example_gitlink_verified") is not True):
         raise ValueError("A clean formal SDK Gitlink/lock identity is required")
     check_gitlink(root, identity)
-    validator = load(source, "scripts/ci/tdd_gate.py", "example_tdd_sdk_validator")
+    validator = load(source, "scripts/validation/junit.py", "example_tdd_sdk_validator")
     execute(root, [python, "-B", "scripts/run_tool_tests.py"], env, output / "tools.log")
     ctest_report = build / "ctest-results.xml"
     ctest_report.unlink(missing_ok=True)

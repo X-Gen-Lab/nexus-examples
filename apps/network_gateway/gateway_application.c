@@ -106,6 +106,23 @@ static void publish_report(example_gateway_application_t* application,
     application->report.local_sessions_released = local_released(application);
     *report = application->report;
 }
+static nx_result_t check_route(example_gateway_application_t* application,
+                               nx_time_us_t deadline) {
+    if (application->config.route_check == NULL) {
+        return NX_SUCCESS;
+    }
+    nx_result_t result = application->config.route_check(
+        application->config.route_context, deadline);
+    if (result != NX_SUCCESS) {
+        return result;
+    }
+    nx_time_us_t now =
+        application->config.clock.read(application->config.clock.context);
+    if (now == NX_DEADLINE_NEVER || now < application->policy.last_time) {
+        return NX_ERROR_STATE;
+    }
+    return nx_deadline_expired(deadline, now) ? NX_ERROR_TIMEOUT : NX_SUCCESS;
+}
 static nx_result_t guard(example_gateway_application_t* application,
                          nx_time_us_t deadline) {
     const nx_time_us_t now =
@@ -117,7 +134,9 @@ static nx_result_t guard(example_gateway_application_t* application,
         application->config.stop(application->config.wait_context)) {
         return NX_ERROR_CANCELLED;
     }
-    return nx_deadline_expired(deadline, now) ? NX_ERROR_TIMEOUT : NX_SUCCESS;
+    return nx_deadline_expired(deadline, now)
+               ? NX_ERROR_TIMEOUT
+               : check_route(application, deadline);
 }
 static nx_result_t turn(example_gateway_application_t* application,
                         nx_time_us_t deadline) {
@@ -145,6 +164,10 @@ static nx_result_t wait_turn(example_gateway_application_t* application,
         }
     }
     if (tls_progress && application->tls_owned) {
+        result = check_route(application, deadline);
+        if (result != NX_SUCCESS) {
+            return result;
+        }
         result = nx_tls_service(application->config.tls);
         if (result != NX_SUCCESS && result != NX_ERROR_BUSY) {
             return result;
@@ -302,6 +325,10 @@ static nx_result_t session(example_gateway_application_t* application) {
             return result;
         }
     }
+    result = check_route(application, deadline);
+    if (result != NX_SUCCESS) {
+        return result;
+    }
     nx_tls_config_t tls = application->config.tls_config;
     tls.transport = nx_lwip_tcp_stream(application->config.tcp);
     if (tls.transport == NULL) {
@@ -330,6 +357,10 @@ static nx_result_t session(example_gateway_application_t* application) {
         return result;
     }
     application->report.authenticated = true;
+    result = check_route(application, deadline);
+    if (result != NX_SUCCESS) {
+        return result;
+    }
     const nx_byte_stream_t* secured = nx_tls_stream(application->config.tls);
     if (secured == NULL) {
         return NX_ERROR_STATE;
@@ -354,10 +385,13 @@ static nx_result_t session(example_gateway_application_t* application) {
     if (result != NX_SUCCESS) {
         return result;
     }
-    result =
-        nx_mqtt_subscribe(application->config.mqtt, application->config.topic,
-                          application->config.topic_bytes, 1U,
-                          &application->subscribed, mqtt_call(application));
+    result = check_route(application, deadline);
+    if (result == NX_SUCCESS) {
+        result = nx_mqtt_subscribe(
+            application->config.mqtt, application->config.topic,
+            application->config.topic_bytes, 1U, &application->subscribed,
+            mqtt_call(application));
+    }
     if (result == NX_SUCCESS) {
         result = events(application, EVENT_SUBACK);
     }
@@ -370,8 +404,12 @@ static nx_result_t session(example_gateway_application_t* application) {
                                            application->policy.payload_size,
                                            1U,
                                            false};
-    result = nx_mqtt_publish(application->config.mqtt, &publication,
-                             &application->published, mqtt_call(application));
+    result = check_route(application, deadline);
+    if (result == NX_SUCCESS) {
+        result =
+            nx_mqtt_publish(application->config.mqtt, &publication,
+                            &application->published, mqtt_call(application));
+    }
     if (result == NX_SUCCESS) {
         result = example_gateway_published(&application->policy,
                                            application->published);
@@ -382,12 +420,18 @@ static nx_result_t session(example_gateway_application_t* application) {
     if (result != NX_SUCCESS) {
         return result;
     }
-    result =
-        nx_mqtt_unsubscribe(application->config.mqtt, application->config.topic,
-                            application->config.topic_bytes,
-                            &application->unsubscribed, mqtt_call(application));
+    result = check_route(application, deadline);
+    if (result == NX_SUCCESS) {
+        result = nx_mqtt_unsubscribe(
+            application->config.mqtt, application->config.topic,
+            application->config.topic_bytes, &application->unsubscribed,
+            mqtt_call(application));
+    }
     if (result == NX_SUCCESS) {
         result = events(application, EVENT_UNSUBACK);
+    }
+    if (result == NX_SUCCESS) {
+        result = check_route(application, deadline);
     }
     return result == NX_SUCCESS ? nx_mqtt_disconnect(application->config.mqtt,
                                                      mqtt_call(application))
@@ -395,8 +439,13 @@ static nx_result_t session(example_gateway_application_t* application) {
 }
 static nx_result_t cleanup_local(example_gateway_application_t* application,
                                  nx_time_us_t deadline) {
+    if (local_released(application)) {
+        application->report.cleanup = NX_SUCCESS;
+        return NX_SUCCESS;
+    }
     bool graceful = application->report.primary == NX_SUCCESS &&
                     application->report.cleanup == NX_SUCCESS &&
+                    application->report.graceful_failure == NX_SUCCESS &&
                     application->report.delivered;
     nx_result_t first = NX_SUCCESS;
     nx_result_t result = NX_SUCCESS;
@@ -407,6 +456,11 @@ static nx_result_t cleanup_local(example_gateway_application_t* application,
             return result;
         }
         application->mqtt_owned = false;
+    }
+    if (graceful) {
+        first = check_route(application, deadline);
+        application->report.graceful_failure = first;
+        graceful = first == NX_SUCCESS;
     }
     if (application->tls_owned) {
         if (graceful) {
@@ -441,6 +495,7 @@ static nx_result_t cleanup_local(example_gateway_application_t* application,
             }
             if (result != NX_SUCCESS) {
                 first = result;
+                application->report.graceful_failure = result;
                 graceful = false;
             }
         }
@@ -453,7 +508,8 @@ static nx_result_t cleanup_local(example_gateway_application_t* application,
     }
     if (application->tcp_owned) {
         if (graceful) {
-            for (;;) {
+            result = check_route(application, deadline);
+            while (result == NX_SUCCESS) {
                 result = nx_lwip_tcp_close(application->config.tcp, deadline);
                 if (result != NX_ERROR_BUSY) {
                     break;
@@ -467,6 +523,7 @@ static nx_result_t cleanup_local(example_gateway_application_t* application,
                 application->tcp_owned = false;
             } else {
                 first = result;
+                application->report.graceful_failure = result;
                 graceful = false;
             }
         }

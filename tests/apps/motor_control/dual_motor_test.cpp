@@ -183,6 +183,27 @@ TEST(DualPmsm, ExpiredSharedBusAuthorityCannotBeRenewedByOuterLoop) {
     EXPECT_LT(report.completed_cycles[1], 2200U);
 }
 
+TEST(DualPmsm, SharedBudgetSurvivesOneAxisFaultUntilTheSourceExpires) {
+    auto experiment = example_dual_motor_reference();
+    experiment.duration_us = 250000;
+    experiment.evaluation_start_us = 0;
+    experiment.bus_limits_at_us = 50000;
+    experiment.sensor_fault_at_us = 100000;
+    experiment.bus_source_stop_at_us = 180000;
+    experiment.motoring_budget_w = 20;
+    experiment.regeneration_budget_w = 20;
+    example_dual_motor_report_t report{};
+    ASSERT_EQ(example_dual_motor_run(&experiment, &report), NX_SUCCESS);
+    EXPECT_TRUE(report.all_settled);
+    EXPECT_EQ(report.fault[0], NX_ERROR_OVERFLOW);
+    EXPECT_EQ(report.fault[1], NX_ERROR_TIMEOUT);
+    EXPECT_LE(report.completed_cycles[0], 2000U);
+    EXPECT_GT(report.completed_cycles[1], 3600U);
+    EXPECT_LT(report.completed_cycles[1], 3800U);
+    EXPECT_GT(report.budget_updates, 100U);
+    EXPECT_LE(report.admitted_power_bound_w, 20.001F);
+}
+
 TEST(DualPmsm, IqOnlyBudgetCannotPretendToCoverIndependentDCurrentPower) {
     auto experiment = example_dual_motor_reference();
     experiment.bus_limits_at_us = 50000;
