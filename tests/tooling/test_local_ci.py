@@ -59,13 +59,16 @@ class LocalCiContracts(unittest.TestCase):
         workflow = yaml.safe_load((ROOT / ".github/workflows/ci.yml").read_text())
         matrix = workflow["jobs"]["arm"]["strategy"]["matrix"]["preset"]
         self.assertEqual(matrix, "${{ fromJSON(needs.native.outputs.arm_presets) }}")
-        self.assertEqual(len(local_ci.arm_presets(ROOT)), 8)
+        self.assertEqual(len(local_ci.arm_presets(ROOT)), 10)
         with self.assertRaisesRegex(ValueError, "preset"):
             local_ci.arm_presets(ROOT, ["../../unknown"])
 
     def test_fixtures_are_explicit_and_unknown_boards_cannot_prepare_hil(self):
         self.assertEqual(local_ci.fixture_for("stm32-qiming-baremetal"),
                          "stm32f407_qiming_v31")
+        for backend in ("baremetal", "freertos"):
+            self.assertEqual(local_ci.fixture_for(f"stm32-f103rb-{backend}"),
+                             "stm32f103rb_nucleo")
         with self.assertRaises(ValueError):
             local_ci.fixture_for("gd32-f303-reference-freertos")
         with self.assertRaisesRegex(ValueError, "fixture"):

@@ -23,7 +23,7 @@
 | --- | --- |
 | `apps/` | C11 应用及明确标注的策略片段 |
 | `recipes/` | 控制、存储、诊断、更新与 USB 交接的[应用层组合片段](recipes/README.md) |
-| `configs/` | 主工程九份明确装配 |
+| `configs/` | 主工程的板卡与后端装配 |
 | `templates/` | 五个可独立复制的起始工程 |
 | `tests/` | 应用合同、工具回归、安装 SDK 消费和测试支撑 |
 | `scripts/` | 构建、身份验证、开发门禁与本地 CI |
@@ -46,9 +46,10 @@ flowchart LR
 
 ## 当前范围
 
-主工程维护九个 preset：一个 Native，加四个精确 STM32F407 Board 的裸机／
-FreeRTOS 两后端。五种模板为 Native、启明 V3.1、天空星青春版、启明核心板和
-启明 V4.1，由 `templates/manifest.json` 索引。
+主工程维护十一个 preset。Native 用于宿主模型。四块 STM32F407 板和
+NUCLEO-F103RB 各有裸机与 FreeRTOS 两份装配，复用同一应用源码。五种模板为
+Native、启明 V3.1、天空星青春版、启明核心板和启明 V4.1，由
+`templates/manifest.json` 索引。
 
 常用组件的软件参考包括控制算法、触摸校准、FlashDB／Settings、运行诊断、更新
 准备和 USB MSC 交接。它们通过公开接口显式组合，具体范围与约束见 `recipes/`。

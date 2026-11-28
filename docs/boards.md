@@ -1,10 +1,11 @@
 # 当前参考板 / Maintained reference Boards
 
-当前主工程只选择以下四个 STM32F407 Board，均使用已审核的 HSE 8 MHz／168 MHz
-profile。Board ID 选择精确引脚和选装条件；原理图不能证明本次实物装配。
+四块 STM32F407 板使用已审核的 HSE 8 MHz／168 MHz 配置，NUCLEO-F103RB
+软件参考使用 HSI 8 MHz。Board ID 选择精确引脚和选装条件。实板验收尚待执行。
 
-The four current Boards select the reviewed HSE8/168 MHz profile. Their exact
-packages own routing and population choices; no connected PCB has been observed.
+The four STM32F407 Boards select the reviewed HSE8/168 MHz profile. The
+NUCLEO-F103RB software reference selects HSI 8 MHz. Each Board selects its
+reviewed routing and population conditions. Physical qualification is pending.
 
 | Board ID | MCU | Status inactive level | Console |
 | --- | --- | --- | --- |
@@ -12,25 +13,24 @@ packages own routing and population choices; no connected PCB has been observed.
 | `stm32f407ve_sky_qingchun` | STM32F407VET6 | PB2 low | USART1 PA9/PA10 |
 | `stm32f407zg_qiming_core` | STM32F407ZGT6 | PG13 high | USART1 PA9/PA10 |
 | `stm32f407zg_qiming_v41` | STM32F407ZGT6 | PE3 high | USART1 PA9/PA10 |
+| `stm32f103rb_nucleo` | STM32F103RBT6 | PA5 low | USART2 PA2/PA3 |
 
-每板有裸机与 FreeRTOS 两个 preset，只选择 GPIO 和 115200 baud UART IRQ/event。
-RX 容量明确为 32 events；优先级为 5。FreeRTOS 配置显式声明 `calls_os=true`，
-裸机不调用内核。UART 损坏、溢出或状态事件不被当作可回显字节。
+每板有裸机与 FreeRTOS 两个 preset，选择 GPIO 和 115200 baud UART IRQ。
+F407 RX 缓冲为 32 个事件，FreeRTOS 配置允许优先级 5 的中断通知内核。
+NUCLEO-F103RB RX 缓冲为 32 字节，两种后端的 UART IRQ 都不调用内核。
 
-Both backend presets select only GPIO and IRQ/event UART with a 32-event budget.
-FreeRTOS explicitly permits the priority-5 notification to call the kernel.
-The application rejects damaged reception before authorizing any echo.
+Both presets select GPIO and IRQ UART. F407 uses a 32-event RX buffer and
+permits priority-5 IRQ notifications to call FreeRTOS. NUCLEO-F103RB uses a
+32-byte RX buffer and disables kernel calls from the UART interrupt.
 
 UART binding 的候选模式由 `list-bindings --board <Board ID> --kind uart` 查询。
-应用中的 `console` 是自定义角色，`uart1` 是板卡绑定；`mode = "irq"` 加
-`rx.format = "events"` 对应规范模式 `irq-byte-event`。选择其他模式时从维护示例
-开始，使用 `check` 检查整个装配，再查看 `explain` 的实际接口与资源。
+应用中的 `console` 是统一角色。F407 绑定 `uart1`，NUCLEO-F103RB 绑定
+`uart2`。使用 `check` 检查完整装配，再用 `explain` 查看实际接口与资源。
 
 Query UART choices with `list-bindings --board <Board ID> --kind uart`.
-`console` is an application role and `uart1` a Board binding. The authored IRQ
-event form resolves to `irq-byte-event`. Use a maintained recipe, then check
-and explain the whole assembly; an editor's general schema cannot authorize a
-new hardware mode or pin route.
+The application uses the `console` role. F407 binds it to `uart1` and F103RB
+binds it to `uart2`. Use `check` to validate the whole assembly and `explain`
+to inspect selected interfaces and resources.
 
 核心板／V4.1 最小配置显式选择 SWD，保留 PA13／PA14；可选 NOR、SRAM、显示、触摸、
 网络等状态均由 TOML 明确表达。最小工程选择 absent/disconnected 只是使用前提，

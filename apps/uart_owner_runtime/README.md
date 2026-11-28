@@ -67,7 +67,7 @@ reset and safe-output acceptance remain `not_executed`.
 
 业务的 producer、owner、取消、排空和 join 共用 `main.c`。应用装配只选择通知／栈
 存储、启动边界与终止策略；普通 I/O 不经过另一层 OS 转发。`threadx.toml` 明确
-选择启明 V3.1、USART1、ThreadX 和可调用内核的 IRQ 优先级，不改变九个主 preset。
+选择启明 V3.1、USART1、ThreadX 和可调用内核的 IRQ 优先级，通过独立入口构建。
 任务控制与 live 标志单独存放，不嵌入被任务借用的业务 context；栈也独立保留。
 从仓库根目录准备固定 SDK 与 ARM 工具链后执行：
 

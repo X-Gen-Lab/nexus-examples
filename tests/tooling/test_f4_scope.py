@@ -1,4 +1,4 @@
-"""The current examples follow the maintained F407 and explicit host scope."""
+"""Reference examples select reviewed F407 and F103 Boards explicitly."""
 
 import json
 from pathlib import Path
@@ -35,10 +35,11 @@ class F4ScopeTests(unittest.TestCase):
                           {row["path"] for row in identity["submodules"]})
             self.assertFalse(identity["hardware_verified"])
 
-    def test_complete_reference_matrix_uses_only_four_f407_boards(self):
+    def test_complete_reference_matrix_uses_exact_f407_and_f103_boards(self):
         expected = {"native-debug"}
         expected.update(f"stm32-{board}-{backend}"
-                        for board in ("qiming", "sky", "qiming-core", "qiming-v41")
+                        for board in ("qiming", "sky", "qiming-core", "qiming-v41",
+                                      "f103rb")
                         for backend in ("baremetal", "freertos"))
         self.assertEqual(expected, set(repository.verify_presets()))
 

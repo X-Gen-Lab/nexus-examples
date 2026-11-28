@@ -20,6 +20,7 @@ REFERENCE_PRESETS = frozenset({
     "native-debug",
     *(f"{board}-{backend}" for board in (
         "stm32-qiming", "stm32-sky", "stm32-qiming-core", "stm32-qiming-v41",
+        "stm32-f103rb",
     ) for backend in ("baremetal", "freertos")),
 })
 
@@ -73,7 +74,7 @@ def verify_presets():
     configured = sections["configurePresets"]
     visible = {name for name, entry in configured.items() if not entry.get("hidden", False)}
     if visible != REFERENCE_PRESETS:
-        raise ValueError("The reference matrix requires Native and eight F407 ARM presets")
+        raise ValueError("The reference matrix requires Native and the selected F407/F103RB presets")
     for name, entry in configured.items():
         inherited = entry.get("inherits", [])
         if isinstance(inherited, str):

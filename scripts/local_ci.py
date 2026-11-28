@@ -84,6 +84,7 @@ def fixture_for(preset):
         "stm32-sky": "stm32f407ve_sky_qingchun",
         "stm32-qiming-core": "stm32f407zg_qiming_core",
         "stm32-qiming-v41": "stm32f407zg_qiming_v41",
+        "stm32-f103rb": "stm32f103rb_nucleo",
     }
     board, _, backend = preset.rpartition("-")
     if board not in prefixes or backend not in ("baremetal", "freertos"):
