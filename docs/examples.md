@@ -172,7 +172,7 @@ Build/create commands and hardware prerequisites are maintained in the linked gu
 
 | 用例 / Use case | 真实源码与配置 / Source and assembly | 退出责任 / Withdrawal |
 | --- | --- | --- |
-| 同步 GPIO / Synchronous GPIO | [main.c](../apps/platform_reference/main.c)、[Native TOML](../configs/native.toml)及四板配置 | 逻辑 signal 显式极性；写入者退出后停止基础设施 |
+| 同步 GPIO / Synchronous GPIO | [main.c](../apps/platform_reference/main.c)、[Native TOML](../configs/native.toml)及[参考板配置](boards.md) | 逻辑 signal 显式极性；写入者退出后停止基础设施 |
 | 有限 UART DMA / Finite UART DMA | [finite_uart.c](../apps/platform_reference/finite_uart.c)、[配置与命令](../apps/platform_reference/README.md) | 单步 service；取消不释放；结清后 finish，BUSY 保留 |
 | 有限 SPI DMA / Finite SPI DMA | [finite_dma.c](../apps/shared_spi_runtime/finite_dma.c)、[配置与命令](../apps/shared_spi_runtime/README.md) | controller/endpoint 独立；TX/RX、CS 和 wire 完成后结清 |
 | 连续 ADC / Continuous ADC | [adc_acquisition.c](../apps/stream_recovery/adc_acquisition.c)、[完整调用顺序](../apps/stream_recovery/README.md) | 完整 scan；归还原 loan，停止 source 并排空 READY/BORROWED |
@@ -180,8 +180,8 @@ Build/create commands and hardware prerequisites are maintained in the linked gu
 
 请求预算用 `nx_deadline_finite_after`，拒绝溢出到无限等待。所有应用状态由调用者
 持有；失败 release 保留原 token，QUARANTINED、BUSY、通知与诊断都不授权提前回收。
-同一对象由一个执行者推进；需要多 producer 时才使用已有 owner。原九个 preset
-保持主参考范围，独立 DMA 装配的命令在各应用 README；它们不自动加入实板支持。
+同一对象由一个执行者推进，需要多 producer 时使用已有 owner。各应用 README
+给出独立 DMA 装配的构建命令。实板状态见相应板卡记录。
 
 Each application advances a bounded step. Payloads remain disjoint from the full
 application control object and live through settlement. Continuous blocks use

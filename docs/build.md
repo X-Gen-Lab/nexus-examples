@@ -29,6 +29,8 @@ python scripts/check_style.py --all
 python scripts/build.py --preset native-debug --test --parallel 2
 python scripts/build.py --preset stm32-qiming-baremetal --parallel 2
 python scripts/build.py --preset stm32-qiming-core-freertos --parallel 2
+python scripts/build.py --preset stm32-f103rb-baremetal --parallel 2
+python scripts/build.py --preset stm32-f103rb-freertos --parallel 2
 ```
 
 `CMakePresets.json` 是主矩阵权威，`configs/*.toml` 选择硬件、后端、组件与预算。

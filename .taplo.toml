@@ -9,4 +9,4 @@ include = [
 ]
 
 [schema]
-path = "https://raw.githubusercontent.com/X-Gen-Lab/nexus/0ce8a5a0369012665120a5cc24c4be9ca77434b8/tools/configure/assembly.schema.json"
+path = "https://raw.githubusercontent.com/X-Gen-Lab/nexus/ab5305eec4e8335c61bd0138875a5aa85760aed2/tools/configure/assembly.schema.json"

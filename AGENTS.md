@@ -14,9 +14,9 @@ products, credentials and PCB data belong to separate product repositories.
   Public types use the selected SDK ABI.
 - Each composition owns one authored TOML. Main examples use
   `configs/*.toml`; standalone recipes and versioned starters own
-  their local `assembly.toml`. Nine Native/F407 builds cover four exact F407
-  Boards and both MCU backends. Retired SoC recipes remain in their historical Git snapshot. Separate
-  build roots prevent stale effective configuration.
+  their local `assembly.toml`. The reference matrix covers Native, four exact
+  F407 Boards and NUCLEO-F103RB. Each MCU board has bare-metal and FreeRTOS
+  assemblies. Separate build roots prevent stale effective configuration.
 - Presets own actual build directories. The build wrapper reuses the selected
   SDK's preset reader, validates configure/build/test association before any
   compilation, and holds the actual binary directory's lock through execution

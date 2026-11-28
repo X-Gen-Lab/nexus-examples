@@ -83,6 +83,20 @@
             "cacheVariables": {
                 "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/qiming-v41-freertos.toml"
             }
+        },
+        {
+            "name": "stm32-f103rb-baremetal",
+            "inherits": "arm-common",
+            "cacheVariables": {
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/f103rb-baremetal.toml"
+            }
+        },
+        {
+            "name": "stm32-f103rb-freertos",
+            "inherits": "arm-common",
+            "cacheVariables": {
+                "NEXUS_ASSEMBLY_FILE": "${sourceDir}/configs/f103rb-freertos.toml"
+            }
         }
     ],
     "buildPresets": [
@@ -121,6 +135,14 @@
         {
             "name": "stm32-qiming-v41-freertos",
             "configurePreset": "stm32-qiming-v41-freertos"
+        },
+        {
+            "name": "stm32-f103rb-baremetal",
+            "configurePreset": "stm32-f103rb-baremetal"
+        },
+        {
+            "name": "stm32-f103rb-freertos",
+            "configurePreset": "stm32-f103rb-freertos"
         }
     ],
     "testPresets": [

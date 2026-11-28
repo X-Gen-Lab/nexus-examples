@@ -189,7 +189,7 @@ else:
         expected = {row['name'] for row in presets['configurePresets']
                     if not row.get('hidden') and row['name'] != 'native-debug'}
         self.assertEqual(set(json.loads(result.stdout)), expected)
-        self.assertEqual(len(expected), 8)
+        self.assertEqual(len(expected), 10)
 
     def test_current_results_and_managed_failure_logs_are_retained(self):
         document = yaml.load((ROOT / '.github/workflows/ci.yml').read_text(),

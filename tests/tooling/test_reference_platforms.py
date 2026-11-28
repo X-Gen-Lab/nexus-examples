@@ -1,4 +1,4 @@
-"""Require explicit, isolated F407 application compositions."""
+"""Require explicit, isolated application compositions per reference Board."""
 
 import json
 import copy
@@ -16,10 +16,11 @@ import tdd_gate
 
 
 REFERENCE_BOARDS = {
-    "qiming": "stm32f407_qiming_v31",
-    "sky": "stm32f407ve_sky_qingchun",
-    "qiming-core": "stm32f407zg_qiming_core",
-    "qiming-v41": "stm32f407zg_qiming_v41",
+    "qiming": ("stm32f407_qiming_v31", "hse8-pll168", "uart1", "events"),
+    "sky": ("stm32f407ve_sky_qingchun", "hse8-pll168", "uart1", "events"),
+    "qiming-core": ("stm32f407zg_qiming_core", "hse8-pll168", "uart1", "events"),
+    "qiming-v41": ("stm32f407zg_qiming_v41", "hse8-pll168", "uart1", "events"),
+    "f103rb": ("stm32f103rb_nucleo", "hsi8", "uart2", "bytes"),
 }
 
 
@@ -98,7 +99,7 @@ class ReferencePlatformTests(unittest.TestCase):
         document = json.loads((ROOT / "CMakePresets.json").read_text())
         presets = {entry["name"]: entry for entry in document["configurePresets"]}
         builds = {entry["name"]: entry for entry in document["buildPresets"]}
-        for family, board in REFERENCE_BOARDS.items():
+        for family, (board, clock, binding, rx_format) in REFERENCE_BOARDS.items():
             for backend in ("baremetal", "freertos"):
                 name = f"stm32-{family}-{backend}"
                 with self.subTest(preset=name):
@@ -112,18 +113,19 @@ class ReferencePlatformTests(unittest.TestCase):
                     data = tomllib.loads(Path(assembly.replace(
                         "${sourceDir}", str(ROOT))).read_text())
                     self.assertEqual(data["board"], board)
-                    self.assertEqual(data["clock"], "hse8-pll168")
+                    self.assertEqual(data["clock"], clock)
                     self.assertEqual(data["backend"], backend)
                     self.assertEqual(set(data["gpio"]), {"status"})
                     self.assertEqual(data["gpio"]["status"]["binding"], "led0")
                     self.assertEqual(set(data["uart"]), {"console"})
                     uart = data["uart"]["console"]
-                    self.assertEqual(uart["binding"], "uart1")
+                    self.assertEqual(uart["binding"], binding)
                     self.assertEqual(uart["mode"], "irq")
                     self.assertEqual(uart["baud"], 115200)
-                    self.assertEqual(uart["rx"], {"format": "events", "capacity": 32})
+                    self.assertEqual(uart["rx"], {"format": rx_format, "capacity": 32})
                     self.assertEqual(uart["irq"]["priority"], 5)
-                    self.assertEqual(uart["irq"].get("calls_os", False), backend == "freertos")
+                    self.assertEqual(uart["irq"].get("calls_os", False),
+                                     rx_format == "events" and backend == "freertos")
                     self.assertEqual(data["components"], ["uart-owner"])
                     self.assertEqual(data["memory"]["libc_heap_bytes"], 0)
                     self.assertNotIn("dma", uart)

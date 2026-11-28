@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/X-Gen-Lab/nexus.git",
-  "commit": "0ce8a5a0369012665120a5cc24c4be9ca77434b8",
-  "tree": "5845ffd4691344456e884b56f2f7f065c3e0cb75",
+  "commit": "ab5305eec4e8335c61bd0138875a5aa85760aed2",
+  "tree": "8c82e0466a349a9600e02d05b2fa694e91c24e7e",
   "consumption": "source-find_package",
   "recursive_submodules": true,
-  "baseline_status": "Selected STM32F4 C11 platform with declarative static assembly, exact installed SDK evidence, image-bound fault diagnostics and bounded FreeRTOS STOP rejection recovery. Physical HIL is not executed.",
+  "baseline_status": "STM32F4 production profiles and selected STM32F103RB GPIO/USART2 IRQ software reference builds on baremetal and FreeRTOS. Both F1 SDK profiles passed relocated consumption. Physical HIL is not executed.",
   "public_api": "find_package(Nexus) / nexus_add_platform / nexus_add_firmware / generated readonly typed factory faces / explicit OS and common component targets"
 }

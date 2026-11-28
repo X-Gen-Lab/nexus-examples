@@ -1,11 +1,11 @@
 # GPIO/UART 主参考 / GPIO and UART reference
 
-本目录是主矩阵的 C11 应用，不是 SDK 复现工具。根工程将相同源码与 `configs/`
-中的九份装配组合：Native 有限执行，四块 F407 Board 分别选择裸机或 FreeRTOS。
+本目录是主矩阵的 C11 应用。根工程将同一源码与 `configs/` 中的十一份装配组合。
+Native 有限执行，四块 F407 板和 NUCLEO-F103RB 各有裸机与 FreeRTOS 配置。
 应用显式启动 Platform，取得逻辑 GPIO/UART 接口，推进 TX 到 SETTLED，再按
 后端规则停止；RX 损坏、溢出与状态事件不会被当成可回显字节。
 
-This directory owns the main application. The root build selects one of nine
+This directory owns the main application. The root build selects one of eleven
 assemblies. Native injects finite model input; baremetal owns a serialized loop;
 FreeRTOS owns a static task/stack and starts its scheduler explicitly. Factory
 lookup has no hardware effects. Accepted request/payload storage stays live
@@ -28,15 +28,14 @@ withdrawal; it does not complete it. Failed stop retains the exact application,
 request and payload. External publishers and observers must join separately;
 this simple reference installs none. Platform and OS shutdown remain separate.
 
-九份配置和五份 starter 显式声明已审 LED 极性：启明三种 PCB 低有效，天空星高
-有效，Native 模型使用高有效。业务使用 strong logical signal，不从初始输出位推导
-极性。主参考的 echo 缓冲是静态的，未结清前不会再次读取覆盖；正常推进不在传输函数
-里忙等。FreeRTOS 任务与裸机主循环仍由本应用显式拥有。
+配置与 starter 显式声明已审 LED 极性。启明三种 PCB 低有效，天空星、Native
+模型和 NUCLEO-F103RB 高有效。应用使用强类型 GPIO signal 操作状态灯，持有
+静态回响缓冲，直至发送结清才可覆盖。裸机主循环和 FreeRTOS 任务由应用创建。
 
-The `status` role uses `nx_factory_gpio_signal_ref`. Physical polarity stays in
-TOML; it is not an assumption in application code. The main nine presets retain
-IRQ UART. The separate `dma.toml` selects real STM32F407 UART TX DMA while keeping
-the RX event responsibilities; successful linking is not physical execution.
+The `status` role uses `nx_factory_gpio_signal_ref` with polarity declared in
+TOML. The reference matrix uses UART IRQ. F407 and the Native model expose RX
+events. The F103RB software reference uses RX bytes through the existing public
+API. The separate `dma.toml` selects STM32F407 TX DMA with RX events.
 
 从仓库根、已准备工具链和锁定 SDK 后执行 / From the repository root:
 
